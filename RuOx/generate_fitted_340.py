@@ -26,8 +26,8 @@ ROOM_TEMP_POINTS = {
 # Mott piecewise breakpoints (K) — segments: T<1, 1≤T<10, T≥10
 VRH_BREAKS = [1.0, 10.0, 100.0]
 
-# Output temperature grid: 0.003 K → 300 K, 400 log-spaced points
-T_NEW    = np.logspace(np.log10(0.003), np.log10(300), 400)
+# Output temperature grid: 0.003 K → 300 K, 198 log-spaced points
+T_NEW    = np.logspace(np.log10(0.003), np.log10(300), 198)
 logT_NEW = np.log10(T_NEW)
 
 
