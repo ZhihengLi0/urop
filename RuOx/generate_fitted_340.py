@@ -1,12 +1,16 @@
 """
 Generate extrapolated .340 calibration files using three fitting models.
-Reads original calibration data from 原始数据/ subdirectory.
+Reads original calibration data from origin data/ subdirectory.
 Outputs fitted files into per-sensor subdirectories (R31279/, R31839/).
 
 Models:
   1. Log-polynomial degree-5 (logR vs logT)
-  2. Mott VRH — piecewise linear in T^{-1/4} vs logR space (3 segments)
+  2. Mott VRH — piecewise linear in T^{-1/4} vs logR space (4 segments)
   3. Cubic log-polynomial (logR vs logT)
+
+Note: room-temperature anchor points are used only to constrain fitting;
+the output grid is limited to the original calibration range so that
+logR remains strictly monotone (required by the Lake Shore .340 format).
 """
 
 import numpy as np
@@ -18,17 +22,17 @@ warnings.filterwarnings("ignore")
 BASE_DIR = "/users/9/li004628/urop/RuOx"
 RAW_DIR  = os.path.join(BASE_DIR, "origin data")
 
-# Room-temperature measurement for R31279 (C6: MXC-Flange, measured at 294 K)
+# Room-temperature anchor for R31279 (C6: MXC-Flange, measured at 294 K).
+# Used for fitting only — NOT included in the output temperature grid.
 ROOM_TEMP_POINTS = {
     "R31279": (294.0, np.log10(1102.5)),   # 1.1025 kΩ → log10(1102.5 Ω)
 }
 
-# Mott piecewise breakpoints (K) — segments: T<1, 1≤T<10, T≥10
+# Mott piecewise segment boundaries (K): T<1, 1≤T<10, 10≤T<100, T≥100
 VRH_BREAKS = [1.0, 10.0, 100.0]
 
-# Output temperature grid: 0.003 K → 300 K, 198 log-spaced points
-T_NEW    = np.logspace(np.log10(0.003), np.log10(300), 198)
-logT_NEW = np.log10(T_NEW)
+# Number of output breakpoints
+N_POINTS = 198
 
 
 # ─── helpers ─────────────────────────────────────────────────────────────────
@@ -52,11 +56,22 @@ def load_340(filepath):
     return np.array(T), np.array(logR)
 
 
-def write_340(filepath, serial, T_points, logR_points, sensor_model="", setpoint_limit=300.0):
-    """Write a Lake Shore .340 format file, sorted high → low temperature."""
-    order = np.argsort(T_points)[::-1]
+def write_340(filepath, serial, T_points, logR_points, sensor_model="", setpoint_limit=100.0):
+    """
+    Write a Lake Shore .340 format file, sorted high → low temperature.
+    Enforces strict monotone increase of logR as T decreases (negative TC).
+    """
+    order = np.argsort(T_points)[::-1]   # high T first
     T_out    = T_points[order]
     logR_out = logR_points[order]
+
+    # Enforce strict monotonicity: logR must strictly increase as T decreases
+    keep = [0]
+    for i in range(1, len(logR_out)):
+        if logR_out[i] > logR_out[keep[-1]]:
+            keep.append(i)
+    T_out    = T_out[keep]
+    logR_out = logR_out[keep]
     n = len(T_out)
 
     lines = [
@@ -91,7 +106,6 @@ def model_cubic(logT, A, B, C, D):
 def fit_vrh_piecewise(T_cal, logR_cal, T_breaks=VRH_BREAKS):
     """
     Piecewise linear fit in Mott variable space: x = T^{-1/4} vs logR.
-    Segments are defined by T_breaks (sorted ascending).
     Returns a callable predict(T_new) -> logR_new.
     """
     order = np.argsort(T_cal)
@@ -99,7 +113,6 @@ def fit_vrh_piecewise(T_cal, logR_cal, T_breaks=VRH_BREAKS):
     R_s = logR_cal[order]
     x_s = T_s ** (-0.25)
 
-    # Build segment edges clipped to data range
     inner = [b for b in T_breaks if T_s[0] < b < T_s[-1]]
     edges = [T_s[0]] + inner + [T_s[-1]]
 
@@ -109,7 +122,7 @@ def fit_vrh_piecewise(T_cal, logR_cal, T_breaks=VRH_BREAKS):
         mask = (T_s >= lo) & (T_s <= hi)
         if mask.sum() < 2:
             continue
-        coeffs = np.polyfit(x_s[mask], R_s[mask], 1)  # [slope, intercept]
+        coeffs = np.polyfit(x_s[mask], R_s[mask], 1)
         segments.append((lo, hi, coeffs))
 
     def predict(T_new):
@@ -140,60 +153,62 @@ for serial in sensors:
     print(f"\n=== {serial} ===")
 
     raw_path = os.path.join(RAW_DIR, f"{serial}.340")
-    T_cal, logR_cal = load_340(raw_path)
+    T_cal_orig, logR_cal_orig = load_340(raw_path)
 
-    # Append room-temperature anchor point if available for this sensor
+    # Output grid: low end 0.003 K, high end = calibration max (not room-T)
+    T_cal_max = T_cal_orig.max()
+    T_NEW    = np.logspace(np.log10(0.003), np.log10(T_cal_max), N_POINTS)
+    logT_NEW = np.log10(T_NEW)
+
+    # Extend calibration data with room-T anchor for fitting only
+    T_fit    = T_cal_orig.copy()
+    logR_fit = logR_cal_orig.copy()
     if serial in ROOM_TEMP_POINTS:
         T_rt, logR_rt = ROOM_TEMP_POINTS[serial]
-        T_cal    = np.append(T_cal,    T_rt)
-        logR_cal = np.append(logR_cal, logR_rt)
-        print(f"  Added room-T point: {T_rt} K, logR={logR_rt:.5f}")
+        T_fit    = np.append(T_fit,    T_rt)
+        logR_fit = np.append(logR_fit, logR_rt)
+        print(f"  Room-T anchor used for fitting: {T_rt} K, logR={logR_rt:.5f}")
 
-    # Sort ascending for fitting
-    order = np.argsort(T_cal)
-    T_cal    = T_cal[order]
-    logR_cal = logR_cal[order]
-    logT_cal = np.log10(T_cal)
+    order = np.argsort(T_fit)
+    T_fit    = T_fit[order]
+    logR_fit = logR_fit[order]
+    logT_fit = np.log10(T_fit)
 
     out_dir = os.path.join(BASE_DIR, serial)
     os.makedirs(out_dir, exist_ok=True)
 
-    T_max_cal = T_cal.max()
-    setpoint  = max(300.0, T_max_cal)
-
     # ── Model 1: log-polynomial degree-5 ─────────────────────────────────────
-    p0 = np.zeros(6); p0[0] = np.mean(logR_cal)
-    popt_lp, _ = curve_fit(model_logpoly5, logT_cal, logR_cal, p0=p0, maxfev=20000)
+    p0 = np.zeros(6); p0[0] = np.mean(logR_fit)
+    popt_lp, _ = curve_fit(model_logpoly5, logT_fit, logR_fit, p0=p0, maxfev=20000)
     logR_lp = model_logpoly5(logT_NEW, *popt_lp)
-    rmse_lp = np.sqrt(np.mean((model_logpoly5(logT_cal, *popt_lp) - logR_cal)**2))
+    rmse_lp = np.sqrt(np.mean((model_logpoly5(logT_fit, *popt_lp) - logR_fit)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_logpoly5.340"),
         serial, T_NEW.copy(), logR_lp.copy(),
-        sensor_model="Log-Polynomial Fit (degree-5)", setpoint_limit=setpoint,
+        sensor_model="Log-Polynomial Fit (degree-5)", setpoint_limit=T_cal_max,
     )
     print(f"    logpoly5 RMSE = {rmse_lp:.5f}")
 
     # ── Model 2: piecewise Mott VRH ───────────────────────────────────────────
-    vrh_predict = fit_vrh_piecewise(T_cal, logR_cal)
-    logR_vrh = vrh_predict(T_NEW)
-    logR_vrh_fit = vrh_predict(T_cal)
-    rmse_vrh = np.sqrt(np.mean((logR_vrh_fit - logR_cal)**2))
+    vrh_predict  = fit_vrh_piecewise(T_fit, logR_fit)
+    logR_vrh     = vrh_predict(T_NEW)
+    rmse_vrh     = np.sqrt(np.mean((vrh_predict(T_fit) - logR_fit)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_Mott_VRH.340"),
         serial, T_NEW.copy(), logR_vrh.copy(),
-        sensor_model="Mott VRH Piecewise Linear Fit", setpoint_limit=setpoint,
+        sensor_model="Mott VRH Piecewise Linear Fit", setpoint_limit=T_cal_max,
     )
     print(f"    Mott VRH (piecewise) RMSE = {rmse_vrh:.5f}")
 
     # ── Model 3: cubic log-polynomial ────────────────────────────────────────
-    popt_c3, _ = curve_fit(model_cubic, logT_cal, logR_cal,
-                           p0=[np.mean(logR_cal), -1.0, 0.1, 0.0], maxfev=20000)
-    logR_c3 = model_cubic(logT_NEW, *popt_c3)
-    rmse_c3 = np.sqrt(np.mean((model_cubic(logT_cal, *popt_c3) - logR_cal)**2))
+    popt_c3, _ = curve_fit(model_cubic, logT_fit, logR_fit,
+                           p0=[np.mean(logR_fit), -1.0, 0.1, 0.0], maxfev=20000)
+    logR_c3  = model_cubic(logT_NEW, *popt_c3)
+    rmse_c3  = np.sqrt(np.mean((model_cubic(logT_fit, *popt_c3) - logR_fit)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_cubic_logpoly.340"),
         serial, T_NEW.copy(), logR_c3.copy(),
-        sensor_model="Cubic Log-Polynomial Fit (degree-3)", setpoint_limit=setpoint,
+        sensor_model="Cubic Log-Polynomial Fit (degree-3)", setpoint_limit=T_cal_max,
     )
     print(f"    cubic logpoly RMSE = {rmse_c3:.5f}")
 
