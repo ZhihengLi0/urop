@@ -74,7 +74,8 @@ def write_340(filepath, serial, T_points, logR_points, sensor_model="", setpoint
 
     keep = [0]
     for i in range(1, len(logR_out)):
-        if logR_out[i] > logR_out[keep[-1]]:
+        # Compare formatted values (5 dp) to avoid equal-string controller error
+        if float(f"{logR_out[i]:.5f}") > float(f"{logR_out[keep[-1]]:.5f}"):
             keep.append(i)
     T_out    = T_out[keep]
     logR_out = logR_out[keep]
@@ -163,7 +164,7 @@ for serial in ["R31279", "R31839"]:
     p0 = np.zeros(6); p0[0] = np.mean(logR_cal)
     popt_lp, _ = curve_fit(model_logpoly5, logT_cal, logR_cal, p0=p0, maxfev=20000)
     logR_lp = model_logpoly5(logT_NEW, *popt_lp)
-    logR_lp[T_NEW > T_rt] = np.minimum(logR_lp[T_NEW > T_rt], logR_rt - 1e-6)
+    logR_lp[T_NEW > T_rt] = np.minimum(logR_lp[T_NEW > T_rt], logR_rt - 1e-4)
     logR_lp[anchor_idx] = logR_rt
     rmse_lp = np.sqrt(np.mean((model_logpoly5(logT_cal, *popt_lp) - logR_cal)**2))
     write_340(
@@ -177,7 +178,7 @@ for serial in ["R31279", "R31839"]:
     pm_predict = fit_pchip_mott(T_cal, logR_cal)
     logR_pm    = pm_predict(T_NEW)
     # clamp T > 294K to logR ≤ logR_rt so anchor survives monotone filter
-    logR_pm[T_NEW > T_rt] = np.minimum(logR_pm[T_NEW > T_rt], logR_rt - 1e-6)
+    logR_pm[T_NEW > T_rt] = np.minimum(logR_pm[T_NEW > T_rt], logR_rt - 1e-4)
     logR_pm[anchor_idx] = logR_rt
     write_340(
         os.path.join(out_dir, f"{serial}_fit_PCHIP.340"),
@@ -190,7 +191,7 @@ for serial in ["R31279", "R31839"]:
     popt_c3, _ = curve_fit(model_cubic, logT_cal, logR_cal,
                            p0=[np.mean(logR_cal), -1.0, 0.1, 0.0], maxfev=20000)
     logR_c3 = model_cubic(logT_NEW, *popt_c3)
-    logR_c3[T_NEW > T_rt] = np.minimum(logR_c3[T_NEW > T_rt], logR_rt - 1e-6)
+    logR_c3[T_NEW > T_rt] = np.minimum(logR_c3[T_NEW > T_rt], logR_rt - 1e-4)
     logR_c3[anchor_idx] = logR_rt
     rmse_c3 = np.sqrt(np.mean((model_cubic(logT_cal, *popt_c3) - logR_cal)**2))
     write_340(
