@@ -13,6 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from scipy.optimize import curve_fit
+from scipy.interpolate import PchipInterpolator
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -68,46 +69,13 @@ def model_power3(logT, A, B, C, D):
     return A + B*logT + C*logT**2 + D*logT**3
 
 
-def fit_vrh_piecewise(T_cal, logR_cal, T_breaks=VRH_BREAKS):
-    """
-    Piecewise linear fit in Mott variable space: x = T^{-1/4} vs logR.
-    Returns a callable predict(T_new) -> logR_new.
-    """
+def fit_pchip(T_cal, logR_cal):
+    """PCHIP spline in log10(T) space: monotone, C1 smooth, exact interpolation."""
     order = np.argsort(T_cal)
-    T_s = T_cal[order]
-    R_s = logR_cal[order]
-    x_s = T_s ** (-0.25)
-
-    inner = [b for b in T_breaks if T_s[0] < b < T_s[-1]]
-    edges = [T_s[0]] + inner + [T_s[-1]]
-
-    segments = []
-    for j in range(len(edges) - 1):
-        lo, hi = edges[j], edges[j + 1]
-        mask = (T_s >= lo) & (T_s <= hi)
-        if mask.sum() < 2:
-            continue
-        coeffs = np.polyfit(x_s[mask], R_s[mask], 1)
-        segments.append((lo, hi, coeffs))
-
-    def predict(T_new):
-        T_arr = np.asarray(T_new, dtype=float)
-        x_arr = T_arr ** (-0.25)
-        result = np.empty_like(T_arr)
-        for i in range(len(T_arr)):
-            Ti = T_arr[i]
-            if Ti <= segments[0][0]:
-                result[i] = np.polyval(segments[0][2], x_arr[i])
-            elif Ti >= segments[-1][1]:
-                result[i] = np.polyval(segments[-1][2], x_arr[i])
-            else:
-                for lo, hi, coeffs in segments:
-                    if lo <= Ti <= hi:
-                        result[i] = np.polyval(coeffs, x_arr[i])
-                        break
-        return result
-
-    return predict
+    logT_s = np.log10(T_cal[order])
+    R_s    = logR_cal[order]
+    interp = PchipInterpolator(logT_s, R_s, extrapolate=True)
+    return lambda T_new: interp(np.log10(np.asarray(T_new, dtype=float)))
 
 
 # ─── plot setup ──────────────────────────────────────────────────────────────
@@ -125,7 +93,7 @@ ax_res = fig.add_subplot(gs[1, 1])
 
 colors = {
     "logpoly5": "#1f77b4",
-    "vrh":      "#d62728",
+    "pchip":    "#d62728",
     "power3":   "#2ca02c",
     "data":     "k",
     "room_T":   "#ff7f0e",
@@ -161,11 +129,10 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
     logR_fit_lp  = model_logpoly(logT_cal,  *popt_lp)
     rmse_lp = np.sqrt(np.mean((logR_fit_lp - logR_cal)**2))
 
-    # ── Model 2: piecewise Mott VRH ───────────────────────────────────────────
-    vrh_predict  = fit_vrh_piecewise(T_cal, logR_cal)
-    logR_pred_vrh = vrh_predict(T_pred)
-    logR_fit_vrh  = vrh_predict(T_cal)
-    rmse_vrh = np.sqrt(np.mean((logR_fit_vrh - logR_cal)**2))
+    # ── Model 2: PCHIP spline ─────────────────────────────────────────────────
+    pchip_predict  = fit_pchip(T_cal, logR_cal)
+    logR_pred_pchip = pchip_predict(T_pred)
+    logR_fit_pchip  = pchip_predict(T_cal)
 
     # ── Model 3: cubic log-polynomial ────────────────────────────────────────
     p0_p3 = [np.mean(logR_cal), -1.0, 0.1, 0.0]
@@ -177,7 +144,7 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
 
     summary_lines.append(
         f"{name}:  logpoly5 RMSE={rmse_lp:.4f}  "
-        f"VRH-piecewise RMSE={rmse_vrh:.4f}  cubic RMSE={rmse_p3:.4f}"
+        f"PCHIP (exact)  cubic RMSE={rmse_p3:.4f}"
     )
 
     # ── pick axes ─────────────────────────────────────────────────────────────
@@ -185,7 +152,7 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
     ax_zoom = ax_s1z if sensor_idx == 0 else None
 
     for ax, xlim, title_sfx in [
-        (ax_main, (0.003, 300), ""),
+        (ax_main, (0.005, 300), ""),
         *([(ax_zoom, (0.005, 0.1), " — Low-T zoom")] if ax_zoom else []),
     ]:
         ax.plot(T_cal, logR_cal, ".", color=colors["data"],
@@ -199,9 +166,9 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
         ax.plot(T_pred, logR_pred_lp,
                 color=colors["logpoly5"], lw=1.8,
                 label=f"Log-poly deg-5  (RMSE={rmse_lp:.4f})", zorder=3)
-        ax.plot(T_pred, logR_pred_vrh,
-                color=colors["vrh"], lw=1.8, ls="--",
-                label=f"Mott VRH piecewise  (RMSE={rmse_vrh:.4f})", zorder=3)
+        ax.plot(T_pred, logR_pred_pchip,
+                color=colors["pchip"], lw=1.8, ls="--",
+                label="PCHIP spline  (exact interpolation)", zorder=4)
         ax.plot(T_pred, logR_pred_p3,
                 color=colors["power3"], lw=1.8, ls="-.",
                 label=f"Cubic log-poly  (RMSE={rmse_p3:.4f})", zorder=3)
@@ -223,17 +190,17 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
         ax.grid(True, which="both", alpha=0.3)
 
     # ── residuals ─────────────────────────────────────────────────────────────
-    resid_lp  = logR_fit_lp  - logR_cal
-    resid_vrh = logR_fit_vrh - logR_cal
-    resid_p3  = logR_fit_p3  - logR_cal
+    resid_lp    = logR_fit_lp    - logR_cal
+    resid_pchip = logR_fit_pchip - logR_cal
+    resid_p3    = logR_fit_p3    - logR_cal
 
     ls = "-" if sensor_idx == 0 else "--"
     lbl = f"{name} "
-    ax_res.plot(T_cal, resid_lp,  color=colors["logpoly5"], lw=1.3, ls=ls,
+    ax_res.plot(T_cal, resid_lp,    color=colors["logpoly5"], lw=1.3, ls=ls,
                 label=f"{lbl}log-poly5")
-    ax_res.plot(T_cal, resid_vrh, color=colors["vrh"],      lw=1.3, ls=ls,
-                label=f"{lbl}VRH-piecewise")
-    ax_res.plot(T_cal, resid_p3,  color=colors["power3"],   lw=1.3, ls=ls,
+    ax_res.plot(T_cal, resid_pchip, color=colors["pchip"],    lw=1.3, ls=ls,
+                label=f"{lbl}PCHIP")
+    ax_res.plot(T_cal, resid_p3,    color=colors["power3"],   lw=1.3, ls=ls,
                 label=f"{lbl}cubic")
 
 ax_res.axhline(0, color="k", lw=0.8)

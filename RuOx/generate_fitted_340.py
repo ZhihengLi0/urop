@@ -5,18 +5,19 @@ Outputs fitted files into per-sensor subdirectories (R31279/, R31839/).
 
 Models:
   1. Log-polynomial degree-5 (logR vs logT)
-  2. Mott VRH — piecewise linear in T^{-1/4} vs logR (segments: T<1, 1≤T<10, T≥10 K)
+  2. PCHIP — monotone-preserving cubic Hermite spline (exact interpolation, C1 smooth)
   3. Cubic log-polynomial (logR vs logT)
 
 Output grid: 198 points total
   - [0.005 K, 200 K]: 178 log-spaced points (endpoint at 200 K)
   - (200 K, 300 K]: 20 log-spaced points with 294 K anchor forced in
-Both sensors include room-temperature anchor (R31279: 1102.5 Ω, R31839: 1016.9 Ω at 294 K).
+Both sensors include room-temperature anchor (R31279: 1012.9 Ω, R31839: 1016.9 Ω at 294 K).
 """
 
 import numpy as np
 import os
 from scipy.optimize import curve_fit
+from scipy.interpolate import PchipInterpolator
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -111,43 +112,13 @@ def model_cubic(logT, A, B, C, D):
     return A + B*logT + C*logT**2 + D*logT**3
 
 
-def fit_vrh_piecewise(T_cal, logR_cal, T_breaks=VRH_BREAKS):
-    """Piecewise linear fit in Mott variable space: x = T^{-1/4} vs logR."""
+def fit_pchip(T_cal, logR_cal):
+    """PCHIP spline in log10(T) space: monotone, C1 smooth, exact interpolation."""
     order = np.argsort(T_cal)
-    T_s = T_cal[order]
-    R_s = logR_cal[order]
-    x_s = T_s ** (-0.25)
-
-    inner = [b for b in T_breaks if T_s[0] < b < T_s[-1]]
-    edges = [T_s[0]] + inner + [T_s[-1]]
-
-    segments = []
-    for j in range(len(edges) - 1):
-        lo, hi = edges[j], edges[j + 1]
-        mask = (T_s >= lo) & (T_s <= hi)
-        if mask.sum() < 2:
-            continue
-        coeffs = np.polyfit(x_s[mask], R_s[mask], 1)
-        segments.append((lo, hi, coeffs))
-
-    def predict(T_new):
-        T_arr = np.asarray(T_new, dtype=float)
-        x_arr = T_arr ** (-0.25)
-        result = np.empty_like(T_arr)
-        for i in range(len(T_arr)):
-            Ti = T_arr[i]
-            if Ti <= segments[0][0]:
-                result[i] = np.polyval(segments[0][2], x_arr[i])
-            elif Ti >= segments[-1][1]:
-                result[i] = np.polyval(segments[-1][2], x_arr[i])
-            else:
-                for lo, hi, coeffs in segments:
-                    if lo <= Ti <= hi:
-                        result[i] = np.polyval(coeffs, x_arr[i])
-                        break
-        return result
-
-    return predict
+    logT_s = np.log10(T_cal[order])
+    R_s    = logR_cal[order]
+    interp = PchipInterpolator(logT_s, R_s, extrapolate=True)
+    return lambda T_new: interp(np.log10(np.asarray(T_new, dtype=float)))
 
 
 # ─── main ────────────────────────────────────────────────────────────────────
@@ -186,17 +157,16 @@ for serial in ["R31279", "R31839"]:
     )
     print(f"    logpoly5 RMSE = {rmse_lp:.5f}")
 
-    # ── Model 2: Mott VRH piecewise linear ───────────────────────────────────
-    vrh_predict = fit_vrh_piecewise(T_cal, logR_cal)
-    logR_vrh    = vrh_predict(T_NEW)
-    logR_vrh[anchor_idx] = logR_rt
-    rmse_vrh    = np.sqrt(np.mean((vrh_predict(T_cal) - logR_cal)**2))
+    # ── Model 2: PCHIP spline ─────────────────────────────────────────────────
+    pchip_predict = fit_pchip(T_cal, logR_cal)
+    logR_pchip    = pchip_predict(T_NEW)
+    logR_pchip[anchor_idx] = logR_rt
     write_340(
-        os.path.join(out_dir, f"{serial}_fit_Mott_VRH.340"),
-        serial, T_NEW.copy(), logR_vrh.copy(),
-        sensor_model="Mott VRH Piecewise Linear Fit",
+        os.path.join(out_dir, f"{serial}_fit_PCHIP.340"),
+        serial, T_NEW.copy(), logR_pchip.copy(),
+        sensor_model="PCHIP Spline (monotone cubic Hermite)",
     )
-    print(f"    Mott VRH (piecewise) RMSE = {rmse_vrh:.5f}")
+    print(f"    PCHIP (exact interpolation, RMSE=0 on training data)")
 
     # ── Model 3: cubic log-polynomial ────────────────────────────────────────
     popt_c3, _ = curve_fit(model_cubic, logT_cal, logR_cal,
