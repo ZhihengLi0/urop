@@ -21,10 +21,11 @@ RAW_DIR  = BASE_DIR + "/origin data"
 
 # Room-temperature anchor point for R31279 (C6: MXC-Flange, measured at 294 K)
 ROOM_TEMP_POINTS = {
-    "R31279": (294.0, np.log10(1102.5)),   # 1.1025 kΩ → log10(1102.5 Ω)
+    "R31279": (294.0, np.log10(1012.9)),   # 1.0129 kΩ → log10(1012.9 Ω)
+    "R31839": (294.0, np.log10(1016.9)),   # 1.0169 kΩ → log10(1016.9 Ω)
 }
 
-VRH_BREAKS = [1.0, 10.0, 100.0]   # Mott piecewise segment boundaries (K)
+VRH_BREAKS = [1.0, 10.0]   # Mott piecewise segment boundaries (K)
 
 
 # ─── data loading ────────────────────────────────────────────────────────────
@@ -148,7 +149,7 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
     logR_cal = logR_cal[order]
     logT_cal = np.log10(T_cal)
 
-    T_pred    = np.logspace(np.log10(0.003), np.log10(300), 1200)
+    T_pred    = np.logspace(np.log10(0.005), np.log10(300), 1200)
     logT_pred = np.log10(T_pred)
 
     # ── Model 1: degree-5 log-polynomial ─────────────────────────────────────
@@ -185,9 +186,8 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
 
     for ax, xlim, title_sfx in [
         (ax_main, (0.003, 300), ""),
-        *([(ax_zoom, (0.003, 0.1), " — Low-T zoom")] if ax_zoom else []),
+        *([(ax_zoom, (0.005, 0.1), " — Low-T zoom")] if ax_zoom else []),
     ]:
-        cal_lo, cal_hi = T_cal[T_cal < (min(ROOM_TEMP_POINTS.get(name, [(0,)])[0], 200))].min() if name not in ROOM_TEMP_POINTS else T_cal[:-1].min(), T_cal[:-1].max() if name in ROOM_TEMP_POINTS else T_cal.max()
         ax.plot(T_cal, logR_cal, ".", color=colors["data"],
                 ms=3, label="Calibration data", zorder=5)
 

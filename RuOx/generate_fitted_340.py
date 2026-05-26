@@ -8,9 +8,10 @@ Models:
   2. Mott VRH — piecewise linear in T^{-1/4} vs logR (segments: T<1, 1≤T<10, T≥10 K)
   3. Cubic log-polynomial (logR vs logT)
 
-All models include the room-temperature anchor point where available.
-The Mott piecewise linear fit absorbs the 294 K anchor into the T≥10 K
-segment, which remains monotone in Mott variable space.
+Output grid: 198 points total
+  - [0.005 K, 200 K]: 178 log-spaced points (endpoint at 200 K)
+  - (200 K, 300 K]: 20 log-spaced points with 294 K anchor forced in
+Both sensors include room-temperature anchor (R31279: 1102.5 Ω, R31839: 1016.9 Ω at 294 K).
 """
 
 import numpy as np
@@ -22,18 +23,28 @@ warnings.filterwarnings("ignore")
 BASE_DIR = "/users/9/li004628/urop/RuOx"
 RAW_DIR  = os.path.join(BASE_DIR, "origin data")
 
-# Room-temperature anchor points (included in all model fits)
+# Room-temperature anchor points (must appear in output, exact values enforced)
 ROOM_TEMP_POINTS = {
-    "R31279": (294.0, np.log10(1102.5)),   # 1.1025 kΩ → log10(1102.5 Ω)
+    "R31279": (294.0, np.log10(1012.9)),   # 1.0129 kΩ
+    "R31839": (294.0, np.log10(1016.9)),   # 1.0169 kΩ
 }
 
-# Mott piecewise segment boundaries (K): T<1, 1≤T<10, T≥10
-# 294 K anchor falls into the T≥10 segment and is fit linearly in Mott space
 VRH_BREAKS = [1.0, 10.0]
 
-# Output grid: 0.005 K → 300 K, 198 log-spaced points
-T_NEW    = np.logspace(np.log10(0.005), np.log10(300), 198)
+# ─── output grid (198 points total) ──────────────────────────────────────────
+# Low  [0.005 K, 200 K] : 178 log-spaced points (last point = 200 K)
+# High (200 K, 300 K]   : 20 points with 294 K anchor forced in
+
+T_LOW  = np.logspace(np.log10(0.005), np.log10(200), 178)          # 178 pts, ends at 200 K
+
+_T_high_fill = np.logspace(np.log10(200), np.log10(300), 20)[1:]   # 19 pts above 200 K
+T_HIGH = np.sort(np.unique(np.append(_T_high_fill, 294.0)))         # + 294 K = 20 pts
+
+T_NEW    = np.concatenate([T_LOW, T_HIGH])                          # 198 total
 logT_NEW = np.log10(T_NEW)
+
+assert len(T_NEW) == 198, f"Grid has {len(T_NEW)} points, expected 198"
+assert np.any(np.isclose(T_NEW, 294.0)), "294 K missing from output grid"
 
 
 # ─── helpers ─────────────────────────────────────────────────────────────────
@@ -57,12 +68,12 @@ def load_340(filepath):
 
 
 def write_340(filepath, serial, T_points, logR_points, sensor_model="", setpoint_limit=300.0):
-    """Write .340 file sorted high→low T, with strict monotone logR enforced."""
+    """Write .340 file sorted high→low T, monotone logR enforced."""
     order = np.argsort(T_points)[::-1]
     T_out    = T_points[order]
     logR_out = logR_points[order]
 
-    # Enforce strictly increasing logR (Lake Shore format requirement)
+    # Enforce strictly increasing logR as T decreases (Lake Shore requirement)
     keep = [0]
     for i in range(1, len(logR_out)):
         if logR_out[i] > logR_out[keep[-1]]:
@@ -101,10 +112,7 @@ def model_cubic(logT, A, B, C, D):
 
 
 def fit_vrh_piecewise(T_cal, logR_cal, T_breaks=VRH_BREAKS):
-    """
-    Piecewise linear fit in Mott variable space: x = T^{-1/4} vs logR.
-    Each segment is a separate linear fit; extrapolation uses end segments.
-    """
+    """Piecewise linear fit in Mott variable space: x = T^{-1/4} vs logR."""
     order = np.argsort(T_cal)
     T_s = T_cal[order]
     R_s = logR_cal[order]
@@ -149,17 +157,18 @@ for serial in ["R31279", "R31839"]:
 
     T_cal, logR_cal = load_340(os.path.join(RAW_DIR, f"{serial}.340"))
 
-    # Append room-temperature anchor where available
-    if serial in ROOM_TEMP_POINTS:
-        T_rt, logR_rt = ROOM_TEMP_POINTS[serial]
-        T_cal    = np.append(T_cal,    T_rt)
-        logR_cal = np.append(logR_cal, logR_rt)
-        print(f"  Anchor: {T_rt} K, logR={logR_rt:.5f}")
+    T_rt, logR_rt = ROOM_TEMP_POINTS[serial]
+    T_cal    = np.append(T_cal,    T_rt)
+    logR_cal = np.append(logR_cal, logR_rt)
+    print(f"  Anchor: {T_rt} K  logR={logR_rt:.5f}  ({10**logR_rt:.1f} Ω)")
 
     order = np.argsort(T_cal)
     T_cal    = T_cal[order]
     logR_cal = logR_cal[order]
     logT_cal = np.log10(T_cal)
+
+    # index of 294 K in the output grid (for forcing exact anchor value)
+    anchor_idx = np.argmin(np.abs(T_NEW - T_rt))
 
     out_dir = os.path.join(BASE_DIR, serial)
     os.makedirs(out_dir, exist_ok=True)
@@ -168,6 +177,7 @@ for serial in ["R31279", "R31839"]:
     p0 = np.zeros(6); p0[0] = np.mean(logR_cal)
     popt_lp, _ = curve_fit(model_logpoly5, logT_cal, logR_cal, p0=p0, maxfev=20000)
     logR_lp = model_logpoly5(logT_NEW, *popt_lp)
+    logR_lp[anchor_idx] = logR_rt
     rmse_lp = np.sqrt(np.mean((model_logpoly5(logT_cal, *popt_lp) - logR_cal)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_logpoly5.340"),
@@ -179,6 +189,7 @@ for serial in ["R31279", "R31839"]:
     # ── Model 2: Mott VRH piecewise linear ───────────────────────────────────
     vrh_predict = fit_vrh_piecewise(T_cal, logR_cal)
     logR_vrh    = vrh_predict(T_NEW)
+    logR_vrh[anchor_idx] = logR_rt
     rmse_vrh    = np.sqrt(np.mean((vrh_predict(T_cal) - logR_cal)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_Mott_VRH.340"),
@@ -191,6 +202,7 @@ for serial in ["R31279", "R31839"]:
     popt_c3, _ = curve_fit(model_cubic, logT_cal, logR_cal,
                            p0=[np.mean(logR_cal), -1.0, 0.1, 0.0], maxfev=20000)
     logR_c3 = model_cubic(logT_NEW, *popt_c3)
+    logR_c3[anchor_idx] = logR_rt
     rmse_c3 = np.sqrt(np.mean((model_cubic(logT_cal, *popt_c3) - logR_cal)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_cubic_logpoly.340"),
