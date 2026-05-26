@@ -52,7 +52,7 @@ def load_340(filepath):
     return np.array(T), np.array(logR)
 
 
-def write_340(filepath, serial, T_points, logR_points, setpoint_limit=300.0):
+def write_340(filepath, serial, T_points, logR_points, sensor_model="", setpoint_limit=300.0):
     """Write a Lake Shore .340 format file, sorted high → low temperature."""
     order = np.argsort(T_points)[::-1]
     T_out    = T_points[order]
@@ -60,7 +60,7 @@ def write_340(filepath, serial, T_points, logR_points, setpoint_limit=300.0):
     n = len(T_out)
 
     lines = [
-        "Sensor Model:   RU-1000-BF0.007",
+        f"Sensor Model:   {sensor_model}",
         f"Serial Number:\t{serial}",
         "Data Format:    4      (Log Ohms/Kelvin)",
         f"SetPoint Limit: {setpoint_limit:.1f}      (Kelvin)",
@@ -168,7 +168,8 @@ for serial in sensors:
     rmse_lp = np.sqrt(np.mean((model_logpoly5(logT_cal, *popt_lp) - logR_cal)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_logpoly5.340"),
-        serial, T_NEW.copy(), logR_lp.copy(), setpoint_limit=setpoint,
+        serial, T_NEW.copy(), logR_lp.copy(),
+        sensor_model="Log-Polynomial Fit (degree-5)", setpoint_limit=setpoint,
     )
     print(f"    logpoly5 RMSE = {rmse_lp:.5f}")
 
@@ -179,7 +180,8 @@ for serial in sensors:
     rmse_vrh = np.sqrt(np.mean((logR_vrh_fit - logR_cal)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_Mott_VRH.340"),
-        serial, T_NEW.copy(), logR_vrh.copy(), setpoint_limit=setpoint,
+        serial, T_NEW.copy(), logR_vrh.copy(),
+        sensor_model="Mott VRH Piecewise Linear Fit", setpoint_limit=setpoint,
     )
     print(f"    Mott VRH (piecewise) RMSE = {rmse_vrh:.5f}")
 
@@ -190,7 +192,8 @@ for serial in sensors:
     rmse_c3 = np.sqrt(np.mean((model_cubic(logT_cal, *popt_c3) - logR_cal)**2))
     write_340(
         os.path.join(out_dir, f"{serial}_fit_cubic_logpoly.340"),
-        serial, T_NEW.copy(), logR_c3.copy(), setpoint_limit=setpoint,
+        serial, T_NEW.copy(), logR_c3.copy(),
+        sensor_model="Cubic Log-Polynomial Fit (degree-3)", setpoint_limit=setpoint,
     )
     print(f"    cubic logpoly RMSE = {rmse_c3:.5f}")
 
