@@ -69,13 +69,21 @@ def model_power3(logT, A, B, C, D):
     return A + B*logT + C*logT**2 + D*logT**3
 
 
-def fit_pchip(T_cal, logR_cal):
-    """PCHIP spline in log10(T) space: monotone, C1 smooth, exact interpolation."""
+def fit_pchip_mott(T_cal, logR_cal, n_mott=20):
+    """PCHIP in calibration range; Mott linear (logR = A + B*T^{-1/4}) below."""
     order = np.argsort(T_cal)
-    logT_s = np.log10(T_cal[order])
-    R_s    = logR_cal[order]
-    interp = PchipInterpolator(logT_s, R_s, extrapolate=True)
-    return lambda T_new: interp(np.log10(np.asarray(T_new, dtype=float)))
+    T_s   = T_cal[order]; R_s = logR_cal[order]
+    T_min_cal = T_s[0]
+    coeffs_m  = np.polyfit(T_s[:n_mott]**(-0.25), R_s[:n_mott], 1)
+    pchip     = PchipInterpolator(np.log10(T_s), R_s, extrapolate=True)
+    def predict(T_new):
+        T_arr  = np.asarray(T_new, dtype=float)
+        result = pchip(np.log10(T_arr)).copy()
+        below  = T_arr < T_min_cal
+        if below.any():
+            result[below] = np.polyval(coeffs_m, T_arr[below]**(-0.25))
+        return result
+    return predict
 
 
 # ─── plot setup ──────────────────────────────────────────────────────────────
@@ -130,9 +138,9 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
     rmse_lp = np.sqrt(np.mean((logR_fit_lp - logR_cal)**2))
 
     # ── Model 2: PCHIP spline ─────────────────────────────────────────────────
-    pchip_predict  = fit_pchip(T_cal, logR_cal)
-    logR_pred_pchip = pchip_predict(T_pred)
-    logR_fit_pchip  = pchip_predict(T_cal)
+    pm_predict  = fit_pchip_mott(T_cal, logR_cal)
+    logR_pred_pchip = pm_predict(T_pred)
+    logR_fit_pchip  = pm_predict(T_cal)
 
     # ── Model 3: cubic log-polynomial ────────────────────────────────────────
     p0_p3 = [np.mean(logR_cal), -1.0, 0.1, 0.0]
@@ -144,7 +152,7 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
 
     summary_lines.append(
         f"{name}:  logpoly5 RMSE={rmse_lp:.4f}  "
-        f"PCHIP (exact)  cubic RMSE={rmse_p3:.4f}"
+        f"PCHIP+Mott (exact in cal. range)  cubic RMSE={rmse_p3:.4f}"
     )
 
     # ── pick axes ─────────────────────────────────────────────────────────────
@@ -168,7 +176,7 @@ for sensor_idx, (name, filepath) in enumerate(sensors.items()):
                 label=f"Log-poly deg-5  (RMSE={rmse_lp:.4f})", zorder=3)
         ax.plot(T_pred, logR_pred_pchip,
                 color=colors["pchip"], lw=1.8, ls="--",
-                label="PCHIP spline  (exact interpolation)", zorder=4)
+                label="PCHIP + Mott low-T  (exact interpolation)", zorder=4)
         ax.plot(T_pred, logR_pred_p3,
                 color=colors["power3"], lw=1.8, ls="-.",
                 label=f"Cubic log-poly  (RMSE={rmse_p3:.4f})", zorder=3)
