@@ -1,0 +1,204 @@
+"""
+Generate extrapolated .340 calibration files using three fitting models.
+Reads original calibration data from origin data/ subdirectory.
+Outputs fitted files into per-sensor subdirectories (R31279/, R31839/).
+
+Models:
+  1. Log-polynomial degree-5 (logR vs logT)
+  2. PCHIP + Mott VRH low-T: PCHIP spline in calibration range, Mott linear
+     (logR = A + B*T^{-1/4}) for extrapolation below calibration minimum
+  3. Cubic log-polynomial (logR vs logT)
+
+Output grid: 198 points total, nearly uniform in log(T)
+  - [0.005 K, 100 K] : 178 log-spaced points  (step ~0.0243 per decade)
+  - (100 K, 300 K]   : 20 log-spaced points with 294 K anchor forced in
+Both sensors include room-temperature anchor (R31279: 1012.9 Ω, R31839: 1016.9 Ω at 294 K).
+"""
+
+import numpy as np
+import os
+from scipy.optimize import curve_fit
+from scipy.interpolate import PchipInterpolator
+import warnings
+warnings.filterwarnings("ignore")
+
+BASE_DIR = "/users/9/li004628/urop/RuOx"
+RAW_DIR  = os.path.join(BASE_DIR, "origin data")
+
+ROOM_TEMP_POINTS = {
+    "R31279": (294.0, np.log10(1012.9)),   # 1.0129 kΩ
+    "R31839": (294.0, np.log10(1016.9)),   # 1.0169 kΩ
+}
+
+# ─── output grid (198 points, nearly uniform in log T) ───────────────────────
+# Low  [0.005 K, 100 K] : 178 pts  (step ≈ 0.0243 log10-K per step)
+# High (100 K, 300 K]   : 20 pts with 294 K anchor forced  (step ≈ 0.0251)
+
+T_LOW  = np.logspace(np.log10(0.005), np.log10(100), 178)
+
+_T_high_fill = np.logspace(np.log10(100), np.log10(300), 20)[1:]   # 19 pts
+T_HIGH = np.sort(np.unique(np.append(_T_high_fill, 294.0)))          # + 294 K = 20 pts
+
+T_NEW    = np.concatenate([T_LOW, T_HIGH])                           # 198 total
+logT_NEW = np.log10(T_NEW)
+
+assert len(T_NEW) == 198, f"Grid has {len(T_NEW)} points, expected 198"
+assert np.any(np.isclose(T_NEW, 294.0)), "294 K missing from output grid"
+
+
+# ─── helpers ─────────────────────────────────────────────────────────────────
+
+def load_340(filepath):
+    logR, T = [], []
+    with open(filepath) as f:
+        in_data = False
+        for line in f:
+            line = line.strip()
+            if line.startswith("No."):
+                in_data = True
+                continue
+            if not in_data or not line:
+                continue
+            parts = line.split()
+            if len(parts) >= 3 and parts[0].isdigit():
+                logR.append(float(parts[1]))
+                T.append(float(parts[2]))
+    return np.array(T), np.array(logR)
+
+
+def write_340(filepath, serial, T_points, logR_points, sensor_model="", setpoint_limit=300.0):
+    """Write .340 file sorted high→low T, monotone logR enforced."""
+    order = np.argsort(T_points)[::-1]
+    T_out    = T_points[order]
+    logR_out = logR_points[order]
+
+    keep = [0]
+    for i in range(1, len(logR_out)):
+        # Compare formatted values (5 dp) to avoid equal-string controller error
+        if float(f"{logR_out[i]:.5f}") > float(f"{logR_out[keep[-1]]:.5f}"):
+            keep.append(i)
+    T_out    = T_out[keep]
+    logR_out = logR_out[keep]
+    n = len(T_out)
+
+    lines = [
+        f"Sensor Model:   {sensor_model}",
+        f"Serial Number:\t{serial}",
+        "Data Format:    4      (Log Ohms/Kelvin)",
+        f"SetPoint Limit: {setpoint_limit:.1f}      (Kelvin)",
+        "Temperature coefficient:  1 (Negative)",
+        f"Number of Breakpoints:   {n}",
+        "",
+        "No.   Units      Temperature (K)",
+        "",
+    ]
+    for i, (lr, t) in enumerate(zip(logR_out, T_out), start=1):
+        lines.append(f"{i}\t{lr:.5f}\t{t:g}")
+
+    with open(filepath, "w") as f:
+        f.write("\n".join(lines) + "\n")
+    print(f"  Written: {os.path.basename(filepath)}  ({n} breakpoints)")
+
+
+# ─── model functions ─────────────────────────────────────────────────────────
+
+def model_logpoly5(logT, c0, c1, c2, c3, c4, c5):
+    return c0 + c1*logT + c2*logT**2 + c3*logT**3 + c4*logT**4 + c5*logT**5
+
+
+def model_cubic(logT, A, B, C, D):
+    return A + B*logT + C*logT**2 + D*logT**3
+
+
+def fit_pchip_mott(T_cal, logR_cal, n_mott=20):
+    """
+    PCHIP spline (calibration range + above) with Mott VRH linear
+    (logR = A + B*T^{-1/4}) for extrapolation below calibration minimum.
+    """
+    order = np.argsort(T_cal)
+    T_s   = T_cal[order]
+    R_s   = logR_cal[order]
+    T_min_cal = T_s[0]
+
+    # Single-segment Mott linear fit on the n_mott lowest calibration points
+    x_mott   = T_s[:n_mott] ** (-0.25)
+    coeffs_m = np.polyfit(x_mott, R_s[:n_mott], 1)   # slope, intercept in T^{-1/4} space
+
+    # PCHIP in log10(T) space for calibration range and above
+    pchip = PchipInterpolator(np.log10(T_s), R_s, extrapolate=True)
+
+    def predict(T_new):
+        T_arr  = np.asarray(T_new, dtype=float)
+        result = pchip(np.log10(T_arr)).copy()
+        below  = T_arr < T_min_cal
+        if below.any():
+            result[below] = np.polyval(coeffs_m, T_arr[below] ** (-0.25))
+        return result
+
+    return predict
+
+
+# ─── main ────────────────────────────────────────────────────────────────────
+
+for serial in ["R31279", "R31839"]:
+    print(f"\n=== {serial} ===")
+
+    T_cal, logR_cal = load_340(os.path.join(RAW_DIR, f"{serial}.340"))
+
+    T_rt, logR_rt = ROOM_TEMP_POINTS[serial]
+    T_cal    = np.append(T_cal,    T_rt)
+    logR_cal = np.append(logR_cal, logR_rt)
+    print(f"  Anchor: {T_rt} K  logR={logR_rt:.5f}  ({10**logR_rt:.1f} Ω)")
+
+    order    = np.argsort(T_cal)
+    T_cal    = T_cal[order]
+    logR_cal = logR_cal[order]
+    logT_cal = np.log10(T_cal)
+
+    anchor_idx = np.argmin(np.abs(T_NEW - T_rt))
+
+    out_dir = os.path.join(BASE_DIR, serial)
+    os.makedirs(out_dir, exist_ok=True)
+
+    # ── Model 1: log-polynomial degree-5 ─────────────────────────────────────
+    p0 = np.zeros(6); p0[0] = np.mean(logR_cal)
+    popt_lp, _ = curve_fit(model_logpoly5, logT_cal, logR_cal, p0=p0, maxfev=20000)
+    logR_lp = model_logpoly5(logT_NEW, *popt_lp)
+    logR_lp[T_NEW > T_rt] = np.minimum(logR_lp[T_NEW > T_rt], logR_rt - 1e-4)
+    logR_lp[anchor_idx] = logR_rt
+    rmse_lp = np.sqrt(np.mean((model_logpoly5(logT_cal, *popt_lp) - logR_cal)**2))
+    write_340(
+        os.path.join(out_dir, f"{serial}_fit_logpoly5.340"),
+        serial, T_NEW.copy(), logR_lp.copy(),
+        sensor_model="Log-Polynomial Fit (degree-5)",
+    )
+    print(f"    logpoly5 RMSE = {rmse_lp:.5f}")
+
+    # ── Model 2: PCHIP + Mott low-T ──────────────────────────────────────────
+    pm_predict = fit_pchip_mott(T_cal, logR_cal)
+    logR_pm    = pm_predict(T_NEW)
+    # clamp T > 294K to logR ≤ logR_rt so anchor survives monotone filter
+    logR_pm[T_NEW > T_rt] = np.minimum(logR_pm[T_NEW > T_rt], logR_rt - 1e-4)
+    logR_pm[anchor_idx] = logR_rt
+    write_340(
+        os.path.join(out_dir, f"{serial}_fit_PCHIP.340"),
+        serial, T_NEW.copy(), logR_pm.copy(),
+        sensor_model="PCHIP + Mott VRH low-T extrapolation",
+    )
+    print(f"    PCHIP+Mott (exact in calibration range)")
+
+    # ── Model 3: cubic log-polynomial ────────────────────────────────────────
+    popt_c3, _ = curve_fit(model_cubic, logT_cal, logR_cal,
+                           p0=[np.mean(logR_cal), -1.0, 0.1, 0.0], maxfev=20000)
+    logR_c3 = model_cubic(logT_NEW, *popt_c3)
+    logR_c3[T_NEW > T_rt] = np.minimum(logR_c3[T_NEW > T_rt], logR_rt - 1e-4)
+    logR_c3[anchor_idx] = logR_rt
+    rmse_c3 = np.sqrt(np.mean((model_cubic(logT_cal, *popt_c3) - logR_cal)**2))
+    write_340(
+        os.path.join(out_dir, f"{serial}_fit_cubic_logpoly.340"),
+        serial, T_NEW.copy(), logR_c3.copy(),
+        sensor_model="Cubic Log-Polynomial Fit (degree-3)",
+    )
+    print(f"    cubic logpoly RMSE = {rmse_c3:.5f}")
+
+print("\nDone.")
