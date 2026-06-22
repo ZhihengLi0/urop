@@ -1,0 +1,1040 @@
+CDMS Software Version: V07-02-00
+Found 9 series
+
+=== Processing Zip10 ===
+Zip10 channels (11): ['PAS1', 'PBS1', 'PCS1', 'PDS1', 'PES1', 'PFS1', 'PAS2', 'PBS2', 'PCS2', 'PDS2', 'PES2']
+
+Zip10 — cut: 1.10e-06 < PTOFamps < 1.70e-06
+  24260615_235328: 48 events selected
+  24260616_011402: 44 events selected
+  24260616_021845: 42 events selected
+  24260616_032333: 0 events selected
+  24260616_033235: 34 events selected
+  24260616_045309: 39 events selected
+  24260616_055753: 16 events selected
+  24260616_063504: 33 events selected
+  24260616_074337: 8 events selected
+  → Zip10 total: 264 events
+
+Reading raw traces for Zip10...
+INFO: Found 16 midas raw data files
+  24260615_235328: 402 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 379 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 359 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 302 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 309 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 139 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 285 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 68 good channel-trace pairs
+  PAS1: 247 traces
+  PBS1: 177 traces
+  PCS1: 144 traces
+  PDS1: 96 traces
+  PES1: 261 traces
+  PFS1: 146 traces
+  PAS2: 224 traces
+  PBS2: 263 traces
+  PCS2: 262 traces
+  PDS2: 171 traces
+  PES2: 252 traces
+  PF (Type 3): 48 per-event traces
+Cache saved: /users/9/li004628/urop/snolab/第三次/run/r4_v3_20260622/cache/traces_cache_zip10.pkl
+  PAS1: template from 247 traces
+  PBS1: template from 177 traces
+  PCS1: template from 144 traces
+  PDS1: template from 96 traces
+  PES1: template from 261 traces
+  PFS1: template from 146 traces
+  PAS2: template from 224 traces
+  PBS2: template from 263 traces
+  PCS2: template from 262 traces
+  PDS2: template from 171 traces
+  PES2: template from 252 traces
+  PAS1: [4-exp] t1=0.080  t2=0.28  t3=0.09  t4=1.42 ms
+  PBS1: [4-exp] t1=0.074  t2=0.38  t3=0.38  t4=0.39 ms
+  PCS1: [4-exp] t1=0.070  t2=0.17  t3=0.16  t4=1.21 ms
+  PDS1: [4-exp] t1=0.080  t2=0.96  t3=0.40  t4=0.97 ms
+  PES1: [4-exp] t1=0.046  t2=0.69  t3=0.99  t4=0.54 ms
+  PFS1: [4-exp] t1=0.047  t2=0.78  t3=0.64  t4=0.56 ms
+  PAS2: [4-exp] t1=0.075  t2=0.22  t3=0.61  t4=0.62 ms
+  PBS2: [4-exp] t1=0.076  t2=0.19  t3=0.55  t4=50.00 ms
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PCS2: [4-exp] t1=0.020  t2=0.53  t3=0.57  t4=1.36 ms
+  PDS2: [4-exp] t1=0.070  t2=0.60  t3=0.59  t4=0.61 ms
+  PES2: [4-exp] t1=0.042  t2=0.59  t3=0.63  t4=1.19 ms
+PT [PF method, 48 events, 4-exp]: t1=0.047  t2=0.69  t3=0.78  t4=0.63 ms
+  PAS1: written
+  PBS1: written
+  PCS1: written
+  PDS1: written
+  PES1: written
+  PFS1: written
+  PAS2: written
+  PBS2: written
+  PCS2: written
+  PDS2: written
+  PES2: written
+  PFS2: skipped (no template)
+  PT: written
+  PS1: written
+  PS2: written
+Time constants saved: /users/9/li004628/urop/snolab/第三次/run/r4_v3_20260622/root_files/time_constants_zip10.json
+
+── NxM per-event fitting (4-exp, window [13384:32768], synthetic full 32768-sample) ──
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PAS1: 110 accepted, 137 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PBS1: 45 accepted, 132 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PCS1: 41 accepted, 103 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PDS1: 13 accepted, 83 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PES1: 209 accepted, 52 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PFS1: 42 accepted, 104 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PAS2: 89 accepted, 135 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PBS2: 133 accepted, 130 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PCS2: 230 accepted, 32 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PDS2: 33 accepted, 138 rejected
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/第三次/scripts/template_single_zip.py:309: RuntimeWarning: overflow encountered in multiply
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PES2: 151 accepted, 101 rejected
+Alignment plot saved: /users/9/li004628/urop/snolab/第三次/run/r4_v3_20260622/template_plots/nxm_alignment_zip10.png
+
+PCA on 1096 synthetic traces (5 components, full 32768-sample traces)
+  PC0: 63.17% variance
+  PC1: 24.72% variance
+  PC2: 9.13% variance
+  PC3: 1.96% variance
+  PC4: 0.57% variance
+PCA components plot saved: /users/9/li004628/urop/snolab/第三次/run/r4_v3_20260622/template_plots/nxm_pca_components_zip10.png
+NxM templates (5 components × 11 channels) written to ROOT.
+
+Done. Saved: /users/9/li004628/urop/snolab/第三次/run/r4_v3_20260622/root_files/Templates_SNOLAB_R4_zip10_1x1.root

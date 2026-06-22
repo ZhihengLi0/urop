@@ -1,0 +1,788 @@
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:562: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:562: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:562: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:562: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:562: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in multiply
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in multiply
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:562: RuntimeWarning: invalid value encountered in subtract
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:562: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:563: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+/users/9/li004628/urop/snolab/SNOLAB_R4_TemplateGeneration.py:564: RuntimeWarning: overflow encountered in exp
+  - amp2                * np.exp(-(x - pretrigger) / t3 / samplerate)
+TFile**		Templates_SNOLAB_R4_zip1_1x1.root	
+ TFile*		Templates_SNOLAB_R4_zip1_1x1.root	
+  KEY: TDirectoryFile	zip1;1	zip1
+CDMS Software Version: V07-02-00
+Found 9 series:
+  24260615_235328
+  24260616_011402
+  24260616_021845
+  24260616_032333
+  24260616_033235
+  24260616_045309
+  24260616_055753
+  24260616_063504
+  24260616_074337
+
+Zip1 channels (9): ['PAS1', 'PBS1', 'PCS1', 'PES1', 'PFS1', 'PAS2', 'PCS2', 'PDS2', 'PES2']
+  zip 1: 9 channels  missing: ['PDS1', 'PBS2', 'PFS2']
+  zip 4: 11 channels  missing: ['PBS1']
+  zip 6: 12 channels
+  zip 7: 11 channels  missing: ['PFS2']
+  zip 9: 11 channels  missing: ['PFS2']
+  zip10: 11 channels  missing: ['PFS2']
+  zip15: 11 channels  missing: ['PAS1']
+  zip16: 9 channels  missing: ['PAS1', 'PAS2', 'PES2']
+  zip18: 11 channels  missing: ['PCS2']
+  zip24: 12 channels
+Zip 1: 5596 physics events
+Zip 4: 6641 physics events
+Zip 6: 6086 physics events
+Zip 7: 23789 physics events
+Zip 9: 5532 physics events
+Zip10: 5504 physics events
+Zip15: 5183 physics events
+Zip16: 4424 physics events
+Zip18: 5473 physics events
+Zip24: 5690 physics events
+
+Zip1 — cut: 7.50e-07 < PTOFamps < 1.05e-06
+  24260615_235328: 41 events selected
+  24260616_011402: 8 events selected
+  24260616_021845: 13 events selected
+  24260616_032333: 0 events selected
+  24260616_033235: 18 events selected
+  24260616_045309: 8 events selected
+  24260616_055753: 4 events selected
+  24260616_063504: 9 events selected
+  24260616_074337: 3 events selected
+  → Zip1 total: 104 events
+
+Zip4 — cut: 1.10e-06 < PTOFamps < 1.60e-06
+  24260615_235328: 20 events selected
+  24260616_011402: 16 events selected
+  24260616_021845: 19 events selected
+  24260616_032333: 1 events selected
+  24260616_033235: 11 events selected
+  24260616_045309: 11 events selected
+  24260616_055753: 7 events selected
+  24260616_063504: 12 events selected
+  24260616_074337: 0 events selected
+  → Zip4 total: 97 events
+  WARNING: only 97 events — consider widening PTOF_RANGES[4]
+
+Zip6 — cut: 1.10e-06 < PTOFamps < 2.00e-06
+  24260615_235328: 40 events selected
+  24260616_011402: 25 events selected
+  24260616_021845: 42 events selected
+  24260616_032333: 2 events selected
+  24260616_033235: 33 events selected
+  24260616_045309: 25 events selected
+  24260616_055753: 11 events selected
+  24260616_063504: 26 events selected
+  24260616_074337: 6 events selected
+  → Zip6 total: 210 events
+
+Zip7 — cut: 7.00e-07 < PTOFamps < 1.20e-06
+  24260615_235328: 16 events selected
+  24260616_011402: 2 events selected
+  24260616_021845: 1 events selected
+  24260616_032333: 1 events selected
+  24260616_033235: 1 events selected
+  24260616_045309: 3 events selected
+  24260616_055753: 7 events selected
+  24260616_063504: 3 events selected
+  24260616_074337: 3 events selected
+  → Zip7 total: 37 events
+  WARNING: only 37 events — consider widening PTOF_RANGES[7]
+
+Zip10 — cut: 1.10e-06 < PTOFamps < 1.70e-06
+  24260615_235328: 48 events selected
+  24260616_011402: 44 events selected
+  24260616_021845: 42 events selected
+  24260616_032333: 0 events selected
+  24260616_033235: 34 events selected
+  24260616_045309: 39 events selected
+  24260616_055753: 16 events selected
+  24260616_063504: 33 events selected
+  24260616_074337: 8 events selected
+  → Zip10 total: 264 events
+
+Zip15 — cut: 2.00e-06 < PTOFamps < 3.00e-06
+  24260615_235328: 22 events selected
+  24260616_011402: 14 events selected
+  24260616_021845: 14 events selected
+  24260616_032333: 0 events selected
+  24260616_033235: 22 events selected
+  24260616_045309: 23 events selected
+  24260616_055753: 20 events selected
+  24260616_063504: 21 events selected
+  24260616_074337: 1 events selected
+  → Zip15 total: 137 events
+
+Zip16 — cut: 2.40e-06 < PTOFamps < 3.50e-06
+  24260615_235328: 28 events selected
+  24260616_011402: 15 events selected
+  24260616_021845: 17 events selected
+  24260616_032333: 0 events selected
+  24260616_033235: 18 events selected
+  24260616_045309: 13 events selected
+  24260616_055753: 10 events selected
+  24260616_063504: 7 events selected
+  24260616_074337: 2 events selected
+  → Zip16 total: 110 events
+
+Zip18 — cut: 2.30e-06 < PTOFamps < 3.60e-06
+  24260615_235328: 16 events selected
+  24260616_011402: 5 events selected
+  24260616_021845: 5 events selected
+  24260616_032333: 0 events selected
+  24260616_033235: 6 events selected
+  24260616_045309: 9 events selected
+  24260616_055753: 3 events selected
+  24260616_063504: 7 events selected
+  24260616_074337: 1 events selected
+  → Zip18 total: 52 events
+  WARNING: only 52 events — consider widening PTOF_RANGES[18]
+
+=== Zip1 ===
+INFO: Found 16 midas raw data files
+  24260615_235328: 369 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 72 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 117 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 162 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 72 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 36 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 81 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 27 good channel-trace pairs
+  PAS1: 104 traces
+  PBS1: 104 traces
+  PCS1: 104 traces
+  PES1: 104 traces
+  PFS1: 104 traces
+  PAS2: 104 traces
+  PCS2: 104 traces
+  PDS2: 104 traces
+  PES2: 104 traces
+  PF (Type 3): 104 per-event traces
+
+=== Zip4 ===
+INFO: Found 16 midas raw data files
+  24260615_235328: 220 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 176 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 209 good channel-trace pairs
+INFO: Found 2 midas raw data files
+  24260616_032333: 11 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 121 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 121 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 77 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 132 good channel-trace pairs
+  PAS1: 97 traces
+  PCS1: 97 traces
+  PDS1: 97 traces
+  PES1: 97 traces
+  PFS1: 97 traces
+  PAS2: 97 traces
+  PBS2: 97 traces
+  PCS2: 97 traces
+  PDS2: 97 traces
+  PES2: 97 traces
+  PFS2: 97 traces
+  PF (Type 3): 97 per-event traces
+
+=== Zip6 ===
+INFO: Found 16 midas raw data files
+  24260615_235328: 480 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 300 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 504 good channel-trace pairs
+INFO: Found 2 midas raw data files
+  24260616_032333: 24 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 396 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 300 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 132 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 312 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 72 good channel-trace pairs
+  PAS1: 210 traces
+  PBS1: 210 traces
+  PCS1: 210 traces
+  PDS1: 210 traces
+  PES1: 210 traces
+  PFS1: 210 traces
+  PAS2: 210 traces
+  PBS2: 210 traces
+  PCS2: 210 traces
+  PDS2: 210 traces
+  PES2: 210 traces
+  PFS2: 210 traces
+  PF (Type 3): 210 per-event traces
+
+=== Zip7 ===
+INFO: Found 16 midas raw data files
+  24260615_235328: 176 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 22 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 11 good channel-trace pairs
+INFO: Found 2 midas raw data files
+  24260616_032333: 11 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 11 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 33 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 77 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 33 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 33 good channel-trace pairs
+  PAS1: 37 traces
+  PBS1: 37 traces
+  PCS1: 37 traces
+  PDS1: 37 traces
+  PES1: 37 traces
+  PFS1: 37 traces
+  PAS2: 37 traces
+  PBS2: 37 traces
+  PCS2: 37 traces
+  PDS2: 37 traces
+  PES2: 37 traces
+  PF (Type 3): 37 per-event traces
+
+=== Zip10 ===
+INFO: Found 16 midas raw data files
+  24260615_235328: 528 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 484 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 462 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 374 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 429 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 176 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 363 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 88 good channel-trace pairs
+  PAS1: 264 traces
+  PBS1: 264 traces
+  PCS1: 264 traces
+  PDS1: 264 traces
+  PES1: 264 traces
+  PFS1: 264 traces
+  PAS2: 264 traces
+  PBS2: 264 traces
+  PCS2: 264 traces
+  PDS2: 264 traces
+  PES2: 264 traces
+  PF (Type 3): 264 per-event traces
+
+=== Zip15 ===
+INFO: Found 16 midas raw data files
+  24260615_235328: 242 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 154 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 154 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 242 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 253 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 220 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 231 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 11 good channel-trace pairs
+  PBS1: 137 traces
+  PCS1: 137 traces
+  PDS1: 137 traces
+  PES1: 137 traces
+  PFS1: 137 traces
+  PAS2: 137 traces
+  PBS2: 137 traces
+  PCS2: 137 traces
+  PDS2: 137 traces
+  PES2: 137 traces
+  PFS2: 137 traces
+  PF (Type 3): 137 per-event traces
+
+=== Zip16 ===
+INFO: Found 16 midas raw data files
+  24260615_235328: 252 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 135 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 153 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 162 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 117 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 90 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 63 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 18 good channel-trace pairs
+  PBS1: 110 traces
+  PCS1: 110 traces
+  PDS1: 110 traces
+  PES1: 110 traces
+  PFS1: 110 traces
+  PBS2: 110 traces
+  PCS2: 110 traces
+  PDS2: 110 traces
+  PFS2: 110 traces
+  PF (Type 3): 110 per-event traces
+
+=== Zip18 ===
+INFO: Found 16 midas raw data files
+  24260615_235328: 176 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 55 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 55 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 66 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 99 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 33 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 77 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 11 good channel-trace pairs
+  PAS1: 52 traces
+  PBS1: 52 traces
+  PCS1: 52 traces
+  PDS1: 52 traces
+  PES1: 52 traces
+  PFS1: 52 traces
+  PAS2: 52 traces
+  PBS2: 52 traces
+  PDS2: 52 traces
+  PES2: 52 traces
+  PFS2: 52 traces
+  PF (Type 3): 52 per-event traces
+
+缓存已保存至: /users/9/li004628/urop/snolab/traces_cache.pkl
+  PAS1: template from 104 traces
+  PBS1: template from 104 traces
+  PCS1: template from 104 traces
+  PES1: template from 104 traces
+  PFS1: template from 104 traces
+  PAS2: template from 104 traces
+  PCS2: template from 104 traces
+  PDS2: template from 104 traces
+  PES2: template from 104 traces
+  PAS1: [4-exp] t1=0.076  t2=0.04  t3=0.04  t4=26.05 ms
+  PBS1: [4-exp] t1=0.075  t2=0.04  t3=0.04  t4=12.89 ms
+  PCS1: [4-exp] t1=0.080  t2=0.00  t3=0.08  t4=50.39 ms
+  PES1: [4-exp] t1=0.076  t2=0.05  t3=0.05  t4=20.89 ms
+  PFS1: [4-exp] t1=0.077  t2=0.05  t3=0.11  t4=15.89 ms
+  PAS2: [4-exp] t1=0.076  t2=0.06  t3=0.07  t4=22.19 ms
+  PCS2: [4-exp] t1=0.053  t2=0.07  t3=0.07  t4=32.08 ms
+  PDS2: [4-exp] t1=0.079  t2=0.05  t3=0.07  t4=38.52 ms
+  PES2: [4-exp] t1=0.076  t2=0.04  t3=0.03  t4=39.07 ms
+Channel   Model       amp1      amp2      amp3     t1 [ms]     t2 [ms]     t3 [ms]     t4 [ms]
+----------------------------------------------------------------------------------------------
+  PAS1  :  4-exp     0.075     0.152     0.333       0.076        0.04        0.04       26.05
+  PBS1  :  4-exp     0.269     0.178     0.231       0.075        0.04        0.04       12.89
+  PCS1  :  4-exp     0.000    57.008     0.483       0.080        0.00        0.08       50.39
+  PES1  :  4-exp     0.235     0.349     0.299       0.076        0.05        0.05       20.89
+  PFS1  :  4-exp     0.371     0.254     0.382       0.077        0.05        0.11       15.89
+  PAS2  :  4-exp     0.333     0.831     0.330       0.076        0.06        0.07       22.19
+  PCS2  :  4-exp     0.344     0.159     0.643       0.053        0.07        0.07       32.08
+  PDS2  :  4-exp     0.133     3.882     0.439       0.079        0.05        0.07       38.52
+  PES2  :  4-exp     0.056     0.029     0.401       0.076        0.04        0.03       39.07
+PT [PF method, 104 events, 4-exp]: t1=0.065  t2=0.07  t3=0.06  t4=91.21 ms
+  PAS1: written
+  PBS1: written
+  PCS1: written
+  PDS1: skipped (no template)
+  PES1: written
+  PFS1: written
+  PAS2: written
+  PBS2: skipped (no template)
+  PCS2: written
+  PDS2: written
+  PES2: written
+  PFS2: skipped (no template)
+  PT: written
+  PS1: written
+  PS2: written
+
+Saved: /users/9/li004628/urop/snolab/Templates_SNOLAB_R4_zip1_1x1.root
+  PAS1: 75 fitted + 27 raw fallback = 102 training events
+  PBS1: 55 fitted + 43 raw fallback = 98 training events
+  PCS1: 83 fitted + 12 raw fallback = 95 training events
+  PES1: 58 fitted + 32 raw fallback = 90 training events
+  PFS1: 46 fitted + 33 raw fallback = 79 training events
+  PAS2: 66 fitted + 29 raw fallback = 95 training events
+  PCS2: 35 fitted + 34 raw fallback = 69 training events
+  PDS2: 68 fitted + 25 raw fallback = 93 training events
+  PES2: 62 fitted + 33 raw fallback = 95 training events
+PCA on 816 synthetic traces (4 components)
+  PC0: 50.15% variance
+  PC1: 25.27% variance
+  PC2: 8.15% variance
+  PC3: 5.52% variance
+Sine cleaning skipped — uncomment above block if needed.
+NxM templates (4 components × 9 channels) written.
+Saved: /users/9/li004628/urop/snolab/Templates_SNOLAB_R4_zip1_1x1.root
+1×1 templates present: ['PAS1', 'PBS1', 'PCS1', 'PES1', 'PFS1', 'PAS2', 'PCS2', 'PDS2', 'PES2', 'PT', 'PS1', 'PS2']
+NxM channels present: ['PAS1', 'PBS1', 'PCS1', 'PES1', 'PFS1', 'PAS2', 'PCS2', 'PDS2', 'PES2']

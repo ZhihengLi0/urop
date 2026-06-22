@@ -1,0 +1,110 @@
+CDMS Software Version: V07-02-00
+Found 9 series
+
+=== Processing Zip18 ===
+Zip18 channels (11): ['PAS1', 'PBS1', 'PCS1', 'PDS1', 'PES1', 'PFS1', 'PAS2', 'PBS2', 'PDS2', 'PES2', 'PFS2']
+
+Zip18 — cut: 2.30e-06 < PTOFamps < 3.60e-06
+  24260615_235328: 16 events selected
+  24260616_011402: 5 events selected
+  24260616_021845: 5 events selected
+  24260616_032333: 0 events selected
+  24260616_033235: 6 events selected
+  24260616_045309: 9 events selected
+  24260616_055753: 3 events selected
+  24260616_063504: 7 events selected
+  24260616_074337: 1 events selected
+  → Zip18 total: 52 events
+  WARNING: only 52 events — consider widening PTOF_RANGES[18]
+
+Reading raw traces for Zip18...
+INFO: Found 16 midas raw data files
+  24260615_235328: 130 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 45 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 39 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 58 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 85 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 29 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 60 good channel-trace pairs
+INFO: Found 6 midas raw data files
+  24260616_074337: 11 good channel-trace pairs
+  PAS1: 47 traces
+  PBS1: 44 traces
+  PCS1: 17 traces
+  PDS1: 46 traces
+  PES1: 48 traces
+  PFS1: 22 traces
+  PAS2: 41 traces
+  PBS2: 50 traces
+  PDS2: 50 traces
+  PES2: 49 traces
+  PFS2: 43 traces
+  PF (Type 3): 10 per-event traces
+Cache saved: /users/9/li004628/urop/snolab/runs/r4_fixed_v2_20260621/cache/traces_cache_zip18.pkl
+  PAS1: template from 47 traces
+  PBS1: template from 44 traces
+  PCS1: template from 17 traces
+  PDS1: template from 46 traces
+  PES1: template from 48 traces
+  PFS1: template from 22 traces
+  PAS2: template from 41 traces
+  PBS2: template from 50 traces
+  PDS2: template from 50 traces
+  PES2: template from 49 traces
+  PFS2: template from 43 traces
+  PAS1: [4-exp] t1=0.057  t2=0.60  t3=0.62  t4=0.60 ms
+  PBS1: [4-exp] t1=0.067  t2=0.58  t3=1.71  t4=0.65 ms
+  PCS1: [4-exp] t1=0.080  t2=0.21  t3=1.46  t4=1.46 ms
+  PDS1: [4-exp] t1=0.065  t2=0.49  t3=0.50  t4=0.56 ms
+  PES1: [4-exp] t1=0.074  t2=0.60  t3=0.53  t4=0.80 ms
+  PFS1: [4-exp] t1=0.072  t2=0.25  t3=1.51  t4=1.50 ms
+  PAS2: [4-exp] t1=0.060  t2=0.49  t3=0.46  t4=0.56 ms
+  PBS2: [4-exp] t1=0.068  t2=0.37  t3=0.31  t4=0.86 ms
+  PDS2: [4-exp] t1=0.080  t2=0.21  t3=0.59  t4=8.59 ms
+  PES2: [4-exp] t1=0.080  t2=0.23  t3=0.19  t4=0.99 ms
+  PFS2: [4-exp] t1=0.066  t2=0.43  t3=0.45  t4=0.39 ms
+PT [PF method, 10 events, 4-exp]: t1=0.076  t2=0.38  t3=0.45  t4=1.64 ms
+  PAS1: written
+  PBS1: written
+  PCS1: written
+  PDS1: written
+  PES1: written
+  PFS1: written
+  PAS2: written
+  PBS2: written
+  PCS2: skipped (no template)
+  PDS2: written
+  PES2: written
+  PFS2: written
+  PT: written
+  PS1: written
+  PS2: written
+  PAS1: 30 fitted + 17 raw = 47 training events
+  PBS1: 26 fitted + 17 raw = 43 training events
+  PCS1: 6 fitted + 10 raw = 16 training events
+  PDS1: 32 fitted + 14 raw = 46 training events
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+  PES1: 30 fitted + 18 raw = 48 training events
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+  PFS1: 11 fitted + 11 raw = 22 training events
+  PAS2: 26 fitted + 15 raw = 41 training events
+  PBS2: 25 fitted + 25 raw = 50 training events
+  PDS2: 26 fitted + 24 raw = 50 training events
+  PES2: 29 fitted + 20 raw = 49 training events
+  PFS2: 29 fitted + 14 raw = 43 training events
+PCA on 455 synthetic traces (4 components)
+  PC0: 42.60% variance
+  PC1: 20.48% variance
+  PC2: 10.05% variance
+  PC3: 6.46% variance
+NxM templates (4 components × 11 channels) written.
+
+Done. Saved: /users/9/li004628/urop/snolab/runs/r4_fixed_v2_20260621/root_files/Templates_SNOLAB_R4_zip18_1x1.root

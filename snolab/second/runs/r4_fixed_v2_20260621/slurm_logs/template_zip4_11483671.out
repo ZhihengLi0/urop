@@ -1,0 +1,140 @@
+CDMS Software Version: V07-02-00
+Found 9 series
+
+=== Processing Zip4 ===
+Zip4 channels (11): ['PAS1', 'PCS1', 'PDS1', 'PES1', 'PFS1', 'PAS2', 'PBS2', 'PCS2', 'PDS2', 'PES2', 'PFS2']
+
+Zip4 — cut: 1.10e-06 < PTOFamps < 1.60e-06
+  24260615_235328: 20 events selected
+  24260616_011402: 16 events selected
+  24260616_021845: 19 events selected
+  24260616_032333: 1 events selected
+  24260616_033235: 11 events selected
+  24260616_045309: 11 events selected
+  24260616_055753: 7 events selected
+  24260616_063504: 12 events selected
+  24260616_074337: 0 events selected
+  → Zip4 total: 97 events
+  WARNING: only 97 events — consider widening PTOF_RANGES[4]
+
+Reading raw traces for Zip4...
+INFO: Found 16 midas raw data files
+  24260615_235328: 146 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_011402: 120 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_021845: 160 good channel-trace pairs
+INFO: Found 2 midas raw data files
+  24260616_032333: 6 good channel-trace pairs
+INFO: Found 16 midas raw data files
+  24260616_033235: 87 good channel-trace pairs
+INFO: Found 13 midas raw data files
+  24260616_045309: 91 good channel-trace pairs
+INFO: Found 8 midas raw data files
+  24260616_055753: 57 good channel-trace pairs
+INFO: Found 14 midas raw data files
+  24260616_063504: 97 good channel-trace pairs
+  PAS1: 91 traces
+  PCS1: 46 traces
+  PDS1: 40 traces
+  PES1: 70 traces
+  PFS1: 39 traces
+  PAS2: 93 traces
+  PBS2: 91 traces
+  PCS2: 50 traces
+  PDS2: 58 traces
+  PES2: 94 traces
+  PFS2: 92 traces
+  PF (Type 3): 14 per-event traces
+Cache saved: /users/9/li004628/urop/snolab/runs/r4_fixed_v2_20260621/cache/traces_cache_zip4.pkl
+  PAS1: template from 91 traces
+  PCS1: template from 46 traces
+  PDS1: template from 40 traces
+  PES1: template from 70 traces
+  PFS1: template from 39 traces
+  PAS2: template from 93 traces
+  PBS2: template from 91 traces
+  PCS2: template from 50 traces
+  PDS2: template from 58 traces
+  PES2: template from 94 traces
+  PFS2: template from 92 traces
+  PAS1: [4-exp] t1=0.079  t2=0.97  t3=0.94  t4=1.10 ms
+  PCS1: [4-exp] t1=0.060  t2=0.22  t3=2.23  t4=2.21 ms
+  PDS1: [4-exp] t1=0.051  t2=0.33  t3=1.44  t4=2.52 ms
+  PES1: [4-exp] t1=0.054  t2=0.55  t3=0.08  t4=2.21 ms
+  PFS1: [4-exp] t1=0.062  t2=1.87  t3=1.87  t4=1.87 ms
+  PAS2: [4-exp] t1=0.078  t2=0.76  t3=0.78  t4=1.34 ms
+  PBS2: [4-exp] t1=0.074  t2=1.23  t3=1.02  t4=1.03 ms
+  PCS2: [4-exp] t1=0.063  t2=0.16  t3=1.64  t4=1.61 ms
+  PDS2: [4-exp] t1=0.072  t2=0.25  t3=1.74  t4=1.74 ms
+  PES2: [4-exp] t1=0.075  t2=0.98  t3=0.95  t4=1.01 ms
+  PFS2: [4-exp] t1=0.079  t2=0.68  t3=1.24  t4=0.72 ms
+PT [PF method, 14 events, 4-exp]: t1=0.065  t2=0.08  t3=0.85  t4=1.69 ms
+  PAS1: written
+  PBS1: skipped (no template)
+  PCS1: written
+  PDS1: written
+  PES1: written
+  PFS1: written
+  PAS2: written
+  PBS2: written
+  PCS2: written
+  PDS2: written
+  PES2: written
+  PFS2: written
+  PT: written
+  PS1: written
+  PS2: written
+  PAS1: 63 fitted + 27 raw = 90 training events
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:293: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+  PCS1: 14 fitted + 25 raw = 39 training events
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:293: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:293: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:292: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:293: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:292: RuntimeWarning: overflow encountered in exp
+  -((amp1 + amp2 + amp3) * np.exp(-(x - pretrigger) / t1 / samplerate)
+  PDS1: 21 fitted + 16 raw = 37 training events
+  PES1: 26 fitted + 43 raw = 69 training events
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+  PFS1: 21 fitted + 11 raw = 32 training events
+  PAS2: 66 fitted + 27 raw = 93 training events
+  PBS2: 61 fitted + 30 raw = 91 training events
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:293: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+  PCS2: 19 fitted + 28 raw = 47 training events
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:293: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:293: RuntimeWarning: overflow encountered in exp
+  - amp1                * np.exp(-(x - pretrigger) / t2 / samplerate)
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+  PDS2: 23 fitted + 35 raw = 58 training events
+  PES2: 59 fitted + 34 raw = 93 training events
+/users/9/li004628/urop/snolab/scripts/template_single_zip.py:295: RuntimeWarning: overflow encountered in exp
+  - amp3                * np.exp(-(x - pretrigger) / t4 / samplerate)) + baseline
+  PFS2: 72 fitted + 19 raw = 91 training events
+PCA on 740 synthetic traces (4 components)
+  PC0: 41.07% variance
+  PC1: 19.68% variance
+  PC2: 10.82% variance
+  PC3: 8.11% variance
+NxM templates (4 components × 11 channels) written.
+
+Done. Saved: /users/9/li004628/urop/snolab/runs/r4_fixed_v2_20260621/root_files/Templates_SNOLAB_R4_zip4_1x1.root

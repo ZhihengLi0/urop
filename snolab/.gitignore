@@ -1,0 +1,5 @@
+# Large trace cache files (hundreds of MB - GB)
+traces_cache*.pkl
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
