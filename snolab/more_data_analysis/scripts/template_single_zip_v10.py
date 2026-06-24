@@ -34,7 +34,7 @@ from scipy.optimize import curve_fit
 from scipy.signal import butter, sosfilt
 from sklearn.decomposition import PCA
 import uproot
-import glob, os, warnings, pickle, json
+import os, warnings, pickle, json
 
 print("CDMS Software Version:", cdms.get_global_version())
 
@@ -123,6 +123,10 @@ if len(_pairs) < len(all_proc_files):
 all_proc_files, series_list = ([p[0] for p in _pairs], [p[1] for p in _pairs])
 print(f"Using {len(series_list)} series for Zip{det_tmpl} "
       f"({len(SERIES_EXCLUSIONS.get(det_tmpl, []))} excluded)")
+
+if not all_proc_files:
+    raise RuntimeError(f"No processed files found on disk for Zip{det_tmpl}. "
+                       f"Check PROCESSED_DIR and series list.")
 
 ALL_CHANS = ['PAS1','PBS1','PCS1','PDS1','PES1','PFS1',
              'PAS2','PBS2','PCS2','PDS2','PES2','PFS2']
