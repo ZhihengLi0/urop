@@ -444,7 +444,7 @@ def fit_average_template(tmpl):
                 warnings.simplefilter('ignore')
                 popt4_free, _ = curve_fit(
                     _4exp_1x1, x, y,
-                    p0=[a1_3 * 0.6, a1_3 * 0.3, a2_3, t4_init, bl_3, pt_3],
+                    p0=[a1_3 * 0.6, a2_3, a1_3 * 0.3, t4_init, bl_3, pt_3],
                     bounds=([0, 0, 0, t4_lower, -BASELINE_LIMIT, pt_lo],
                             [np.inf, np.inf, np.inf, T4_DECAY_MAX,
                              BASELINE_LIMIT, pt_hi]),
