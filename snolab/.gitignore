@@ -1,5 +1,14 @@
-# Large trace cache files (hundreds of MB - GB)
-traces_cache*.pkl
-
-# Jupyter checkpoints
-.ipynb_checkpoints/
+# Run outputs — large binary files
+*/run/
+# Pickle cache files
+*.pkl
+# ROOT histogram files
+*.root
+# Plot outputs
+*.png
+*.pdf
+# Python cache
+__pycache__/
+*.pyc
+# Claude project settings
+.claude/
