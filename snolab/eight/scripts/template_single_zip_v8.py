@@ -847,7 +847,7 @@ for chan in chan_names:
                 plt.close(fig_d)
             diag_done += 1
 
-        # 4-exp canonical synthetic trace with fixed pretrigger.
+        # 4-exp canonical synthetic trace pinned to CANONICAL_PT.
         try:
             synth = make_fixed_pretrigger_synth_4exp(
                 amp1_4, amp2_4, amp3_4, t1_fix, t2_fix, t3_fix, t4)
@@ -862,8 +862,8 @@ for chan in chan_names:
         nxm_synth_bychan[chan].append(synth)
         n_accept += 1
 
-    print(f"  {chan}: {n_accept} accepted, {n_reject} fit/shape rejected, "
-          f"{n_raw_negative} >5% negative-excursion rejected")
+    print(f"  {chan}: {n_accept} accepted, {n_reject} rejected, "
+          f"{n_raw_negative} >5% undershoot rejected")
 
 # ── Alignment diagnostic plot ─────────────────────────────────────────────────
 demo_chan = next((c for c in chan_names if nxm_synth_bychan.get(c)), None)
