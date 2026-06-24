@@ -27,7 +27,7 @@ os.makedirs(OUTDIR, exist_ok=True)
 
 SAMPLERATE  = 625000
 TRACELENGTH = 32768
-ZIPS        = [1, 4, 6, 7, 10, 15, 16, 18]
+ZIPS        = [1, 4, 6, 7, 9, 10, 13, 15, 16, 18, 19, 22, 24]
 
 WRITE_CHANS = ['PAS1','PBS1','PCS1','PDS1','PES1','PFS1',
                'PAS2','PBS2','PCS2','PDS2','PES2','PFS2','PT','PS1','PS2']
@@ -193,7 +193,7 @@ for det in ZIPS:
 # PT comparison across all zips
 fig_all, ax_all = plt.subplots(figsize=(14, 6))
 ax_all.set_title(f'PT Template Comparison — All Zips [{MODE}]', fontsize=13)
-zip_colors = plt.cm.tab10(np.linspace(0, 0.9, len(ZIPS)))
+zip_colors = plt.cm.tab20(np.linspace(0, 0.95, len(ZIPS)))
 for det, col in zip(ZIPS, zip_colors):
     root_path = os.path.join(ROOT_DIR, f"Templates_SNOLAB_R4_zip{det}_{MODE}.root")
     if not os.path.exists(root_path):

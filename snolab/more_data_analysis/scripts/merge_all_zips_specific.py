@@ -7,7 +7,7 @@ _run = os.environ.get("R4_RUN_DIR", ".")
 SRC_DIR  = os.path.join(_run, "specific", "root_files")
 OUT_FILE = os.path.join(SRC_DIR, "Templates_SNOLAB_R4_AllZips_specific.root")
 
-ZIPS = [1, 4, 6, 7, 10, 15, 16, 18]
+ZIPS = [1, 4, 6, 7, 9, 10, 13, 15, 16, 18, 19, 22, 24]
 
 out = ROOT.TFile(OUT_FILE, "RECREATE")
 

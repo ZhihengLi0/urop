@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 RUN_DIR = os.environ.get('R4_RUN_DIR', '.').strip()
-ZIPS = [1, 4, 6, 7, 10, 15, 16, 18]
+ZIPS = [1, 4, 6, 7, 9, 10, 13, 15, 16, 18, 19, 22, 24]
 ALL_CHANS = ['PAS1','PBS1','PCS1','PDS1','PES1','PFS1',
              'PAS2','PBS2','PCS2','PDS2','PES2','PFS2']
 JSON_DIR = os.path.join(RUN_DIR, 'agnostic', 'root_files')
