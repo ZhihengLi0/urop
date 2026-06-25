@@ -32,38 +32,44 @@ DAYS=(260617 260618 260619 260620 260621 260622 260623)
 DETS=(1 4 6 7 9 10 13 15 16 18 19 22 24)
 
 # ── Step 1: per-day, per-detector trace reading ───────────────────────────────
-job_ids=()
+# Track per-detector job IDs so each plot job depends only on its own reading jobs.
+declare -A det_job_ids
+
 for det in "${DETS[@]}"; do
+    det_job_ids[$det]=""
     for day in "${DAYS[@]}"; do
         jid=$(sbatch --parsable \
             --job-name="sec3_z${det}_d${day}" \
             --time=2:00:00 \
             --ntasks=1 \
-            --mem=32g \
-            --partition=msismall \
+            --mem=128g \
+            --partition=agsmall \
             --output="$RUN_DIR/agnostic/slurm_logs/sec3_zip${det}_day${day}_%j.out" \
             --export="ALL,R4_RUN_DIR=$RUN_DIR" \
             --wrap="singularity exec -B \$HOME,\$MSIPROJECT/shared/ $IMAGE \
                     python3 -u $SCRIPTS/process_day_section3.py --det $det --day $day")
-        job_ids+=("$jid")
+        if [[ -z "${det_job_ids[$det]}" ]]; then
+            det_job_ids[$det]="$jid"
+        else
+            det_job_ids[$det]="${det_job_ids[$det]}:$jid"
+        fi
         echo "  Submitted Zip${det} Day${day}: job ${jid}"
     done
 done
 
-dependency=$(IFS=:; echo "${job_ids[*]}")
 echo ""
-echo "All ${#job_ids[@]} reading jobs submitted."
+echo "All reading jobs submitted."
 
-# ── Step 2: merge + plot per detector (runs after all reading jobs finish) ────
+# ── Step 2: merge + plot per detector (each depends only on its own reading jobs) ──
 echo ""
 for det in "${DETS[@]}"; do
     plot_jid=$(sbatch --parsable \
         --job-name="sec3_plot_z${det}" \
-        --dependency="afterok:$dependency" \
+        --dependency="afterok:${det_job_ids[$det]}" \
         --time=0:30:00 \
         --ntasks=1 \
         --mem=16g \
-        --partition=msismall \
+        --partition=agsmall \
         --output="$RUN_DIR/agnostic/slurm_logs/sec3_plot_zip${det}_%j.out" \
         --export="ALL,R4_RUN_DIR=$RUN_DIR" \
         --wrap="singularity exec -B \$HOME,\$MSIPROJECT/shared/ $IMAGE \

@@ -261,3 +261,105 @@ plt.close()
 print(f"Saved: {out_pt}")
 
 print(f"\nDone. Plots in: {os.path.abspath(OUTDIR)}")
+
+# ── Section 3 style: corrected vs uncorrected pulse overlays ─────────────────
+# Corrected  : 4-exp canonical synthetic traces (pretrigger fixed, baseline=0, peak=1)
+# Uncorrected: raw LP-filtered channel_traces (baseline subtracted, not amplitude/peak aligned)
+
+CANONICAL_PT = 16250
+LO_FULL = CANONICAL_PT - 500
+HI_FULL = CANONICAL_PT + 3000
+LO_ZOOM = CANONICAL_PT - 50
+HI_ZOOM = CANONICAL_PT + 600
+
+def load_nxm_synth(det):
+    path = os.path.join(CACHE_DIR, f"nxm_synth_zip{det}.pkl")
+    if not os.path.exists(path):
+        return None
+    with open(path, 'rb') as f:
+        d = pickle.load(f)
+    return d.get('nxm_synth_bychan', {})
+
+print("\n── Section 3 style: corrected vs uncorrected ──")
+for det in ZIPS:
+    nxm_synth   = load_nxm_synth(det)
+    ch_traces_s3, _ = load_cache(det)
+
+    # collect channels that have at least one synthetic trace
+    if nxm_synth is None:
+        print(f"  Zip{det}: nxm_synth not found, skipping")
+        continue
+    chans_s3 = [c for c in S1_CHANS + S2_CHANS if c in nxm_synth and nxm_synth[c]]
+    if not chans_s3:
+        print(f"  Zip{det}: no synthetic traces")
+        continue
+
+    ncols_s3 = min(4, len(chans_s3))
+    nrows_s3  = (len(chans_s3) + ncols_s3 - 1) // ncols_s3
+    ev_colors = [plt.cm.tab20(i % 20) for i in range(
+        max(max(len(nxm_synth[c]) for c in chans_s3),
+            max((len(ch_traces_s3.get(c, [])) if ch_traces_s3 else 0)
+                for c in chans_s3)))]
+
+    for label, use_synth, fname_tag, title_main, title_note in [
+        (True,  True,  'section3_corrected',
+         'Corrected — 4-exp canonical synthetic traces',
+         'pretrigger fixed @ CANONICAL_PT, baseline=0, amplitude normalized'),
+        (False, False, 'section3_uncorrected',
+         'Uncorrected — raw LP-filtered traces',
+         'baseline subtracted, PTOFdelay aligned, amplitude NOT normalized'),
+    ]:
+        fig_s3, axes_s3 = plt.subplots(
+            nrows_s3, ncols_s3 * 2,
+            figsize=(5 * ncols_s3 * 2, 3.5 * nrows_s3),
+            sharex='col', sharey=True)
+        axes_s3 = np.array(axes_s3).reshape(nrows_s3, ncols_s3 * 2)
+        fig_s3.suptitle(
+            f'Zip{det} [{MODE}] — {title_main}\n{title_note}',
+            fontsize=11)
+
+        for idx, ch in enumerate(chans_s3):
+            row = idx // ncols_s3
+            col_base = (idx % ncols_s3) * 2
+            ax_full = axes_s3[row, col_base]
+            ax_zoom = axes_s3[row, col_base + 1]
+
+            traces_to_plot = (nxm_synth[ch] if use_synth
+                              else (ch_traces_s3.get(ch, []) if ch_traces_s3 else []))
+
+            for ei, tr in enumerate(traces_to_plot):
+                tr = np.asarray(tr, dtype=float)
+                peak = np.max(tr)
+                if peak <= 0:
+                    continue
+                col_ev = ev_colors[ei % len(ev_colors)]
+                if use_synth:
+                    y = tr  # already peak-normalized and pinned to CANONICAL_PT
+                else:
+                    y = tr / peak  # normalize amplitude for comparison
+                ax_full.plot(t_axis[LO_FULL:HI_FULL], y[LO_FULL:HI_FULL],
+                             color=col_ev, lw=0.7, alpha=0.85)
+                ax_zoom.plot(t_axis[LO_ZOOM:HI_ZOOM], y[LO_ZOOM:HI_ZOOM],
+                             color=col_ev, lw=0.8, alpha=0.85)
+
+            for ax, tag in [(ax_full, 'full'), (ax_zoom, 'zoom')]:
+                ax.axvline(x=t_axis[CANONICAL_PT], color='gray',
+                           lw=0.8, ls='--', alpha=0.5)
+                ax.set_title(f'{ch} ({len(traces_to_plot)}) [{tag}]', fontsize=8)
+                ax.grid(alpha=0.2, ls=':')
+                ax.set_ylabel('Amplitude (norm.)')
+            ax_full.set_xlabel('Time (ms)')
+            ax_zoom.set_xlabel('Time (ms)')
+
+        # hide unused axes
+        for idx in range(len(chans_s3), nrows_s3 * ncols_s3):
+            row = idx // ncols_s3
+            col_base = (idx % ncols_s3) * 2
+            for ax in [axes_s3[row, col_base], axes_s3[row, col_base + 1]]:
+                ax.set_visible(False)
+
+        plt.tight_layout()
+        out_s3 = os.path.join(OUTDIR, f'zip{det}_{fname_tag}.png')
+        plt.savefig(out_s3, dpi=150, bbox_inches='tight')
+        plt.close()
+        print(f"  Zip{det} {fname_tag}: {len(chans_s3)} channels → {out_s3}")

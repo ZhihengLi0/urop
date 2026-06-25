@@ -23,8 +23,8 @@ for det in 1 4 6 7 9 10 13 15 16 18 19 22 24; do
         --job-name="r4v10_z${det}" \
         --time=5:00:00 \
         --ntasks=1 \
-        --mem=48g \
-        --partition=msismall \
+        --mem=256g \
+        --partition=agsmall \
         --output="$RUN_DIR/agnostic/slurm_logs/template_zip${det}_%j.out" \
         --export="ALL,R4_RUN_DIR=$RUN_DIR" \
         --wrap="singularity exec -B \$HOME,\$MSIPROJECT/shared/ $IMAGE \
