@@ -3,9 +3,9 @@
 # Each per-zip job writes to both agnostic/ and specific/ subdirs.
 set -euo pipefail
 
-REPO="$HOME/urop/snolab/more_data_analysis"
+REPO="$HOME/urop/snolab/more_data_analysis_next"
 DATE="$(date +%Y%m%d)"
-RUN_DIR="$REPO/run/r4_v10_${DATE}"
+RUN_DIR="$REPO/run/r4_v11_${DATE}"
 IMAGE="$MSIPROJECT/shared/singularity_images/cdmsfull_V07-02-00.sif"
 SCRIPTS="$REPO/scripts"
 
@@ -21,9 +21,9 @@ job_ids=()
 for det in 1 4 6 7 9 10 13 15 16 18 19 22 24; do
     jid=$(sbatch --parsable \
         --job-name="r4v10_z${det}" \
-        --time=16:00:00 \
+        --time=24:00:00 \
         --ntasks=1 \
-        --mem=256g \
+        --mem=384g \
         --partition=agsmall \
         --output="$RUN_DIR/agnostic/slurm_logs/template_zip${det}_%j.out" \
         --export="ALL,R4_RUN_DIR=$RUN_DIR" \

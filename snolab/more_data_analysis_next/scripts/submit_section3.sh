@@ -1,7 +1,7 @@
 #!/bin/bash
 # Section-3 plot pipeline: per-day trace reading → merge → plot.
 #
-# Step 1: 7 days × 13 detectors = 91 jobs (process_day_section3.py)
+# Step 1: days × detectors jobs (process_day_section3.py)
 #         Each reads one day's raw traces for one detector, saves pkl.
 # Step 2: 13 plot jobs (plot_section3_all_events.py)
 #         Loads all day pkls per detector, merges, outputs corrected/uncorrected pngs.
@@ -11,7 +11,7 @@
 #   bash submit_section3.sh /path/to/run_dir  # reuse an existing run dir
 set -euo pipefail
 
-REPO="$HOME/urop/snolab/more_data_analysis"
+REPO="$HOME/urop/snolab/more_data_analysis_next"
 IMAGE="$MSIPROJECT/shared/singularity_images/cdmsfull_V07-02-00.sif"
 SCRIPTS="$REPO/scripts"
 
@@ -19,7 +19,7 @@ if [[ -n "${1:-}" ]]; then
     RUN_DIR="$1"
 else
     DATE="$(date +%Y%m%d)"
-    RUN_DIR="$REPO/run/r4_v10_${DATE}"
+    RUN_DIR="$REPO/run/r4_v11_section3_${DATE}"
 fi
 
 mkdir -p "$RUN_DIR/cache"
@@ -40,9 +40,9 @@ for det in "${DETS[@]}"; do
     for day in "${DAYS[@]}"; do
         jid=$(sbatch --parsable \
             --job-name="sec3_z${det}_d${day}" \
-            --time=6:00:00 \
+            --time=24:00:00 \
             --ntasks=1 \
-            --mem=128g \
+            --mem=192g \
             --partition=agsmall \
             --output="$RUN_DIR/agnostic/slurm_logs/sec3_zip${det}_day${day}_%j.out" \
             --export="ALL,R4_RUN_DIR=$RUN_DIR" \
@@ -66,7 +66,7 @@ for det in "${DETS[@]}"; do
     plot_jid=$(sbatch --parsable \
         --job-name="sec3_plot_z${det}" \
         --dependency="afterany:${det_job_ids[$det]}" \
-        --time=0:30:00 \
+        --time=1:00:00 \
         --ntasks=1 \
         --mem=16g \
         --partition=agsmall \
