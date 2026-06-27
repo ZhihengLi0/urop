@@ -95,6 +95,8 @@ def process_pulse(pulse_raw, baseline_rq):
     fit_params = dict(t_rise, t_fall, nrmse) if fit succeeded, else None.
     """
     y = pulse_raw.astype(np.float64)
+    if len(y) < TRACELENGTH:
+        return None, None, False, f"short_trace_{len(y)}", None
 
     if np.isfinite(baseline_rq) and baseline_rq != -999999:
         bs = float(baseline_rq)

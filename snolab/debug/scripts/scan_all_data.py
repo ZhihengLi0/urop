@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
 """
-Full data characterisation scan — ALL zips, ALL channels, ALL series.
+Full data scan: ALL series → ALL events → ALL zips → ALL channels.
 
-For every raw event passing the PTOFamps cut, computes every diagnostic
-metric used across v1-v10 of the template pipeline and outputs:
+For every event passing the PTOFamps Ge K-shell cut:
+  - reads the raw trace for each channel
+  - computes ~55 metrics individually
+  - writes one TSV row immediately (no buffering)
 
-  all_zips_event_stats.tsv  — one row per (zip,series,event,channel), 50+ cols
-  all_zips_summary.txt      — per-zip/channel aggregate stats PLUS every
-                              individual event listed with all key metrics
-
-One MIDAS pass per series covers all 13 detectors simultaneously.
-
-Usage (inside Singularity):
-    python3 -u scan_all_data.py
-    Set SCAN_RUN_DIR env var to choose output directory.
+Outputs (in $SCAN_RUN_DIR):
+  all_zips_event_stats.tsv   one row per (zip, series, event, channel)
+  all_zips_summary.txt       per-channel aggregate stats + per-event listing
+  scan.log                   timestamped progress
 """
 
-import os, sys, csv, datetime, warnings
+import os, csv, datetime, warnings
 import numpy as np
 import uproot
 from scipy.optimize import curve_fit
@@ -25,35 +22,28 @@ from scipy.signal import butter, sosfilt
 try:
     import rawio
 except ImportError:
-    raise RuntimeError("rawio required — run inside CDMS Singularity image")
+    raise RuntimeError("run inside CDMS Singularity image")
 
-# ══════════════════════════════════════════════════════════════════════════════
-# CONFIG
-# ══════════════════════════════════════════════════════════════════════════════
+# ─────────────────────────────────────────────────────────────────────────────
+# CONSTANTS
+# ─────────────────────────────────────────────────────────────────────────────
 PROCESSED_DIR = "/projects/standard/yanliusp/shared/data/CDMS/SNOLAB/R4/Processed/Prompt/Prompt_V07-02_C0.4.5/Submerged"
 RAW_DIR       = "/projects/standard/yanliusp/shared/data/CDMS/SNOLAB/R4/Raw"
 PROD_TAG      = "Prompt_V07-02_C0.4.5"
 
-SAMPLERATE    = 625000
-TRACELENGTH   = 32768
-FILTER_KHZ    = 100.0
-
-ALIGN_PEAK_LO       = 15000
-ALIGN_PEAK_HI       = 18000
-NEGATIVE_FRACTION   = 0.05
-NEGATIVE_TAIL_SAMP  = 12000
-MIN_SNR             = 4.0
-MAX_FIT_RMSE_FRAC   = 0.50
-CANONICAL_PT        = 16250
-
-# 2-exp fit window (relative to estimated pretrigger)
-FIT_WIN_LO = -300
-FIT_WIN_HI = 5000
-FIT_STRIDE = 4
+FS          = 625000        # samples per second
+NSAMP       = 32768         # trace length
+LP_KHZ      = 100.0        # low-pass cutoff
+PEAK_LO     = 15000        # expected peak window start
+PEAK_HI     = 18000        # expected peak window end
+CANONICAL   = 16250        # canonical pretrigger index
+MIN_SNR     = 4.0
+MAX_UNDER   = -0.05        # undershoot fraction floor
 
 ALL_CHANS = ['PAS1','PBS1','PCS1','PDS1','PES1','PFS1',
              'PAS2','PBS2','PCS2','PDS2','PES2','PFS2']
-ALL_ZIPS  = [1, 4, 6, 7, 9, 10, 13, 15, 16, 18, 19, 22, 24]
+
+ALL_ZIPS = [1, 4, 6, 7, 9, 10, 13, 15, 16, 18, 19, 22, 24]
 
 PTOF_RANGES = {
      1: (2.96e-7, 5.40e-7),   4: (4.44e-7, 8.10e-7),
@@ -87,296 +77,368 @@ ALL_SERIES = [
     "24260623_035656", "24260623_064608",
 ]
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SIGNAL PROCESSING HELPERS
-# ══════════════════════════════════════════════════════════════════════════════
-def butter_lp(data, cutoff_khz=FILTER_KHZ, fs=SAMPLERATE, order=4):
-    sos = butter(order, cutoff_khz * 1000, btype="low", fs=fs, output="sos")
-    return sosfilt(sos, data)
+# ─────────────────────────────────────────────────────────────────────────────
+# SIGNAL HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
+_LP_SOS = butter(4, LP_KHZ * 1000, btype="low", fs=FS, output="sos")
 
-def two_exp(x, amp, t_rise, t_fall, baseline, pretrigger):
-    dt    = np.clip((x - pretrigger) / SAMPLERATE, 0.0, None)
-    pulse = -(amp * np.exp(-dt / t_rise) - amp * np.exp(-dt / t_fall))
-    return np.where(x <= pretrigger, baseline, pulse + baseline)
+def lp_filter(y):
+    return sosfilt(_LP_SOS, y)
 
-X_FULL = np.arange(TRACELENGTH, dtype=np.float64)
+def two_exp_model(x, amp, t_rise, t_fall, baseline, pretrigger):
+    dt = np.clip((x - pretrigger) / FS, 0.0, None)
+    pulse = amp * (np.exp(-dt / t_fall) - np.exp(-dt / t_rise))
+    return np.where(x < pretrigger, baseline, pulse + baseline)
 
-def do_2exp_fit(y_lp, peak, peak_idx):
-    T_RISE0 = 6.0e-5
-    T_FALL0 = 2.8e-4
-    dt2peak = (np.log(T_FALL0 / T_RISE0) /
-               (1.0 / T_RISE0 - 1.0 / T_FALL0))
-    pt_est  = float(np.clip(peak_idx - dt2peak * SAMPLERATE, 14000, 20000))
-    fit_lo  = max(0,           int(pt_est) + FIT_WIN_LO)
-    fit_hi  = min(TRACELENGTH, int(pt_est) + FIT_WIN_HI)
-    pt_lo   = max(fit_lo, pt_est - 600)
-    pt_hi   = min(fit_hi - 1, pt_est + 600)
-    x_fit   = X_FULL[fit_lo:fit_hi:FIT_STRIDE]
-    y_fit   = y_lp[fit_lo:fit_hi:FIT_STRIDE]
+X = np.arange(NSAMP, dtype=np.float64)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 2-EXP FIT
+# ─────────────────────────────────────────────────────────────────────────────
+def fit_2exp(y_lp, peak_amp, peak_idx):
+    """
+    Fit 2-exp model to LP-filtered trace.
+    Returns dict of fit params, or None on failure.
+    """
+    # Estimate pretrigger from expected time-to-peak formula
+    T_R0, T_F0 = 6e-5, 2.8e-4
+    dt2pk = np.log(T_F0 / T_R0) / (1.0 / T_R0 - 1.0 / T_F0)
+    pt_est = float(np.clip(peak_idx - dt2pk * FS, 14000, 20000))
+
+    # Fit window: from 300 before pretrigger to 5000 after, stride 4
+    fit_lo = max(0,    int(pt_est) - 300)
+    fit_hi = min(NSAMP, int(pt_est) + 5000)
+    if fit_hi - fit_lo < 50:
+        return None
+
+    x_fit = X[fit_lo:fit_hi:4]
+    y_fit = y_lp[fit_lo:fit_hi:4]
+
+    # Pretrigger is a free parameter but bounded ±600 samples around estimate
+    pt_lo = max(fit_lo, pt_est - 600)
+    pt_hi = min(fit_hi - 1, pt_est + 600)
+
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             popt, _ = curve_fit(
-                two_exp, x_fit, y_fit,
-                p0=[peak, T_RISE0, T_FALL0, 0.0, pt_est],
-                bounds=([0,  1e-6,  1e-5, -0.5*peak, pt_lo],
-                        [np.inf, 8e-4, 8e-3,  0.5*peak, pt_hi]),
-                maxfev=30000,
+                two_exp_model, x_fit, y_fit,
+                p0   = [peak_amp, T_R0, T_F0, 0.0, pt_est],
+                bounds = (
+                    [0,     1e-6,  1e-5, -0.5 * peak_amp, pt_lo],
+                    [1e9,   8e-4,  8e-3,  0.5 * peak_amp, pt_hi],
+                ),
+                maxfev = 5000,
             )
-        amp, t_rise, t_fall, bl, pt = [float(v) for v in popt]
-        if not (amp > 0 and 0 < t_rise < t_fall and np.isfinite(pt)):
-            return None
-        y_model   = two_exp(x_fit, *popt)
-        residuals = (y_fit - y_model) / peak
-        nrmse     = float(np.sqrt(np.mean(residuals**2)))
-        rmse_abs  = float(np.sqrt(np.mean((y_fit - y_model)**2)))
-        return dict(amp=amp, t_rise=t_rise, t_fall=t_fall,
-                    baseline=bl, pretrigger=pt,
-                    nrmse=nrmse, rmse_abs=rmse_abs)
     except Exception:
         return None
 
-# ══════════════════════════════════════════════════════════════════════════════
-# MAIN METRIC COMPUTATION
-# ══════════════════════════════════════════════════════════════════════════════
-def compute_metrics(pulse_raw, baseline_rq, ptofamps, ptof_delay):
-    y   = pulse_raw.astype(np.float64)
-    nan = np.nan
+    amp, t_rise, t_fall, bl, pt = [float(v) for v in popt]
 
-    # ── 1. Raw pre-trigger noise ──────────────────────────────────────────────
-    raw_pre       = y[:5000]
-    noise_std     = float(np.std(raw_pre))
-    noise_mean    = float(np.mean(raw_pre))
-    noise_rms     = float(np.sqrt(np.mean(raw_pre**2)))
-    noise_p2p     = float(np.max(raw_pre) - np.min(raw_pre))
-    noise_skew    = float(np.mean(((raw_pre - noise_mean)/noise_std)**3)) if noise_std>0 else nan
-    # split into two halves to check drift
-    noise_h1_mean = float(np.mean(y[:2500]))
-    noise_h2_mean = float(np.mean(y[2500:5000]))
-    baseline_drift = noise_h2_mean - noise_h1_mean
+    # sanity checks on fit result
+    if amp <= 0 or t_rise <= 0 or t_fall <= t_rise:
+        return None
+    if not np.isfinite(pt):
+        return None
 
-    # ── 2. Baseline ───────────────────────────────────────────────────────────
-    if np.isfinite(baseline_rq) and baseline_rq != -999999:
-        bs        = float(baseline_rq)
-        bs_source = "rq"
-    else:
-        bs        = noise_mean
-        bs_source = "raw_mean"
-    bs_residual = noise_mean - bs   # how much RQ baseline differs from raw mean
-
-    y_bs = y - bs
-
-    # ── 3. Raw (unfiltered) peak ──────────────────────────────────────────────
-    peak_raw     = float(np.max(y_bs))
-    peak_idx_raw = int(np.argmax(y_bs))
-    min_raw      = float(np.min(y_bs))
-
-    # ── 4. LP-filtered trace ──────────────────────────────────────────────────
-    y_lp = butter_lp(y_bs)
-
-    # Pre-trigger LP stats: 14000-15500 (right before expected pulse)
-    pre_lp        = y_lp[14000:15500]
-    pretrig_mean  = float(np.mean(pre_lp))
-    pretrig_std   = float(np.std(pre_lp))
-    pretrig_p2p   = float(np.max(pre_lp) - np.min(pre_lp))
-    # Even closer to pulse: 15000-16000
-    pre_close     = y_lp[15000:16000]
-    pretrig_close_std  = float(np.std(pre_close))
-    pretrig_close_mean = float(np.mean(pre_close))
-
-    y_lp -= pretrig_mean   # remove residual LP baseline
-
-    # ── 5. LP peak ────────────────────────────────────────────────────────────
-    search_lo    = max(0, ALIGN_PEAK_LO - 1500)
-    search_hi    = min(TRACELENGTH, ALIGN_PEAK_HI + 2000)
-    peak_lp      = float(np.max(y_lp[search_lo:search_hi]))
-    peak_idx_lp  = int(search_lo + np.argmax(y_lp[search_lo:search_hi]))
-    if peak_lp <= 0:
-        peak_idx_lp = -1
-
-    # ── 6. Quality flags ──────────────────────────────────────────────────────
-    peak_in_win  = int(ALIGN_PEAK_LO <= peak_idx_lp <= ALIGN_PEAK_HI)
-    snr          = peak_lp / noise_std if (noise_std > 0 and peak_lp > 0) else 0.0
-    snr_pass     = int(snr >= MIN_SNR)
-
-    # ── 7. Undershoot ─────────────────────────────────────────────────────────
-    if peak_lp > 0 and peak_idx_lp >= 0:
-        tail_end       = min(TRACELENGTH, peak_idx_lp + NEGATIVE_TAIL_SAMP)
-        tail           = y_lp[peak_idx_lp:tail_end]
-        min_tail       = float(np.min(tail)) if len(tail) else 0.0
-        min_tail_idx   = int(peak_idx_lp + np.argmin(tail)) if len(tail) else -1
-        undershoot_frac = min_tail / peak_lp
-        undershoot_pass = int(undershoot_frac >= -NEGATIVE_FRACTION)
-    else:
-        min_tail = min_tail_idx = undershoot_frac = nan
-        undershoot_pass = 0
-
-    # ── 8. Waveform shape times ───────────────────────────────────────────────
-    rise_10_90 = rise_20_80 = fall_1e = fall_half = fall_tenth = nan
-    peak_to_half_rise = nan
-    if peak_lp > 0 and peak_idx_lp > 0:
-        pre = y_lp[:peak_idx_lp + 1]
-        for lo_frac, hi_frac, attr in [(0.10, 0.90, "rise_10_90"),
-                                        (0.20, 0.80, "rise_20_80")]:
-            i_lo = np.where(pre >= lo_frac * peak_lp)[0]
-            i_hi = np.where(pre >= hi_frac * peak_lp)[0]
-            if len(i_lo) and len(i_hi):
-                val = (i_hi[0] - i_lo[0]) / SAMPLERATE * 1e3
-                if attr == "rise_10_90": rise_10_90 = float(val)
-                else:                    rise_20_80 = float(val)
-        # half-rise: sample where LP first reaches 50% of peak
-        i_half = np.where(pre >= 0.5 * peak_lp)[0]
-        peak_to_half_rise = float((peak_idx_lp - i_half[0]) / SAMPLERATE * 1e3) if len(i_half) else nan
-
-        post = y_lp[peak_idx_lp:]
-        for frac, attr in [(1.0/np.e, "fall_1e"), (0.5, "fall_half"), (0.1, "fall_tenth")]:
-            ie = np.where(post <= frac * peak_lp)[0]
-            val = float(ie[0] / SAMPLERATE * 1e3) if len(ie) else nan
-            if attr == "fall_1e":     fall_1e     = val
-            elif attr == "fall_half": fall_half   = val
-            else:                     fall_tenth  = val
-
-    # ── 9. Pulse integral and energy proxy ────────────────────────────────────
-    if peak_lp > 0 and peak_idx_lp > 0:
-        int_lo = max(0, peak_idx_lp - 1000)
-        int_hi = min(TRACELENGTH, peak_idx_lp + 20000)
-        pulse_integral = float(np.sum(y_lp[int_lo:int_hi])) / SAMPLERATE
-        # amplitude at fixed offsets from peak (shape characterisation)
-        amp_at = {}
-        for dt_ms, label in [(0.5,"0p5ms"),(1.0,"1ms"),(2.0,"2ms"),(5.0,"5ms"),(10.0,"10ms")]:
-            idx = peak_idx_lp + int(dt_ms * 1e-3 * SAMPLERATE)
-            amp_at[label] = float(y_lp[idx] / peak_lp) if 0 <= idx < TRACELENGTH else nan
-    else:
-        pulse_integral = nan
-        amp_at = {k: nan for k in ["0p5ms","1ms","2ms","5ms","10ms"]}
-
-    # ── 10. Pre-trigger pulse check (noise spike / pileup) ─────────────────────
-    pretrig_peak     = float(np.max(np.abs(y_lp[5000:ALIGN_PEAK_LO - 500]))) if ALIGN_PEAK_LO > 5500 else nan
-    pretrig_peak_snr = pretrig_peak / noise_std if (np.isfinite(pretrig_peak) and noise_std > 0) else nan
-
-    # ── 11. Sign changes in tail (ringing indicator) ─────────────────────────
-    if peak_lp > 0 and peak_idx_lp >= 0:
-        tail_sg = y_lp[peak_idx_lp:min(TRACELENGTH, peak_idx_lp + 15000)]
-        sign_changes = int(np.sum(np.diff(np.sign(tail_sg)) != 0)) if len(tail_sg) > 1 else 0
-    else:
-        sign_changes = -1
-
-    # ── 12. 2-exp fit ─────────────────────────────────────────────────────────
-    f2 = None
-    if peak_lp > 0 and peak_in_win:
-        f2 = do_2exp_fit(y_lp, peak_lp, peak_idx_lp)
-
-    if f2:
-        fit2_ok         = 1
-        fit2_amp        = f2["amp"]
-        fit2_t_rise_ms  = f2["t_rise"] * 1e3
-        fit2_t_fall_ms  = f2["t_fall"] * 1e3
-        fit2_pretrigger = f2["pretrigger"]
-        fit2_baseline   = f2["baseline"]
-        fit2_nrmse      = f2["nrmse"]
-        fit2_rmse_abs   = f2["rmse_abs"]
-        fit2_pt_dist    = f2["pretrigger"] - CANONICAL_PT
-        fit2_ratio      = f2["t_fall"] / f2["t_rise"] if f2["t_rise"] > 0 else nan
-        fit2_rmse_pass  = int(fit2_nrmse < MAX_FIT_RMSE_FRAC)
-    else:
-        fit2_ok = 0
-        fit2_amp = fit2_t_rise_ms = fit2_t_fall_ms = fit2_pretrigger = nan
-        fit2_baseline = fit2_nrmse = fit2_rmse_abs = fit2_pt_dist = fit2_ratio = nan
-        fit2_rmse_pass = 0
-
-    # ── 13. PTOFdelay alignment ───────────────────────────────────────────────
-    if np.isfinite(ptof_delay):
-        delay_samp      = -round(ptof_delay * SAMPLERATE)
-        aligned_peak    = (peak_idx_lp + delay_samp) if peak_idx_lp >= 0 else -1
-        dist_canonical  = (peak_idx_lp - CANONICAL_PT) if peak_idx_lp >= 0 else nan
-        dist_after_align = (aligned_peak - CANONICAL_PT) if aligned_peak >= 0 else nan
-    else:
-        delay_samp = aligned_peak = 0
-        dist_canonical = dist_after_align = nan
-
-    # ── 14. Combined pass ─────────────────────────────────────────────────────
-    all_pass = int(peak_in_win and snr_pass and undershoot_pass)
+    y_model = two_exp_model(x_fit, *popt)
+    residuals = y_fit - y_model
+    nrmse = float(np.sqrt(np.mean((residuals / peak_amp) ** 2)))
+    rmse  = float(np.sqrt(np.mean(residuals ** 2)))
 
     return {
-        # identification / selection
-        "ptofamps":            ptofamps,
-        "ptof_delay_s":        ptof_delay,
-        # raw noise
-        "noise_std":           noise_std,
-        "noise_mean":          noise_mean,
-        "noise_rms":           noise_rms,
-        "noise_p2p":           noise_p2p,
-        "noise_skewness":      noise_skew,
-        "baseline_drift_h1h2": baseline_drift,
-        # baseline
-        "baseline_rq":         baseline_rq,
-        "baseline_source":     bs_source,
-        "baseline_residual":   bs_residual,
-        # raw peak
-        "peak_raw_adu":        peak_raw,
-        "peak_idx_raw":        peak_idx_raw,
-        "min_raw_adu":         min_raw,
-        # LP pre-trigger
-        "pretrig_lp_mean":     pretrig_mean,
-        "pretrig_lp_std":      pretrig_std,
-        "pretrig_lp_p2p":      pretrig_p2p,
-        "pretrig_close_std":   pretrig_close_std,
-        "pretrig_close_mean":  pretrig_close_mean,
-        # LP peak
-        "peak_lp_adu":         peak_lp,
-        "peak_idx_lp":         peak_idx_lp,
-        "peak_idx_dist_canonical": (peak_idx_lp - CANONICAL_PT) if peak_idx_lp >= 0 else nan,
-        # quality flags
-        "snr":                 snr,
-        "peak_in_window":      peak_in_win,
-        "snr_pass":            snr_pass,
-        "undershoot_frac":     undershoot_frac,
-        "undershoot_min_adu":  min_tail,
-        "undershoot_min_idx":  min_tail_idx,
-        "undershoot_pass":     undershoot_pass,
-        # waveform shape
-        "rise_10_90_ms":       rise_10_90,
-        "rise_20_80_ms":       rise_20_80,
-        "half_rise_from_peak_ms": peak_to_half_rise,
-        "fall_1e_ms":          fall_1e,
-        "fall_half_ms":        fall_half,
-        "fall_tenth_ms":       fall_tenth,
-        # amplitude at fixed offsets (normalised to peak)
-        "amp_norm_0p5ms":      amp_at["0p5ms"],
-        "amp_norm_1ms":        amp_at["1ms"],
-        "amp_norm_2ms":        amp_at["2ms"],
-        "amp_norm_5ms":        amp_at["5ms"],
-        "amp_norm_10ms":       amp_at["10ms"],
-        # pulse integral
-        "pulse_integral_adu_s": pulse_integral,
-        # pileup / noise spike check
-        "pretrig_peak_abs":    pretrig_peak,
-        "pretrig_peak_snr":    pretrig_peak_snr,
-        "tail_sign_changes":   sign_changes,
-        # 2-exp fit
-        "fit2_ok":             fit2_ok,
-        "fit2_amp":            fit2_amp,
-        "fit2_t_rise_ms":      fit2_t_rise_ms,
-        "fit2_t_fall_ms":      fit2_t_fall_ms,
-        "fit2_t_ratio":        fit2_ratio,
-        "fit2_pretrigger":     fit2_pretrigger,
-        "fit2_pt_dist_canonical": fit2_pt_dist,
-        "fit2_baseline":       fit2_baseline,
-        "fit2_nrmse":          fit2_nrmse,
-        "fit2_rmse_abs":       fit2_rmse_abs,
-        "fit2_rmse_pass":      fit2_rmse_pass,
-        # alignment
-        "delay_samples":       delay_samp,
-        "aligned_peak_idx":    aligned_peak,
-        "dist_canonical_raw":  dist_canonical,
-        "dist_canonical_aligned": dist_after_align,
-        # combined
-        "all_cuts_pass":       all_pass,
+        "amp":        amp,
+        "t_rise":     t_rise,
+        "t_fall":     t_fall,
+        "baseline":   bl,
+        "pretrigger": pt,
+        "nrmse":      nrmse,
+        "rmse":       rmse,
     }
 
-# ══════════════════════════════════════════════════════════════════════════════
-# MAIN
-# ══════════════════════════════════════════════════════════════════════════════
+# ─────────────────────────────────────────────────────────────────────────────
+# PER-CHANNEL METRIC COMPUTATION
+# ─────────────────────────────────────────────────────────────────────────────
+NAN = np.nan
+
+def metrics(raw_trace, baseline_rq, ptofamps, ptof_delay):
+    """
+    Compute all metrics for one raw trace (one event, one channel).
+    Returns a flat dict.  Never raises — returns error string on failure.
+    """
+    result = {}
+
+    # ── validate input ────────────────────────────────────────────────────────
+    if raw_trace is None or len(raw_trace) != NSAMP:
+        result["error"] = f"bad_trace_len_{len(raw_trace) if raw_trace is not None else 'None'}"
+        return result
+
+    y = raw_trace.astype(np.float64)
+
+    # ── 1. Baseline ───────────────────────────────────────────────────────────
+    # Use RQ baseline if valid, else raw mean of first 5000 samples
+    pre_raw = y[:5000]
+    raw_mean = float(np.mean(pre_raw))
+    raw_std  = float(np.std(pre_raw))
+
+    if np.isfinite(baseline_rq) and abs(baseline_rq) < 1e7 and baseline_rq != -999999.0:
+        bs = float(baseline_rq)
+        bs_src = "rq"
+    else:
+        bs = raw_mean
+        bs_src = "raw"
+
+    result["baseline_used"]     = bs
+    result["baseline_source"]   = bs_src
+    result["baseline_rq"]       = float(baseline_rq) if np.isfinite(float(baseline_rq)) else NAN
+    result["baseline_residual"] = raw_mean - bs   # should be ~0 if rq is good
+
+    # ── 2. Raw pre-trigger noise (samples 0–5000) ─────────────────────────────
+    result["noise_mean"]  = raw_mean
+    result["noise_std"]   = raw_std
+    result["noise_rms"]   = float(np.sqrt(np.mean((pre_raw - raw_mean) ** 2)))
+    result["noise_p2p"]   = float(np.max(pre_raw) - np.min(pre_raw))
+    if raw_std > 0:
+        result["noise_skew"] = float(np.mean(((pre_raw - raw_mean) / raw_std) ** 3))
+    else:
+        result["noise_skew"] = NAN
+    # baseline drift: compare first and second half of pre-trigger
+    result["baseline_drift"] = float(np.mean(y[2500:5000]) - np.mean(y[:2500]))
+
+    # ── 3. Baseline subtract ──────────────────────────────────────────────────
+    y0 = y - bs
+
+    # ── 4. Raw peak ───────────────────────────────────────────────────────────
+    result["peak_raw"]     = float(np.max(y0))
+    result["peak_idx_raw"] = int(np.argmax(y0))
+    result["min_raw"]      = float(np.min(y0))
+
+    # ── 5. LP filter ──────────────────────────────────────────────────────────
+    y_lp = lp_filter(y0)
+
+    # local baseline from LP pre-trigger region 14000–15500
+    lp_pre = y_lp[14000:15500]
+    lp_pre_mean = float(np.mean(lp_pre))
+    result["pretrig_lp_mean"] = lp_pre_mean
+    result["pretrig_lp_std"]  = float(np.std(lp_pre))
+    result["pretrig_lp_p2p"]  = float(np.max(lp_pre) - np.min(lp_pre))
+
+    # tighter window 15000–15800 (closest to pulse onset)
+    lp_close = y_lp[15000:15800]
+    result["pretrig_close_std"]  = float(np.std(lp_close))
+    result["pretrig_close_mean"] = float(np.mean(lp_close))
+
+    # subtract LP pre-trigger mean so LP baseline is 0
+    y_lp -= lp_pre_mean
+
+    # ── 6. LP peak ────────────────────────────────────────────────────────────
+    # search in [PEAK_LO - 1500, PEAK_HI + 2000]
+    search_lo = max(0,    PEAK_LO - 1500)
+    search_hi = min(NSAMP, PEAK_HI + 2000)
+    lp_window = y_lp[search_lo:search_hi]
+    peak_lp   = float(np.max(lp_window))
+    peak_idx  = int(search_lo + np.argmax(lp_window))
+
+    result["peak_lp"]      = peak_lp
+    result["peak_idx_lp"]  = peak_idx
+    result["peak_in_win"]  = int(PEAK_LO <= peak_idx <= PEAK_HI)
+    result["peak_dist_canonical"] = (peak_idx - CANONICAL) if peak_lp > 0 else NAN
+
+    # ── 7. SNR ────────────────────────────────────────────────────────────────
+    snr = (peak_lp / raw_std) if (raw_std > 0 and peak_lp > 0) else 0.0
+    result["snr"]      = float(snr)
+    result["snr_pass"] = int(snr >= MIN_SNR)
+
+    # ── 8. Undershoot ─────────────────────────────────────────────────────────
+    if peak_lp > 0:
+        tail_end = min(NSAMP, peak_idx + 12000)
+        tail = y_lp[peak_idx:tail_end]
+        if len(tail) > 0:
+            min_tail     = float(np.min(tail))
+            min_tail_idx = int(peak_idx + int(np.argmin(tail)))
+            under_frac   = min_tail / peak_lp
+        else:
+            min_tail = min_tail_idx = NAN
+            under_frac = NAN
+    else:
+        min_tail = min_tail_idx = under_frac = NAN
+
+    result["undershoot_frac"]  = under_frac
+    result["undershoot_min"]   = min_tail
+    result["undershoot_idx"]   = min_tail_idx
+    result["undershoot_pass"]  = int(under_frac >= MAX_UNDER) if np.isfinite(under_frac) else 0
+
+    # ── 9. Rise / fall times (measured on LP trace) ───────────────────────────
+    rise_10_90 = rise_20_80 = fall_1e = fall_half = fall_tenth = NAN
+    half_rise  = NAN
+
+    if peak_lp > 0 and peak_idx > 0:
+        # rise: search only last 3000 samples before peak to avoid noise triggers
+        rl = max(0, peak_idx - 3000)
+        pre = y_lp[rl:peak_idx + 1]   # pre[−1] = peak
+
+        def _rise_time(lo_f, hi_f):
+            idx_lo = np.where(pre >= lo_f * peak_lp)[0]
+            idx_hi = np.where(pre >= hi_f * peak_lp)[0]
+            if len(idx_lo) == 0 or len(idx_hi) == 0:
+                return NAN
+            dt = idx_hi[0] - idx_lo[0]
+            if dt <= 0:   # should not happen on a clean rising edge
+                return NAN
+            return float(dt / FS * 1e3)
+
+        rise_10_90 = _rise_time(0.10, 0.90)
+        rise_20_80 = _rise_time(0.20, 0.80)
+
+        # half-rise = distance from first 50% crossing to peak
+        i50 = np.where(pre >= 0.5 * peak_lp)[0]
+        if len(i50) > 0:
+            half_rise = float((len(pre) - 1 - i50[0]) / FS * 1e3)
+
+        # fall: from peak onwards
+        post = y_lp[peak_idx:]
+
+        def _fall_time(frac):
+            idx = np.where(post <= frac * peak_lp)[0]
+            return float(idx[0] / FS * 1e3) if len(idx) > 0 else NAN
+
+        fall_1e    = _fall_time(1.0 / np.e)
+        fall_half  = _fall_time(0.5)
+        fall_tenth = _fall_time(0.1)
+
+    result["rise_10_90_ms"]  = rise_10_90
+    result["rise_20_80_ms"]  = rise_20_80
+    result["half_rise_ms"]   = half_rise
+    result["fall_1e_ms"]     = fall_1e
+    result["fall_half_ms"]   = fall_half
+    result["fall_tenth_ms"]  = fall_tenth
+
+    # ── 10. Amplitude at fixed offsets (normalised to peak) ───────────────────
+    if peak_lp > 0:
+        for dt_ms, label in [(0.5,"0p5ms"),(1.0,"1ms"),(2.0,"2ms"),
+                             (5.0,"5ms"),(10.0,"10ms")]:
+            idx = peak_idx + int(dt_ms * 1e-3 * FS)
+            if 0 <= idx < NSAMP:
+                result[f"amp_norm_{label}"] = float(y_lp[idx] / peak_lp)
+            else:
+                result[f"amp_norm_{label}"] = NAN
+    else:
+        for label in ["0p5ms","1ms","2ms","5ms","10ms"]:
+            result[f"amp_norm_{label}"] = NAN
+
+    # ── 11. Pulse integral ────────────────────────────────────────────────────
+    if peak_lp > 0:
+        int_lo = max(0,    peak_idx - 1000)
+        int_hi = min(NSAMP, peak_idx + 20000)
+        result["pulse_integral"] = float(np.sum(y_lp[int_lo:int_hi])) / FS
+    else:
+        result["pulse_integral"] = NAN
+
+    # ── 12. Pre-trigger pileup check (5000–14500) ─────────────────────────────
+    pileup_region = y_lp[5000:PEAK_LO - 500]
+    if len(pileup_region) > 0:
+        pileup_abs = float(np.max(np.abs(pileup_region)))
+        result["pileup_abs"] = pileup_abs
+        result["pileup_snr"] = pileup_abs / raw_std if raw_std > 0 else NAN
+    else:
+        result["pileup_abs"] = NAN
+        result["pileup_snr"] = NAN
+
+    # ── 13. Tail sign changes (ringing) ───────────────────────────────────────
+    if peak_lp > 0:
+        tail_sg = y_lp[peak_idx:min(NSAMP, peak_idx + 15000)]
+        result["tail_sign_changes"] = float(np.sum(np.diff(np.sign(tail_sg)) != 0))
+    else:
+        result["tail_sign_changes"] = NAN
+
+    # ── 14. 2-exp fit ─────────────────────────────────────────────────────────
+    if peak_lp > 0 and result["peak_in_win"] == 1:
+        fit = fit_2exp(y_lp, peak_lp, peak_idx)
+    else:
+        fit = None
+
+    if fit is not None:
+        result["fit_ok"]         = 1
+        result["fit_amp"]        = fit["amp"]
+        result["fit_t_rise_ms"]  = fit["t_rise"] * 1e3
+        result["fit_t_fall_ms"]  = fit["t_fall"] * 1e3
+        result["fit_ratio"]      = fit["t_fall"] / fit["t_rise"]
+        result["fit_pretrigger"] = fit["pretrigger"]
+        result["fit_pt_dist"]    = fit["pretrigger"] - CANONICAL
+        result["fit_baseline"]   = fit["baseline"]
+        result["fit_nrmse"]      = fit["nrmse"]
+        result["fit_rmse"]       = fit["rmse"]
+        result["fit_nrmse_pass"] = int(fit["nrmse"] < 0.50)
+    else:
+        result["fit_ok"]         = 0
+        result["fit_amp"]        = NAN
+        result["fit_t_rise_ms"]  = NAN
+        result["fit_t_fall_ms"]  = NAN
+        result["fit_ratio"]      = NAN
+        result["fit_pretrigger"] = NAN
+        result["fit_pt_dist"]    = NAN
+        result["fit_baseline"]   = NAN
+        result["fit_nrmse"]      = NAN
+        result["fit_rmse"]       = NAN
+        result["fit_nrmse_pass"] = 0
+
+    # ── 15. PTOFdelay alignment ───────────────────────────────────────────────
+    if np.isfinite(float(ptof_delay)):
+        delay_samp = int(-round(float(ptof_delay) * FS))
+        aligned    = peak_idx + delay_samp if peak_lp > 0 else None
+        result["delay_samp"]        = delay_samp
+        result["aligned_peak_idx"]  = aligned if aligned is not None else NAN
+        result["dist_before_align"] = float(peak_idx - CANONICAL) if peak_lp > 0 else NAN
+        result["dist_after_align"]  = float(aligned - CANONICAL)  if aligned is not None else NAN
+    else:
+        result["delay_samp"]        = NAN
+        result["aligned_peak_idx"]  = NAN
+        result["dist_before_align"] = NAN
+        result["dist_after_align"]  = NAN
+
+    # ── 16. PTOFamps ──────────────────────────────────────────────────────────
+    result["ptofamps"]   = float(ptofamps)
+    result["ptof_delay"] = float(ptof_delay) if np.isfinite(float(ptof_delay)) else NAN
+
+    # ── 17. Combined pass flag ────────────────────────────────────────────────
+    result["all_pass"] = int(
+        result["peak_in_win"] == 1 and
+        result["snr_pass"]    == 1 and
+        result["undershoot_pass"] == 1
+    )
+
+    result["error"] = ""
+    return result
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TSV COLUMN ORDER
+# ─────────────────────────────────────────────────────────────────────────────
+ID_COLS  = ["zip","series","event","channel"]
+MET_COLS = [
+    "ptofamps","ptof_delay",
+    "baseline_used","baseline_source","baseline_rq","baseline_residual",
+    "noise_mean","noise_std","noise_rms","noise_p2p","noise_skew","baseline_drift",
+    "peak_raw","peak_idx_raw","min_raw",
+    "pretrig_lp_mean","pretrig_lp_std","pretrig_lp_p2p",
+    "pretrig_close_std","pretrig_close_mean",
+    "peak_lp","peak_idx_lp","peak_in_win","peak_dist_canonical",
+    "snr","snr_pass",
+    "undershoot_frac","undershoot_min","undershoot_idx","undershoot_pass",
+    "rise_10_90_ms","rise_20_80_ms","half_rise_ms",
+    "fall_1e_ms","fall_half_ms","fall_tenth_ms",
+    "amp_norm_0p5ms","amp_norm_1ms","amp_norm_2ms","amp_norm_5ms","amp_norm_10ms",
+    "pulse_integral",
+    "pileup_abs","pileup_snr","tail_sign_changes",
+    "fit_ok","fit_amp","fit_t_rise_ms","fit_t_fall_ms","fit_ratio",
+    "fit_pretrigger","fit_pt_dist","fit_baseline","fit_nrmse","fit_rmse","fit_nrmse_pass",
+    "delay_samp","aligned_peak_idx","dist_before_align","dist_after_align",
+    "all_pass","error",
+]
+ALL_COLS = ID_COLS + MET_COLS
+
+# ─────────────────────────────────────────────────────────────────────────────
+# UTILITIES
+# ─────────────────────────────────────────────────────────────────────────────
 RUN_DIR  = os.environ.get("SCAN_RUN_DIR", os.path.abspath("debug/run"))
 os.makedirs(RUN_DIR, exist_ok=True)
 
@@ -384,375 +446,468 @@ TSV_PATH = os.path.join(RUN_DIR, "all_zips_event_stats.tsv")
 SUM_PATH = os.path.join(RUN_DIR, "all_zips_summary.txt")
 LOG_PATH = os.path.join(RUN_DIR, "scan.log")
 
-# All metric column names (order matters for TSV)
-METRIC_COLS = [
-    "ptofamps","ptof_delay_s",
-    "noise_std","noise_mean","noise_rms","noise_p2p","noise_skewness","baseline_drift_h1h2",
-    "baseline_rq","baseline_source","baseline_residual",
-    "peak_raw_adu","peak_idx_raw","min_raw_adu",
-    "pretrig_lp_mean","pretrig_lp_std","pretrig_lp_p2p",
-    "pretrig_close_std","pretrig_close_mean",
-    "peak_lp_adu","peak_idx_lp","peak_idx_dist_canonical",
-    "snr","peak_in_window","snr_pass",
-    "undershoot_frac","undershoot_min_adu","undershoot_min_idx","undershoot_pass",
-    "rise_10_90_ms","rise_20_80_ms","half_rise_from_peak_ms",
-    "fall_1e_ms","fall_half_ms","fall_tenth_ms",
-    "amp_norm_0p5ms","amp_norm_1ms","amp_norm_2ms","amp_norm_5ms","amp_norm_10ms",
-    "pulse_integral_adu_s",
-    "pretrig_peak_abs","pretrig_peak_snr","tail_sign_changes",
-    "fit2_ok","fit2_amp","fit2_t_rise_ms","fit2_t_fall_ms","fit2_t_ratio",
-    "fit2_pretrigger","fit2_pt_dist_canonical","fit2_baseline",
-    "fit2_nrmse","fit2_rmse_abs","fit2_rmse_pass",
-    "delay_samples","aligned_peak_idx",
-    "dist_canonical_raw","dist_canonical_aligned",
-    "all_cuts_pass",
-]
-TSV_COLS = ["zip","series","event","channel"] + METRIC_COLS
-
-# Accumulator: acc[det][chan] = list of full row dicts (including series, event)
-acc = {det: {c: [] for c in ALL_CHANS} for det in ALL_ZIPS}
-
 def log(msg):
     ts   = datetime.datetime.now().strftime("%H:%M:%S")
     line = f"[{ts}] {msg}"
     print(line, flush=True)
-    with open(LOG_PATH, "a") as lf:
-        lf.write(line + "\n")
+    with open(LOG_PATH, "a") as fh:
+        fh.write(line + "\n")
 
-log(f"=== scan_all_data.py started {datetime.datetime.now()} ===")
-log(f"Output: {RUN_DIR}")
+def fmt_val(v):
+    """Format a value for TSV: floats to 6 sig figs, nan → 'nan', else str."""
+    if v is None:
+        return ""
+    if isinstance(v, float) or (hasattr(v, "dtype") and np.issubdtype(type(v), np.floating)):
+        return "nan" if not np.isfinite(v) else f"{v:.6g}"
+    return str(v)
 
-# ── detect channels per zip ───────────────────────────────────────────────────
-_ref = os.path.join(PROCESSED_DIR, f"{PROD_TAG}_{ALL_SERIES[0]}.root")
+# ─────────────────────────────────────────────────────────────────────────────
+# ACCUMULATOR  (in-memory, for summary file)
+# ─────────────────────────────────────────────────────────────────────────────
+# acc[det][chan] = list of dicts, each dict = metric row + "_series" + "_event"
+acc = {det: {c: [] for c in ALL_CHANS} for det in ALL_ZIPS}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DETECT AVAILABLE CHANNELS PER ZIP  (from first series ROOT file)
+# ─────────────────────────────────────────────────────────────────────────────
+log(f"=== scan_all_data.py  {datetime.datetime.now()} ===")
+log(f"Output dir: {RUN_DIR}")
+
+ref_root = None
+for _s in ALL_SERIES:
+    _p = os.path.join(PROCESSED_DIR, f"{PROD_TAG}_{_s}.root")
+    if os.path.exists(_p):
+        ref_root = _p
+        break
+if ref_root is None:
+    raise FileNotFoundError("No processed ROOT files found — check PROCESSED_DIR")
+log(f"Channel detection from: {ref_root}")
+
 zip_chans = {}
-with uproot.open(_ref) as _f:
+with uproot.open(ref_root) as rf:
     for det in ALL_ZIPS:
         try:
-            _keys = list(_f[f"rqDir/zip{det}"].keys())
-            zip_chans[det] = [c for c in ALL_CHANS if f"{c}OFdelay" in _keys]
+            keys = list(rf[f"rqDir/zip{det}"].keys())
+            zip_chans[det] = [c for c in ALL_CHANS if f"{c}OFdelay" in keys]
         except Exception:
             zip_chans[det] = []
-for det in ALL_ZIPS:
-    log(f"  Zip{det} channels: {zip_chans[det]}")
+        log(f"  Zip{det:2d}: {zip_chans[det]}")
 
-# ── open TSV ─────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# OPEN TSV
+# ─────────────────────────────────────────────────────────────────────────────
 tsv_fh = open(TSV_PATH, "w", newline="")
-writer  = csv.DictWriter(tsv_fh, fieldnames=TSV_COLS, delimiter="\t",
-                         extrasaction="ignore")
-writer.writeheader()
+writer  = csv.writer(tsv_fh, delimiter="\t")
+writer.writerow(ALL_COLS)
 tsv_fh.flush()
 
 total_rows = 0
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SERIES LOOP
-# ══════════════════════════════════════════════════════════════════════════════
+# ─────────────────────────────────────────────────────────────────────────────
+# MAIN LOOP: series → events → zips → channels
+# ─────────────────────────────────────────────────────────────────────────────
 for s_idx, series in enumerate(ALL_SERIES):
-    log(f"\n── {s_idx+1}/{len(ALL_SERIES)}  {series} ──")
+    log(f"\n[{s_idx+1:02d}/{len(ALL_SERIES)}] series {series}")
+
     proc_path = os.path.join(PROCESSED_DIR, f"{PROD_TAG}_{series}.root")
     if not os.path.exists(proc_path):
-        log(f"  processed file missing"); continue
+        log(f"  SKIP: processed ROOT not found")
+        continue
 
-    # load selected events for all zips
-    sel_info = {}   # det -> {evnum: {ptofamps, chans: {chan: {delay, bs}}}}
+    # ── Step 1: load event selection + RQ values from processed ROOT ──────────
+    # sel[det] = { event_number: { ptofamps, delay[chan], bs[chan] } }
+    sel = {}
+
     try:
-        with uproot.open(proc_path) as f:
-            trig  = f["rqDir/eventTree/TriggerType"].array(library="np")
-            evnum = f["rqDir/eventTree/EventNumber"].array(library="np").astype(int)
+        with uproot.open(proc_path) as rf:
+            trig  = rf["rqDir/eventTree/TriggerType"].array(library="np")
+            evnum = rf["rqDir/eventTree/EventNumber"].array(library="np").astype(int)
+
             for det in ALL_ZIPS:
                 if series in SERIES_EXCLUSIONS.get(det, []):
                     continue
                 chans = zip_chans.get(det, [])
-                if not chans: continue
+                if not chans:
+                    continue
+
+                # PTOFamps selection
                 try:
-                    ptof = f[f"rqDir/zip{det}/PTOFamps"].array(library="np")
-                except Exception: continue
+                    ptof = rf[f"rqDir/zip{det}/PTOFamps"].array(library="np")
+                except Exception as e:
+                    log(f"  Zip{det}: cannot read PTOFamps: {e}")
+                    continue
+
                 lo, hi = PTOF_RANGES[det]
-                mask   = (trig == 1) & (ptof != -999999) & (ptof > lo) & (ptof < hi)
-                evs    = evnum[mask]
-                if len(evs) == 0: continue
-                ptof_sel = ptof[mask]
-                per_ev   = {}
-                for i, ev in enumerate(evs.tolist()):
-                    chan_data = {}
-                    for c in chans:
-                        try: dl = float(f[f"rqDir/zip{det}/{c}OFdelay"].array(library="np")[mask][i])
-                        except: dl = np.nan
-                        try: bs = float(f[f"rqDir/zip{det}/{c}bs"].array(library="np")[mask][i])
-                        except: bs = np.nan
-                        chan_data[c] = {"delay": dl, "bs": bs}
-                    per_ev[int(ev)] = {"ptofamps": float(ptof_sel[i]), "chans": chan_data}
-                sel_info[det] = per_ev
-                log(f"    Zip{det}: {len(evs)} events")
-    except Exception as exc:
-        log(f"  ERROR reading processed file: {exc}"); continue
+                mask = (trig == 1) & (ptof != -999999) & (ptof > lo) & (ptof < hi)
+                n_sel = int(np.sum(mask))
+                if n_sel == 0:
+                    continue
 
-    if not sel_info: continue
+                evs_sel      = evnum[mask]
+                ptof_sel     = ptof[mask]
 
-    needed = {}
-    for det, pev in sel_info.items():
-        for ev in pev:
-            needed.setdefault(ev, []).append(det)
+                # read per-channel RQ arrays once (vectorised, outside event loop)
+                delay_arr = {}
+                bs_arr    = {}
+                for c in chans:
+                    try:
+                        delay_arr[c] = rf[f"rqDir/zip{det}/{c}OFdelay"].array(library="np")[mask]
+                    except Exception:
+                        delay_arr[c] = np.full(n_sel, NAN)
+                    try:
+                        bs_arr[c] = rf[f"rqDir/zip{det}/{c}bs"].array(library="np")[mask]
+                    except Exception:
+                        bs_arr[c] = np.full(n_sel, NAN)
 
+                # build per-event lookup dict
+                det_sel = {}
+                for i in range(n_sel):
+                    ev = int(evs_sel[i])
+                    det_sel[ev] = {
+                        "ptofamps": float(ptof_sel[i]),
+                        "delay":    {c: float(delay_arr[c][i]) for c in chans},
+                        "bs":       {c: float(bs_arr[c][i])    for c in chans},
+                    }
+                sel[det] = det_sel
+                log(f"  Zip{det:2d}: {n_sel} events selected")
+
+    except Exception as e:
+        log(f"  ERROR reading processed ROOT: {e}")
+        continue
+
+    if not sel:
+        log(f"  no events selected in any zip, skipping rawio")
+        continue
+
+    # set of all event numbers needed across all zips
+    needed_events = set()
+    for det_sel in sel.values():
+        needed_events.update(det_sel.keys())
+    log(f"  total unique events to find in raw: {len(needed_events)}")
+
+    # ── Step 2: read raw MIDAS files ─────────────────────────────────────────
     raw_dir = os.path.join(RAW_DIR, series)
     if not os.path.isdir(raw_dir):
-        log(f"  raw dir missing"); continue
+        log(f"  SKIP: raw dir not found: {raw_dir}")
+        continue
+
     try:
         reader  = rawio.RawDataReader(raw_dir)
         nb      = reader.get_nb_events()
-        total_e = nb.get("NbEventsNotEmpty", nb.get("NbEvents", 50000))
+        total_e = nb.get("NbEvents", nb.get("NbEventsNotEmpty", 10_000_000))
         events  = reader.read_events(
-            output_format=2, skip_empty=True, trigger_types=[1],
-            nb_events=total_e,
-            detector_nums=list(sel_info.keys()),
-            channel_names=ALL_CHANS,
+            output_format  = 2,
+            skip_empty     = True,
+            trigger_types  = [1],
+            nb_events      = total_e,
+            detector_nums  = list(sel.keys()),
+            channel_names  = ALL_CHANS,
         )
-    except Exception as exc:
-        log(f"  rawio error: {exc}"); continue
+    except Exception as e:
+        log(f"  ERROR opening rawio: {e}")
+        continue
 
-    n_rows_series = 0
+    n_found = 0
+    n_rows_this_series = 0
+
+    # ── Step 3: iterate events one by one ────────────────────────────────────
     for event in events:
-        evn = int(event["event"]["EventNumber"])
-        if evn not in needed: continue
-        for det in needed[evn]:
+        try:
+            evn = int(event["event"]["EventNumber"])
+        except Exception:
+            continue
+
+        if evn not in needed_events:
+            continue
+
+        n_found += 1
+
+        # iterate every zip that wants this event
+        for det, det_sel in sel.items():
+            if evn not in det_sel:
+                continue
+
+            ev_info = det_sel[evn]
             z_key   = f"Z{det}"
-            ev_info = sel_info[det].get(evn)
-            if ev_info is None: continue
-            chans   = zip_chans.get(det, [])
+            chans   = zip_chans[det]
+
+            # iterate every channel for this zip
             for chan in chans:
-                try:    pulse = event[z_key][chan]
-                except: continue
-                ci = ev_info["chans"].get(chan, {})
+                # ── get raw trace ──────────────────────────────────────────
                 try:
-                    m = compute_metrics(pulse, ci.get("bs", np.nan),
-                                        ev_info["ptofamps"], ci.get("delay", np.nan))
-                except Exception as exc:
-                    m = {k: np.nan for k in METRIC_COLS}
-                    m["ptofamps"] = ev_info["ptofamps"]
-                    m["baseline_source"] = f"error:{exc}"
+                    pulse = event[z_key][chan]
+                except Exception:
+                    pulse = None
 
-                row = {"zip": det, "series": series, "event": evn, "channel": chan}
-                row.update(m)
+                # ── compute metrics ────────────────────────────────────────
+                try:
+                    m = metrics(
+                        raw_trace  = pulse,
+                        baseline_rq = ev_info["bs"].get(chan, NAN),
+                        ptofamps    = ev_info["ptofamps"],
+                        ptof_delay  = ev_info["delay"].get(chan, NAN),
+                    )
+                except Exception as e:
+                    m = {"error": str(e)}
 
-                out = {}
-                for k, v in row.items():
-                    if isinstance(v, float):
-                        out[k] = f"{v:.6g}" if np.isfinite(v) else "nan"
-                    else:
-                        out[k] = v
-                writer.writerow(out)
-                n_rows_series += 1
+                # ── write TSV row ──────────────────────────────────────────
+                row = [det, series, evn, chan]
+                for col in MET_COLS:
+                    row.append(fmt_val(m.get(col, "")))
+                writer.writerow(row)
+                n_rows_this_series += 1
                 total_rows += 1
 
-                # accumulate full row for summary
+                # flush every 500 rows
+                if total_rows % 500 == 0:
+                    tsv_fh.flush()
+
+                # ── accumulate for summary ─────────────────────────────────
                 m["_series"] = series
                 m["_event"]  = evn
                 acc[det][chan].append(m)
 
-        if total_rows % 1000 == 0:
-            tsv_fh.flush()
-
-    log(f"  wrote {n_rows_series} rows")
+    log(f"  events found in raw: {n_found}/{len(needed_events)}  rows written: {n_rows_this_series}")
 
 tsv_fh.flush()
 tsv_fh.close()
-log(f"\nTSV done: {total_rows} rows total → {TSV_PATH}")
+log(f"\nTSV complete: {total_rows} rows → {TSV_PATH}")
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SUMMARY FILE — per-zip, per-channel: aggregates + every individual event
-# ══════════════════════════════════════════════════════════════════════════════
+# ─────────────────────────────────────────────────────────────────────────────
+# SUMMARY FILE
+# ─────────────────────────────────────────────────────────────────────────────
 log("Writing summary...")
 
-def fv(v, fmt=".4g"):
-    if v is None: return "N/A"
-    try:
-        return "nan" if not np.isfinite(float(v)) else f"{float(v):{fmt}}"
-    except: return str(v)
-
-def agg(rows, key, unit="", fmt=".4g"):
-    vals = np.array([r[key] for r in rows
-                     if isinstance(r.get(key),(int,float)) and np.isfinite(r.get(key,np.nan))],
-                    dtype=float)
-    if len(vals) == 0:
+def _agg(rows, key, unit="", fmt=".4g"):
+    """Aggregate a metric across rows, return formatted string."""
+    vals = []
+    for r in rows:
+        v = r.get(key)
+        if v is None:
+            continue
+        try:
+            fv = float(v)
+            if np.isfinite(fv):
+                vals.append(fv)
+        except Exception:
+            pass
+    if not vals:
         return f"    {key}: NO DATA"
-    return (f"    {key} (n={len(vals)}):"
-            f"  median={vals.mean():{fmt}}{unit}"
-            f"  mean={vals.mean():{fmt}}{unit}"
-            f"  std={vals.std():{fmt}}{unit}"
-            f"  [p5={np.percentile(vals,5):{fmt}}  p16={np.percentile(vals,16):{fmt}}"
-            f"  p84={np.percentile(vals,84):{fmt}}  p95={np.percentile(vals,95):{fmt}}]{unit}"
-            f"  min={vals.min():{fmt}}  max={vals.max():{fmt}}{unit}")
+    a = np.array(vals)
+    return (
+        f"    {key} (n={len(a)}):  "
+        f"median={np.median(a):{fmt}}{unit}  "
+        f"mean={a.mean():{fmt}}{unit}  "
+        f"std={a.std():{fmt}}{unit}  "
+        f"[p5={np.percentile(a,5):{fmt}}  p16={np.percentile(a,16):{fmt}}  "
+        f"p84={np.percentile(a,84):{fmt}}  p95={np.percentile(a,95):{fmt}}]{unit}  "
+        f"min={a.min():{fmt}}  max={a.max():{fmt}}{unit}"
+    )
 
-def pct(n, d): return f"{n/d*100:.1f}%" if d > 0 else "N/A"
+def _pct(n, d):
+    return f"{n/d*100:.1f}%" if d > 0 else "N/A"
 
-lines = []
-H = "=" * 90
-h = "-" * 70
+def _fv(v, fmt=".4g"):
+    if v is None or v == "":
+        return "N/A"
+    try:
+        f = float(v)
+        return f"{f:{fmt}}" if np.isfinite(f) else "nan"
+    except Exception:
+        return str(v)
 
-lines += [H,
-    f"ALL-ZIPS DATA SCAN SUMMARY   {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}",
-    H, "",
-    f"PTOF ranges (Ge K-shell peak selection):"]
-for det, (lo, hi) in PTOF_RANGES.items():
-    excl = SERIES_EXCLUSIONS.get(det, [])
-    lines.append(f"  Zip{det:2d}: [{lo:.3e}, {hi:.3e}]  excluded={excl or 'none'}")
-lines += ["",
-    "Series list (30 total):", f"  {ALL_SERIES}", "",
-    f"Total event-channel rows written to TSV: {total_rows}", ""]
+def _iv(v):
+    try:
+        f = float(v)
+        return int(f) if np.isfinite(f) else 0
+    except Exception:
+        return 0
+
+SEP  = "=" * 90
+sep  = "-" * 70
+
+lines = [
+    SEP,
+    f"ALL-ZIPS SCAN SUMMARY   generated {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}",
+    SEP, "",
+    f"Total TSV rows: {total_rows}",
+    f"Series ({len(ALL_SERIES)}): {ALL_SERIES}",
+    "",
+    "PTOFamps ranges (Ge K-shell selection):",
+]
+for det in ALL_ZIPS:
+    lo, hi = PTOF_RANGES[det]
+    excl   = SERIES_EXCLUSIONS.get(det, [])
+    lines.append(f"  Zip{det:2d}: [{lo:.3e}, {hi:.3e}]  excluded_series={excl or 'none'}")
+lines.append("")
 
 for det in ALL_ZIPS:
-    lines += [H, f"ZIP {det}   PTOFamps [{PTOF_RANGES[det][0]:.3e}, {PTOF_RANGES[det][1]:.3e}]", H]
     chans = zip_chans.get(det, [])
+    lines += [SEP, f"ZIP {det}   [{PTOF_RANGES[det][0]:.3e}, {PTOF_RANGES[det][1]:.3e}]", SEP]
     if not chans:
-        lines += ["  No channels.", ""]; continue
+        lines += ["  No active channels.", ""]
+        continue
 
     for chan in chans:
         rows = acc[det][chan]
         n    = len(rows)
-        lines += ["", h, f"  ZIP{det}  {chan}  (total events: {n})", h]
+        lines += ["", sep, f"  ZIP{det}  {chan}   total_events = {n}", sep]
 
         if n == 0:
-            lines += ["    NO DATA — dead channel or all series excluded", ""]; continue
+            lines += ["    NO DATA", ""]
+            continue
 
         # cut counts
-        n_win    = sum(1 for r in rows if r.get("peak_in_window")==1)
-        n_snr    = sum(1 for r in rows if r.get("snr_pass")==1)
-        n_ush    = sum(1 for r in rows if r.get("undershoot_pass")==1)
-        n_fit    = sum(1 for r in rows if r.get("fit2_ok")==1)
-        n_all    = sum(1 for r in rows if r.get("all_cuts_pass")==1)
-        ok_rows  = [r for r in rows if r.get("fit2_ok")==1]
+        n_win  = sum(1 for r in rows if _iv(r.get("peak_in_win"))  == 1)
+        n_snr  = sum(1 for r in rows if _iv(r.get("snr_pass"))     == 1)
+        n_ush  = sum(1 for r in rows if _iv(r.get("undershoot_pass")) == 1)
+        n_fit  = sum(1 for r in rows if _iv(r.get("fit_ok"))       == 1)
+        n_all  = sum(1 for r in rows if _iv(r.get("all_pass"))     == 1)
+        n_err  = sum(1 for r in rows if r.get("error","") not in ("","None","nan","0"))
+        ok_rows = [r for r in rows if _iv(r.get("fit_ok")) == 1]
 
         lines += [
             "  --- CUT SUMMARY ---",
-            f"    peak in window [{ALIGN_PEAK_LO},{ALIGN_PEAK_HI}]: {n_win}/{n} ({pct(n_win,n)})",
-            f"    SNR >= {MIN_SNR}:                    {n_snr}/{n} ({pct(n_snr,n)})",
-            f"    undershoot > -{NEGATIVE_FRACTION*100:.0f}%:          {n_ush}/{n} ({pct(n_ush,n)})",
-            f"    2-exp fit converged:         {n_fit}/{n} ({pct(n_fit,n)})",
-            f"    ALL cuts pass:               {n_all}/{n} ({pct(n_all,n)})",
+            f"    peak in window [{PEAK_LO},{PEAK_HI}]: {n_win}/{n} ({_pct(n_win,n)})",
+            f"    SNR >= {MIN_SNR}:             {n_snr}/{n} ({_pct(n_snr,n)})",
+            f"    undershoot > {MAX_UNDER:.0%}:    {n_ush}/{n} ({_pct(n_ush,n)})",
+            f"    2-exp fit converged:    {n_fit}/{n} ({_pct(n_fit,n)})",
+            f"    ALL cuts pass:          {n_all}/{n} ({_pct(n_all,n)})",
+            f"    compute errors:         {n_err}/{n}",
             "",
             "  --- NOISE & BASELINE ---",
         ]
-        for k,u in [("noise_std"," ADU"),("noise_rms"," ADU"),("noise_p2p"," ADU"),
-                    ("noise_skewness",""),("baseline_drift_h1h2"," ADU"),
-                    ("baseline_residual"," ADU"),
-                    ("pretrig_lp_std"," ADU"),("pretrig_close_std"," ADU")]:
-            lines.append(agg(rows, k, u))
+        for k, u in [("noise_std"," ADU"),("noise_rms"," ADU"),("noise_p2p"," ADU"),
+                     ("noise_skew",""),("baseline_drift"," ADU"),
+                     ("baseline_residual"," ADU"),
+                     ("pretrig_lp_std"," ADU"),("pretrig_close_std"," ADU")]:
+            lines.append(_agg(rows, k, u))
+
         lines += ["", "  --- PEAK ---"]
-        for k,u in [("peak_lp_adu"," ADU"),("peak_idx_lp"," samp"),
-                    ("peak_idx_dist_canonical"," samp"),("snr",""),
-                    ("peak_raw_adu"," ADU"),("pulse_integral_adu_s"," ADU·s")]:
-            lines.append(agg(rows, k, u))
+        for k, u in [("peak_lp"," ADU"),("peak_idx_lp"," samp"),
+                     ("peak_dist_canonical"," samp"),("snr",""),
+                     ("peak_raw"," ADU"),("pulse_integral"," ADU·s")]:
+            lines.append(_agg(rows, k, u))
+
         lines += ["", "  --- UNDERSHOOT ---"]
-        for k,u in [("undershoot_frac",""),("undershoot_min_adu"," ADU"),
-                    ("undershoot_min_idx"," samp")]:
-            lines.append(agg(rows, k, u))
-        lines += ["", "  --- WAVEFORM SHAPE TIMES ---"]
-        for k,u in [("rise_10_90_ms"," ms"),("rise_20_80_ms"," ms"),
-                    ("fall_1e_ms"," ms"),("fall_half_ms"," ms"),("fall_tenth_ms"," ms")]:
-            lines.append(agg(rows, k, u))
-        lines += ["", "  --- AMPLITUDE AT FIXED OFFSETS (normalised to peak) ---"]
-        for k in ["amp_norm_0p5ms","amp_norm_1ms","amp_norm_2ms","amp_norm_5ms","amp_norm_10ms"]:
-            lines.append(agg(rows, k))
-        lines += ["", "  --- 2-EXP FIT ---"]
+        for k, u in [("undershoot_frac",""),("undershoot_min"," ADU"),
+                     ("undershoot_idx"," samp")]:
+            lines.append(_agg(rows, k, u))
+
+        lines += ["", "  --- WAVEFORM SHAPE ---"]
+        for k, u in [("rise_10_90_ms"," ms"),("rise_20_80_ms"," ms"),
+                     ("half_rise_ms"," ms"),
+                     ("fall_1e_ms"," ms"),("fall_half_ms"," ms"),("fall_tenth_ms"," ms")]:
+            lines.append(_agg(rows, k, u))
+
+        lines += ["", "  --- NORMALISED AMPLITUDE AT FIXED OFFSETS ---"]
+        for k in ["amp_norm_0p5ms","amp_norm_1ms","amp_norm_2ms",
+                  "amp_norm_5ms","amp_norm_10ms"]:
+            lines.append(_agg(rows, k))
+
+        lines += ["", "  --- 2-EXP FIT (converged events only) ---"]
         if ok_rows:
-            for k,u in [("fit2_t_rise_ms"," ms"),("fit2_t_fall_ms"," ms"),
-                        ("fit2_t_ratio",""),("fit2_pretrigger"," samp"),
-                        ("fit2_pt_dist_canonical"," samp"),
-                        ("fit2_nrmse",""),("fit2_rmse_abs"," ADU")]:
-                lines.append(agg(ok_rows, k, u))
-            n_nrmse = sum(1 for r in ok_rows if r.get("fit2_nrmse",1) > 0.3)
-            T_LB, T_UB = 1e-3, 0.8
-            n_lb = sum(1 for r in ok_rows if r.get("fit2_t_rise_ms",99) <= T_LB*1.01)
-            n_ub = sum(1 for r in ok_rows if r.get("fit2_t_rise_ms",0)  >= T_UB*0.99)
-            lines += [f"    nrmse>0.3: {n_nrmse}/{n_fit} ({pct(n_nrmse,n_fit)})",
-                      f"    t_rise at lower bound ({T_LB} ms): {n_lb}/{n_fit}",
-                      f"    t_rise at upper bound ({T_UB} ms): {n_ub}/{n_fit}"]
+            for k, u in [("fit_t_rise_ms"," ms"),("fit_t_fall_ms"," ms"),
+                         ("fit_ratio",""),("fit_pretrigger"," samp"),
+                         ("fit_pt_dist"," samp"),
+                         ("fit_nrmse",""),("fit_rmse"," ADU")]:
+                lines.append(_agg(ok_rows, k, u))
+            n_hi_nrmse = sum(1 for r in ok_rows
+                             if np.isfinite(float(r.get("fit_nrmse", NAN)))
+                             and float(r["fit_nrmse"]) > 0.30)
+            lines += [
+                f"    fit_nrmse > 0.30: {n_hi_nrmse}/{n_fit} ({_pct(n_hi_nrmse,n_fit)})",
+            ]
         else:
             lines.append("    No successful fits.")
-        lines += ["", "  --- ALIGNMENT ---"]
-        for k,u in [("delay_samples"," samp"),("dist_canonical_raw"," samp"),
-                    ("dist_canonical_aligned"," samp"),("aligned_peak_idx"," samp")]:
-            lines.append(agg(rows, k, u))
 
-        # auto flags
+        lines += ["", "  --- PTOFdelay ALIGNMENT ---"]
+        for k, u in [("delay_samp"," samp"),("dist_before_align"," samp"),
+                     ("dist_after_align"," samp"),("aligned_peak_idx"," samp")]:
+            lines.append(_agg(rows, k, u))
+
+        # auto-flags
         flags = []
-        if n < 20:       flags.append(f"VERY FEW EVENTS ({n})")
-        if n_win < n*0.5: flags.append(f"PEAK OUT OF WINDOW {100-n_win/n*100:.0f}%")
-        if n_snr < n*0.5: flags.append(f"LOW SNR {100-n_snr/n*100:.0f}% fail")
-        if n_ush < n*0.7: flags.append(f"HIGH UNDERSHOOT RATE {100-n_ush/n*100:.0f}%")
-        if n_fit < n*0.4: flags.append(f"HIGH FIT FAIL RATE {100-n_fit/n*100:.0f}%")
+        if n < 20:             flags.append(f"VERY_FEW_EVENTS({n})")
+        if n_win < n * 0.5:   flags.append(f"PEAK_OUT_OF_WINDOW_{100-n_win/n*100:.0f}pct")
+        if n_snr < n * 0.5:   flags.append(f"LOW_SNR_{100-n_snr/n*100:.0f}pct_fail")
+        if n_ush < n * 0.7:   flags.append(f"HIGH_UNDERSHOOT_{100-n_ush/n*100:.0f}pct")
+        if n_fit < n * 0.4:   flags.append(f"HIGH_FIT_FAIL_{100-n_fit/n*100:.0f}pct")
         if ok_rows:
-            mn = float(np.median([r["fit2_nrmse"] for r in ok_rows]))
-            if mn > 0.25: flags.append(f"POOR FIT quality median nrmse={mn:.3f}")
-        lines += ["",
+            mn = np.median([float(r["fit_nrmse"]) for r in ok_rows
+                            if np.isfinite(float(r.get("fit_nrmse", NAN)))])
+            if np.isfinite(mn) and mn > 0.25:
+                flags.append(f"POOR_FIT_nrmse_median={mn:.3f}")
+        lines += [
+            "",
             f"  *** FLAGS: {' | '.join(flags)}" if flags else "  STATUS: OK",
-            ""]
+            "",
+        ]
 
-        # ── PER-EVENT LISTING ─────────────────────────────────────────────────
-        lines += ["  --- EVERY EVENT ---",
-                  "  series              ev      ptofamps    peak_lp   peak_idx  snr    "
-                  "undershoot  rise10_90  fall_1e  fit_ok  t_rise_ms  t_fall_ms  "
-                  "fit_pt    nrmse  all_pass"]
-        for r in sorted(rows, key=lambda x: (x.get("_series",""), x.get("_event",0))):
+        # per-event listing
+        hdr = (f"  {'series':20s}  {'ev':>7s}  {'ptofamps':>12s}  "
+               f"{'peak_lp':>10s}  {'peak_idx':>8s}  {'snr':>6s}  "
+               f"{'undershoot':>11s}  {'rise10_90':>9s}  {'fall_1e':>7s}  "
+               f"{'fit_ok':>6s}  {'t_rise_ms':>9s}  {'t_fall_ms':>9s}  "
+               f"{'fit_pt':>8s}  {'nrmse':>7s}  {'all'}")
+        lines += ["  --- EVERY EVENT ---", hdr]
+
+        for r in sorted(rows, key=lambda x: (x.get("_series",""), x.get("_event", 0))):
             lines.append(
                 f"  {r.get('_series','?'):20s}  "
-                f"{r.get('_event',0):7d}  "
-                f"{fv(r.get('ptofamps'), '.4e'):12s}  "
-                f"{fv(r.get('peak_lp_adu'), '.3e'):10s}  "
-                f"{fv(r.get('peak_idx_lp'), '.0f'):8s}  "
-                f"{fv(r.get('snr'), '.2f'):6s}  "
-                f"{fv(r.get('undershoot_frac'), '.4f'):11s}  "
-                f"{fv(r.get('rise_10_90_ms'), '.4f'):10s}  "
-                f"{fv(r.get('fall_1e_ms'), '.4f'):8s}  "
-                f"{r.get('fit2_ok',0):6d}  "
-                f"{fv(r.get('fit2_t_rise_ms'), '.4f'):10s}  "
-                f"{fv(r.get('fit2_t_fall_ms'), '.4f'):10s}  "
-                f"{fv(r.get('fit2_pretrigger'), '.1f'):8s}  "
-                f"{fv(r.get('fit2_nrmse'), '.4f'):7s}  "
-                f"{r.get('all_cuts_pass',0):1d}"
+                f"{r.get('_event', 0):>7d}  "
+                f"{_fv(r.get('ptofamps'),'.4e'):>12s}  "
+                f"{_fv(r.get('peak_lp'),'.3e'):>10s}  "
+                f"{_fv(r.get('peak_idx_lp'),'.0f'):>8s}  "
+                f"{_fv(r.get('snr'),'.2f'):>6s}  "
+                f"{_fv(r.get('undershoot_frac'),'.4f'):>11s}  "
+                f"{_fv(r.get('rise_10_90_ms'),'.4f'):>9s}  "
+                f"{_fv(r.get('fall_1e_ms'),'.4f'):>7s}  "
+                f"{_iv(r.get('fit_ok')):>6d}  "
+                f"{_fv(r.get('fit_t_rise_ms'),'.4f'):>9s}  "
+                f"{_fv(r.get('fit_t_fall_ms'),'.4f'):>9s}  "
+                f"{_fv(r.get('fit_pretrigger'),'.1f'):>8s}  "
+                f"{_fv(r.get('fit_nrmse'),'.4f'):>7s}  "
+                f"{_iv(r.get('all_pass'))}"
             )
         lines.append("")
 
-lines += [H,
-    "METRIC REFERENCE",
-    H,
-    "noise_std            raw pre-trigger std (samples 0-5000), ADU",
-    "noise_p2p            raw pre-trigger peak-to-peak, ADU",
-    "noise_skewness       skewness of pre-trigger distribution (0=Gaussian)",
-    "baseline_drift_h1h2  mean(2500-5000) - mean(0-2500), ADU  (drift indicator)",
-    "baseline_residual    noise_mean - baseline_rq  (RQ accuracy check)",
-    "pretrig_lp_std       LP filtered std, samples 14000-15500",
-    "pretrig_close_std    LP filtered std, samples 15000-16000 (nearest to pulse)",
-    "peak_lp_adu          LP-filtered baseline-subtracted peak amplitude, ADU",
-    "peak_idx_lp          sample index of LP peak (expected 15000-18000)",
-    "peak_idx_dist_canonical  peak_idx_lp - 16250  (misalignment from canonical)",
+lines += [
+    SEP, "METRIC REFERENCE", SEP,
+    "noise_std            raw pre-trigger (0-5000) std, ADU",
+    "noise_skew           pre-trigger skewness  (0=Gaussian, large→non-normal noise)",
+    "baseline_drift       mean(2500-5000) - mean(0-2500), ADU  (slow drift check)",
+    "baseline_residual    raw_mean - rq_baseline  (RQ accuracy check, should be ~0)",
+    "pretrig_lp_std       LP-filtered std, samples 14000-15500",
+    "pretrig_close_std    LP-filtered std, samples 15000-15800  (closest to pulse)",
+    "peak_lp              LP peak amplitude, baseline-subtracted, ADU",
+    "peak_idx_lp          sample index of LP peak  (nominal 15000-18000)",
+    "peak_dist_canonical  peak_idx_lp - 16250",
     "snr                  peak_lp / noise_std",
-    "undershoot_frac      min(tail)/peak  (negative = undershoot, cut: > -0.05)",
-    "rise_10_90_ms        10%-90% rise time from LP waveform, ms",
-    "fall_1e_ms           peak to 1/e amplitude fall time, ms",
-    "fall_half_ms         peak to 50% amplitude fall time, ms",
-    "amp_norm_Xms         LP amplitude at X ms after peak, normalised to peak",
-    "pulse_integral       integral of LP trace ±window around peak, ADU·s",
-    "pretrig_peak_snr     largest |amplitude| in 5000-14500 / noise_std  (pileup check)",
-    "tail_sign_changes    sign changes in tail after peak  (ringing indicator)",
-    "fit2_t_rise_ms       2-exp rise time constant, ms",
-    "fit2_t_fall_ms       2-exp fall time constant, ms",
-    "fit2_t_ratio         t_fall/t_rise",
-    "fit2_pretrigger      fitted pulse start sample index",
-    "fit2_pt_dist_canonical  fit2_pretrigger - 16250",
-    "fit2_nrmse           normalised RMS fit residual  (<0.2 good, >0.3 poor)",
-    "dist_canonical_raw   peak_idx_lp - 16250  (before PTOFdelay alignment)",
-    "dist_canonical_aligned  aligned_peak_idx - 16250  (after PTOFdelay shift)",
-    "all_cuts_pass        peak_in_window AND snr_pass AND undershoot_pass",
+    "undershoot_frac      min(tail 0-12000samp after peak) / peak  (> -0.05 required)",
+    "rise_10_90_ms        10%-90% rise time, ms  (window: 3000 samp before peak)",
+    "fall_1e_ms           time from peak to 1/e amplitude, ms",
+    "fall_half_ms         time from peak to 50% amplitude, ms",
+    "amp_norm_Xms         LP amplitude X ms after peak, normalised to peak",
+    "pulse_integral       sum of LP trace in ±window around peak, ADU·s",
+    "pileup_snr           max|LP| in 5000-14500 / noise_std  (pileup indicator)",
+    "tail_sign_changes    sign flips in tail after peak  (ringing: higher = worse)",
+    "fit_t_rise_ms        2-exp rise time constant, ms",
+    "fit_t_fall_ms        2-exp fall time constant, ms",
+    "fit_ratio            t_fall / t_rise",
+    "fit_pretrigger       fitted pulse start sample  (floating ±600 from estimate)",
+    "fit_pt_dist          fit_pretrigger - 16250  (should be small for good events)",
+    "fit_nrmse            normalised RMS residual  (< 0.20 excellent, > 0.30 poor)",
+    "dist_before_align    peak_idx_lp - 16250  (raw misalignment)",
+    "dist_after_align     (peak_idx_lp + delay_samp) - 16250  (after PTOFdelay correction)",
+    "all_pass             peak_in_win AND snr_pass AND undershoot_pass",
     "",
-    "THRESHOLDS (v10/v11 standard):",
-    f"  peak window: [{ALIGN_PEAK_LO}, {ALIGN_PEAK_HI}]  |  SNR >= {MIN_SNR}",
-    f"  undershoot >= -{NEGATIVE_FRACTION}  |  canonical pretrigger: {CANONICAL_PT}",
-    f"  fit nrmse < {MAX_FIT_RMSE_FRAC}  |  LP filter: {FILTER_KHZ} kHz",
+    f"Config: LP={LP_KHZ}kHz  peak_win=[{PEAK_LO},{PEAK_HI}]  SNR>={MIN_SNR}  "
+    f"undershoot>{MAX_UNDER}  canonical={CANONICAL}",
 ]
 
-with open(SUM_PATH, "w") as f:
-    f.write("\n".join(lines) + "\n")
+with open(SUM_PATH, "w") as fh:
+    fh.write("\n".join(lines) + "\n")
 
-log(f"Summary written: {SUM_PATH}")
-log(f"=== SCAN COMPLETE {datetime.datetime.now()} ===")
+log(f"Summary written → {SUM_PATH}")
+log(f"=== DONE {datetime.datetime.now()} ===")
