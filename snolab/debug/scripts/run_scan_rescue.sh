@@ -20,7 +20,7 @@ if [[ -n "${SLURM_JOB_ID:-}" && "$DEPTH" -lt "$MAX_DEPTH" ]]; then
         --dependency="afternotok:${SLURM_JOB_ID}" \
         --time=48:00:00 \
         --ntasks=1 \
-        --mem=256g \
+        --mem=384g \
         --partition=agsmall \
         --output="$RUN_DIR/scan_rescue${next_depth}_%j.out" \
         --export="ALL,SCAN_RUN_DIR=$RUN_DIR,SCAN_RESUME=1,RESCUE_DEPTH=$next_depth,MAX_RESCUE_DEPTH=$MAX_DEPTH" \

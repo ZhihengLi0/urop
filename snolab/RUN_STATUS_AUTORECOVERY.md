@@ -234,3 +234,198 @@ loss of completed series.
 This setup protects against time-limit loss. It cannot automatically fix a
 permanent data corruption, rawio bug, or cluster-level failure that repeatedly
 prevents a specific series from being read.
+
+---
+
+## Update — 2026-06-28 (third session)
+
+### Scan pipeline — chain exhausted, memory raised to 384 GB
+
+By the morning of 2026-06-28 the entire scan rescue chain (rescue2–rescue5,
+jobs 12065602, 12073791, 12077680, 12095921, 12095950, 12109836, 12115240)
+had all failed with OUT_OF_MEMORY (exit 0:125). No scan jobs were running or
+pending — the chain was completely dead.
+
+Root cause: the OOM is NOT from the large series 16 (24260619_230219, 6458
+events) — that series completed successfully at some point. The new OOM trigger
+is series 21 (24260621_111527, 735 events, 19 raw MIDAS files). The process is
+killed immediately after "Found 19 midas raw data files", before reading any
+events. This suggests the raw MIDAS files for this series are individually very
+large, and 256 GB is not enough headroom to load them.
+
+State at time of intervention:
+- `debug/run/all_zips_event_stats.tsv`: 922,501 rows (header + 922,500 data)
+- `debug/run/scan.log`: 20/30 series complete (series 1–20)
+- Series 21–30 remain; resume will pick up from series 21 automatically
+
+Fix applied:
+- Edited `debug/scripts/run_scan_rescue.sh`: changed follow-up job memory
+  from `--mem=256g` to `--mem=384g`. Future auto-rescue jobs in the chain
+  will now request 384 GB.
+- Manually submitted `scan_rescue5` (job **12132314**) with `--mem=384g`,
+  `--time=48:00:00`, `SCAN_RESUME=1`, `RESCUE_DEPTH=1`, `MAX_RESCUE_DEPTH=4`.
+  This job will resume from series 21 and pre-submit a rescue chain (up to
+  depth 4) at 384 GB each.
+
+The agsmall nodes have ~514 GB physical RAM, so 384 GB is safely within limit.
+If 384 GB still OOMs on a future series, the next step is 480 GB.
+
+### Scan — how resume works (for the next AI)
+
+The scan script (`debug/scripts/scan_all_data.py`) resumes by:
+1. Reading `debug/run/scan.log` and collecting all series with a completed
+   "events found in raw: ... rows written: ..." line.
+2. Compacting the TSV: keeps rows only for completed series, drops partial
+   rows. This prevents double-counting on resume.
+3. Skipping completed series in the main loop.
+4. After the main loop, rebuilding the full summary accumulator by re-reading
+   the entire TSV from disk (lines 726–754 of scan_all_data.py). This is
+   memory-intensive but only runs at the very end.
+
+`SCAN_RESUME=1` is the default. Never set `SCAN_RESUME=0` unless you want to
+wipe all progress and restart from scratch.
+
+The final output files are:
+- `debug/run/all_zips_event_stats.tsv` — one row per event per channel
+- `debug/run/all_zips_summary.txt` — aggregate statistics; written last
+
+Scan is complete when `scan.log` contains "TSV complete" AND
+`all_zips_summary.txt` exists and is newer than the TSV.
+
+### raw_without_filter pipeline — current state (2026-06-28 ~17:30)
+
+All 13 zips are at rescue depth 2 (raw_rescue2_z*), running on agsmall with a
+16-hour time limit. Per-series checkpoints are in place for all rescue-depth
+jobs; if a job times out, the pre-submitted raw_rescue3 (all 12 pending with
+Dependency) will fire and resume from the last completed series checkpoint.
+
+Checkpoint location: `raw_without_filter/run/cache/zip{det}_series/{series}.pkl`
+Merged output:       `raw_without_filter/run/cache/zip{det}_all_series.pkl`
+
+Only zip16 has a merged pkl (it completed earlier). The other 12 zips will get
+their merged pkl written automatically when their rescue job finishes all series.
+
+Series counts completed as of this session (from per-series checkpoint files):
+
+| zip | checkpoints | merged pkl |
+|-----|-------------|------------|
+|  1  |     16      |    no      |
+|  4  |      7      |    no      |
+|  6  |     17      |    no      |
+|  7  |     26      |    no      |
+|  9  |     25      |    no      |
+| 10  |     22      |    no      |
+| 13  |     22      |    no      |
+| 15  |     16      |    no      |
+| 16  |     30      |  **YES**   |
+| 18  |      8      |    no      |
+| 19  |     10      |    no      |
+| 22  |     10      |    no      |
+| 24  |      8      |    no      |
+
+Zip18 is the highest-risk zip: it is the heaviest (23 series, each ~100 min),
+has only 8 checkpoints done, and its raw_rescue2 job (12062549) had already
+been running 8h42m at time of check — leaving ~7h before the 16h timeout.
+raw_rescue3_z18 (12109827) is pre-queued and will fire automatically.
+
+### How to check status (updated commands)
+
+```bash
+# Scan: is it running? what series?
+squeue -u li004628 -o '%.18i %.24j %.10T %.10M %.32R' | grep -i scan
+
+# Scan: how many series done?
+grep "rows written:" ~/urop/snolab/debug/run/scan.log | wc -l
+tail -30 ~/urop/snolab/debug/run/scan.log
+
+# Scan: TSV size
+wc -l ~/urop/snolab/debug/run/all_zips_event_stats.tsv
+
+# Scan: latest rescue output (replace JOBID)
+ls -lt ~/urop/snolab/debug/run/scan_rescue*.out | head -3
+tail -40 ~/urop/snolab/debug/run/scan_rescue5_12132314.out
+
+# Raw: checkpoint counts per zip
+for det in 1 4 6 7 9 10 13 15 16 18 19 22 24; do
+  n=$(find ~/urop/snolab/raw_without_filter/run/cache/zip${det}_series \
+      -name "*.pkl" 2>/dev/null | wc -l)
+  merged=$([ -f ~/urop/snolab/raw_without_filter/run/cache/zip${det}_all_series.pkl ] \
+      && echo "MERGED" || echo "-")
+  echo "zip${det}: ${n} series checkpoints  ${merged}"
+done
+
+# Queue: all jobs
+squeue -u li004628 -o '%.18i %.24j %.10T %.10M %.32R'
+
+# Failed/OOM jobs
+sacct -u li004628 --starttime=today \
+  --format=JobID,JobName,State,ExitCode,Elapsed --noheader \
+  | grep -v "RUNNING\|PENDING\|extern\|batch\|COMPLETED"
+```
+
+### Changes made in this session (2026-06-28)
+
+**`raw_without_filter/scripts/run_raw_rescue.sh`** — rewritten:
+- `MAX_RESCUE_DEPTH` default raised from 4 → 6 (chain now goes rescue2…rescue6)
+- Removed `exec` so code runs after the main python script exits
+- SIGTERM trap (`_on_timeout`): when SLURM sends SIGTERM ~60s before the
+  time limit, bash catches it, immediately runs `finalize_zip.py --det $DET`
+  inside singularity, then exits 1 so the pre-submitted follow-up rescue fires
+- Post-main finalize: even on normal or error exit, `finalize_zip.py` is
+  called unconditionally so the merged pkl is always up to date
+- Effect: after EVERY job exit (success / timeout / python error), the merged
+  pkl `zip{det}_all_series.pkl` is rebuilt from all completed checkpoints
+
+**`raw_without_filter/scripts/finalize_zip.py`** — new script:
+- Reads all `zip{det}_series/{series}.pkl` checkpoints, merges them, and
+  writes `zip{det}_all_series.pkl`, the plot png, and `zip{det}_summary.txt`
+- Accepts `--det DET`, `--all` (all 13 zips), `--dry-run`
+- Does NOT need rawio — runs in any env with numpy + matplotlib, or inside
+  singularity for consistency
+- Use this to force-produce final outputs at any time:
+  ```bash
+  # Inside singularity:
+  IMAGE="$MSIPROJECT/shared/singularity_images/cdmsfull_V07-02-00.sif"
+  singularity exec -B "$HOME,$MSIPROJECT/shared/" "$IMAGE" \
+      python3 ~/urop/snolab/raw_without_filter/scripts/finalize_zip.py --all
+  ```
+
+**rescue3 jobs resubmitted** — all 12 old rescue3 jobs (MAX_DEPTH=4) were
+cancelled and resubmitted with `MAX_RESCUE_DEPTH=6` and the same `afternotok`
+dependencies on their rescue2 parents.
+
+### What the next AI should do
+
+1. Run the status commands above to assess current state.
+2. **Scan**: if no scan job is running or pending, check `scan.log` for how
+   many series are done. If fewer than 30, submit a new rescue job manually:
+   ```bash
+   ROOT_DIR="$HOME/urop/snolab/debug"
+   RUN_DIR="$ROOT_DIR/run"
+   jid=$(sbatch --parsable \
+       --job-name="scan_rescue5" \
+       --time=48:00:00 --ntasks=1 --mem=384g --partition=agsmall \
+       --output="$RUN_DIR/scan_rescue5_%j.out" \
+       --export="ALL,SCAN_RUN_DIR=$RUN_DIR,SCAN_RESUME=1,RESCUE_DEPTH=1,MAX_RESCUE_DEPTH=4" \
+       --wrap="bash $ROOT_DIR/scripts/run_scan_rescue.sh")
+   echo "Submitted: $jid"
+   ```
+   If it OOMs again, try `--mem=480g`.
+3. **Raw**: if a zip's rescue chain is exhausted (raw_rescue3 already ran and
+   failed, no rescue4 pending), submit a new job manually:
+   ```bash
+   det=18   # example
+   ROOT_DIR="$HOME/urop/snolab/raw_without_filter"
+   RUN_DIR="$ROOT_DIR/run"
+   jid=$(sbatch --parsable \
+       --job-name="raw_rescue4_z${det}" \
+       --time=16:00:00 --ntasks=1 --mem=256g --partition=agsmall \
+       --output="$RUN_DIR/logs/read_rescue4_z${det}_%j.out" \
+       --export="ALL,RAW_WF_RUN_DIR=$RUN_DIR,RESCUE_DEPTH=4,MAX_RESCUE_DEPTH=4" \
+       --wrap="bash $ROOT_DIR/scripts/run_raw_rescue.sh $det")
+   echo "Submitted: $jid"
+   ```
+4. **Final merge check**: once all raw jobs complete and all zips have a
+   merged pkl, and scan shows "TSV complete" in scan.log, both pipelines are
+   done. No extra merge script is needed — the outputs are already the final
+   combined files.
