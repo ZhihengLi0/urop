@@ -143,6 +143,12 @@ def process_pulse(pulse_raw, baseline_rq):
 # ── main ──────────────────────────────────────────────────────────────────────
 parser = argparse.ArgumentParser()
 parser.add_argument("--det", type=int, required=True)
+parser.add_argument("--series", nargs="*", default=None,
+                    help="Optional explicit series list to process")
+parser.add_argument("--series-from", dest="series_from", default=None,
+                    help="Optional first series to process, inclusive")
+parser.add_argument("--series-after", dest="series_after", default=None,
+                    help="Optional previous completed series; process following series only")
 args = parser.parse_args()
 det = args.det
 
@@ -151,6 +157,8 @@ CACHE_DIR = os.path.join(RUN_DIR, "cache")
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 cache_file = os.path.join(CACHE_DIR, f"zip{det}_all_series.pkl")
+SERIES_CACHE_DIR = os.path.join(CACHE_DIR, f"zip{det}_series")
+os.makedirs(SERIES_CACHE_DIR, exist_ok=True)
 
 if det not in PTOF_RANGES:
     raise ValueError(f"zip{det} not in PTOF_RANGES")
@@ -158,6 +166,22 @@ if det not in PTOF_RANGES:
 ptof_lo, ptof_hi = PTOF_RANGES[det]
 excluded = set(SERIES_EXCLUSIONS.get(det, []))
 series_list = [s for s in ALL_SERIES if s not in excluded]
+if args.series is not None and len(args.series) > 0:
+    wanted = set(args.series)
+    unknown = sorted(wanted - set(ALL_SERIES))
+    if unknown:
+        raise ValueError(f"unknown series: {unknown}")
+    series_list = [s for s in series_list if s in wanted]
+if args.series_from:
+    if args.series_from not in ALL_SERIES:
+        raise ValueError(f"--series-from not in ALL_SERIES: {args.series_from}")
+    first_idx = ALL_SERIES.index(args.series_from)
+    series_list = [s for s in series_list if ALL_SERIES.index(s) >= first_idx]
+if args.series_after:
+    if args.series_after not in ALL_SERIES:
+        raise ValueError(f"--series-after not in ALL_SERIES: {args.series_after}")
+    first_idx = ALL_SERIES.index(args.series_after) + 1
+    series_list = [s for s in series_list if ALL_SERIES.index(s) >= first_idx]
 print(f"=== Zip{det}  PTOFamps [{ptof_lo:.2e}, {ptof_hi:.2e}] ===")
 print(f"Series to process ({len(series_list)}): {series_list}")
 
@@ -207,7 +231,27 @@ fit_ok_mask   = {c: [] for c in ALL_CHANS}
 fit_params_ch = {c: [] for c in ALL_CHANS}  # list of dicts: t_rise, t_fall, nrmse
 fail_reasons  = {c: {} for c in ALL_CHANS}  # reason -> count
 
+def merge_series_payload(payload):
+    for chan in ALL_CHANS:
+        raw_traces[chan].extend(payload.get("raw_traces", {}).get(chan, []))
+        ana_traces[chan].extend(payload.get("ana_traces", {}).get(chan, []))
+        fit_ok_mask[chan].extend(payload.get("fit_ok_mask", {}).get(chan, []))
+        fit_params_ch[chan].extend(payload.get("fit_params_ch", {}).get(chan, []))
+        for reason, count in payload.get("fail_reasons", {}).get(chan, {}).items():
+            fail_reasons[chan][reason] = fail_reasons[chan].get(reason, 0) + int(count)
+
 for series, info in sel.items():
+    series_cache = os.path.join(SERIES_CACHE_DIR, f"{series}.pkl")
+    if os.path.exists(series_cache):
+        try:
+            with open(series_cache, "rb") as f:
+                payload = pickle.load(f)
+            merge_series_payload(payload)
+            print(f"  {series}: loaded checkpoint {series_cache}")
+            continue
+        except Exception as exc:
+            print(f"  {series}: checkpoint unreadable ({exc}); recomputing")
+
     evnum_set = info["evnums"]
     if not evnum_set:
         continue
@@ -230,6 +274,12 @@ for series, info in sel.items():
 
     n_found = 0
     z_key = f"Z{det}"
+    series_raw_traces    = {c: [] for c in ALL_CHANS}
+    series_ana_traces    = {c: [] for c in ALL_CHANS}
+    series_fit_ok_mask   = {c: [] for c in ALL_CHANS}
+    series_fit_params_ch = {c: [] for c in ALL_CHANS}
+    series_fail_reasons  = {c: {} for c in ALL_CHANS}
+
     for event in events:
         evn = int(event["event"]["EventNumber"])
         if evn not in evnum_set:
@@ -244,16 +294,33 @@ for series, info in sel.items():
             baseline_rq = info["baselines"].get(chan, {}).get(evn, np.nan)
             raw_n, ana_n, ok, reason, fpar = process_pulse(pulse, baseline_rq)
             if raw_n is None:
-                fail_reasons[chan][reason] = fail_reasons[chan].get(reason, 0) + 1
+                series_fail_reasons[chan][reason] = series_fail_reasons[chan].get(reason, 0) + 1
                 continue
-            raw_traces[chan].append(raw_n)
-            ana_traces[chan].append(ana_n)
-            fit_ok_mask[chan].append(ok)
-            fit_params_ch[chan].append(fpar)  # None if fit failed
+            series_raw_traces[chan].append(raw_n)
+            series_ana_traces[chan].append(ana_n)
+            series_fit_ok_mask[chan].append(ok)
+            series_fit_params_ch[chan].append(fpar)  # None if fit failed
             if not ok and reason:
-                fail_reasons[chan][reason] = fail_reasons[chan].get(reason, 0) + 1
+                series_fail_reasons[chan][reason] = series_fail_reasons[chan].get(reason, 0) + 1
 
     print(f"  {series}: found {n_found}/{len(evnum_set)} events in raw files")
+    payload = {
+        "series":        series,
+        "det":           det,
+        "n_found":       n_found,
+        "n_selected":    len(evnum_set),
+        "raw_traces":    series_raw_traces,
+        "ana_traces":    series_ana_traces,
+        "fit_ok_mask":   series_fit_ok_mask,
+        "fit_params_ch": series_fit_params_ch,
+        "fail_reasons":  series_fail_reasons,
+    }
+    tmp_cache = series_cache + ".tmp"
+    with open(tmp_cache, "wb") as f:
+        pickle.dump(payload, f, protocol=pickle.HIGHEST_PROTOCOL)
+    os.replace(tmp_cache, series_cache)
+    print(f"  {series}: checkpoint saved {series_cache}")
+    merge_series_payload(payload)
 
 # ── step 3: summary ────────────────────────────────────────────────────────────
 for c in ALL_CHANS:

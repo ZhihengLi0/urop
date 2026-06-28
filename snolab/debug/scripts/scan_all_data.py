@@ -445,6 +445,7 @@ os.makedirs(RUN_DIR, exist_ok=True)
 TSV_PATH = os.path.join(RUN_DIR, "all_zips_event_stats.tsv")
 SUM_PATH = os.path.join(RUN_DIR, "all_zips_summary.txt")
 LOG_PATH = os.path.join(RUN_DIR, "scan.log")
+RESUME = os.environ.get("SCAN_RESUME", "1").strip() != "0"
 
 def log(msg):
     ts   = datetime.datetime.now().strftime("%H:%M:%S")
@@ -496,17 +497,62 @@ with uproot.open(ref_root) as rf:
 # ─────────────────────────────────────────────────────────────────────────────
 # OPEN TSV
 # ─────────────────────────────────────────────────────────────────────────────
-tsv_fh = open(TSV_PATH, "w", newline="")
+def completed_series_from_log(path):
+    """Return series that reached the final per-series raw-read log line."""
+    done = set()
+    current = None
+    if not os.path.exists(path):
+        return done
+    with open(path, errors="replace") as fh:
+        for line in fh:
+            if "] series " in line:
+                current = line.rsplit("] series ", 1)[-1].strip()
+            elif current and "events found in raw:" in line:
+                done.add(current)
+                current = None
+    return done
+
+resume_series = completed_series_from_log(LOG_PATH) if RESUME else set()
+append_tsv = RESUME and os.path.exists(TSV_PATH) and os.path.getsize(TSV_PATH) > 0
+if append_tsv:
+    compact_path = TSV_PATH + ".resume_tmp"
+    kept = 0
+    dropped = 0
+    with open(TSV_PATH, newline="", errors="replace") as src, open(compact_path, "w", newline="") as dst:
+        reader = csv.reader(src, delimiter="\t")
+        writer_compact = csv.writer(dst, delimiter="\t")
+        header = next(reader, None)
+        if header:
+            writer_compact.writerow(header)
+        for row in reader:
+            if len(row) > 1 and row[1] in resume_series:
+                writer_compact.writerow(row)
+                kept += 1
+            else:
+                dropped += 1
+    os.replace(compact_path, TSV_PATH)
+    log(f"Resume compacted TSV: kept {kept} completed-series rows, dropped {dropped} partial/unfinished rows")
+
+tsv_fh = open(TSV_PATH, "a" if append_tsv else "w", newline="")
 writer  = csv.writer(tsv_fh, delimiter="\t")
-writer.writerow(ALL_COLS)
+if not append_tsv:
+    writer.writerow(ALL_COLS)
 tsv_fh.flush()
 
 total_rows = 0
+processed_any_series = False
+if append_tsv:
+    log(f"Resume enabled: appending to existing TSV; skipping {len(resume_series)} completed series")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # MAIN LOOP: series → events → zips → channels
 # ─────────────────────────────────────────────────────────────────────────────
 for s_idx, series in enumerate(ALL_SERIES):
+    if series in resume_series:
+        log(f"\n[{s_idx+1:02d}/{len(ALL_SERIES)}] series {series} already complete in log, skipping")
+        continue
+
+    processed_any_series = True
     log(f"\n[{s_idx+1:02d}/{len(ALL_SERIES)}] series {series}")
 
     proc_path = os.path.join(PROCESSED_DIR, f"{PROD_TAG}_{series}.root")
@@ -672,6 +718,40 @@ for s_idx, series in enumerate(ALL_SERIES):
 tsv_fh.flush()
 tsv_fh.close()
 log(f"\nTSV complete: {total_rows} rows → {TSV_PATH}")
+
+if RESUME and not processed_any_series:
+    log("Resume found no unfinished series; leaving existing summary unchanged.")
+    raise SystemExit(0)
+
+if append_tsv:
+    log("Rebuilding summary accumulator from complete TSV...")
+    acc = {det: {c: [] for c in ALL_CHANS} for det in ALL_ZIPS}
+    with open(TSV_PATH, newline="", errors="replace") as fh:
+        reader = csv.DictReader(fh, delimiter="\t")
+        for row in reader:
+            try:
+                det = int(row.get("zip", ""))
+            except Exception:
+                continue
+            chan = row.get("channel", "")
+            if det not in acc or chan not in acc[det]:
+                continue
+            item = {}
+            for col in MET_COLS:
+                value = row.get(col, "")
+                if value == "":
+                    item[col] = ""
+                    continue
+                try:
+                    item[col] = float(value)
+                except Exception:
+                    item[col] = value
+            item["_series"] = row.get("series", "")
+            try:
+                item["_event"] = int(row.get("event", ""))
+            except Exception:
+                item["_event"] = row.get("event", "")
+            acc[det][chan].append(item)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SUMMARY FILE
