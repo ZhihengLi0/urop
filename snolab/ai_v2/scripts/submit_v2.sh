@@ -1,6 +1,6 @@
 #!/bin/bash
 # Submit template_from_pkl_v2.py for all zips.
-# v2 changes: no NRMSE cut, no noise p75, NxM = PCA components (teacher's method)
+# v2 changes: fit_ok + NRMSE<=0.15 kept, no noise p75, NxM = PCA components (teacher's method)
 
 set -e
 

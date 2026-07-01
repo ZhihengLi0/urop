@@ -5,7 +5,16 @@ See CONTEXT_FOR_NEXT_AI.md for full context and teacher feedback.
 
 Changes from v1 (ai根据原始数据特征的分析):
   - Removed noise p75 filter (circular definition, no physical basis)
-  - Removed NRMSE cut (only fit_ok=True required)
+  - NRMSE cut KEPT (teacher 2026-06-30: fit_ok alone is too weak — it only
+    checks the fit is "physical" (amp>0, 0<t_rise<t_fall), not that the fit
+    actually matches the waveform. Diagnostic on the raw pkl cache confirms:
+    in zip7/zip9/zip16 fit_ok events have low NRMSE (median 0.13-0.17), but
+    in most other zips (1,4,6,10,13,18,19,22,24) 76-98% of "fit_ok" events
+    still have NRMSE>0.15 — i.e. the fit converges to physical-looking but
+    badly-fit parameters. zip7 looks clean because its fits are genuinely
+    good, not because the NRMSE cut is some artifact. So both fit_ok AND
+    NRMSE must be kept; the real root cause is fit quality in
+    read_zip_all_series.py, which still needs separate diagnosis.)
   - NxM algorithm changed to match teacher's notebook (NxM_cedar.ipynb):
       templates = PCA components themselves, not mean ± scale × component
       components can be negative (they are basis vectors, not physical pulses)
@@ -13,11 +22,12 @@ Changes from v1 (ai根据原始数据特征的分析):
 Filter logic:
   PTOFamps window (done in pkl generation)
   → 100kHz LP filter (done in pkl generation)
-  → fit_ok = True
+  → fit_ok = True AND nrmse <= NRMSE_MAX
   → collect ana_traces → PCA → templates = components
 
 Usage:
     python template_from_pkl_v2.py --det 7
+    python template_from_pkl_v2.py --det 7 --nrmse-max 0.15
 """
 
 import argparse, os, pickle, json, warnings
@@ -26,6 +36,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 
 try:
     import ROOT
@@ -38,8 +49,10 @@ except ImportError:
 # ── CLI ───────────────────────────────────────────────────────────────────────
 parser = argparse.ArgumentParser()
 parser.add_argument('--det', type=int, required=True)
+parser.add_argument('--nrmse-max', type=float, default=0.15)
 args = parser.parse_args()
-det = args.det
+det       = args.det
+NRMSE_MAX = args.nrmse_max
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 PKL_CACHE = ("/projects/standard/yanliusp/shared/zhiheng/snolab"
@@ -65,7 +78,7 @@ MIN_EVENTS        = 5
 ALL_CHANS = ['PAS1','PBS1','PCS1','PDS1','PES1','PFS1',
              'PAS2','PBS2','PCS2','PDS2','PES2','PFS2']
 
-print(f"=== Zip{det} v2  (fit_ok only, no NRMSE cut, no noise cut) ===")
+print(f"=== Zip{det} v2  (fit_ok + nrmse<={NRMSE_MAX}, no noise cut) ===")
 
 # ── Load pkl series ────────────────────────────────────────────────────────────
 series_dir = os.path.join(PKL_CACHE, f"zip{det}_series")
@@ -78,14 +91,16 @@ pkl_files = sorted([
 ])
 print(f"Found {len(pkl_files)} series pkl files")
 
-# ── Single pass: collect ana_traces for fit_ok=True events ────────────────────
+# ── Single pass: collect ana_traces for fit_ok=True AND nrmse<=NRMSE_MAX events ──
 channel_traces = {c: [] for c in ALL_CHANS}
 channel_trises = {c: [] for c in ALL_CHANS}
 channel_tfalls = {c: [] for c in ALL_CHANS}
 channel_nrmses = {c: [] for c in ALL_CHANS}
+channel_raws   = {c: [] for c in ALL_CHANS}  # raw LP-filtered trace, same selection as channel_traces
 
 n_total      = {c: 0 for c in ALL_CHANS}
 n_fitok      = {c: 0 for c in ALL_CHANS}
+n_nrmse_ok   = {c: 0 for c in ALL_CHANS}
 n_ana_none   = {c: 0 for c in ALL_CHANS}
 
 for pkl_path in pkl_files:
@@ -108,9 +123,13 @@ for pkl_path in pkl_files:
             fp  = fps[i]       if i < len(fps) else None
             ana = anas[i]      if i < len(anas) else None
 
-            if not ok:
+            if not ok or fp is None:
                 continue
             n_fitok[c] += 1
+
+            if float(fp['nrmse']) > NRMSE_MAX:
+                continue
+            n_nrmse_ok[c] += 1
 
             if ana is None:
                 n_ana_none[c] += 1
@@ -125,19 +144,20 @@ for pkl_path in pkl_files:
             ana /= pk
 
             channel_traces[c].append(ana.astype(np.float32))
-            if fp:
-                channel_trises[c].append(float(fp['t_rise']))
-                channel_tfalls[c].append(float(fp['t_fall']))
-                channel_nrmses[c].append(float(fp['nrmse']))
+            channel_trises[c].append(float(fp['t_rise']))
+            channel_tfalls[c].append(float(fp['t_fall']))
+            channel_nrmses[c].append(float(fp['nrmse']))
+            channel_raws[c].append(np.asarray(rts[i], dtype=np.float32))
 
 print(f"\nEvent counts per channel:")
-print(f"{'Chan':6} {'total':>7} {'fit_ok':>7} {'selected':>9} {'drop%':>7}")
+print(f"{'Chan':6} {'total':>7} {'fit_ok':>7} {'nrmse_ok':>9} {'selected':>9} {'drop%':>7}")
 for c in ALL_CHANS:
     tot = n_total[c]
     ok  = n_fitok[c]
+    nok = n_nrmse_ok[c]
     sel = len(channel_traces[c])
     drop = 100 * (1 - sel / tot) if tot > 0 else 0
-    print(f"  {c:6} {tot:>7} {ok:>7} {sel:>9} {drop:>6.1f}%")
+    print(f"  {c:6} {tot:>7} {ok:>7} {nok:>9} {sel:>9} {drop:>6.1f}%")
 
 # ── Helper: build NxM templates (teacher's version) ───────────────────────────
 def build_nxm(traces, n_comp=PCA_COMPONENTS, max_ev=MAX_NXM):
@@ -299,7 +319,7 @@ active = [c for c in ALL_CHANS if len(channel_traces[c]) >= MIN_EVENTS]
 if active:
     nrows = len(active)
     fig, axes = plt.subplots(nrows, 2, figsize=(14, 3.5 * nrows), squeeze=False)
-    fig.suptitle(f"Zip{det} v2 — aligned ana_traces (fit_ok only)", fontsize=10)
+    fig.suptitle(f"Zip{det} v2 — aligned ana_traces (fit_ok + NRMSE<={NRMSE_MAX})", fontsize=10)
     for row, c in enumerate(active):
         arr = np.array(channel_traces[c], dtype=np.float64)
         ax  = axes[row, 0]
@@ -402,5 +422,115 @@ if active:
                 dpi=120, bbox_inches='tight')
     plt.close(fig)
     print(f"Saved: zip{det}_trise_vs_tfall.png")
+
+# 5. Rise/fall cluster correspondence — does the rise-slow peak's event set match
+#    the fall-slow peak's event set, or are the two bimodal splits independent?
+MIN_CLUSTER_EVENTS = 20
+rise_fall_concordance = {}
+
+if active:
+    nrows = len(active)
+    fig, axes = plt.subplots(nrows, 1, figsize=(8, 3.8 * nrows), squeeze=False)
+    fig.suptitle(f"Zip{det} v2 — rise/fall cluster correspondence "
+                 f"(KMeans k=2 on t_rise and on t_fall separately, then cross-tabulated)",
+                 fontsize=10)
+    for row, c in enumerate(active):
+        trs = np.array(channel_trises[c]) * 1e3
+        tfs = np.array(channel_tfalls[c]) * 1e3
+        ax  = axes[row, 0]
+        n   = len(trs)
+        if n < MIN_CLUSTER_EVENTS:
+            ax.text(0.5, 0.5, f"{c}: only {n} events, skip clustering",
+                    transform=ax.transAxes, ha='center', fontsize=8)
+            ax.set_title(c, fontsize=8)
+            continue
+
+        km_r = KMeans(n_clusters=2, n_init=10, random_state=0).fit(trs.reshape(-1, 1))
+        km_f = KMeans(n_clusters=2, n_init=10, random_state=0).fit(tfs.reshape(-1, 1))
+        # relabel so cluster index 0 = fast (smaller mean), 1 = slow (larger mean)
+        r_order   = np.argsort(km_r.cluster_centers_.ravel())
+        f_order   = np.argsort(km_f.cluster_centers_.ravel())
+        rise_slow = (km_r.labels_ == r_order[1])
+        fall_slow = (km_f.labels_ == f_order[1])
+
+        both_fast = (~rise_slow) & (~fall_slow)
+        both_slow = ( rise_slow) & ( fall_slow)
+        rise_only = ( rise_slow) & (~fall_slow)
+        fall_only = (~rise_slow) & ( fall_slow)
+        concord   = (both_fast.sum() + both_slow.sum()) / n
+        rise_fall_concordance[c] = concord
+
+        ax.scatter(trs[both_fast], tfs[both_fast], s=3, alpha=0.4, color='steelblue',
+                   label=f'rise-fast & fall-fast (n={int(both_fast.sum())})')
+        ax.scatter(trs[both_slow], tfs[both_slow], s=3, alpha=0.4, color='crimson',
+                   label=f'rise-slow & fall-slow (n={int(both_slow.sum())})')
+        ax.scatter(trs[rise_only], tfs[rise_only], s=3, alpha=0.4, color='darkorange',
+                   label=f'rise-slow, fall-fast (n={int(rise_only.sum())})')
+        ax.scatter(trs[fall_only], tfs[fall_only], s=3, alpha=0.4, color='forestgreen',
+                   label=f'rise-fast, fall-slow (n={int(fall_only.sum())})')
+        rs_bound = km_r.cluster_centers_.ravel()[r_order[1]]
+        fs_bound = km_f.cluster_centers_.ravel()[f_order[1]]
+        ax.set_xlabel("t_rise (ms)", fontsize=7); ax.set_ylabel("t_fall (ms)", fontsize=7)
+        ax.set_title(f"{c}  n={n}  concordance={concord*100:.0f}%  "
+                     f"(rise-slow center~{rs_bound:.3f}ms, fall-slow center~{fs_bound:.3f}ms)",
+                     fontsize=7)
+        ax.legend(fontsize=6, loc='upper left')
+        ax.tick_params(labelsize=6); ax.grid(alpha=0.2)
+    fig.tight_layout()
+    fig.savefig(os.path.join(PLOT_DIR, f"zip{det}_rise_fall_correspondence.png"),
+                dpi=120, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Saved: zip{det}_rise_fall_correspondence.png")
+    print("Rise/fall concordance (event is slow in BOTH or fast in BOTH, vs split):")
+    for c, v in rise_fall_concordance.items():
+        print(f"  {c}: {v*100:.1f}%")
+
+# 6. Raw trace examples near the rise-fast peak vs the rise-slow peak —
+#    what does a typical *measured* (not fitted) pulse look like in each population?
+N_EXAMPLES = 20
+if active:
+    nrows = len(active)
+    fig, axes = plt.subplots(nrows, 2, figsize=(14, 3.5 * nrows), squeeze=False)
+    fig.suptitle(f"Zip{det} v2 — raw trace examples: rise-fast peak (blue) vs rise-slow peak (red)",
+                 fontsize=10)
+    for row, c in enumerate(active):
+        trs  = np.array(channel_trises[c]) * 1e3
+        raws = channel_raws[c]
+        n    = len(trs)
+        ax_full, ax_zoom = axes[row, 0], axes[row, 1]
+        if n < MIN_CLUSTER_EVENTS or len(raws) != n:
+            ax_full.text(0.5, 0.5, f"{c}: only {n} events, skip",
+                         transform=ax_full.transAxes, ha='center', fontsize=8)
+            ax_full.set_title(c, fontsize=8); ax_zoom.set_title(c, fontsize=8)
+            continue
+
+        km_r = KMeans(n_clusters=2, n_init=10, random_state=0).fit(trs.reshape(-1, 1))
+        r_order  = np.argsort(km_r.cluster_centers_.ravel())
+        fast_idx = np.where(km_r.labels_ == r_order[0])[0]
+        slow_idx = np.where(km_r.labels_ == r_order[1])[0]
+        rng = np.random.default_rng(0)
+        fast_sample = rng.choice(fast_idx, min(N_EXAMPLES, len(fast_idx)), replace=False)
+        slow_sample = rng.choice(slow_idx, min(N_EXAMPLES, len(slow_idx)), replace=False)
+
+        for ax, lo, hi in [(ax_full, PLOT_LO, PLOT_HI), (ax_zoom, ZOOM_LO, ZOOM_HI)]:
+            for i in fast_sample:
+                ax.plot(t_ms[lo:hi], raws[i][lo:hi], lw=0.6, alpha=0.4, color='steelblue')
+            for i in slow_sample:
+                ax.plot(t_ms[lo:hi], raws[i][lo:hi], lw=0.6, alpha=0.4, color='crimson')
+            ax.axvline(t_ms[SECTION3_RISE_IDX], color='k', lw=0.8, ls=':')
+            ax.tick_params(labelsize=6); ax.grid(alpha=0.2)
+
+        rise_fast_c = km_r.cluster_centers_.ravel()[r_order[0]]
+        rise_slow_c = km_r.cluster_centers_.ravel()[r_order[1]]
+        ax_full.set_title(f"{c} full  fast~{rise_fast_c:.3f}ms (n={len(fast_idx)})  "
+                           f"slow~{rise_slow_c:.3f}ms (n={len(slow_idx)})", fontsize=7)
+        ax_zoom.set_title(f"{c} zoom (rise region)", fontsize=7)
+        ax_full.set_xlabel("Time (ms)", fontsize=7); ax_full.set_ylabel("Norm. raw amp.", fontsize=7)
+        ax_zoom.set_xlabel("Time (ms)", fontsize=7)
+    fig.tight_layout()
+    fig.savefig(os.path.join(PLOT_DIR, f"zip{det}_raw_examples_by_rise_peak.png"),
+                dpi=120, bbox_inches='tight')
+    plt.close(fig)
+    print(f"Saved: zip{det}_raw_examples_by_rise_peak.png")
 
 print(f"\nDone. Zip{det} v2 complete.")
