@@ -1,4 +1,4 @@
-x#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Save raw MIDAS traces for events selected only by the configured PTOFamps range.
 
 This intentionally does not low-pass filter, normalize, fit, align, apply

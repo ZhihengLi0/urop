@@ -14,3 +14,5 @@ __pycache__/
 .claude/
 # Jupyter checkpoints
 .ipynb_checkpoints/
+# AI handoff doc stays local on MSI only
+CONTEXT_FOR_NEXT_AI.md
