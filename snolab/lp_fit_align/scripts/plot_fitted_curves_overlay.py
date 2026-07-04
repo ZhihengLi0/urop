@@ -17,7 +17,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lp_fit_align import (ALL_CHANS, CKPT_DIR, PLOT_DIR, RISE_REF_IDX,
+from lp_fit_align import (add_pipeline_note,
+                          ALL_CHANS, CKPT_DIR, PLOT_DIR, RISE_REF_IDX,
                           SAMPLERATE, X_FULL, two_exp_free_pt)
 
 parser = argparse.ArgumentParser()
@@ -74,6 +75,9 @@ for row, c in enumerate(chans):
     ax.tick_params(labelsize=7)
     ax.grid(alpha=0.2)
 fig.tight_layout()
+add_pipeline_note(fig, "SMOOTH fitted 2-exp curves only (no measured data): each fit_ok "
+                  "event's fitted (amp, t_rise, t_fall) re-evaluated at COMMON "
+                  f"pretrigger=16050, peak-normalized; cut: {cut}")
 suffix = f"_nrmse{args.nrmse_max}" if args.nrmse_max else ""
 out = os.path.join(PLOT_DIR, f"zip{args.det}_fitted_curves_overlay{suffix}.png")
 fig.savefig(out, dpi=120, bbox_inches="tight")

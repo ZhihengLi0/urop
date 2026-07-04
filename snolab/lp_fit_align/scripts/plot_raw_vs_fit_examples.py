@@ -13,7 +13,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lp_fit_align import (ALL_CHANS, BASELINE_HI, BASELINE_LO, CACHE_DIR_DEFAULT,
+from lp_fit_align import (add_pipeline_note,
+                          ALL_CHANS, BASELINE_HI, BASELINE_LO, CACHE_DIR_DEFAULT,
                           PLOT_DIR, RISE_REF_IDX, SAMPLERATE, TRACELENGTH,
                           X_FULL, fit_trace, lowpass, two_exp_free_pt)
 
@@ -92,6 +93,10 @@ for k, (c, ev, raw_norm, y_norm, fp) in enumerate(examples):
 for k in range(len(examples), nrows * ncols):
     axes[k // ncols, k % ncols].axis("off")
 fig.tight_layout()
+add_pipeline_note(fig, "RAW unfiltered trace (gray) + 100kHz LP (blue) + fitted 2-exp "
+                  "curve (red); one example per channel = lowest-NRMSE fit_ok event of "
+                  "first 15 traces (falls back to best available on noise detectors); "
+                  "red dashed = fitted pretrigger, black dotted = 16050 reference")
 out = os.path.join(PLOT_DIR, f"zip{args.det}_raw_vs_fit_examples.png")
 fig.savefig(out, dpi=130, bbox_inches="tight")
 print(f"Saved: {out}  ({len(examples)} examples)")

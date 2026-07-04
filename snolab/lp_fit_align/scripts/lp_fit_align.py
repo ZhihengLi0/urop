@@ -66,6 +66,37 @@ PLOT_DIR = os.path.join(BASE_DIR, "results", "plots")
 STATS_DIR = os.path.join(BASE_DIR, "results", "stats")
 CKPT_DIR = os.path.join(BASE_DIR, "run", "checkpoints")
 
+
+PIPELINE_NOTE = (
+    "processing: raw MIDAS trace -> 100 kHz 4th-order Butterworth low-pass (scipy sosfilt, steady-state init)\n"
+    "  -> baseline subtract (median of samples 2000-12000) -> normalize by GLOBAL trace peak (no peak window)\n"
+    "  -> 2-exp fit y = A(exp(-t/t_fall) - exp(-t/t_rise)), ALL 5 params free incl. pretrigger"
+    " (curve_fit, pretrigger in 16050+-3000, maxfev=10000)\n"
+    "  -> fit_ok := amp>0 and 0<t_rise<t_fall -> NRMSE := RMS(fit residual)/fitted pulse peak,"
+    " RECORDED ONLY (no cut)\n"
+    "  -> align := shift the MEASURED LP trace by (fitted pretrigger - 16050), sub-sample np.interp"
+)
+
+
+def add_pipeline_note(fig, what):
+    """Reserve a band at the top of the figure and stamp the full processing
+    chain + a description of what this figure shows. Must be called AFTER the
+    plotting code's own tight_layout(); it re-runs tight_layout with a rect
+    that keeps the band clear (text above y=1 would be clipped by Agg)."""
+    import textwrap
+    h = float(fig.get_size_inches()[1])
+    pad_in = 1.1
+    top = max(0.5, 1.0 - pad_in / h)
+    fig.tight_layout(rect=[0, 0, 1, top])
+    what_wrapped = "\n".join(textwrap.wrap("this figure: " + what, width=130,
+                                           subsequent_indent="  "))
+    fig.text(0.01, 0.9992, PIPELINE_NOTE + "\n" + what_wrapped,
+             ha="left", va="top", fontsize=6.5, color="dimgray",
+             family="monospace")
+    if fig._suptitle is not None:
+        fig._suptitle.set_y(top + 0.35 * (1.0 - top))
+
+
 X_FULL = np.arange(TRACELENGTH, dtype=np.float64)
 X_FIT = X_FULL[FIT_LO:FIT_HI:FIT_STRIDE]
 
@@ -269,6 +300,9 @@ def plot_aligned_overlay(det, collector):
         axes[row, 1].set_title(f"{c} zoom", fontsize=8)
         axes[row, 0].set_ylabel("Norm. amp.", fontsize=7)
     fig.tight_layout()
+    add_pipeline_note(fig, "shift-aligned MEASURED low-pass traces (blue, up to "
+                      f"{MAX_OVERLAY}/channel) + mean of ALL fit_ok events (red); "
+                      "dotted line = alignment reference 16050; fit_ok only, no NRMSE cut")
     out = os.path.join(PLOT_DIR, f"zip{det}_lp_aligned_overlay.png")
     fig.savefig(out, dpi=120, bbox_inches="tight")
     plt.close(fig)
@@ -304,6 +338,9 @@ def plot_fit_examples(det, collector):
             if row == 0 and k == 0:
                 ax.legend(fontsize=7)
     fig.tight_layout()
+    add_pipeline_note(fig, "LP trace (blue) vs fitted 2-exp curve (red), first "
+                      f"{N_FIT_EXAMPLES} fit_ok events per channel; examples NOT "
+                      "quality-selected - shows honestly what fit_ok alone lets through")
     out = os.path.join(PLOT_DIR, f"zip{det}_fit_examples.png")
     fig.savefig(out, dpi=120, bbox_inches="tight")
     plt.close(fig)
@@ -347,6 +384,13 @@ def plot_histograms(det, collector):
             ax.tick_params(labelsize=6)
             ax.grid(alpha=0.2)
         fig.tight_layout()
+        if name == "nrmse":
+            add_pipeline_note(fig, "NRMSE distribution of fit_ok events, LOG-spaced "
+                              "bins/axis; bimodal = good-fit population vs noise "
+                              "triggers; valley = natural cut candidate; NO cut applied")
+        else:
+            add_pipeline_note(fig, "distribution of the FITTED free pretrigger "
+                              "(samples) for fit_ok events; reference 16050")
         out = os.path.join(PLOT_DIR, fname)
         fig.savefig(out, dpi=120, bbox_inches="tight")
         plt.close(fig)
@@ -370,6 +414,8 @@ def plot_histograms(det, collector):
             ax.tick_params(labelsize=6)
             ax.grid(alpha=0.2)
     fig.tight_layout()
+    add_pipeline_note(fig, "fitted t_rise / t_fall distributions (ms) of fit_ok "
+                      "events; free-pretrigger fit, loose bounds t_rise<5ms t_fall<20ms")
     out = os.path.join(PLOT_DIR, f"zip{det}_time_constants.png")
     fig.savefig(out, dpi=120, bbox_inches="tight")
     plt.close(fig)
