@@ -306,8 +306,11 @@ def plot_aligned_overlay(det, collector):
         axes[row, 1].set_title(f"{c} zoom", fontsize=8)
         axes[row, 0].set_ylabel("Norm. amp.", fontsize=7)
     fig.tight_layout()
-    add_pipeline_note(fig, "shift-aligned MEASURED low-pass traces (blue, up to "
-                      f"{MAX_OVERLAY}/channel) + mean of ALL fit_ok events (red); "
+    add_pipeline_note(fig, "blue = shift-aligned MEASURED low-pass traces (display sample, up to "
+                      f"{MAX_OVERLAY}/channel); red = POINT-BY-POINT ARITHMETIC MEAN of ALL N "
+                      "fit_ok shifted measured traces (fit contributes ONLY the per-event shift "
+                      "amount, no fitted curve enters the mean; random noise cancels as 1/sqrt(N), "
+                      "the common pulse shape survives; trigger-coherent noise also survives); "
                       "dotted line = alignment reference 16050; fit_ok only, no NRMSE cut")
     out = plot_path("aligned_overlay", f"zip{det}_lp_aligned_overlay.png")
     fig.savefig(out, dpi=120, bbox_inches="tight")
