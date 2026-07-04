@@ -97,6 +97,12 @@ def add_pipeline_note(fig, what):
         fig._suptitle.set_y(top + 0.35 * (1.0 - top))
 
 
+def plot_path(kind, fname):
+    """Plots are grouped one sub-directory per figure type, all zips together."""
+    d = os.path.join(PLOT_DIR, kind)
+    os.makedirs(d, exist_ok=True)
+    return os.path.join(d, fname)
+
 X_FULL = np.arange(TRACELENGTH, dtype=np.float64)
 X_FIT = X_FULL[FIT_LO:FIT_HI:FIT_STRIDE]
 
@@ -303,7 +309,7 @@ def plot_aligned_overlay(det, collector):
     add_pipeline_note(fig, "shift-aligned MEASURED low-pass traces (blue, up to "
                       f"{MAX_OVERLAY}/channel) + mean of ALL fit_ok events (red); "
                       "dotted line = alignment reference 16050; fit_ok only, no NRMSE cut")
-    out = os.path.join(PLOT_DIR, f"zip{det}_lp_aligned_overlay.png")
+    out = plot_path("aligned_overlay", f"zip{det}_lp_aligned_overlay.png")
     fig.savefig(out, dpi=120, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved: {out}")
@@ -341,7 +347,7 @@ def plot_fit_examples(det, collector):
     add_pipeline_note(fig, "LP trace (blue) vs fitted 2-exp curve (red), first "
                       f"{N_FIT_EXAMPLES} fit_ok events per channel; examples NOT "
                       "quality-selected - shows honestly what fit_ok alone lets through")
-    out = os.path.join(PLOT_DIR, f"zip{det}_fit_examples.png")
+    out = plot_path("fit_examples", f"zip{det}_fit_examples.png")
     fig.savefig(out, dpi=120, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved: {out}")
@@ -391,7 +397,7 @@ def plot_histograms(det, collector):
         else:
             add_pipeline_note(fig, "distribution of the FITTED free pretrigger "
                               "(samples) for fit_ok events; reference 16050")
-        out = os.path.join(PLOT_DIR, fname)
+        out = plot_path(name, fname)
         fig.savefig(out, dpi=120, bbox_inches="tight")
         plt.close(fig)
         print(f"Saved: {out}")
@@ -416,7 +422,7 @@ def plot_histograms(det, collector):
     fig.tight_layout()
     add_pipeline_note(fig, "fitted t_rise / t_fall distributions (ms) of fit_ok "
                       "events; free-pretrigger fit, loose bounds t_rise<5ms t_fall<20ms")
-    out = os.path.join(PLOT_DIR, f"zip{det}_time_constants.png")
+    out = plot_path("time_constants", f"zip{det}_time_constants.png")
     fig.savefig(out, dpi=120, bbox_inches="tight")
     plt.close(fig)
     print(f"Saved: {out}")

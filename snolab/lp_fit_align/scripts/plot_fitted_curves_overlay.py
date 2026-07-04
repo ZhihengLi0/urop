@@ -17,7 +17,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from lp_fit_align import (add_pipeline_note,
+from lp_fit_align import (add_pipeline_note, plot_path,
                           ALL_CHANS, CKPT_DIR, PLOT_DIR, RISE_REF_IDX,
                           SAMPLERATE, X_FULL, two_exp_free_pt)
 
@@ -79,6 +79,6 @@ add_pipeline_note(fig, "SMOOTH fitted 2-exp curves only (no measured data): each
                   "event's fitted (amp, t_rise, t_fall) re-evaluated at COMMON "
                   f"pretrigger=16050, peak-normalized; cut: {cut}")
 suffix = f"_nrmse{args.nrmse_max}" if args.nrmse_max else ""
-out = os.path.join(PLOT_DIR, f"zip{args.det}_fitted_curves_overlay{suffix}.png")
+out = plot_path("fitted_curves_overlay", f"zip{args.det}_fitted_curves_overlay{suffix}.png")
 fig.savefig(out, dpi=120, bbox_inches="tight")
 print(f"Saved: {out}")
