@@ -326,10 +326,21 @@ def plot_histograms(det, collector):
                                  squeeze=False)
         fig.suptitle(f"Zip{det} — {name} distribution (fit_ok events)", fontsize=10)
         for row, c in enumerate(chans):
-            vals = [getter(f) for f in collector[c]["fits"] if f["fit_ok"]]
+            vals = np.array([getter(f) for f in collector[c]["fits"] if f["fit_ok"]])
             ax = axes[row, 0]
-            if vals:
-                ax.hist(vals, bins=60, color="steelblue", edgecolor="white", lw=0.3)
+            if len(vals):
+                if name == "nrmse":
+                    # log-spaced bins: outliers reach O(100) and would squash
+                    # a linear histogram into a single bin at zero
+                    vals = vals[np.isfinite(vals) & (vals > 0)]
+                    bins = np.logspace(np.log10(max(vals.min(), 1e-3)),
+                                       np.log10(vals.max()), 60)
+                    ax.hist(vals, bins=bins, color="steelblue",
+                            edgecolor="white", lw=0.3)
+                    ax.set_xscale("log")
+                else:
+                    ax.hist(vals, bins=60, color="steelblue",
+                            edgecolor="white", lw=0.3)
                 ax.set_title(f"{c}  n={len(vals)}  median={np.median(vals):.4g}",
                              fontsize=8)
             ax.set_xlabel(xlabel, fontsize=7)
