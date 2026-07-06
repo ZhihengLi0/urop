@@ -175,6 +175,28 @@ def shift_align(y_norm, fitted_pretrigger):
     return np.interp(X_FULL + shift, X_FULL, y_norm, left=0.0, right=0.0)
 
 
+def nrmse_weighted_fit_mean(fits, lo, hi):
+    """NRMSE-weighted average of the fitted 2-exp curves (peak-normalized,
+    common pretrigger = RISE_REF_IDX) over window [lo:hi].
+
+    Weight w_i = 1 / max(NRMSE_i, 0.01)^2 — far-off (high-NRMSE) events are
+    down-weighted smoothly but never excluded (weight > 0 for every event).
+    """
+    x = X_FULL[lo:hi]
+    acc = np.zeros(hi - lo)
+    wsum = 0.0
+    for fp in fits:
+        y = two_exp_free_pt(x, fp["amp"], fp["t_rise"], fp["t_fall"],
+                            0.0, float(RISE_REF_IDX))
+        pk = float(np.max(y))
+        if pk <= 0 or not np.isfinite(pk):
+            continue
+        w = 1.0 / max(fp["nrmse"], 0.01) ** 2
+        acc += (y / pk) * w
+        wsum += w
+    return acc / wsum if wsum > 0 else acc
+
+
 def process_channel(task):
     """Worker: LP + fit + shift every trace of one channel of one series.
 
@@ -291,13 +313,17 @@ def plot_aligned_overlay(det, collector):
     for row, c in enumerate(chans):
         col = collector[c]
         mean_tr = col["mean_sum"] / col["mean_n"]
+        wmean = nrmse_weighted_fit_mean(col["fits"], lo, hi)
         for ax, a, b in [(axes[row, 0], lo, hi), (axes[row, 1], zlo, zhi)]:
             for tr in col["overlay"]:
                 ax.plot(t_ms[a:b], tr[a:b], lw=0.4, alpha=0.15, color="steelblue")
             ax.plot(t_ms[a:b], mean_tr[a:b], lw=1.5, color="crimson",
-                    label=f"mean (n={col['mean_n']})")
+                    label=f"mean of measured traces (n={col['mean_n']})")
+            ax.plot(t_ms[a:b], wmean[a - lo:b - lo], lw=1.5, color="darkorange",
+                    label=f"NRMSE-weighted mean of fitted curves "
+                          f"(w=1/NRMSE^2, n={len(col['fits'])})")
             ax.axvline(t_ms[RISE_REF_IDX], color="k", lw=0.8, ls=":")
-            ax.legend(fontsize=7)
+            ax.legend(fontsize=6.5, loc="upper right")
             ax.tick_params(labelsize=6)
             ax.grid(alpha=0.2)
             ax.set_xlabel("Time (ms)", fontsize=7)
@@ -307,11 +333,13 @@ def plot_aligned_overlay(det, collector):
         axes[row, 0].set_ylabel("Norm. amp.", fontsize=7)
     fig.tight_layout()
     add_pipeline_note(fig, "blue = shift-aligned MEASURED low-pass traces (display sample, up to "
-                      f"{MAX_OVERLAY}/channel); red = POINT-BY-POINT ARITHMETIC MEAN of ALL N "
-                      "fit_ok shifted measured traces (fit contributes ONLY the per-event shift "
-                      "amount, no fitted curve enters the mean; random noise cancels as 1/sqrt(N), "
-                      "the common pulse shape survives; trigger-coherent noise also survives); "
-                      "dotted line = alignment reference 16050; fit_ok only, no NRMSE cut")
+                      f"{MAX_OVERLAY}/channel); red = point-by-point arithmetic mean of ALL N "
+                      "fit_ok shifted measured traces (fit contributes only the per-event shift, "
+                      "no fitted curve enters this mean); orange = NRMSE-WEIGHTED MEAN of the "
+                      "fitted 2-exp curves (each fit_ok event's fitted curve at common pretrigger "
+                      "16050, peak-normalized, averaged with weight w=1/max(NRMSE,0.01)^2 so "
+                      "badly-fit events count less but are never excluded); dotted line = "
+                      "alignment reference 16050; fit_ok only, no NRMSE cut anywhere")
     out = plot_path("aligned_overlay", f"zip{det}_lp_aligned_overlay.png")
     fig.savefig(out, dpi=120, bbox_inches="tight")
     plt.close(fig)
@@ -503,7 +531,8 @@ def main():
                            collector, args.max_per_channel, pool)
 
     plot_aligned_overlay(det, collector)
-    plot_fit_examples(det, collector)
+    # per-channel fit examples superseded by the event-organized grid
+    # (scripts/plot_event_fit_grid.py) which owns results/plots/fit_examples/
     plot_histograms(det, collector)
     write_summary(det, collector)
     print(f"\nDone. zip{det} complete.")
