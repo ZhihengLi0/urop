@@ -323,7 +323,13 @@ def plot_aligned_overlay(det, collector):
                     label=f"NRMSE-weighted mean of fitted curves "
                           f"(w=1/NRMSE^2, n={len(col['fits'])})")
             ax.axvline(t_ms[RISE_REF_IDX], color="k", lw=0.8, ls=":")
-            ax.legend(fontsize=6.5, loc="upper right")
+            handles, labels = ax.get_legend_handles_labels()
+            blue_proxy = plt.Line2D([], [], color="steelblue", lw=1.5)
+            ax.legend([blue_proxy] + handles,
+                      [f"shift-aligned measured LP traces "
+                       f"(showing {len(col['overlay'])} of {col['mean_n']})"]
+                      + labels,
+                      fontsize=6.5, loc="upper right")
             ax.tick_params(labelsize=6)
             ax.grid(alpha=0.2)
             ax.set_xlabel("Time (ms)", fontsize=7)
