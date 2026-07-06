@@ -94,7 +94,7 @@ def add_pipeline_note(fig, what):
              ha="left", va="top", fontsize=6.5, color="dimgray",
              family="monospace")
     if fig._suptitle is not None:
-        fig._suptitle.set_y(top + 0.35 * (1.0 - top))
+        fig._suptitle.set_y(top + 0.15 * (1.0 - top))
 
 
 def plot_path(kind, fname):
@@ -384,6 +384,7 @@ def plot_histograms(det, collector):
                     ax.hist(vals, bins=bins, color="steelblue",
                             edgecolor="white", lw=0.3)
                     ax.set_xscale("log")
+                    ax.set_yscale("log")
                 else:
                     ax.hist(vals, bins=60, color="steelblue",
                             edgecolor="white", lw=0.3)
@@ -394,9 +395,9 @@ def plot_histograms(det, collector):
             ax.grid(alpha=0.2)
         fig.tight_layout()
         if name == "nrmse":
-            add_pipeline_note(fig, "NRMSE distribution of fit_ok events, LOG-spaced "
-                              "bins/axis; bimodal = good-fit population vs noise "
-                              "triggers; valley = natural cut candidate; NO cut applied")
+            add_pipeline_note(fig, "NRMSE distribution of fit_ok events, log-log axes "
+                              "(log-spaced bins, log counts); bimodal = good-fit population "
+                              "vs noise triggers; valley = natural cut candidate; NO cut applied")
         else:
             add_pipeline_note(fig, "distribution of the FITTED free pretrigger "
                               "(samples) for fit_ok events; reference 16050")
