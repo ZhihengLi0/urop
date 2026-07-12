@@ -19,3 +19,5 @@ CONTEXT_FOR_NEXT_AI.md
 
 # Final template ROOT files are versioned (exception to *.root)
 !lp_fit_align/results/root_files/*.root
+# Final figures are versioned (exception to *.png)
+!lp_fit_align/results/plots/**/*.png
