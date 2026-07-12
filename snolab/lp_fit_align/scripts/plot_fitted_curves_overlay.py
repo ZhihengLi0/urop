@@ -26,6 +26,8 @@ parser.add_argument("--det", type=int, required=True)
 parser.add_argument("--max-curves", type=int, default=200)
 parser.add_argument("--nrmse-max", type=float, default=None,
                     help="optionally keep only fits with NRMSE below this")
+parser.add_argument("--trise-max", type=float, default=None,
+                    help="optionally keep only fits with t_rise (s) below this")
 args = parser.parse_args()
 
 ckpt_dir = os.path.join(CKPT_DIR, f"zip{args.det}")
@@ -43,13 +45,19 @@ for fname in ckpts:
                 continue
             if args.nrmse_max is not None and fp["nrmse"] > args.nrmse_max:
                 continue
+            if args.trise_max is not None and fp["t_rise"] > args.trise_max:
+                continue
             params[c].append(fp)
 
 lo, hi = RISE_REF_IDX - 500, RISE_REF_IDX + 5000
 x = X_FULL[lo:hi]
 t_ms = x / SAMPLERATE * 1e3
 chans = [c for c in ALL_CHANS if params[c]]
-cut = f"fit_ok, NRMSE<={args.nrmse_max}" if args.nrmse_max else "fit_ok, no NRMSE cut"
+cut = "fit_ok"
+if args.nrmse_max is not None:
+    cut += f", NRMSE<={args.nrmse_max}"
+if args.trise_max is not None:
+    cut += f", t_rise<={args.trise_max*1e3:.2f}ms"
 
 fig, axes = plt.subplots(len(chans), 1, figsize=(10, 3.2 * len(chans)),
                          squeeze=False)
@@ -79,6 +87,8 @@ add_pipeline_note(fig, "SMOOTH fitted 2-exp curves only (no measured data): each
                   "event's fitted (amp, t_rise, t_fall) re-evaluated at COMMON "
                   f"pretrigger=16050, peak-normalized; cut: {cut}")
 suffix = f"_nrmse{args.nrmse_max}" if args.nrmse_max else ""
+if args.trise_max is not None:
+    suffix += f"_trise{args.trise_max*1e3:.2f}ms"
 out = plot_path("fitted_curves_overlay", f"zip{args.det}_fitted_curves_overlay{suffix}.png")
 fig.savefig(out, dpi=120, bbox_inches="tight")
 print(f"Saved: {out}")

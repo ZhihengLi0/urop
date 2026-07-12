@@ -143,7 +143,16 @@ labels = ["nxm0 (mean)", "nxm1 (PC1)", "nxm2 (PC2)", "nxm3 (PC3)", "nxm4 (PC4)"]
 for row, c in enumerate(chans):
     ax = axes[row, 0]
     for k, arr in enumerate(templates[c]):
-        ax.plot(t_ms, arr[PCA_LO:PCA_HI], lw=1.1, color=colors[k],
+        seg = arr[PCA_LO:PCA_HI].astype(np.float64).copy()
+        if k >= 1:
+            # each PCA component (a unit-norm basis vector) is tiny in
+            # amplitude; normalize it to unit peak-abs FOR DISPLAY ONLY so the
+            # waveform shape is visible. The ROOT templates keep the raw
+            # (unit-norm) components.
+            m = float(np.max(np.abs(seg)))
+            if m > 0:
+                seg = seg / m
+        ax.plot(t_ms, seg, lw=1.1, color=colors[k],
                 label=labels[k], alpha=0.85)
     ax.axvline(RISE_REF_IDX / SAMPLERATE * 1e3, color="gray", lw=0.7, ls=":")
     ax.axhline(0, color="gray", lw=0.5, ls="--")
@@ -162,7 +171,9 @@ add_pipeline_note(fig, "NxM PCA templates: population = fitted 2-exp curves with
                   "slow-drift noise leaking through NRMSE), each curve at common "
                   "pretrigger 16050 peak-normalized; per-channel PCA (svd_solver=full); "
                   "nxm0 = mean curve, nxm1-4 = PCA components 1-4 (basis vectors, may "
-                  "be negative); a real pulse = sum_i amp_i * nxm_i in the optimal filter")
+                  "be negative); a real pulse = sum_i amp_i * nxm_i in the optimal filter. "
+                  "PLOT ONLY: nxm1-4 each normalized to unit peak-abs so the shape is "
+                  "visible (ROOT templates keep the raw unit-norm components)")
 out = plot_path("pca_templates", f"zip{det}_pca_templates.png")
 fig.savefig(out, dpi=120, bbox_inches="tight")
 print(f"Saved: {out}")
