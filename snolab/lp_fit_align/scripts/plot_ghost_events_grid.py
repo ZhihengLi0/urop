@@ -10,7 +10,7 @@ peaking later because of the slow rise. The first --n-events such events
 (storage order) are shown, one ROW per event x one COLUMN per channel, each
 panel raw (gray) + 100 kHz LP (blue) + 2-exp fit (red) with its NRMSE.
 
-Output: results/plots/ghost_events/zip{N}_ghost_events.png
+Output: results/plots/shadow_events/zip{N}_shadow_events.png
 
 Usage:
     python3 plot_ghost_events_grid.py --det 7 [--nrmse-max 0.4] [--trise-min 2e-4]
@@ -154,6 +154,6 @@ add_pipeline_note(fig, "GHOST population of aligned_overlay = genuinely slow, WE
                   "onset aligns at 16050 but the peak comes later, producing the faint "
                   "displaced bundle in aligned_overlay; one ROW per event, one COLUMN "
                   "per channel, gray = raw, blue = 100kHz LP, red = 2-exp fit")
-out = plot_path("ghost_events", f"zip{det}_ghost_events.png")
+out = plot_path("shadow_events", f"zip{det}_shadow_events.png")
 fig.savefig(out, dpi=110, bbox_inches="tight")
 print(f"Saved: {out}  ({len(events)} events)")

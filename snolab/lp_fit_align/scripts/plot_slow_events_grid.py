@@ -10,7 +10,7 @@ COLUMN per channel, each panel raw (gray) + 100 kHz LP (blue) + 2-exp fit
 (red) with its NRMSE, so one can judge from the RAW traces whether these are
 noise triggers or genuinely slow pulses.
 
-Output: results/plots/slow_events/zip{N}_slow_events.png
+Output: results/plots/slow_rise_events/zip{N}_slow_rise_events.png
 
 Usage:
     python3 plot_slow_events_grid.py --det 7 [--nrmse-min 0.4] [--n-events 15]
@@ -146,6 +146,6 @@ add_pipeline_note(fig, "slow-onset candidates = the RED (rejected) population of
                   "one ROW per event, one COLUMN per channel, gray = raw, blue = "
                   "100kHz LP, red = free-pretrigger 2-exp fit; judge from the raw "
                   "traces whether these are noise triggers or genuinely slow pulses")
-out = plot_path("slow_events", f"zip{det}_slow_events.png")
+out = plot_path("slow_rise_events", f"zip{det}_slow_rise_events.png")
 fig.savefig(out, dpi=110, bbox_inches="tight")
 print(f"Saved: {out}  ({len(events)} events)")

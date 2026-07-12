@@ -86,7 +86,7 @@ is traceable to an `EventNumber` and downstream analyses never refit.
   (log-log histograms in `results/plots/nrmse/`): a good-fit population
   (median ≈ 0.05–0.1 on quiet detectors) and a noise-trigger population
   (≈ 1–2), separated by a valley at ≈ 0.4–0.5. The cut sits in the valley.
-  Event grids of the rejected population (`slow_events/`) show pure noise in
+  Event grids of the rejected population (`slow_rise_events/`) show pure noise in
   the raw traces, confirming the cut removes noise triggers, not physics.
 - **`t_rise ≤ 0.3 ms`** — on noisy-window detectors a smooth slow baseline
   drift can survive the NRMSE cut (a slow 2-exp hugs it with a small
@@ -117,8 +117,8 @@ self-documenting.
 | `raw_vs_fit_examples/` | same 15 events, three layers per panel: raw (gray) / 100 kHz LP (blue) / fit (red) |
 | `overlay_fan_cut/` | three-in-one: aligned measured traces + fitted curves passing the NRMSE cut (green) + rejected (red), median NRMSE of both populations stamped per channel |
 | `nrmse/`, `pretrigger/`, `time_constants/` | full-statistics distributions (log-log NRMSE; fitted onset; t_rise/t_fall) |
-| `slow_events/` | event grid of the NRMSE-rejected population — raw traces show they are noise triggers |
-| `ghost_events/` | event grid of well-fit slow-rise events (median NRMSE ≤ 0.4 and median t_rise > 0.2 ms) — raw traces show real, genuinely slow pulses (the faint displaced bundle visible in aligned overlays) |
+| `slow_rise_events/` | event grid of the NRMSE-rejected population — raw traces show they are noise triggers |
+| `shadow_events/` | event grid of well-fit slow-rise events (median NRMSE ≤ 0.4 and median t_rise > 0.2 ms) — raw traces show real, genuinely slow pulses (the faint displaced bundle visible in aligned overlays) |
 | `slow_fall_events/` | random sample of events with long fitted t_fall on a reference channel, all channels drawn — showed that Z7 "slow-fall" events are real pulses in 11 channels while the long t_fall is a PDS2 single-channel low-frequency artifact |
 | `pca_templates/` | final NxM PCA templates per channel (nxm0–nxm4) with explained-variance ratios |
 
