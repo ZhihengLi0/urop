@@ -184,8 +184,14 @@ SNOLAB_R4_20260707_ZhihengLi_pca_zip{N}.root    # PCA nxm templates (normalized)
 
 - **One algorithm = one self-contained directory** (`scripts/` in git,
   `results/plots|stats` for finals, git-ignored `run/` for logs and
-  checkpoints). Current pipeline: `lp_fit_align/`. Earlier template
-  iterations are kept for comparison in `1x1_final/` and `nxm_final/`.
+  checkpoints). Current layout:
+  - `raw_without_filter/` — stage 1: PTOFamps-window event selection and the
+    unprocessed raw-trace pickle cache (section 1);
+  - `lp_fit_align/` — stage 2: the fit/align/diagnostics/template pipeline
+    (sections 2–6). This is the definitive analysis.
+  Earlier template iterations (`1x1_final/`, `nxm_final/` — pinned-pretrigger
+  fits, superseded methodology) were removed from the tree; their history is
+  preserved in git tags v0.1–v5.0.
 - Deliverables (code, notebooks, figures, commit messages) are in English.
 - Large artifacts (pkl / png / root) stay on MSI storage and out of git;
   the repository tracks code and small JSON summaries only.
