@@ -63,6 +63,9 @@ channel-parallel with a process pool):
    The onset is *never* pinned inside the fit — real trigger times vary
    event-by-event (fitted onsets cluster ≈ 230 samples after the nominal
    16050) and pinning them distorts every other parameter.
+   Fit window: samples 12550–24050 (16050 − 3000 − 500 to 16050 + 8000),
+   stride 4; parameter bounds amp ∈ [0, 10], t_rise ∈ [1 µs, 5 ms],
+   t_fall ∈ [10 µs, 20 ms], baseline ∈ [−0.5, 0.5].
 5. **Quality numbers** — `fit_ok := amp>0 and 0<t_rise<t_fall`;
    `NRMSE := RMS(fit residual)/fitted pulse peak` (recorded for every trace;
    used as a cut only downstream).
@@ -146,7 +149,9 @@ but are never excluded), re-normalized to peak 1. Local archive:
 **(b) NxM PCA templates** (`scripts/build_pca_templates.py`,
 `scripts/normalize_pca_templates.py`) — per channel, PCA over the fitted
 curves that pass `fit_ok + NRMSE≤0.4 + t_rise≤0.3 ms` (curves at common
-pretrigger, peak-normalized). Templates are `nxm0` = mean curve and
+pretrigger, peak-normalized; PCA window samples 15550–24050, i.e.
+16050 − 500 to 16050 + 8000; at most 3000 curves per channel, seeded random
+subsample). Templates are `nxm0` = mean curve and
 `nxm1..nxm4` = the first four principal components (oscillating basis
 vectors, may be negative; a real pulse is fit as Σᵢ ampᵢ·nxmᵢ). PC1+PC2
 capture 96–98 % of the shape variance. All five are peak-normalized to 1 in
