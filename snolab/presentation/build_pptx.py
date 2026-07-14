@@ -197,18 +197,22 @@ s = slide()
 title(s, "Alignment result — overlaid measured traces")
 bullets(s, [
     "All fit_ok traces shifted to the common onset (blue) + point-by-point mean (red) + NRMSE-weighted mean of the fitted curves (orange, w = 1/max(NRMSE, 0.01)²)",
-    "Quiet detectors give a tight bundle — the template input is well defined; right panels zoom on the peak",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.15), size=14)
-pic(s, "aligned_overlay_zip7_PBS1.png", IN(0.9), IN(2.5), IN(11.5), IN(2.35))
-pic(s, "aligned_overlay_zip7_PCS1.png", IN(0.9), IN(4.95), IN(11.5), IN(2.3),
-    "Z7 PBS1 (top) and PCS1 (bottom). Note the faint displaced bundle in the PCS1 zoom — more on it later")
-notes(s, "After alignment the measured traces stack into a tight bundle - "
-         "here channel PBS1 and PCS1 of Z7, with the full window on the left "
-         "and the peak zoom on the right. Red is the plain mean of the "
-         "measured traces, orange the NRMSE-weighted mean of the fitted "
-         "curves - already almost a template. In the PCS1 zoom you can see a "
-         "faint displaced bundle next to the main one; keep it in mind, it "
-         "comes back in a few slides.")
+    "Peak zoom on a quiet detector: a tight bundle — the template input is well defined. Note the faint displaced bundle beside the main one, visible on both crystal faces (S1 and S2) — more on it later",
+], IN(0.55), IN(1.2), IN(12.3), IN(1.5), size=14)
+pic(s, "aligned_zoom_zip7_PCS1.png", IN(0.35), IN(3.1), IN(6.15), IN(3.4),
+    "Z7 PCS1 (S1 face) — peak zoom; the faint displaced bundle is clearly visible")
+pic(s, "aligned_zoom_zip7_PBS2.png", IN(6.85), IN(3.1), IN(6.15), IN(3.4),
+    "Z7 PBS2 (S2 face) — same faint displaced bundle")
+notes(s, "Here's what things look like after alignment - zoomed right on the "
+         "peak. The blue band is thousands of measured traces stacked on top "
+         "of each other; red is their average; orange is the weighted average "
+         "of the fitted curves. On a quiet detector the bundle is very tight "
+         "- the pulse shape really is highly consistent, so the raw material "
+         "for a template is good. Now please notice one detail: in both "
+         "channels there is a faint, displaced little bundle next to the "
+         "main one - very clear in the left panel. And these two channels "
+         "sit on opposite faces of the crystal, so this is not a quirk of "
+         "one channel. Keep it in mind - we'll come back to what it is.")
 
 # ------------------------------------------------------ 6 · NRMSE cut
 s = slide()

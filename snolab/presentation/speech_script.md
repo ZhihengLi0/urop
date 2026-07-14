@@ -40,9 +40,9 @@
 
 ## Slide 5 — Alignment result（约 40 秒）
 
-**中文**：对齐之后长这样。蓝色是上千条实测波形叠在一起，红色是它们的平均，橙色是拟合曲线的加权平均。安静探测器上这个束非常紧——脉冲形状确实高度一致，做模板的原料是好的。这里请注意一个细节：下面这个通道的放大图里，主束旁边有一条淡淡的、错开的小束。先记住它，一会儿回来讲它是什么。
+**中文**：对齐之后长这样——这里直接放大在峰值附近。蓝色是上千条实测波形叠在一起，红色是它们的平均，橙色是拟合曲线的加权平均。安静探测器上这个束非常紧——脉冲形状确实高度一致，做模板的原料是好的。请注意一个细节：两个通道里，主束旁边都有一条淡淡的、错开的小束，左边这个通道特别明显。而且这两个通道分别在晶体的两个面上——所以这不是某一个通道的毛病。先记住它，一会儿回来讲它是什么。
 
-**English**: This is what things look like after alignment. The blue band is thousands of measured traces stacked on top of each other; red is their average; orange is the weighted average of the fitted curves. On a quiet detector this bundle is very tight — the pulse shape really is highly consistent, so the raw material for a template is good. One detail I'd like you to notice: in the zoomed panel of the lower channel, there's a faint, displaced little bundle next to the main one. Keep it in mind — we'll come back to what it is.
+**English**: This is what things look like after alignment — zoomed right in on the peak. The blue band is thousands of measured traces stacked on top of each other; red is their average; orange is the weighted average of the fitted curves. On a quiet detector this bundle is very tight — the pulse shape really is highly consistent, so the raw material for a template is good. Now, one detail I'd like you to notice: in both channels there's a faint, displaced little bundle next to the main one — very clear in the left panel. And these two channels sit on opposite faces of the crystal, so this is not a quirk of a single channel. Keep it in mind — we'll come back to what it is.
 
 ---
 

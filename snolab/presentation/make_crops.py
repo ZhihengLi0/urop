@@ -78,8 +78,21 @@ def grid(src, out, row0, nrows, ncols, pad=6, min_row=140):
 
 
 # ---- stacked per-channel figures: panel 0 = PAS1, 1 = PBS1, 2 = PCS1, ...
-vpanel("aligned_overlay/zip7_lp_aligned_overlay.png", "aligned_overlay_zip7_PBS1.png", 1)
-vpanel("aligned_overlay/zip7_lp_aligned_overlay.png", "aligned_overlay_zip7_PCS1.png", 2)
+# CAUTION (aligned_overlay only): its header text block is >120 px tall, so it
+# survives the panel filter as block 0 — channel i sits at block i+1 there.
+vpanel("aligned_overlay/zip7_lp_aligned_overlay.png", "aligned_overlay_zip7_PBS1.png", 2)
+vpanel("aligned_overlay/zip7_lp_aligned_overlay.png", "aligned_overlay_zip7_PCS1.png", 3)
+
+# zoom-only crops (right half of the row; the shadow bundle is clearest here)
+def aligned_zoom(chan_block, out, xsplit=852):
+    im = Image.open(os.path.join(PLOTS, "aligned_overlay/zip7_lp_aligned_overlay.png"))
+    rb = [b for b in row_blocks(im) if b[1] - b[0] > 120]
+    t, b = rb[chan_block]
+    im.crop((xsplit, max(t - 4, 0), im.width, min(b + 6, im.height))).save(os.path.join(OUT, out))
+    print(f"{out}: block {chan_block}, rows {t}-{b}")
+
+aligned_zoom(3, "aligned_zoom_zip7_PCS1.png")   # PCS1: shadow bundle clearest
+aligned_zoom(8, "aligned_zoom_zip7_PBS2.png")   # PBS2: shadow visible on the S2 face too
 vpanel("nrmse/zip7_nrmse.png", "nrmse_zip7_PBS1.png", 1)
 vpanel("nrmse/zip22_nrmse.png", "nrmse_zip22_PAS1.png", 0)
 vpanel("overlay_fan_cut/zip22_overlay_fan_cut_nrmse0.4.png", "fan_cut_zip22_PCS1.png", 2)
