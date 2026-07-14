@@ -21,3 +21,8 @@ CONTEXT_FOR_NEXT_AI.md
 !lp_fit_align/results/root_files/*.root
 # Final figures are versioned (exception to *.png)
 !lp_fit_align/results/plots/**/*.png
+# Presentation deliverables are versioned (exceptions to *.png / *.pdf)
+!presentation/figures/*.png
+!presentation/*.pdf
+.~*.pptx
+speech_script.html
