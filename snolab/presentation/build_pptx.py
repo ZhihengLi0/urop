@@ -150,21 +150,28 @@ bullets(s, [
 ], IN(0.55), IN(1.25), IN(12.3), IN(3.1), size=15)
 tb = bullets(s, [
     "Why a free onset?  Real trigger times vary event-by-event — fitted onsets cluster ≈230 samples after the nominal 16050. Pinning the onset distorts every other parameter.",
-], IN(0.55), IN(4.5), IN(5.6), IN(1.9), size=14)
+], IN(0.55), IN(4.38), IN(12.3), IN(0.75), size=14)
 for pgh in tb.text_frame.paragraphs:
     for r in pgh.runs:
         r.font.color.rgb = ACCENT
-pic(s, "pretrigger_zip7_crop.png", IN(6.4), IN(4.55), IN(6.4), IN(2.6),
-    "Z7 PAS1: fitted onset distribution — offset from nominal, narrow core")
-notes(s, "The per-trace algorithm. Low-pass at 100 kHz, baseline subtraction, "
-         "peak normalization, then a two-exponential fit where all five "
-         "parameters are free, including the pulse onset. The onset is never "
-         "pinned: real trigger times vary, and the fitted onsets cluster about "
-         "230 samples after the nominal pretrigger - pinning it would bias the "
-         "time constants. Each fit gives two quality numbers, a physicality "
-         "flag and an NRMSE, which we only record at this stage. Finally the "
-         "measured trace is aligned by shifting it by the fitted onset - a "
-         "pure translation, no analytic re-generation.")
+pic(s, "fan_zip7_PBS1_before.png", IN(0.55), IN(5.25), IN(6.0), IN(1.75),
+    "Fitted curves at common onset, peak-normalized — ALL fit_ok events (no cut)")
+pic(s, "fan_zip7_PBS1_nrmse.png", IN(6.85), IN(5.25), IN(6.0), IN(1.75),
+    "Same, after NRMSE ≤ 0.4 — a single tight shape family remains (Z7 PBS1)")
+notes(s, "The per-trace algorithm, five steps. Low-pass at 100 kilohertz, "
+         "baseline subtraction, peak normalization, then a two-exponential fit "
+         "where all five parameters are free, including the pulse onset. The "
+         "onset is never pinned: real trigger times vary, and the fitted "
+         "onsets cluster about 230 samples after the nominal pretrigger - "
+         "pinning it would bias the time constants. Each fit records a "
+         "physicality flag and an NRMSE; no cut yet. Finally the measured "
+         "trace is aligned by shifting it by the fitted onset - a pure "
+         "translation. The two fan plots show the output of the fit step: "
+         "every fitted curve drawn at the common onset, peak-normalized. On "
+         "the left, all physical fits - you can see slow components spreading "
+         "off the main bundle. On the right, after the NRMSE cut, a single "
+         "tight shape family remains. Where that cut comes from is the next "
+         "part of the talk.")
 
 # ------------------------------------------------------ 4 · fit example grids
 s = slide()
@@ -311,18 +318,16 @@ bullets(s, [
     "Badly-fit events count less but are never excluded — robust and smooth (noise-free by construction)",
     "Delivered as peak-normalized 32768-bin ROOT TH1D per channel + summed PT/PS1/PS2 templates",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
-pic(s, "fan_zip7_PBS1_before.png", IN(1.7), IN(2.85), IN(9.9), IN(2.05),
-    "Z7 PBS1, fitted curves at common onset — before cuts")
-pic(s, "fan_zip7_PBS1_after.png", IN(1.7), IN(5.05), IN(9.9), IN(2.05),
-    "…after NRMSE ≤ 0.4 and τ_rise ≤ 0.3 ms — a single tight shape family; the weighted mean of these is the 1x1 template")
+pic(s, "fan_zip7_PBS1_after.png", IN(1.4), IN(3.35), IN(10.5), IN(3.1),
+    "Z7 PBS1, fitted curves after NRMSE ≤ 0.4 and τ_rise ≤ 0.3 ms — the NRMSE-weighted mean of this family is the 1x1 template")
 notes(s, "First template family: the analytic one. For each channel we take "
-         "every physical fitted curve, put them at the common onset, and "
-         "average them with a weight of one over NRMSE squared - so badly "
-         "fit events count less but nothing is excluded by hand. The fan "
-         "plots show the shape distribution before and after the cuts: "
-         "after the cuts a single tight shape family remains, and its "
-         "weighted mean is the 1x1 template - smooth and noise-free by "
-         "construction because it is built from analytic curves.")
+         "every physical fitted curve at the common onset and average them "
+         "with a weight of one over NRMSE squared - badly fit events count "
+         "less but nothing is excluded by hand. After the cuts, shown here, "
+         "a single tight shape family remains, and its weighted mean is the "
+         "1x1 template - smooth and noise-free by construction because it is "
+         "built from analytic curves, delivered as peak-normalized ROOT "
+         "histograms.")
 
 # ------------------------------------------------- 12 · template family 2
 s = slide()

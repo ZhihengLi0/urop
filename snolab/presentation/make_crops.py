@@ -88,6 +88,8 @@ vpanel("time_constants/zip7_time_constants.png", "time_constants_zip7_PDS2.png",
 vpanel("pca_templates/zip7_pca_templates.png", "pca_zip7_PAS1.png", 0)
 vpanel("pca_templates/zip7_pca_templates.png", "pca_zip7_PBS1.png", 1)
 vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay.png", "fan_zip7_PBS1_before.png", 1)
+vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay_nrmse0.4.png",
+       "fan_zip7_PBS1_nrmse.png", 1)
 vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
        "fan_zip7_PBS1_after.png", 1)
 vpanel("pretrigger/zip7_pretrigger.png", "pretrigger_zip7_crop.png", 0)
