@@ -254,65 +254,71 @@ notes(s, "Before trusting the cut we looked at what it throws away. These are "
          "shape, the red one is spread out with a median NRMSE three times "
          "higher. So the cut removes noise, not physics.")
 
-# ------------------------------------------------------ 8 · t_rise cut
+# --------------------------------------- 8 · follow-up 1: slow-fall tail
 s = slide()
-title(s, "Quality cut 2: τ_rise ≤ 0.3 ms — against slow baseline drift")
+title(s, "Follow-up 1 — the slow-fall tail is a one-channel artifact")
 bullets(s, [
-    "On noisy-window detectors a smooth, slow baseline drift can survive the NRMSE cut — a slow 2-exp hugs it with a small residual",
-    "The fast-pulse population sits at τ_rise ≈ 0.1 ms (p90 ≈ 0.15 ms) — cleanly separated from the drift tail, so a 0.3 ms ceiling removes the leakage",
-    "Cost ≈ 2–5% of signal on quiet detectors; known trade-off: it also trims the small population of genuine slow-rise pulses (final decision pending)",
+    "The post-cut fan still shows slow-fall tails → sample them: NRMSE ≤ 0.4 AND τ_fall > 1.5 ms (reference channel PDS2), 10 random events, raw vs fit drawn in all 12 channels",
+    "The same events are normal fast pulses in the other 11 channels — only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere): a channel-specific low-frequency disturbance",
+    "Conclusion: artifact, not physics → no τ_fall cut",
+], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
+pic(s, "slow_fall_zip7_crop.png", IN(0.45), IN(2.9), IN(7.3), IN(4.1),
+    "Z7, 3 of the sampled slow-fall events: normal pulses in PBS2/PCS2/PES2, low-frequency swings only in PDS2")
+pic(s, "time_constants_zip7_PDS2.png", IN(8.0), IN(3.6), IN(5.1), IN(2.2),
+    "Z7 PDS2: broad τ_fall tail — the artifact in the distributions")
+notes(s, "The first lead comes from the fan plot after the cut: some curves "
+         "still fall very slowly. We chased it with the same recipe: among "
+         "events passing the cut, take fall times above one point five "
+         "milliseconds, randomly sample ten, and draw raw versus fit in "
+         "every channel. The result is clean: in the other eleven channels "
+         "these events are perfectly normal fast pulses - only PDS2, one "
+         "single channel, is swinging wildly. So it's not the event that's "
+         "slow, it's that one channel's low-frequency disturbance. "
+         "Conclusion: no fall cut is needed - artifact, not physics.")
+
+# --------------------------------------- 9 · follow-up 2: genuine slow rise
+s = slide()
+title(s, "Follow-up 2 — genuine slow-rise pulses (“shadow” events)")
+bullets(s, [
+    "Same sampling recipe on the rise side: median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms → the raw traces show real pulses — onset aligned, peak late, consistent across channels",
+    "They are the faint displaced bundle in the aligned overlays — a genuine second pulse shape (candidate surface/bulk effect, not settled)",
+    "Real physics → cannot simply be cut away; exactly the shape variation the multi-template NxM method is built to capture",
+], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
+pic(s, "shadow_zip7_crop.png", IN(1.2), IN(2.95), IN(10.9), IN(4.15),
+    "Z7 shadow events (first 4 channels): raw (gray) / LP (blue) / fit (red) — genuine slow pulses, onset aligned, peak late")
+notes(s, "The second lead is the slow rise. Same recipe: take events that "
+         "fit well - NRMSE fine - but whose median rise time is above zero "
+         "point two milliseconds, sample them, look at the raw traces. This "
+         "time the conclusion is the opposite: these are real pulses. Onset "
+         "aligned, peak arriving late, consistent across all channels - "
+         "they are exactly the shadow from the alignment plot. So the slow "
+         "rise cannot simply be cut away: there is real physics in it, "
+         "possibly related to where in the crystal the event happens; that "
+         "is not settled yet.")
+
+# --------------------------------------- 10 · τ_rise ceiling on template input
+s = slide()
+title(s, "Slow drift also fits “slow”: a τ_rise ≤ 0.3 ms ceiling")
+bullets(s, [
+    "On noisy-window detectors a smooth baseline drift survives the NRMSE cut — a slow 2-exp hugs it with a tiny residual — and mimics a slow rise",
+    "Fast pulses sit at τ_rise ≈ 0.1 ms (p90 ≈ 0.15 ms), far below the drift tail → a ceiling at 0.3 ms blocks the drift at ≈ 2–5% signal cost",
+    "Keeps most genuine slow pulses, trims the very slowest — documented trade-off, final decision pending",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.75), size=14)
 pic(s, "time_constants_zip7_PAS1.png", IN(1.4), IN(3.15), IN(10.5), IN(2.15),
     "Z7 PAS1: fitted τ_rise (median 0.105 ms) and τ_fall distributions")
 tb = bullets(s, [
     "On quiet detectors both τ_rise and τ_fall distributions are narrow — the pulse shape is stable across events",
 ], IN(1.4), IN(5.75), IN(10.5), IN(1.0), size=13)
-notes(s, "Second cut. On detectors with a noisy window, a smooth slow "
-         "baseline drift can sneak past the NRMSE cut, because a slow "
-         "two-exponential can hug it with a tiny residual. But the real "
-         "pulses have a rise time around 0.1 milliseconds with the 90th "
-         "percentile at 0.15, far from the drift tail, so a ceiling at 0.3 "
-         "milliseconds removes the leakage at a signal cost of a few "
-         "percent. One documented trade-off: the same ceiling also trims a "
-         "small population of genuine slow pulses - that decision is still "
-         "open, and here is that population.")
-
-# ------------------------------------------------------ 9 · shadow events
-s = slide()
-title(s, "A genuine slow-pulse population (“shadow” events)")
-bullets(s, [
-    "Selection: well-fit (median NRMSE ≤ 0.4) AND slow (median τ_rise > 0.2 ms) — raw traces show real pulses, not noise",
-    "They are the faint displaced bundle seen in the aligned overlays — real shape variation (candidate surface/bulk effect)",
-    "Exactly the kind of shape variation the multi-template NxM method is built to capture",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
-pic(s, "shadow_zip7_crop.png", IN(1.2), IN(2.95), IN(10.9), IN(4.15),
-    "Z7 shadow events (first 4 channels): raw (gray) / LP (blue) / fit (red) — genuine slow pulses, onset aligned, peak late")
-notes(s, "Here is that slow population on Z7. These events pass the NRMSE "
-         "cut - they are well fit - but their rise time is above 0.2 "
-         "milliseconds. In the raw traces they are clearly real pulses, not "
-         "noise. They are exactly the faint displaced bundle we saw in the "
-         "aligned overlay earlier. This is genuine pulse-shape variation, "
-         "possibly a surface or bulk effect - and it is precisely what a "
-         "multi-template NxM optimal filter is meant to capture, which "
-         "motivates the second template family.")
-
-# ------------------------------------------------- 10 · Z7 PDS2 side finding
-s = slide()
-title(s, "Side finding: long-τ_fall events on Z7 are a one-channel artifact")
-bullets(s, [
-    "PDS2 shows a broad τ_fall tail (median 0.51 ms vs ≈ 0.25 ms elsewhere) and a smeared τ_rise distribution",
-    "Cross-channel check: the same events are normal fast pulses in the other 11 channels → a PDS2-only low-frequency disturbance, not slow physics",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.3), size=14)
-pic(s, "time_constants_zip7_PAS1.png", IN(1.4), IN(2.6), IN(10.5), IN(2.1),
-    "Z7 PAS1 — reference channel: narrow τ_rise / τ_fall")
-pic(s, "time_constants_zip7_PDS2.png", IN(1.4), IN(4.9), IN(10.5), IN(2.1),
-    "Z7 PDS2 — broad tails from a channel-specific low-frequency artifact")
-notes(s, "One more diagnostic worth showing. On Z7, channel PDS2 has a much "
-         "broader fall-time distribution than every other channel. Drawing "
-         "the same events across all channels shows they are perfectly "
-         "normal fast pulses in the other eleven - so the long fall is a "
-         "PDS2-only low-frequency disturbance, not slow physics, and it does "
-         "not contaminate the shape conclusions.")
+notes(s, "But on the slow-rise side there is also a troublemaker: on "
+         "detectors with a noisy window, a slow baseline drift also fits as "
+         "a slow rise, with a tiny residual - NRMSE cannot catch it. The "
+         "real pulses cluster near zero point one milliseconds while the "
+         "drift tail stretches much further, so for the template input we "
+         "set a ceiling at zero point three milliseconds. That blocks the "
+         "drift and keeps the vast majority of real pulses - including part "
+         "of the shadow population; the price is that the very slowest "
+         "genuine pulses get trimmed too. That trade-off is documented and "
+         "not final - I would like your input on it later.")
 
 # ------------------------------------------------- 11 · template family 1
 s = slide()
@@ -339,7 +345,7 @@ title(s, "Template family 2 — NxM PCA templates")
 bullets(s, [
     "Input: fitted curves passing fit_ok + NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms, at common onset, peak-normalized (PCA window 15550–24050, ≤ 3000 curves/channel)",
     "nxm0 = mean shape;  nxm1…nxm4 = first four principal components — a real pulse is fit as Σᵢ ampᵢ · nxmᵢ",
-    "PC1 + PC2 already capture 96–98% of the shape variance; all five delivered peak-normalized",
+    "PC1 + PC2 already capture 96–98% of the shape variance; final step before delivery: normalize all five to unit peak — the delivered product",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "pca_zip7_PAS1.png", IN(1.5), IN(2.95), IN(10.3), IN(2.0))
 pic(s, "pca_zip7_PBS1.png", IN(1.5), IN(5.0), IN(10.3), IN(2.0),

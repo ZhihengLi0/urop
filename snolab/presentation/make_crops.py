@@ -55,7 +55,7 @@ def vpanel(src, out, index, span=1, pad=6, skip_header=True):
     print(f"{out}: rows {t}-{b} of {im.height}  ({len(panels)} panels found)")
 
 
-def grid(src, out, row0, nrows, ncols, pad=6, min_row=140):
+def grid(src, out, row0, nrows, ncols, pad=6, min_row=140, col0=0):
     """Crop rows [row0, row0+nrows) x first ncols columns of an event grid.
     Row/column boundaries come from blank-gap detection; columns are detected
     inside the selected rows only, so full-width header text cannot mask the
@@ -72,9 +72,10 @@ def grid(src, out, row0, nrows, ncols, pad=6, min_row=140):
     b = min(panels[row0 + nrows - 1][1] + pad, im.height)
     strip = im.crop((0, panels[row0][0], im.width, panels[row0 + nrows - 1][1]))
     cols = [c for c in col_blocks(strip, min_gap=6) if c[1] - c[0] > 80]
-    r = min(cols[ncols - 1][1] + pad, im.width)
-    im.crop((0, t, r, b)).save(os.path.join(OUT, out))
-    print(f"{out}: rows {t}-{b}, x 0-{r}  ({len(panels)} rows x {len(cols)} cols)")
+    l = max(cols[col0][0] - pad, 0) if col0 else 0
+    r = min(cols[col0 + ncols - 1][1] + pad, im.width)
+    im.crop((l, t, r, b)).save(os.path.join(OUT, out))
+    print(f"{out}: rows {t}-{b}, x {l}-{r}  ({len(panels)} rows x {len(cols)} cols)")
 
 
 # ---- stacked per-channel figures: panel 0 = PAS1, 1 = PBS1, 2 = PCS1, ...
@@ -113,3 +114,18 @@ grid("fit_examples/zip7_fit_examples.png", "fit_examples_zip7_noise.png", row0=0
 grid("fit_examples/zip7_fit_examples.png", "fit_examples_zip7_good.png", row0=2, nrows=2, ncols=3)
 grid("slow_rise_events/zip22_slow_rise_events.png", "slow_rise_zip22_crop.png", row0=0, nrows=3, ncols=3)
 grid("shadow_events/zip7_shadow_events.png", "shadow_zip7_crop.png", row0=0, nrows=3, ncols=4, min_row=100)
+# slow-fall follow-up: 3 sampled events x PBS2..PES2 (normal, normal, wild PDS2, normal);
+# crop starts below the header row, so stamp the channel names back on
+grid("slow_fall_events/zip7_PDS2_slow_fall.png", "slow_fall_zip7_crop.png",
+     row0=2, nrows=3, ncols=4, col0=7)
+from PIL import ImageDraw, ImageFont
+_im = Image.open(os.path.join(OUT, "slow_fall_zip7_crop.png"))
+_d = ImageDraw.Draw(_im)
+_f = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 30)
+_w = _im.width / 4
+for _i, _c in enumerate(["PBS2", "PCS2", "PDS2", "PES2"]):
+    _x = int(_i * _w + _w / 2 - 40)
+    _d.rectangle([_x - 8, 4, _x + 105, 44], fill="#1F3864")
+    _d.text((_x, 10), _c, font=_f, fill="white")
+_im.save(os.path.join(OUT, "slow_fall_zip7_crop.png"))
+print("slow_fall_zip7_crop.png: channel labels stamped")

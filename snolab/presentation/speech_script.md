@@ -62,29 +62,27 @@
 
 ---
 
-## Slide 8 — Quality cut 2: τ_rise ≤ 0.3 ms（约 50 秒）
+## Slide 8 — Follow-up 1: the slow-fall tail（约 50 秒）
 
-**中文**：第二个 cut 针对一种漏网的情况。有些探测器的基线会慢慢漂移，这种漂移很平滑，一条很慢的双指数能贴得很好、残差很小——NRMSE 抓不到它。但它有一个藏不住的特征：慢。看上升时间的分布：真脉冲集中在 0.1 毫秒附近，非常窄；漂移拟出来的上升时间比这大得多。所以加一条上限：上升时间不超过 0.3 毫秒。在安静探测器上，这一刀只损失百分之二到五的信号。但要坦白一个代价：确实存在一小群**真实的**慢脉冲，也会被这条线切到。这个取舍还没有最终定——下一页就是这群事件。
+**中文**：第一条线索来自 cut 之后的扇形图：还剩一些"拖尾巴"的曲线，下降特别慢。我们用同一套办法追查：在通过 0.4 的事件里，挑下降时间超过 1.5 毫秒的，随机抽 10 个，把每个事件在全部 12 个通道里的原始波形和拟合画出来对比。结果很干净，也有点意外：这些事件在其他 11 个通道里都是完全正常的快脉冲，只有 PDS2 这一个通道在剧烈晃动——慢的不是事件，是那个通道自己的低频干扰。右边的分布也印证这一点：PDS2 的下降时间中位数是其他通道的两倍。所以结论是：这是单通道伪影，不是物理——**不需要为下降时间设 cut**。
 
-**English**: The second cut targets something that slips through. On some detectors the baseline drifts slowly, and the drift is smooth — a very slow two-exponential can hug it with a tiny residual, so the NRMSE never notices. But it has one feature it can't hide: it's slow. Look at the rise-time distribution: real pulses cluster around zero point one milliseconds, very narrow, while the drift fits come out much slower. So we added a ceiling: rise time no more than zero point three milliseconds. On quiet detectors this costs only a few percent of the signal. But I should be upfront about one trade-off: there is a small population of **genuinely** slow pulses, and this line cuts into them too. That decision isn't final yet — and that population is the next slide.
-
----
-
-## Slide 9 — A genuine slow-pulse population（约 45 秒）
-
-**中文**：这就是刚才对齐图里那条"影子"。这些事件拟合得很好——NRMSE 完全达标——但就是慢，上升时间超过 0.2 毫秒。关键看原始波形：这些是真脉冲，不是噪声；起点对得齐，峰值来得晚。也就是说，探测器里真的存在第二种脉冲形状。一个模板只能描述一种形状——这种真实的形状差异，单模板方法天生盖不住。这正是我们做第二族模板、也就是多模板 NxM 方法的动机。
-
-**English**: And here is that "shadow" from the alignment plot. These events fit well — their NRMSE is perfectly fine — but they're slow, with rise times above zero point two milliseconds. The key is the raw traces: these are real pulses, not noise. The onset lines up; the peak just comes late. In other words, the detector genuinely produces a second pulse shape. One template can only describe one shape — real shape variation like this is something a single-template method simply can't cover. And that is exactly the motivation for our second template family, the multi-template NxM approach.
+**English**: The first lead comes from the fan plot after the cut: some curves still have long tails — a very slow fall. We chased it with the same recipe: among the events that pass the cut, take the ones with a fall time above one and a half milliseconds, randomly sample ten of them, and draw raw versus fit in every one of the twelve channels. The result is clean, and a little surprising: in the other eleven channels these events are perfectly normal fast pulses — only PDS2, one single channel, is swinging wildly. It's not the event that's slow, it's that one channel's low-frequency disturbance. The distribution on the right confirms it: PDS2's median fall time is twice that of every other channel. So the conclusion is: a one-channel artifact, not physics — **no fall-time cut is needed**.
 
 ---
 
-## Slide 10 — Side finding: Z7 PDS2（约 30 秒）
+## Slide 9 — Follow-up 2: genuine slow-rise pulses（约 50 秒）
 
-*（时间紧可跳过，说一句"我们还排除了一个单通道伪影"即可。）*
+**中文**：第二条线索是慢上升。还是同一套办法：挑拟合很好——NRMSE 达标——但中位上升时间超过 0.2 毫秒的事件，抽出来看原始波形。这次结论正相反：这些是**真脉冲**。起点对得齐，峰值来得晚，而且所有通道一致——它们就是对齐图里那条"影子"。所以慢上升不能一刀切掉：里面有真物理，可能与事件在晶体里的位置有关，这一点还没有定论。而这种真实的形状变化，恰恰是多模板 NxM 方法要捕捉的东西。
 
-**中文**：顺带一个小发现。Z7 有一个通道的下降时间分布特别宽，乍一看像慢物理。但把同样的事件在全部通道里展开看：其他 11 个通道里它们都是完全正常的快脉冲。所以这是那一个通道自己的低频干扰，不是物理，不影响任何形状结论。
+**English**: The second lead is the slow rise. Same recipe again: take events that fit well — NRMSE fine — but whose median rise time is above zero point two milliseconds, sample them, and look at the raw traces. This time the conclusion is the opposite: these are **real pulses**. The onset lines up, the peak comes late, and it's consistent across all channels — they are exactly the "shadow" from the alignment plot. So the slow rise cannot simply be cut away: there's real physics in it, possibly related to where in the crystal the event happens — that's not settled yet. And this kind of genuine shape variation is exactly what the multi-template NxM method is built to capture.
 
-**English**: One quick side finding. On Z7, one channel shows a much broader fall-time distribution — at first glance it looks like slow physics. But if you draw the same events across all channels, they're perfectly normal fast pulses in the other eleven. So it's a low-frequency disturbance in that one channel, not physics — and it doesn't affect any of the shape conclusions.
+---
+
+## Slide 10 — τ_rise ≤ 0.3 ms ceiling（约 50 秒）
+
+**中文**：但慢上升这边还有一个搅局者。在窗口比较吵的探测器上，缓慢的基线漂移也会被拟合成"慢上升"，而且残差很小，NRMSE 抓不到它。看上升时间的分布：真脉冲集中在 0.1 毫秒附近，非常窄；漂移的尾巴拖得远得多。所以做模板输入时我们设了一条上限：上升时间不超过 0.3 毫秒。这样漂移被挡住，绝大多数真脉冲——包括一部分影子事件——留了下来，代价只有百分之二到五的信号。但要坦白：最慢的那一小撮**真**脉冲也被削掉了。这个取舍记录在案、还没最终拍板，待会儿想听听大家的意见。
+
+**English**: But on the slow-rise side there's also a troublemaker. On detectors with a noisy window, a slow baseline drift also gets fitted as a "slow rise," with a tiny residual — NRMSE can't catch it. Look at the rise-time distribution: real pulses cluster near zero point one milliseconds, very narrow, while the drift tail stretches much further. So for the template input we set a ceiling: rise time no more than zero point three milliseconds. That blocks the drift and keeps the vast majority of real pulses — including part of the shadow population — at a cost of only a few percent of the signal. But to be upfront: the very slowest **genuine** pulses get trimmed too. That trade-off is documented and not final — I'd like to hear your thoughts on it later.
 
 ---
 
@@ -98,9 +96,9 @@
 
 ## Slide 12 — Template family 2: NxM PCA（约 50 秒）
 
-**中文**：第二族模板就是为刚才那种形状变化准备的。做法是对通过全部筛选的拟合曲线做主成分分析，PCA。直观理解：黑色的 nxm0 是平均形状；后面四条彩色的，是数据里最主要的四个"变形方向"——比如上升更慢一点、下降更快一点。真实脉冲就用这五条的线性组合去拟合。效果非常好：前两个成分就已经覆盖了 96 到 98% 的形状差异。也就是说，那群慢脉冲不再是麻烦——它们被显式地表示进了模板空间里。
+**中文**：第二族模板就是为刚才那种形状变化准备的。做法是对通过全部筛选的拟合曲线做主成分分析，PCA。直观理解：黑色的 nxm0 是平均形状；后面四条彩色的，是数据里最主要的四个"变形方向"——比如上升更慢一点、下降更快一点。真实脉冲就用这五条的线性组合去拟合。效果非常好：前两个成分就已经覆盖了 96 到 98% 的形状差异。也就是说，那群慢脉冲不再是麻烦——它们被显式地表示进了模板空间里。最后一步，交付之前把五条模板统一归一到峰值为 1，方便对比和使用——这就是最终产物。
 
-**English**: The second family is built precisely for the shape variation we just saw. We run a principal component analysis — PCA — on the fitted curves that pass all the selections. The intuition: the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data — say, a slightly slower rise, or a faster fall. A real pulse is then fitted as a linear combination of these five. And it works remarkably well: the first two components already cover ninety-six to ninety-eight percent of the shape variation. So the slow population is no longer a problem — it's explicitly represented inside the template space.
+**English**: The second family is built precisely for the shape variation we just saw. We run a principal component analysis — PCA — on the fitted curves that pass all the selections. The intuition: the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data — say, a slightly slower rise, or a faster fall. A real pulse is then fitted as a linear combination of these five. And it works remarkably well: the first two components already cover ninety-six to ninety-eight percent of the shape variation. So the slow population is no longer a problem — it's explicitly represented inside the template space. As a final step before delivery, all five templates are normalized to unit peak, so they're easy to compare and use — and that is the final product.
 
 ---
 
