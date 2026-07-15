@@ -390,5 +390,18 @@ notes(s, "To summarize: both template families are delivered for all 13 "
          "pulses, and running the group's template-validation method on the "
          "new templates. Thank you - happy to take questions.")
 
+# page numbers: "N / total" bottom-right, skip the title slide
+_slides = list(prs.slides)
+_total = len(_slides)
+for _i, _s in enumerate(_slides, start=1):
+    if _i == 1:
+        continue
+    _pn = _s.shapes.add_textbox(SW - Inches(1.35), SH - Inches(0.45),
+                                Inches(1.1), Inches(0.3))
+    _p = _pn.text_frame.paragraphs[0]
+    _r = _p.add_run(); _r.text = f"{_i} / {_total}"
+    _r.font.size, _r.font.color.rgb, _r.font.name = Pt(11), GRAY, "Arial"
+    _p.alignment = PP_ALIGN.RIGHT
+
 prs.save(OUT)
 print("saved", OUT, "slides:", len(prs.slides.__iter__.__self__._sldIdLst))
