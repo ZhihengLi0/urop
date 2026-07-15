@@ -107,7 +107,7 @@ r.text = "K-line event selection  ·  free-pretrigger two-exponential fits  ·  
 r.font.size, r.font.color.rgb, r.font.name = Pt(18), GRAY, "Arial"
 tb3 = textbox(s, IN(0.9), IN(5.6), IN(11.5), IN(0.8))
 p = tb3.text_frame.paragraphs[0]
-r = p.add_run(); r.text = "Zhiheng Li  —  July 15, 2026"
+r = p.add_run(); r.text = "Zhiheng Li  —  July 2026"
 r.font.size, r.font.color.rgb, r.font.name = Pt(16), DARK, "Arial"
 notes(s, "Today I will present the phonon pulse-template work for SNOLAB Run 4: "
          "how we selected events on the Ge-activation K-line, the fit-and-align "
@@ -269,10 +269,10 @@ bullets(s, [
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "slow_fall_zip7_crop.png", IN(0.45), IN(2.9), IN(7.3), IN(4.1),
     "Z7, 3 of the sampled slow-fall events: normal pulses in PBS2/PCS2/PES2, low-frequency swings only in PDS2")
-pic(s, "time_constants_zip7_PAS1_tfall.png", IN(8.05), IN(2.72), IN(5.0), IN(1.7),
+pic(s, "time_constants_zip7_PAS1_tfall.png", IN(7.75), IN(2.68), IN(5.5), IN(2.05),
     "PAS1 — a normal channel: narrow, median 0.25 ms")
-pic(s, "time_constants_zip7_PDS2_tfall.png", IN(8.05), IN(4.75), IN(5.0), IN(1.7),
-    "PDS2 — the bad channel: broad tail, median 0.51 ms (same 0–20 ms axis)")
+pic(s, "time_constants_zip7_PDS2_tfall.png", IN(7.75), IN(4.9), IN(5.5), IN(2.05),
+    "PDS2 — the bad channel: broad tail, median 0.51 ms (τ_fall in ms)")
 notes(s, "The first lead comes from the fan plot after the cut: some curves "
          "still fall very slowly. We chased it by sampling: among events "
          "passing the cut, take fall times above one point five "
@@ -284,59 +284,14 @@ notes(s, "The first lead comes from the fan plot after the cut: some curves "
          "the other eleven channels - so the extreme tail is a one-channel "
          "low-frequency artifact, not slow physics.")
 
-# --------------------------------------- 9 · follow-up 2: genuine slow rise
-s = slide()
-title(s, "Follow-up 2 — genuine slow-rise pulses (echo-trigger events)")
-bullets(s, [
-    "Same sampling recipe on the rise side: median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms → the raw traces show real pulses — pretrigger aligned, peak late, consistent across channels",
-    "A genuine second, slower pulse shape — a faint “echo” behind the main pulse (candidate surface/bulk effect, not settled)",
-    "Real physics → cannot simply be cut away; exactly the shape variation the multi-template NxM method is built to capture",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
-pic(s, "shadow_zip7_crop.png", IN(1.2), IN(2.95), IN(10.9), IN(4.15),
-    "Z7 echo-trigger events (first 4 channels): raw (gray) / LP (blue) / fit (red) — genuine slow pulses, pretrigger aligned, peak late")
-notes(s, "The second lead is the slow rise. Same recipe: take events that "
-         "fit well - NRMSE fine - but whose median rise time is above zero "
-         "point two milliseconds, sample them, look at the raw traces. This "
-         "time the conclusion is the opposite: these are real pulses. The pretrigger is "
-         "aligned, peak arriving late, consistent across all channels - "
-         "they are the echo-trigger population - a genuine second, slower "
-         "pulse shape. So the slow "
-         "rise cannot simply be cut away: there is real physics in it, "
-         "possibly related to where in the crystal the event happens; that "
-         "is not settled yet.")
-
-# --------------------------------------- 10 · τ_rise ceiling on template input
-s = slide()
-title(s, "Slow drift also fits “slow”: a τ_rise ≤ 0.3 ms ceiling")
-bullets(s, [
-    "On noisy-window detectors a smooth baseline drift survives the NRMSE cut — a slow 2-exp hugs it with a tiny residual — and mimics a slow rise",
-    "Fast pulses sit at τ_rise ≈ 0.1 ms (p90 ≈ 0.15 ms), far below the drift tail → a ceiling at 0.3 ms blocks the drift at ≈ 2–5% signal cost",
-    "Keeps most genuine slow pulses, trims the very slowest — documented trade-off, final decision pending",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.75), size=14)
-pic(s, "time_constants_zip7_PAS1.png", IN(1.4), IN(3.15), IN(10.5), IN(2.15),
-    "Z7 PAS1: fitted τ_rise (median 0.105 ms) and τ_fall distributions")
-tb = bullets(s, [
-    "On quiet detectors both τ_rise and τ_fall distributions are narrow — the pulse shape is stable across events",
-], IN(1.4), IN(5.75), IN(10.5), IN(1.0), size=13)
-notes(s, "But on the slow-rise side there is also a troublemaker: on "
-         "detectors with a noisy window, a slow baseline drift also fits as "
-         "a slow rise, with a tiny residual - NRMSE cannot catch it. The "
-         "real pulses cluster near zero point one milliseconds while the "
-         "drift tail stretches much further, so for the template input we "
-         "set a ceiling at zero point three milliseconds. That blocks the "
-         "drift and keeps the vast majority of real pulses - including part "
-         "of the echo-trigger population; the price is that the very slowest "
-         "genuine pulses get trimmed too. That trade-off is documented and "
-         "not final - I would like your input on it later.")
-
 # ------------------------------------------------- 11 · template family 1
 s = slide()
 title(s, "Template family 1 — analytic 2-exp, NRMSE-weighted (1x1)")
 bullets(s, [
-    "Per channel: weighted mean of ALL fit_ok fitted curves at the common pretrigger, weight w = 1/max(NRMSE, 0.01)²",
-    "Badly-fit events count less but are never excluded — robust and smooth (noise-free by construction)",
-    "Delivered as peak-normalized 32768-bin ROOT TH1D per channel + summed PT/PS1/PS2 templates",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
+    "NRMSE-weighted mean of the fit_ok 2-exp curves",
+    "Smooth & noise-free by construction",
+    "ROOT TH1D, peak-normalized (+ summed PT / PS1 / PS2)",
+], IN(0.55), IN(1.25), IN(12.3), IN(1.5), size=18)
 pic(s, "fan_zip7_PBS1_after.png", IN(1.4), IN(3.35), IN(10.5), IN(3.1),
     "Z7 PBS1, fitted curves after NRMSE ≤ 0.4 and τ_rise ≤ 0.3 ms — the NRMSE-weighted mean of this family is the 1x1 template")
 notes(s, "First template family: the analytic one. For each channel we take "
@@ -352,15 +307,15 @@ notes(s, "First template family: the analytic one. For each channel we take "
 s = slide()
 title(s, "Template family 2 — NxM PCA templates")
 bullets(s, [
-    "Input: fitted curves passing fit_ok + NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms, at common pretrigger, peak-normalized (PCA window 15550–24050, ≤ 3000 curves/channel)",
-    "nxm0 = mean shape;  nxm1…nxm4 = first four principal components — a real pulse is fit as Σᵢ ampᵢ · nxmᵢ",
-    "PC1 + PC2 already capture 96–98% of the shape variance; final step before delivery: normalize all five to unit peak — the delivered product",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
+    "Per-channel PCA over the clean fitted curves (fit_ok + NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms)",
+    "nxm0 = mean shape;  nxm1–4 = principal components;  real pulse = Σᵢ ampᵢ · nxmᵢ",
+    "PC1 + PC2 ≈ 96–98% of the shape variance;  delivered peak-normalized",
+], IN(0.55), IN(1.22), IN(12.3), IN(1.5), size=16)
 pic(s, "pca_zip7_PAS1.png", IN(1.5), IN(2.95), IN(10.3), IN(2.0))
 pic(s, "pca_zip7_PBS1.png", IN(1.5), IN(5.0), IN(10.3), IN(2.0),
     "Z7 PAS1 / PBS1: nxm0 (mean) + nxm1–4 (PCs) — the oscillating components encode rise/fall-time variation")
-notes(s, "Second family: the NxM PCA templates, built to capture the shape "
-         "variation we just saw. We run a PCA over the fitted curves that "
+notes(s, "Second family: the NxM PCA templates, built to capture the "
+         "pulse-shape variation across events. We run a PCA over the fitted curves that "
          "pass all cuts, in a window around the pulse. The mean shape "
          "becomes template zero, and the first four principal components "
          "become templates one to four - they oscillate and can be "
@@ -372,15 +327,11 @@ notes(s, "Second family: the NxM PCA templates, built to capture the shape "
 s = slide()
 title(s, "Delivered — and what remains")
 bullets(s, [
-    "Delivered for all 13 zips, official cdmsbats PulseTemplates layout (zip{N}/{chan}, {chan}nxm0–4, summed PT/PS1/PS2):",
-    (1, "SNOLAB_R4_20260706_ZhihengLi_zip{N}.root — 2-exp NRMSE-weighted (1x1)"),
-    (1, "SNOLAB_R4_20260707_ZhihengLi_pca_zip{N}.root — NxM PCA (normalized)"),
-    "Every step is traceable: raw cache → per-series fit checkpoints indexed by EventNumber → self-documenting figures (11 types × 13 zips, all versioned)",
-    "Cuts derived from the data, validated in raw traces: NRMSE ≤ 0.4 (bimodal valley), τ_rise ≤ 0.3 ms (drift leakage)",
-    "Open items:",
-    (1, "final decision on the τ_rise ceiling vs the genuine slow-pulse population"),
-    (1, "run the group's template-validation method on the new templates"),
-], IN(0.55), IN(1.3), IN(12.3), IN(4.6), size=16)
+    "Two template families built for all 13 detectors:  1x1 (2-exp weighted)  +  NxM PCA",
+    "Delivered in the official cdmsbats PulseTemplates format",
+    "Cuts read off the data, verified in raw traces:  NRMSE ≤ 0.4,  τ_rise ≤ 0.3 ms",
+    "Next: run the group's template-validation on the new templates",
+], IN(0.55), IN(1.7), IN(12.3), IN(3.5), size=22)
 notes(s, "To summarize: both template families are delivered for all 13 "
          "detectors in the official PulseTemplates format - the analytic "
          "1x1 templates and the PCA NxM set. The whole chain is traceable "

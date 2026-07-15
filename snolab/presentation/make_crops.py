@@ -122,10 +122,14 @@ vpanel("time_constants/zip7_time_constants.png", "time_constants_zip7_PDS2.png",
 # for direct comparison on the slow-fall slide
 def tfall_half(src, out):
     _im = Image.open(os.path.join(OUT, src))
-    # rise|fall are a 1x2 subplot pair; the fall panel is the right half
-    _im.crop((int(_im.width * 0.50), 0, _im.width, _im.height)).save(
+    # rise|fall are a 1x2 subplot pair; keep the fall panel (right half),
+    # then drop the centered title row (top) and the empty right of the 0-20 ms
+    # axis (data lives in 0-8 ms) so the bars display large. Channel + median
+    # are given in the slide caption instead.
+    _fall = _im.crop((int(_im.width * 0.50), 0, _im.width, _im.height))
+    _fall.crop((0, 30, int(_fall.width * 0.56), _fall.height)).save(
         os.path.join(OUT, out))
-    print(f"{out}: right (t_fall) half")
+    print(f"{out}: t_fall panel, title trimmed, zoomed to ~0-8 ms")
 tfall_half("time_constants_zip7_PDS2.png", "time_constants_zip7_PDS2_tfall.png")
 tfall_half("time_constants_zip7_PAS1.png", "time_constants_zip7_PAS1_tfall.png")
 vpanel("pca_templates/zip7_pca_templates.png", "pca_zip7_PAS1.png", 0)

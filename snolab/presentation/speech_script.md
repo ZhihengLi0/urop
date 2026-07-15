@@ -1,6 +1,6 @@
 # Speaker Script / 演讲稿 — SNOLAB R4 Phonon Pulse Templates
 
-约 10 分钟，12 页。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
+约 8 分钟，10 页。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
 原则：稿子是说的话，不是幻灯片的复读——具体参数都在屏幕上，嘴里讲思路和为什么。
 斜体是给自己的提示，不用念。
 
@@ -62,43 +62,27 @@
 
 ---
 
-## Slide 8 — Follow-up 2: genuine slow-rise pulses / echo-trigger（约 60 秒）
+## Slide 8 — Template family 1: 2-exp weighted (1x1)（约 50 秒）
 
-**中文**：第二条线索是慢上升。挑选的做法说一下：对每个事件，它所有拟合正常的通道各给出一个 NRMSE 和一个上升时间，我们**跨通道取中位数**——注意是中位数、不是平均数，这样哪怕某一个通道抽风，也带不偏对整个事件的判断。一个事件如果**中位 NRMSE 达标、同时中位上升时间超过 0.2 毫秒**，就入选；按存储顺序取前几个，不做任何人工挑选，画出原始波形来看。这次结论正相反：这些是**真脉冲**。pretrigger 对得齐，峰值来得晚，而且所有通道一致——它们就是所谓的 echo-trigger——主脉冲后面一道更慢的"回声"。所以慢上升不能一刀切掉：里面有真物理，可能与事件在晶体里的位置有关，这一点还没有定论。而这种真实的形状变化，恰恰是多模板 NxM 方法要捕捉的东西。
+**中文**：现在到产出。第一族模板走解析路线：每个通道，把所有物理拟合的曲线放到同一个 pretrigger 位置，做加权平均——权重是 NRMSE 平方的倒数。这个设计的好处是：拟合差的事件权重自动变得极小，等于被压没了，但我们不需要人为剔除任何事件。屏幕上就是参与平均的这束曲线。因为平均的对象是解析函数，做出来的模板天然光滑、完全没有噪声。这就是标准的单模板，1x1。每个通道一条，交付成峰值归一的 32768 点 ROOT 直方图，另外还有把各通道求和得到的 PT、PS1、PS2 模板。
 
-**English**: The second lead is the slow rise. Let me explain how these events are selected. For each event, every channel with a valid fit contributes one NRMSE and one rise time, and we take the **median across channels** — the median, not the mean, so even if one channel misbehaves, it cannot bias the decision for the whole event. An event qualifies when its **median NRMSE passes the cut and its median rise time is above zero point two milliseconds**; we take the first few in storage order, with no hand-picking, and draw their raw traces. This time the conclusion is the opposite: these are **real pulses**. The pretrigger lines up, the peak comes late, and it's consistent across all channels — they are the echo-trigger population — a genuine second, slower pulse shape. So the slow rise cannot simply be cut away: there's real physics in it, possibly related to where in the crystal the event happens — that's not settled yet. And this kind of genuine shape variation is exactly what the multi-template NxM method is built to capture.
-
----
-
-## Slide 9 — τ_rise ≤ 0.3 ms ceiling（约 50 秒）
-
-**中文**：但慢上升这边还有一个搅局者。在窗口比较吵的探测器上，缓慢的基线漂移也会被拟合成"慢上升"，而且残差很小，NRMSE 抓不到它。看上升时间的分布：真脉冲集中在 0.1 毫秒附近，非常窄；漂移的尾巴拖得远得多。所以做模板输入时我们设了一条上限：上升时间不超过 0.3 毫秒。这样漂移被挡住，绝大多数真脉冲——包括一部分 echo-trigger 事件——留了下来，代价只有百分之二到五的信号。但要坦白：最慢的那一小撮**真**脉冲也被削掉了。这个取舍记录在案、还没最终拍板，待会儿想听听大家的意见。
-
-**English**: But on the slow-rise side there's also a troublemaker. On detectors with a noisy window, a slow baseline drift also gets fitted as a "slow rise," with a tiny residual — NRMSE can't catch it. Look at the rise-time distribution: real pulses cluster near zero point one milliseconds, very narrow, while the drift tail stretches much further. So for the template input we set a ceiling: rise time no more than zero point three milliseconds. That blocks the drift and keeps the vast majority of real pulses — including part of the echo-trigger population — at a cost of only a few percent of the signal. But to be upfront: the very slowest **genuine** pulses get trimmed too. That trade-off is documented and not final — I'd like to hear your thoughts on it later.
+**English**: Now to the deliverables. The first template family takes the analytic route: for each channel, we put all the physical fitted curves at the same pretrigger and take a weighted average — the weight is one over NRMSE squared. The nice property of this design is that badly-fit events automatically get a vanishingly small weight, so they're effectively suppressed — but we never have to remove anything by hand. What's on screen is the bundle of curves that goes into that average. And because we're averaging analytic functions, the resulting template is smooth and completely noise-free by construction. That's the standard single template — the one-by-one — delivered as a peak-normalized 32768-bin ROOT histogram per channel, plus the summed PT, PS1 and PS2 templates.
 
 ---
 
-## Slide 10 — Template family 1: 2-exp weighted (1x1)（约 45 秒）
+## Slide 9 — Template family 2: NxM PCA（约 55 秒）
 
-**中文**：现在到产出。第一族模板走解析路线：每个通道，把所有物理拟合的曲线放到同一个 pretrigger 位置，做加权平均——权重是 NRMSE 平方的倒数。这个设计的好处是：拟合差的事件权重自动变得极小，等于被压没了，但我们不需要人为剔除任何事件。屏幕上就是参与平均的这束曲线。因为平均的对象是解析函数，做出来的模板天然光滑、完全没有噪声。这就是标准的单模板，1x1。
+**中文**：第二族模板是为了捕捉不同事件之间脉冲形状的变化。做法是对干净的拟合曲线做主成分分析，也就是 PCA——输入是通过 NRMSE cut、再加一条上升时间上限（挡掉缓慢的基线漂移）之后剩下的曲线。直观理解：黑色的 nxm0 是平均形状；后面四条彩色的，是数据里最主要的四个"变形方向"——比如上升更慢一点、下降更快一点。真实脉冲就用这五条的线性组合去拟合。效果非常好：前两个成分就已经覆盖了 96 到 98% 的形状差异。也就是说，事件之间的形状差异被显式地表示进了模板空间里。最后一步，交付之前把五条模板统一归一到峰值为 1，方便对比和使用——这就是最终产物。
 
-**English**: Now to the deliverables. The first template family takes the analytic route: for each channel, we put all the physical fitted curves at the same pretrigger and take a weighted average — the weight is one over NRMSE squared. The nice property of this design is that badly-fit events automatically get a vanishingly small weight, so they're effectively suppressed — but we never have to remove anything by hand. What's on screen is the bundle of curves that goes into that average. And because we're averaging analytic functions, the resulting template is smooth and completely noise-free by construction. That's the standard single template — the one-by-one.
-
----
-
-## Slide 11 — Template family 2: NxM PCA（约 50 秒）
-
-**中文**：第二族模板就是为刚才那种形状变化准备的。做法是对通过全部筛选的拟合曲线做主成分分析，PCA。直观理解：黑色的 nxm0 是平均形状；后面四条彩色的，是数据里最主要的四个"变形方向"——比如上升更慢一点、下降更快一点。真实脉冲就用这五条的线性组合去拟合。效果非常好：前两个成分就已经覆盖了 96 到 98% 的形状差异。也就是说，那群慢脉冲不再是麻烦——它们被显式地表示进了模板空间里。最后一步，交付之前把五条模板统一归一到峰值为 1，方便对比和使用——这就是最终产物。
-
-**English**: The second family is built precisely for the shape variation we just saw. We run a principal component analysis — PCA — on the fitted curves that pass all the selections. The intuition: the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data — say, a slightly slower rise, or a faster fall. A real pulse is then fitted as a linear combination of these five. And it works remarkably well: the first two components already cover ninety-six to ninety-eight percent of the shape variation. So the slow population is no longer a problem — it's explicitly represented inside the template space. As a final step before delivery, all five templates are normalized to unit peak, so they're easy to compare and use — and that is the final product.
+**English**: The second family is built to capture the variation in pulse shape across events. We run a principal component analysis — PCA — on the clean fitted curves: the ones passing the NRMSE cut plus a rise-time ceiling that removes slow baseline drift. The intuition: the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data — say, a slightly slower rise, or a faster fall. A real pulse is then fitted as a linear combination of these five. And it works remarkably well: the first two components already cover ninety-six to ninety-eight percent of the shape variation. So the shape variation across events is explicitly represented inside the template space. As a final step before delivery, all five templates are normalized to unit peak, so they're easy to compare and use — and that is the final product.
 
 ---
 
-## Slide 12 — Delivered, and what remains（约 45 秒）
+## Slide 10 — Delivered, and what remains（约 30 秒）
 
-**中文**：总结一下。两族模板已经为全部 13 个探测器交付，用的是官方 cdmsbats 的标准格式，处理链可以直接读。整个分析每一步都可追溯：原始缓存、每个拟合的检查点、所有诊断图，全部有版本记录，每张图上都印着自己的完整处理过程。两个 cut 都是从数据分布里读出来、又回到原始波形里验证过的。还剩两件事：一是慢脉冲那个取舍需要拍板，想听听大家的意见；二是对新模板跑一遍组里的模板验证流程。谢谢大家，欢迎提问。
+**中文**：一句话总结：我们为全部 13 个探测器做出了两族模板——1x1 和 NxM PCA，都按官方格式交付了。两个 cut 都是从数据里读出来、又回到原始波形验证过的。下一步是对新模板跑一遍组里的验证流程。谢谢大家，欢迎提问。
 
-**English**: To wrap up. Both template families are delivered for all thirteen detectors, in the official cdmsbats format, ready for the processing chain to read. Every step of the analysis is traceable — from the raw cache, to the per-fit checkpoints, to all the diagnostic figures: everything is under version control, and every figure carries its full processing history printed on it. Both cuts were read off the data, and then verified back in the raw traces. Two things remain: first, the slow-pulse trade-off needs a decision — I'd like to hear your thoughts on that. And second, running the group's template-validation procedure on the new templates. Thank you — I'm happy to take questions.
+**English**: In one line: we built two template families for all thirteen detectors — the 1x1 and the NxM PCA — and delivered both in the official format. Both cuts were read off the data and verified in the raw traces. The next step is to run the group's validation procedure on the new templates. Thank you — happy to take questions.
 
 ---
 
