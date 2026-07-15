@@ -98,7 +98,7 @@ IN = Inches  # shorthand
 s = slide()
 tb = textbox(s, IN(0.9), IN(2.3), IN(11.5), IN(1.6))
 p = tb.text_frame.paragraphs[0]
-r = p.add_run(); r.text = "Phonon Pulse Templates for SuperCDMS SNOLAB Run 4"
+r = p.add_run(); r.text = "NxM Templates for SuperCDMS SNOLAB Run 4 — Ge Activation Data"
 r.font.size, r.font.bold, r.font.color.rgb, r.font.name = Pt(36), True, NAVY, "Arial"
 tb2 = textbox(s, IN(0.9), IN(3.7), IN(11.5), IN(0.9))
 p = tb2.text_frame.paragraphs[0]
