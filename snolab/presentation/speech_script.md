@@ -16,7 +16,7 @@
 
 ## Slide 2 — From the Ge-activation K-line to an event sample（约 65 秒）
 
-**中文**：先说事件从哪来。做模板需要一大批干净、彼此相同的脉冲。我们用的是 Ge 活化 K 线：Cf 活化之后，每个探测器里都会持续出现 10.37 keV 的单能事件，这是现成的理想样本。屏幕上是 13 个探测器的 PTOFamps 谱——可以把 PTOFamps 理解成官方处理链给出的能量代理量。每格里的红线，是 Saab 教授的分析标出来的 K 线位置，我们直接拿来用。我们做的事情非常简单：以红线为中心开一个窗，上下各 1.35 倍——这个倍数是粗略目测定的，带点随意性，反正开得够宽就行——窗内的事件全要，不加任何别的条件。然后把每个选中事件所有通道的原始波形，原封不动存下来，一共约 120 GB。大家看这些谱：安静的探测器比如 Z7，K 线峰和噪声峰分得很开；但不少弱探测器，红线就插在噪声堆里——窗口一开，噪声肯定跟着进来。这是故意的：我们宁愿先多收，也要让后面每一步筛选清清楚楚、随时可以回退——因为存的是原始数据，什么都没丢。
+**中文**：先说事件从哪来。做模板需要一大批干净、彼此相同的脉冲。我们用的是 Ge 活化 K 线：Cf 活化之后，每个探测器里都会持续出现 10.37 keV 的单能事件，这是现成的理想样本。屏幕上是 13 个探测器的 PTOFamps 谱——可以把 PTOFamps 理解成官方处理链给出的能量代理量。每格里的红线，是 Saab 教授的分析标出来的 K 线位置，我们直接拿来用。我们做的事情非常简单：以红线为中心开一个窗，上下各 1.35 倍——这个倍数是粗略目测定的，带点随意性，反正开得够宽就行——窗内的事件全要，不加任何别的条件。然后把每个选中事件所有通道的原始波形，原封不动存下来，一共约 120 GB。大家看这些谱：安静的探测器比如 Z7，K 线峰和噪声峰分得很开；但不少噪声大的探测器，红线就插在噪声堆里——窗口一开，噪声肯定跟着进来。这是故意的：我们宁愿先多收，也要让后面每一步筛选清清楚楚、随时可以回退——因为存的是原始数据，什么都没丢。
 
 **English**: Let me start with where the events come from. To build a template, you need a large sample of clean, identical pulses. We use the germanium activation K-line: after the californium activation, every detector keeps producing mono-energetic events at 10.37 keV — a perfect, ready-made sample. What you see here are the PTOFamps spectra of all thirteen detectors — you can think of PTOFamps as the energy estimate from the official processing. The red line in each panel is the K-line position marked by Professor Saab's analysis, and we simply take that as given. What we do is very simple: open a window around the red line, a factor of one point three five on each side — a rough, somewhat arbitrary, eyeballed choice; it just needs to be wide enough — keep everything inside, and apply no other condition. Then, for every selected event, we save the raw traces of all channels, completely untouched — about a hundred and twenty gigabytes in total. Now look at the spectra: on a quiet detector like Z7, the K-line peak is well separated from the noise peak. But on the weaker detectors, the red line sits right inside the noise population — so the window will let noise in. And that's deliberate. We'd rather collect too much, and keep every later selection explicit and reversible — nothing is lost, because what we stored is raw.
 
@@ -38,19 +38,11 @@
 
 ---
 
-## Slide 5 — Alignment result（约 40 秒）
-
-**中文**：对齐之后长这样——这里直接放大在峰值附近。蓝色是上千条实测波形叠在一起，红色是它们的平均，橙色是拟合曲线的加权平均。安静探测器上这个束非常紧——脉冲形状确实高度一致，做模板的原料是好的。请注意一个细节：两个通道里，主束旁边都有一条淡淡的、错开的小束，左边这个通道特别明显。而且这两个通道分别在晶体的两个面上——所以这不是某一个通道的毛病。先记住它，一会儿回来讲它是什么。
-
-**English**: This is what things look like after alignment — zoomed right in on the peak. The blue band is thousands of measured traces stacked on top of each other; red is their average; orange is the weighted average of the fitted curves. On a quiet detector this bundle is very tight — the pulse shape really is highly consistent, so the raw material for a template is good. Now, one detail I'd like you to notice: in both channels there's a faint, displaced little bundle next to the main one — very clear in the left panel. And these two channels sit on opposite faces of the crystal, so this is not a quirk of a single channel. Keep it in mind — we'll come back to what it is.
-
----
-
 ## Slide 6 — Quality cut 1: NRMSE ≤ 0.4（约 55 秒）
 
-**中文**：现在讲第一个 cut 怎么定的。把所有物理拟合的 NRMSE 画成分布，每个探测器都是同一个样子：两个峰。左边的峰是拟合好的，典型值百分之五到百分之十；右边的峰在 1 到 2 附近，就是那些根本没有脉冲的噪声触发。两峰之间有一个很深的谷，位置在 0.4 左右——阈值就取 0.4。我想强调：这个数不是调出来的，是分布自己长出来的。上图是安静的 Z7，两个峰离得很远；下图是弱探测器 Z22，噪声峰是主体——对这些探测器来说，这一刀就是把真脉冲从噪声堆里捞出来的那一刀。
+**中文**：现在讲第一个 cut 怎么定的。把所有物理拟合的 NRMSE 画成分布，每个探测器都是同一个样子：两个峰。左边的峰是拟合好的，典型值百分之五到百分之十；右边的峰在 1 到 2 附近，就是那些根本没有脉冲的噪声触发。两峰之间有一个很深的谷，位置在 0.4 左右——阈值就取 0.4。我想强调：这个数不是调出来的，是分布自己长出来的。上图是安静的 Z7，两个峰离得很远；下图是噪声大的探测器 Z22，噪声峰是主体——对这些探测器来说，这一刀就是把真脉冲从噪声堆里捞出来的那一刀。
 
-**English**: Now, how the first cut was set. If you histogram the NRMSE of all physical fits, every detector shows the same picture: two populations. The left one is the good fits, typically five to ten percent. The right one, around one or two, is the noise triggers — traces with no pulse in them at all. In between there's a deep valley, at about zero point four — and that's where we put the threshold. I want to stress: this number wasn't tuned, it's simply what the distribution itself shows. The top plot is quiet Z7, where the two populations are far apart. The bottom is Z22, a weak detector, where noise dominates — and for those detectors, this cut is exactly what pulls the real pulses out of the noise.
+**English**: Now, how the first cut was set. If you histogram the NRMSE of all physical fits, every detector shows the same picture: two populations. The left one is the good fits, typically five to ten percent. The right one, around one or two, is the noise triggers — traces with no pulse in them at all. In between there's a deep valley, at about zero point four — and that's where we put the threshold. I want to stress: this number wasn't tuned, it's simply what the distribution itself shows. The top plot is quiet Z7, where the two populations are far apart. The bottom is Z22, a noisy detector, where noise dominates — and for those detectors, this cut is exactly what pulls the real pulses out of the noise.
 
 ---
 
@@ -70,19 +62,19 @@
 
 ---
 
-## Slide 9 — Follow-up 2: genuine slow-rise pulses（约 60 秒）
+## Slide 9 — Follow-up 2: genuine slow-rise pulses / echo-trigger（约 60 秒）
 
-**中文**：第二条线索是慢上升。挑选的做法说一下：对每个事件，它所有拟合正常的通道各给出一个 NRMSE 和一个上升时间，我们**跨通道取中位数**——注意是中位数、不是平均数，这样哪怕某一个通道抽风，也带不偏对整个事件的判断。一个事件如果**中位 NRMSE 达标、同时中位上升时间超过 0.2 毫秒**，就入选；按存储顺序取前几个，不做任何人工挑选，画出原始波形来看。这次结论正相反：这些是**真脉冲**。pretrigger 对得齐，峰值来得晚，而且所有通道一致——它们就是对齐图里那条"影子"。所以慢上升不能一刀切掉：里面有真物理，可能与事件在晶体里的位置有关，这一点还没有定论。而这种真实的形状变化，恰恰是多模板 NxM 方法要捕捉的东西。
+**中文**：第二条线索是慢上升。挑选的做法说一下：对每个事件，它所有拟合正常的通道各给出一个 NRMSE 和一个上升时间，我们**跨通道取中位数**——注意是中位数、不是平均数，这样哪怕某一个通道抽风，也带不偏对整个事件的判断。一个事件如果**中位 NRMSE 达标、同时中位上升时间超过 0.2 毫秒**，就入选；按存储顺序取前几个，不做任何人工挑选，画出原始波形来看。这次结论正相反：这些是**真脉冲**。pretrigger 对得齐，峰值来得晚，而且所有通道一致——它们就是所谓的 echo-trigger——主脉冲后面一道更慢的"回声"。所以慢上升不能一刀切掉：里面有真物理，可能与事件在晶体里的位置有关，这一点还没有定论。而这种真实的形状变化，恰恰是多模板 NxM 方法要捕捉的东西。
 
-**English**: The second lead is the slow rise. Let me explain how these events are selected. For each event, every channel with a valid fit contributes one NRMSE and one rise time, and we take the **median across channels** — the median, not the mean, so even if one channel misbehaves, it cannot bias the decision for the whole event. An event qualifies when its **median NRMSE passes the cut and its median rise time is above zero point two milliseconds**; we take the first few in storage order, with no hand-picking, and draw their raw traces. This time the conclusion is the opposite: these are **real pulses**. The pretrigger lines up, the peak comes late, and it's consistent across all channels — they are exactly the "shadow" from the alignment plot. So the slow rise cannot simply be cut away: there's real physics in it, possibly related to where in the crystal the event happens — that's not settled yet. And this kind of genuine shape variation is exactly what the multi-template NxM method is built to capture.
+**English**: The second lead is the slow rise. Let me explain how these events are selected. For each event, every channel with a valid fit contributes one NRMSE and one rise time, and we take the **median across channels** — the median, not the mean, so even if one channel misbehaves, it cannot bias the decision for the whole event. An event qualifies when its **median NRMSE passes the cut and its median rise time is above zero point two milliseconds**; we take the first few in storage order, with no hand-picking, and draw their raw traces. This time the conclusion is the opposite: these are **real pulses**. The pretrigger lines up, the peak comes late, and it's consistent across all channels — they are the echo-trigger population — a genuine second, slower pulse shape. So the slow rise cannot simply be cut away: there's real physics in it, possibly related to where in the crystal the event happens — that's not settled yet. And this kind of genuine shape variation is exactly what the multi-template NxM method is built to capture.
 
 ---
 
 ## Slide 10 — τ_rise ≤ 0.3 ms ceiling（约 50 秒）
 
-**中文**：但慢上升这边还有一个搅局者。在窗口比较吵的探测器上，缓慢的基线漂移也会被拟合成"慢上升"，而且残差很小，NRMSE 抓不到它。看上升时间的分布：真脉冲集中在 0.1 毫秒附近，非常窄；漂移的尾巴拖得远得多。所以做模板输入时我们设了一条上限：上升时间不超过 0.3 毫秒。这样漂移被挡住，绝大多数真脉冲——包括一部分影子事件——留了下来，代价只有百分之二到五的信号。但要坦白：最慢的那一小撮**真**脉冲也被削掉了。这个取舍记录在案、还没最终拍板，待会儿想听听大家的意见。
+**中文**：但慢上升这边还有一个搅局者。在窗口比较吵的探测器上，缓慢的基线漂移也会被拟合成"慢上升"，而且残差很小，NRMSE 抓不到它。看上升时间的分布：真脉冲集中在 0.1 毫秒附近，非常窄；漂移的尾巴拖得远得多。所以做模板输入时我们设了一条上限：上升时间不超过 0.3 毫秒。这样漂移被挡住，绝大多数真脉冲——包括一部分 echo-trigger 事件——留了下来，代价只有百分之二到五的信号。但要坦白：最慢的那一小撮**真**脉冲也被削掉了。这个取舍记录在案、还没最终拍板，待会儿想听听大家的意见。
 
-**English**: But on the slow-rise side there's also a troublemaker. On detectors with a noisy window, a slow baseline drift also gets fitted as a "slow rise," with a tiny residual — NRMSE can't catch it. Look at the rise-time distribution: real pulses cluster near zero point one milliseconds, very narrow, while the drift tail stretches much further. So for the template input we set a ceiling: rise time no more than zero point three milliseconds. That blocks the drift and keeps the vast majority of real pulses — including part of the shadow population — at a cost of only a few percent of the signal. But to be upfront: the very slowest **genuine** pulses get trimmed too. That trade-off is documented and not final — I'd like to hear your thoughts on it later.
+**English**: But on the slow-rise side there's also a troublemaker. On detectors with a noisy window, a slow baseline drift also gets fitted as a "slow rise," with a tiny residual — NRMSE can't catch it. Look at the rise-time distribution: real pulses cluster near zero point one milliseconds, very narrow, while the drift tail stretches much further. So for the template input we set a ceiling: rise time no more than zero point three milliseconds. That blocks the drift and keeps the vast majority of real pulses — including part of the echo-trigger population — at a cost of only a few percent of the signal. But to be upfront: the very slowest **genuine** pulses get trimmed too. That trade-off is documented and not final — I'd like to hear your thoughts on it later.
 
 ---
 

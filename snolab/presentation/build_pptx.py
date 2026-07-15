@@ -219,46 +219,24 @@ notes(s, "To judge the fits we use event-by-channel grids: each row is one "
          "this quantitative. All our figures carry the processing chain "
          "stamped in the header, so each PNG is self-documenting.")
 
-# ------------------------------------------------------ 5 · aligned overlay
-s = slide()
-title(s, "Alignment result — overlaid measured traces")
-bullets(s, [
-    "All fit_ok traces shifted to the common pretrigger (blue) + point-by-point mean (red) + NRMSE-weighted mean of the fitted curves (orange, w = 1/max(NRMSE, 0.01)²)",
-    "Peak zoom on a quiet detector: a tight bundle — the template input is well defined. Note the faint displaced bundle beside the main one, visible on both crystal faces (S1 and S2) — more on it later",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.5), size=14)
-pic(s, "aligned_zoom_zip7_PCS1.png", IN(0.35), IN(3.1), IN(6.15), IN(3.4),
-    "Z7 PCS1 (S1 face) — peak zoom; the faint displaced bundle is clearly visible")
-pic(s, "aligned_zoom_zip7_PBS2.png", IN(6.85), IN(3.1), IN(6.15), IN(3.4),
-    "Z7 PBS2 (S2 face) — same faint displaced bundle")
-notes(s, "Here's what things look like after alignment - zoomed right on the "
-         "peak. The blue band is thousands of measured traces stacked on top "
-         "of each other; red is their average; orange is the weighted average "
-         "of the fitted curves. On a quiet detector the bundle is very tight "
-         "- the pulse shape really is highly consistent, so the raw material "
-         "for a template is good. Now please notice one detail: in both "
-         "channels there is a faint, displaced little bundle next to the "
-         "main one - very clear in the left panel. And these two channels "
-         "sit on opposite faces of the crystal, so this is not a quirk of "
-         "one channel. Keep it in mind - we'll come back to what it is.")
-
 # ------------------------------------------------------ 6 · NRMSE cut
 s = slide()
 title(s, "Quality cut 1: NRMSE ≤ 0.4 — where the number comes from")
 bullets(s, [
     "NRMSE of fit_ok events is bimodal: good fits (median ≈ 0.05–0.1) vs noise triggers (≈ 1–2), valley at ≈ 0.4–0.5",
     "The cut sits in the valley — it is read off the distribution, not tuned on the templates",
-    "Weak detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): the PTOF window admits a noise-dominated mixture — this cut is what extracts the real-pulse population",
+    "Noisy detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): the PTOF window admits a noise-dominated mixture — this cut is what extracts the real-pulse population",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "nrmse_zip7_PBS1.png", IN(1.9), IN(2.9), IN(9.5), IN(2.05),
     "Z7 PBS1 (quiet): two clean populations, log-log axes")
 pic(s, "nrmse_zip22_PAS1.png", IN(1.9), IN(5.2), IN(9.5), IN(2.05),
-    "Z22 PAS1 (weak): noise population dominates — the window alone is not enough")
+    "Z22 PAS1 (noisy): noise population dominates — the window alone is not enough")
 notes(s, "First quality cut. The NRMSE distribution of physical fits is "
          "bimodal on every detector: a good-fit population around 0.05 to "
          "0.1, and a noise-trigger population around 1 to 2, separated by a "
          "valley at about 0.4. We place the cut in the valley - it is read "
          "off the distribution itself. On quiet detectors like Z7 the noise "
-         "population is small; on weak detectors like Z22 it dominates, and "
+         "population is small; on noisy detectors like Z22 it dominates, and "
          "this cut is what digs the real pulses out of the mixture.")
 
 # ------------------------------------------ 7 · what the cut removes
@@ -308,20 +286,21 @@ notes(s, "The first lead comes from the fan plot after the cut: some curves "
 
 # --------------------------------------- 9 · follow-up 2: genuine slow rise
 s = slide()
-title(s, "Follow-up 2 — genuine slow-rise pulses (“shadow” events)")
+title(s, "Follow-up 2 — genuine slow-rise pulses (echo-trigger events)")
 bullets(s, [
     "Same sampling recipe on the rise side: median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms → the raw traces show real pulses — pretrigger aligned, peak late, consistent across channels",
-    "They are the faint displaced bundle in the aligned overlays — a genuine second pulse shape (candidate surface/bulk effect, not settled)",
+    "A genuine second, slower pulse shape — a faint “echo” behind the main pulse (candidate surface/bulk effect, not settled)",
     "Real physics → cannot simply be cut away; exactly the shape variation the multi-template NxM method is built to capture",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "shadow_zip7_crop.png", IN(1.2), IN(2.95), IN(10.9), IN(4.15),
-    "Z7 shadow events (first 4 channels): raw (gray) / LP (blue) / fit (red) — genuine slow pulses, pretrigger aligned, peak late")
+    "Z7 echo-trigger events (first 4 channels): raw (gray) / LP (blue) / fit (red) — genuine slow pulses, pretrigger aligned, peak late")
 notes(s, "The second lead is the slow rise. Same recipe: take events that "
          "fit well - NRMSE fine - but whose median rise time is above zero "
          "point two milliseconds, sample them, look at the raw traces. This "
          "time the conclusion is the opposite: these are real pulses. The pretrigger is "
          "aligned, peak arriving late, consistent across all channels - "
-         "they are exactly the shadow from the alignment plot. So the slow "
+         "they are the echo-trigger population - a genuine second, slower "
+         "pulse shape. So the slow "
          "rise cannot simply be cut away: there is real physics in it, "
          "possibly related to where in the crystal the event happens; that "
          "is not settled yet.")
@@ -346,7 +325,7 @@ notes(s, "But on the slow-rise side there is also a troublemaker: on "
          "drift tail stretches much further, so for the template input we "
          "set a ceiling at zero point three milliseconds. That blocks the "
          "drift and keeps the vast majority of real pulses - including part "
-         "of the shadow population; the price is that the very slowest "
+         "of the echo-trigger population; the price is that the very slowest "
          "genuine pulses get trimmed too. That trade-off is documented and "
          "not final - I would like your input on it later.")
 

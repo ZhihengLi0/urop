@@ -12,11 +12,14 @@ Slides and speaker script for the SNOLAB R4 phonon pulse-template talk.
 | `build_pptx.py` | regenerates the .pptx (python-pptx); PDF export was done via PowerPoint |
 
 Slide flow (investigation order): title → K-line selection & raw cache →
-per-trace algorithm (+ fan before/after NRMSE cut) → fit grids → aligned
-overlays (shadow foreshadowed) → NRMSE cut derivation → rejected = noise →
-follow-up 1: slow-fall tail = PDS2 one-channel artifact, no cut → follow-up 2:
-shadow slow-rise = real pulses → τ_rise ≤ 0.3 ms ceiling against drift
-(trade-off pending) → 2-exp weighted 1x1 → NxM PCA (+ final peak
-normalization) → deliverables & open items.
+per-trace algorithm (+ fan before/after NRMSE cut) → fit grids → NRMSE cut
+derivation → rejected = noise → follow-up 1: slow-fall tail = PDS2 one-channel
+artifact, no cut → follow-up 2: echo-trigger slow-rise = real pulses →
+τ_rise ≤ 0.3 ms ceiling against drift (trade-off pending) → 2-exp weighted 1x1
+→ NxM PCA (+ final peak normalization) → deliverables & open items.
 
-Slide 8 (slow-fall follow-up) is the designated skip-slide if running long.
+Terminology: the genuine slow-rise population (a slower "echo" behind the main
+pulse) is called **echo-trigger** (per Prof. Saab). The `shadow_events/` figure
+folder in `lp_fit_align/` keeps its original name.
+
+Slide 7 (slow-fall follow-up) is the designated skip-slide if running long.
