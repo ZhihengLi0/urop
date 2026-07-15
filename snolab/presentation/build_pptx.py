@@ -270,7 +270,7 @@ bullets(s, [
 pic(s, "slow_fall_zip7_crop.png", IN(0.45), IN(2.9), IN(7.3), IN(4.1),
     "Z7, 3 of the sampled slow-fall events: normal pulses in PBS2/PCS2/PES2, low-frequency swings only in PDS2")
 pic(s, "time_constants_zip7_PDS2_tfall.png", IN(8.0), IN(3.1), IN(5.1), IN(3.2),
-    "Z7 PDS2, fitted τ_fall: broad tail (median 0.51 ms) — the artifact in the distributions",
+    "Z7 PDS2 alone, fitted τ_fall: broad tail (median 0.51 ms vs ≈0.25 ms on good channels) — the artifact quantified",
     stretch=True)
 notes(s, "The first lead comes from the fan plot after the cut: some curves "
          "still fall very slowly. We chased it by sampling: among events "
