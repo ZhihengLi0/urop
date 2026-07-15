@@ -206,14 +206,7 @@ for i, (lead, rest) in enumerate([
     r.font.size, r.font.bold, r.font.color.rgb, r.font.name = Pt(15), True, DARK, "Arial"
     r = p.add_run(); r.text = rest
     r.font.size, r.font.color.rgb, r.font.name = Pt(15), DARK, "Arial"
-steps_box(IN(4.95), IN(0.55), [
-    ("5.  Align", " — shift the measured trace by (fitted pretrigger − 16050)"),
-])
-pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.9), IN(5.32), IN(5.6), IN(1.5),
-    "All fit_ok fitted curves (Z7 PBS1) — no cut")
-pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.9), IN(5.32), IN(5.6), IN(1.5),
-    "After NRMSE ≤ 0.4 — one tight shape family")
-notes(s, "The per-trace algorithm, five steps. First a low-pass filter to "
+notes(s, "The per-trace algorithm. First a low-pass filter to "
          "smooth away the high-frequency noise, then the baseline is "
          "subtracted and the trace is scaled to unit peak - without that "
          "normalization the traces could not be overlaid or compared. The "
@@ -226,33 +219,28 @@ notes(s, "The per-trace algorithm, five steps. First a low-pass filter to "
          "numbers: fit_ok, a physicality check - positive amplitude, rise "
          "faster than fall - and the NRMSE, the normalized root-mean-square "
          "error, the fit residual divided by the pulse height. At this stage "
-         "we only record them. Finally the measured trace is aligned by "
-         "shifting it by the fitted pretrigger minus 16050. The two fan "
-         "plots show the output of the fit step: every fitted curve drawn at "
-         "the common pretrigger, peak-normalized. On the left, all physical "
-         "fits - you can see stragglers spreading off the main bundle. On "
-         "the right, after the NRMSE cut, a single tight shape family "
-         "remains. We'll return to where that cut comes from shortly.")
+         "we only record them. Step five, alignment, and its output get "
+         "their own slide next.")
 
 # ------------------------------------------------------ 5 · alignment result
 s = slide()
-title(s, "Alignment — every trace shifted to a common pretrigger")
+title(s, "5. Align — shift each trace to a common pretrigger")
 bullets(s, [
-    "Each measured trace is shifted by (fitted pretrigger − 16050) — a pure translation; the aligned traces stack into a tight bundle",
-], IN(0.55), IN(1.2), IN(12.3), IN(0.9), size=15)
-pic(s, "aligned_zoom_zip7_PBS1_clean.png", IN(0.6), IN(2.4), IN(12.1), IN(4.7),
-    "Z7 PBS1 (peak zoom): shift-aligned measured traces (blue)  ·  mean (red)  ·  "
-    "NRMSE-weighted mean of the fitted curves (orange)  ·  dotted line = common pretrigger 16050")
-notes(s, "This is the alignment step, on its own. Each measured trace is "
-         "shifted by its fitted pretrigger minus the nominal 16050 - a pure "
-         "translation, nothing about the waveform is regenerated. The dotted "
-         "vertical line is the common pretrigger everything is aligned to. "
-         "The blue band is the aligned measured traces stacked together; they "
-         "form a tight bundle, which tells us the pulse shape is highly "
-         "consistent once the trigger-time jitter is removed. Red is the plain "
-         "mean of the measured traces, and orange is the NRMSE-weighted mean "
-         "of the fitted curves - already essentially the template. This tight "
-         "bundle is what makes a well-defined template possible.")
+    "Shift the measured trace by (fitted pretrigger − 16050) — a pure translation. Drawn at the common pretrigger, the fitted curves stack into one shape family:",
+], IN(0.55), IN(1.2), IN(12.3), IN(0.95), size=16)
+pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.55), IN(2.55), IN(6.35), IN(3.95),
+    "All fit_ok fitted curves (Z7 PBS1) — no cut")
+pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.9), IN(2.55), IN(6.35), IN(3.95),
+    "After NRMSE ≤ 0.4 — one tight shape family")
+notes(s, "Step five: alignment. Each measured trace is shifted by its fitted "
+         "pretrigger minus the nominal 16050 - a pure translation, nothing "
+         "about the waveform is regenerated. Once everything is at the common "
+         "pretrigger, the fitted curves stack up. On the left, all physical "
+         "fits: you can see the slow stragglers spreading off the main "
+         "bundle. On the right, after the NRMSE cut, a single tight, "
+         "consistent shape family remains. That tight family is what makes a "
+         "well-defined template possible - and where the cut comes from is "
+         "what I show next.")
 
 # ------------------------------------------------------ 6 · NRMSE cut
 s = slide()

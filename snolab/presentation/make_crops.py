@@ -94,12 +94,6 @@ def aligned_zoom(chan_block, out, xsplit=852):
 
 aligned_zoom(3, "aligned_zoom_zip7_PCS1.png")   # PCS1: shadow bundle clearest
 aligned_zoom(8, "aligned_zoom_zip7_PBS2.png")   # PBS2: shadow visible on the S2 face too
-# clean PBS1 peak zoom (no visible echo-trigger) for the dedicated alignment slide:
-# right half of the PBS1 overlay row = the "PBS1 zoom" sub-panel
-_ov = Image.open(os.path.join(OUT, "aligned_overlay_zip7_PBS1.png"))
-_ov.crop((int(_ov.width * 0.505), 0, _ov.width, _ov.height)).save(
-    os.path.join(OUT, "aligned_zoom_zip7_PBS1_clean.png"))
-print("aligned_zoom_zip7_PBS1_clean.png: clean PBS1 peak zoom for the alignment slide")
 vpanel("nrmse/zip7_nrmse.png", "nrmse_zip7_PBS1.png", 1)
 vpanel("nrmse/zip22_nrmse.png", "nrmse_zip22_PAS1.png", 0)
 
