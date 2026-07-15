@@ -122,11 +122,22 @@ bullets(s, [
     "Per detector, Prof. Saab's study marked the 10.37 keV K-line position in PTOFamps — the red line in each panel below",
     "Our event selection: a PTOFamps window bracketing the red line — position ×/÷ 1.35, a rough, somewhat arbitrary eyeballed choice; deliberately minimal, no other cuts",
     "For every selected event: cache the fully unprocessed raw MIDAS traces of all channels + event metadata",
-    "13 detectors (zips) × 27–30 series → ~120 GB raw cache; every later cut stays explicit and reversible",
+    "13 detectors (zips) × 27–30 series → ~120 GB raw cache",
 ], IN(0.25), IN(1.18), IN(12.3), IN(1.45), size=14)
+# credit box, top-right of the title band
+ctb = textbox(s, IN(9.35), IN(0.30), IN(3.5), IN(0.72))
+for i, (txt, link) in enumerate([
+        ("Data: Ge Activation Data — Ops Shift 260612", None),
+        ("Credit: Prof. Tarek Saab  ·  SuperCDMS Confluence",
+         "https://confluence.slac.stanford.edu/spaces/CDMS/pages/716899864/Ge+Activation+Data+-+Ops+Shift+260612")]):
+    p = ctb.text_frame.paragraphs[0] if i == 0 else ctb.text_frame.add_paragraph()
+    r = p.add_run(); r.text = txt
+    r.font.size, r.font.color.rgb, r.font.name = Pt(10), GRAY, "Arial"
+    if link:
+        r.hyperlink.address = link
+    p.alignment = PP_ALIGN.RIGHT
 pic(s, "kline_all_zips.png", IN(0.42), IN(2.72), IN(12.5), IN(4.35),
-    "All 13 detectors, PTOFamps spectra (Prof. Saab's study): red line = fitted mean of the 10.37 keV K-line. "
-    "Selection window per detector = red-line position ×/÷ 1.35.")
+    "All 13 detectors, PTOFamps spectra (Prof. Saab's study)")
 notes(s, "Everything starts from the Ge activation data. After Cf activation "
          "every detector shows the 10.37 keV K-line. Professor Saab's study "
          "located the K-line position in the PTOFamps spectrum of each "
