@@ -70,11 +70,11 @@
 
 ---
 
-## Slide 9 — Follow-up 2: genuine slow-rise pulses（约 50 秒）
+## Slide 9 — Follow-up 2: genuine slow-rise pulses（约 60 秒）
 
-**中文**：第二条线索是慢上升。还是同一套办法：挑拟合很好——NRMSE 达标——但中位上升时间超过 0.2 毫秒的事件，抽出来看原始波形。这次结论正相反：这些是**真脉冲**。起点对得齐，峰值来得晚，而且所有通道一致——它们就是对齐图里那条"影子"。所以慢上升不能一刀切掉：里面有真物理，可能与事件在晶体里的位置有关，这一点还没有定论。而这种真实的形状变化，恰恰是多模板 NxM 方法要捕捉的东西。
+**中文**：第二条线索是慢上升。挑选的做法说一下：对每个事件，它所有拟合正常的通道各给出一个 NRMSE 和一个上升时间，我们**跨通道取中位数**——注意是中位数、不是平均数，这样哪怕某一个通道抽风，也带不偏对整个事件的判断。一个事件如果**中位 NRMSE 达标、同时中位上升时间超过 0.2 毫秒**，就入选；按存储顺序取前几个，不做任何人工挑选，画出原始波形来看。这次结论正相反：这些是**真脉冲**。起点对得齐，峰值来得晚，而且所有通道一致——它们就是对齐图里那条"影子"。所以慢上升不能一刀切掉：里面有真物理，可能与事件在晶体里的位置有关，这一点还没有定论。而这种真实的形状变化，恰恰是多模板 NxM 方法要捕捉的东西。
 
-**English**: The second lead is the slow rise. Same recipe again: take events that fit well — NRMSE fine — but whose median rise time is above zero point two milliseconds, sample them, and look at the raw traces. This time the conclusion is the opposite: these are **real pulses**. The onset lines up, the peak comes late, and it's consistent across all channels — they are exactly the "shadow" from the alignment plot. So the slow rise cannot simply be cut away: there's real physics in it, possibly related to where in the crystal the event happens — that's not settled yet. And this kind of genuine shape variation is exactly what the multi-template NxM method is built to capture.
+**English**: The second lead is the slow rise. Let me explain how these events are selected. For each event, every channel with a valid fit contributes one NRMSE and one rise time, and we take the **median across channels** — the median, not the mean, so even if one channel misbehaves, it cannot bias the decision for the whole event. An event qualifies when its **median NRMSE passes the cut and its median rise time is above zero point two milliseconds**; we take the first few in storage order, with no hand-picking, and draw their raw traces. This time the conclusion is the opposite: these are **real pulses**. The onset lines up, the peak comes late, and it's consistent across all channels — they are exactly the "shadow" from the alignment plot. So the slow rise cannot simply be cut away: there's real physics in it, possibly related to where in the crystal the event happens — that's not settled yet. And this kind of genuine shape variation is exactly what the multi-template NxM method is built to capture.
 
 ---
 
