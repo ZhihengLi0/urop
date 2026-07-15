@@ -221,9 +221,9 @@ bullets(s, [
     "One row per event, one column per channel: low-passed trace (blue) vs 2-exp fit (red), NRMSE stamped per panel",
     "The same event fits consistently across channels; a noise trigger fails in all channels at once",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.3), size=14)
-pic(s, "fit_examples_zip7_noise.png", IN(0.55), IN(2.6), IN(6.0), IN(4.1),
+pic(s, "fit_examples_zip7_noise.png", IN(0.2), IN(2.75), IN(6.55), IN(3.55),
     "Noise triggers: the fit fails in every channel at once")
-pic(s, "fit_examples_zip7_good.png", IN(6.85), IN(2.6), IN(6.0), IN(4.1),
+pic(s, "fit_examples_zip7_good.png", IN(6.6), IN(2.75), IN(6.55), IN(3.55),
     "K-line events: consistent good fits across channels")
 notes(s, "To judge the fits we use event-by-channel grids: each row is one "
          "event, each column one channel. A real K-line event fits well in "
@@ -258,11 +258,24 @@ title(s, "The rejected population is noise — verified in the raw traces")
 bullets(s, [
     "Event grids of NRMSE-rejected events (median NRMSE > 0.4 across channels): the raw traces show no pulse — the cut removes noise triggers, not physics",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.0), size=14)
-pic(s, "slow_rise_zip22_crop.png", IN(0.55), IN(2.7), IN(5.9), IN(4.35),
+pic(s, "slow_rise_zip22_crop.png", IN(0.4), IN(2.7), IN(5.9), IN(4.35),
     "Z22: NRMSE-rejected events — raw traces are noise")
-pic(s, "fan_cut_zip22_PCS1.png", IN(6.7), IN(2.9), IN(6.3), IN(3.7),
-    "Z22 PCS1: pass (green) vs rejected (red) — vertically stretched for visibility",
-    stretch=True)
+# fan-cut figure enlarged to fill the right column; its legend is pulled out
+# into the readable colour-coded text below
+pic(s, "fan_cut_zip22_PCS1.png", IN(6.5), IN(2.45), IN(6.85), IN(3.75), stretch=True)
+_lg = textbox(s, IN(6.6), IN(6.35), IN(6.7), IN(1.05))
+_lg.text_frame.word_wrap = True
+_GREEN, _RED, _BLUE = RGBColor(0x2E, 0x7D, 0x32), RGBColor(0xC0, 0x39, 0x2B), RGBColor(0x4A, 0x70, 0xB0)
+_p = _lg.text_frame.paragraphs[0]
+for _txt, _col, _bold in [("── passes the cut (kept)", _GREEN, True),
+                          ("      ── cut away = rejected", _RED, True)]:
+    _r = _p.add_run(); _r.text = _txt
+    _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(14), _bold, _col, "Arial"
+_p2 = _lg.text_frame.add_paragraph()
+for _txt, _col, _bold in [("faint blue = measured traces", _BLUE, False),
+                          ("      Z22 PCS1: 7198 kept / 4788 cut (~40%)", DARK, False)]:
+    _r = _p2.add_run(); _r.text = _txt
+    _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(14), _bold, _col, "Arial"
 notes(s, "Before trusting the cut we looked at what it throws away. These are "
          "event grids of the rejected population on Z22: the raw traces show "
          "no pulse at all - they are noise triggers whose slow two-exp fit "
@@ -280,12 +293,17 @@ bullets(s, [
     "The sampled events are real pulses → kept. Their extreme fall times trace to one channel: only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere) — a low-frequency disturbance",
     "Conclusion: no τ_fall cut — slow-fall events passing NRMSE stay in; the extreme tail is a one-channel artifact, not physics",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
-pic(s, "slow_fall_zip7_crop.png", IN(0.45), IN(2.9), IN(7.3), IN(4.1),
-    "Z7, 3 of the sampled slow-fall events: normal pulses in PBS2/PCS2/PES2, low-frequency swings only in PDS2")
-pic(s, "time_constants_zip7_PAS1_tfall.png", IN(7.75), IN(2.68), IN(5.5), IN(2.05),
-    "PAS1 — a normal channel: narrow, median 0.25 ms")
-pic(s, "time_constants_zip7_PDS2_tfall.png", IN(7.75), IN(4.9), IN(5.5), IN(2.05),
-    "PDS2 — the bad channel: broad tail, median 0.51 ms (τ_fall in ms)")
+pic(s, "slow_fall_zip7_crop.png", IN(0.3), IN(2.95), IN(6.7), IN(4.0),
+    "Z7, 3 sampled slow-fall events: normal in PBS2/PCS2/PES2, swings only in PDS2")
+# the two t_fall histograms side by side, cropped to the useful 0-7 ms
+pic(s, "time_constants_zip7_PAS1_tfall.png", IN(7.05), IN(3.35), IN(3.05), IN(2.3),
+    "PAS1 — normal channel: narrow (median 0.25 ms)")
+pic(s, "time_constants_zip7_PDS2_tfall.png", IN(10.2), IN(3.35), IN(3.05), IN(2.3),
+    "PDS2 — bad channel: broad tail (median 0.51 ms)")
+_ft = textbox(s, IN(7.05), IN(2.62), IN(6.2), IN(0.55))
+_pft = _ft.text_frame.paragraphs[0]
+_rft = _pft.add_run(); _rft.text = "Fitted τ_fall distribution, same 0–7 ms axis:"
+_rft.font.size, _rft.font.bold, _rft.font.color.rgb, _rft.font.name = Pt(15), True, NAVY, "Arial"
 notes(s, "The first lead comes from the fan plot after the cut: some curves "
          "still fall very slowly. We chased it by sampling: among events "
          "passing the cut, take fall times above one point five "
@@ -343,7 +361,6 @@ bullets(s, [
     "Two template families built for all 13 detectors:  1x1 (2-exp weighted)  +  NxM PCA",
     "Delivered in the official cdmsbats PulseTemplates format",
     "Cuts read off the data, verified in raw traces:  NRMSE ≤ 0.4,  τ_rise ≤ 0.3 ms",
-    "Next: run the group's template-validation on the new templates",
 ], IN(0.55), IN(1.7), IN(12.3), IN(3.5), size=22)
 notes(s, "To summarize: both template families are delivered for all 13 "
          "detectors in the official PulseTemplates format - the analytic "

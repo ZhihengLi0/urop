@@ -80,9 +80,9 @@
 
 ## Slide 10 — Delivered, and what remains（约 30 秒）
 
-**中文**：一句话总结：我们为全部 13 个探测器做出了两族模板——1x1 和 NxM PCA，都按官方格式交付了。两个 cut 都是从数据里读出来、又回到原始波形验证过的。下一步是对新模板跑一遍组里的验证流程。谢谢大家，欢迎提问。
+**中文**：一句话总结：我们为全部 13 个探测器做出了两族模板——1x1 和 NxM PCA，都按官方格式交付了。两个 cut 都是从数据里读出来、又回到原始波形验证过的。谢谢大家，欢迎提问。（如被问后续：下一步是对新模板跑一遍组里的验证流程。）
 
-**English**: In one line: we built two template families for all thirteen detectors — the 1x1 and the NxM PCA — and delivered both in the official format. Both cuts were read off the data and verified in the raw traces. The next step is to run the group's validation procedure on the new templates. Thank you — happy to take questions.
+**English**: In one line: we built two template families for all thirteen detectors — the 1x1 and the NxM PCA — and delivered both in the official format. Both cuts were read off the data and verified in the raw traces. Thank you — happy to take questions. (If asked about next steps: run the group's validation procedure on the new templates.)
 
 ---
 
