@@ -119,20 +119,21 @@ s = slide()
 title(s, "From the Ge-activation K-line to an event sample",
       "Goal: one clean, minimally-biased pulse population per detector × channel")
 bullets(s, [
-    "Per detector, the ops-shift study marked the 10.37 keV K-line position in PTOFamps — the red line in each panel below",
-    "Our event selection: a PTOFamps window bracketing the red line (position ×/÷ 1.35) — deliberately minimal, no other cuts",
+    "Per detector, Prof. Saab's study marked the 10.37 keV K-line position in PTOFamps — the red line in each panel below",
+    "Our event selection: a PTOFamps window bracketing the red line — position ×/÷ 1.35, a rough, somewhat arbitrary eyeballed choice; deliberately minimal, no other cuts",
     "For every selected event: cache the fully unprocessed raw MIDAS traces of all channels + event metadata",
     "13 detectors (zips) × 27–30 series → ~120 GB raw cache; every later cut stays explicit and reversible",
 ], IN(0.25), IN(1.18), IN(12.3), IN(1.45), size=14)
 pic(s, "kline_all_zips.png", IN(0.42), IN(2.72), IN(12.5), IN(4.35),
-    "All 13 detectors, PTOFamps spectra (ops-shift study): red line = fitted mean of the 10.37 keV K-line. "
+    "All 13 detectors, PTOFamps spectra (Prof. Saab's study): red line = fitted mean of the 10.37 keV K-line. "
     "Selection window per detector = red-line position ×/÷ 1.35.")
 notes(s, "Everything starts from the Ge activation data. After Cf activation "
-         "every detector shows the 10.37 keV K-line. The ops-shift study "
+         "every detector shows the 10.37 keV K-line. Professor Saab's study "
          "located the K-line position in the PTOFamps spectrum of each "
          "detector - that is the red line in every panel here. Our event "
          "selection is exactly one condition: a window around the red line, "
-         "a factor 1.35 both ways, and nothing else. For each selected event "
+         "a factor 1.35 both ways - a rough, eyeballed choice - and nothing "
+         "else. For each selected event "
          "we cache the fully unprocessed raw MIDAS traces of all channels. "
          "You can already see on the weak detectors that the window will "
          "admit part of the noise-trigger population next to the K-line - "
