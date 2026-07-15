@@ -64,9 +64,9 @@
 
 ## Slide 8 — Follow-up 1: the slow-fall tail（约 50 秒）
 
-**中文**：第一条线索来自 cut 之后的扇形图：还剩一些"拖尾巴"的曲线，下降特别慢。我们用同一套办法追查：在通过 0.4 的事件里，挑下降时间超过 1.5 毫秒的，随机抽 10 个，把每个事件在全部 12 个通道里的原始波形和拟合画出来对比。结果很干净，也有点意外：这些事件在其他 11 个通道里都是完全正常的快脉冲，只有 PDS2 这一个通道在剧烈晃动——慢的不是事件，是那个通道自己的低频干扰。右边的分布也印证这一点：PDS2 的下降时间中位数是其他通道的两倍。所以结论是：这是单通道伪影，不是物理——**不需要为下降时间设 cut**。
+**中文**：第一条线索来自 cut 之后的扇形图：还剩一些"拖尾巴"的曲线，下降特别慢。我们的办法是抽样验证：在通过 0.4 的事件里，挑下降时间超过 1.5 毫秒的，随机抽 10 个，把每个事件在全部 12 个通道里的原始波形和拟合画出来对比。结论有两层。第一层：**抽到的这些事件都是真脉冲**——所以保留，我们没有为下降时间设任何 cut。第二层：它们那些极端的下降时间，追查下来源头都在同一个通道——只有 PDS2 在剧烈晃动，同样的事件在其他 11 个通道里是完全正常的快脉冲，右边的分布也印证：PDS2 的下降时间中位数是其他通道的两倍。所以最夸张的拖尾不是慢物理，是单通道的低频伪影。
 
-**English**: The first lead comes from the fan plot after the cut: some curves still have long tails — a very slow fall. We chased it with the same recipe: among the events that pass the cut, take the ones with a fall time above one and a half milliseconds, randomly sample ten of them, and draw raw versus fit in every one of the twelve channels. The result is clean, and a little surprising: in the other eleven channels these events are perfectly normal fast pulses — only PDS2, one single channel, is swinging wildly. It's not the event that's slow, it's that one channel's low-frequency disturbance. The distribution on the right confirms it: PDS2's median fall time is twice that of every other channel. So the conclusion is: a one-channel artifact, not physics — **no fall-time cut is needed**.
+**English**: The first lead comes from the fan plot after the cut: some curves still have long tails — a very slow fall. Our approach was to verify by sampling: among the events that pass the cut, take the ones with a fall time above one and a half milliseconds, randomly sample ten of them, and draw raw versus fit in every one of the twelve channels. The conclusion has two layers. First: **the sampled events are real pulses** — so they stay in, and we apply no fall-time cut at all. Second: their extreme fall times all trace back to a single channel — only PDS2 is swinging wildly, while the same events are perfectly normal fast pulses in the other eleven channels; the distribution on the right confirms it, with PDS2's median fall time twice that of every other channel. So the most extreme tails are not slow physics — they're a one-channel low-frequency artifact.
 
 ---
 

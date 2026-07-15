@@ -258,23 +258,24 @@ notes(s, "Before trusting the cut we looked at what it throws away. These are "
 s = slide()
 title(s, "Follow-up 1 — the slow-fall tail is a one-channel artifact")
 bullets(s, [
-    "The post-cut fan still shows slow-fall tails → sample them: NRMSE ≤ 0.4 AND τ_fall > 1.5 ms (reference channel PDS2), 10 random events, raw vs fit drawn in all 12 channels",
-    "The same events are normal fast pulses in the other 11 channels — only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere): a channel-specific low-frequency disturbance",
-    "Conclusion: artifact, not physics → no τ_fall cut",
+    "The post-cut fan still shows slow-fall tails → sample them: NRMSE ≤ 0.4 AND τ_fall > 1.5 ms, 10 random events, raw vs fit drawn in all 12 channels",
+    "The sampled events are real pulses → kept. Their extreme fall times trace to one channel: only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere) — a low-frequency disturbance",
+    "Conclusion: no τ_fall cut — slow-fall events passing NRMSE stay in; the extreme tail is a one-channel artifact, not physics",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "slow_fall_zip7_crop.png", IN(0.45), IN(2.9), IN(7.3), IN(4.1),
     "Z7, 3 of the sampled slow-fall events: normal pulses in PBS2/PCS2/PES2, low-frequency swings only in PDS2")
 pic(s, "time_constants_zip7_PDS2.png", IN(8.0), IN(3.6), IN(5.1), IN(2.2),
     "Z7 PDS2: broad τ_fall tail — the artifact in the distributions")
 notes(s, "The first lead comes from the fan plot after the cut: some curves "
-         "still fall very slowly. We chased it with the same recipe: among "
-         "events passing the cut, take fall times above one point five "
+         "still fall very slowly. We chased it by sampling: among events "
+         "passing the cut, take fall times above one point five "
          "milliseconds, randomly sample ten, and draw raw versus fit in "
-         "every channel. The result is clean: in the other eleven channels "
-         "these events are perfectly normal fast pulses - only PDS2, one "
-         "single channel, is swinging wildly. So it's not the event that's "
-         "slow, it's that one channel's low-frequency disturbance. "
-         "Conclusion: no fall cut is needed - artifact, not physics.")
+         "every channel. Two findings. First, the sampled events are real "
+         "pulses - so they stay in, and we apply no fall cut. Second, their "
+         "extreme fall times all trace back to one channel: only PDS2 is "
+         "swinging wildly, while the same events are normal fast pulses in "
+         "the other eleven channels - so the extreme tail is a one-channel "
+         "low-frequency artifact, not slow physics.")
 
 # --------------------------------------- 9 · follow-up 2: genuine slow rise
 s = slide()
