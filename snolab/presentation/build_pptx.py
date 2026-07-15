@@ -207,7 +207,6 @@ title(s, "Fit quality at a glance — event × channel grids")
 bullets(s, [
     "One row per event, one column per channel: low-passed trace (blue) vs 2-exp fit (red), NRMSE stamped per panel",
     "The same event fits consistently across channels; a noise trigger fails in all channels at once",
-    "Every figure carries its full processing chain in the header → self-documenting",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.3), size=14)
 pic(s, "fit_examples_zip7_noise.png", IN(0.55), IN(2.6), IN(6.0), IN(4.1),
     "Noise triggers: the fit fails in every channel at once")
