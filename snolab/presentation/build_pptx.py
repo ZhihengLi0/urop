@@ -153,40 +153,53 @@ notes(s, "Everything starts from the Ge activation data. After Cf activation "
 
 # ------------------------------------------------------ 3 · per-trace algorithm
 s = slide()
-title(s, "Per-trace algorithm: low-pass → free-pretrigger fit → align")
-bullets(s, [
-    "1.  100 kHz 4th-order Butterworth low-pass (steady-state init — no filter start-up transient)",
-    "2.  Baseline = median of samples 2000–12000, subtracted; normalize by the global trace peak",
-    "3.  Two-exponential fit — all 5 parameters free, including the onset:",
-    (1, "y(t) = A·[exp(−(t−t₀)/τ_fall) − exp(−(t−t₀)/τ_rise)] + b,   t₀ ∈ 16050 ± 3000 samples"),
-    (1, "fit window 12550–24050 (stride 4);  τ_rise ∈ [1 µs, 5 ms],  τ_fall ∈ [10 µs, 20 ms]"),
-    "4.  Quality numbers — fit_ok := A>0 and 0<τ_rise<τ_fall;  NRMSE := RMS(residual)/fit peak (recorded, no cut yet)",
-    "5.  Align — shift the measured trace by (fitted onset − 16050), sub-sample interpolation: a pure translation",
-], IN(0.55), IN(1.25), IN(12.3), IN(3.1), size=15)
-tb = bullets(s, [
-    "Why a free onset?  Real trigger times vary event-by-event — fitted onsets cluster ≈230 samples after the nominal 16050. Pinning the onset distorts every other parameter.",
-], IN(0.55), IN(4.38), IN(12.3), IN(0.75), size=14)
-for pgh in tb.text_frame.paragraphs:
-    for r in pgh.runs:
-        r.font.color.rgb = ACCENT
-pic(s, "fan_zip7_PBS1_before.png", IN(0.55), IN(5.25), IN(6.0), IN(1.75),
-    "Fitted curves at common onset, peak-normalized — ALL fit_ok events (no cut)")
-pic(s, "fan_zip7_PBS1_nrmse.png", IN(6.85), IN(5.25), IN(6.0), IN(1.75),
-    "Same, after NRMSE ≤ 0.4 — a single tight shape family remains (Z7 PBS1)")
-notes(s, "The per-trace algorithm, five steps. Low-pass at 100 kilohertz, "
-         "baseline subtraction, peak normalization, then a two-exponential fit "
-         "where all five parameters are free, including the pulse onset. The "
-         "onset is never pinned: real trigger times vary, and the fitted "
-         "onsets cluster about 230 samples after the nominal pretrigger - "
-         "pinning it would bias the time constants. Each fit records a "
-         "physicality flag and an NRMSE; no cut yet. Finally the measured "
-         "trace is aligned by shifting it by the fitted onset - a pure "
-         "translation. The two fan plots show the output of the fit step: "
-         "every fitted curve drawn at the common onset, peak-normalized. On "
-         "the left, all physical fits - you can see slow components spreading "
-         "off the main bundle. On the right, after the NRMSE cut, a single "
-         "tight shape family remains. Where that cut comes from is the next "
-         "part of the talk.")
+title(s, "Per-trace algorithm: low-pass → fit → align")
+steps_tb = textbox(s, IN(0.55), IN(1.25), IN(12.3), IN(2.95))
+_steps = [
+    ("1.  Low-pass", " — 100 kHz 4th-order Butterworth", 0),
+    ("2.  Normalize", " — subtract the baseline, scale the trace to unit peak", 0),
+    ("3.  Fit", " — two-exponential, all 5 parameters free, including the pretrigger offset:", 0),
+    ("", "y(t) = A·[exp(−(t−t₀)/τ_fall) − exp(−(t−t₀)/τ_rise)] + b,    t₀ = pretrigger ∈ 16050 ± 3000 samples", 1),
+    ("4.  Quality numbers", " — fit_ok := A>0 and 0<τ_rise<τ_fall;   NRMSE := RMS(residual)/fit peak", 0),
+    ("5.  Align", " — shift the measured trace by (fitted pretrigger − 16050)", 0),
+]
+first = True
+for head, rest, lvl in _steps:
+    p = steps_tb.text_frame.paragraphs[0] if first else steps_tb.text_frame.add_paragraph()
+    first = False
+    p.level = lvl
+    p.space_after = Pt(7)
+    if head:
+        r = p.add_run(); r.text = head
+        r.font.size, r.font.bold, r.font.color.rgb, r.font.name = Pt(16), True, NAVY, "Arial"
+    r = p.add_run(); r.text = ("        " if lvl else "") + rest
+    r.font.size = Pt(16 if lvl == 0 else 14)
+    r.font.color.rgb = DARK if lvl == 0 else GRAY
+    r.font.name = "Arial"
+pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.9), IN(4.35), IN(5.6), IN(2.7),
+    "All fit_ok fitted curves at the common pretrigger, peak-normalized — zoom on the pulse (Z7 PBS1, time in ms)")
+pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.9), IN(4.35), IN(5.6), IN(2.7),
+    "Same, after NRMSE ≤ 0.4 — a single tight shape family remains")
+notes(s, "The per-trace algorithm, five steps. First a low-pass filter to "
+         "smooth away the high-frequency noise, then the baseline is "
+         "subtracted and the trace is scaled to unit peak - without that "
+         "normalization the traces could not be overlaid or compared. The "
+         "core is the fit: a two-exponential function, one exponential for "
+         "the rise and one for the fall, with all five parameters free, "
+         "including the pretrigger - the pulse start time. The pretrigger is "
+         "never pinned: real trigger times vary, and the fitted pretriggers "
+         "cluster about 230 samples after the nominal value - pinning it "
+         "would bias the time constants. Each fit records two quality "
+         "numbers: fit_ok, a physicality check - positive amplitude, rise "
+         "faster than fall - and the NRMSE, the normalized root-mean-square "
+         "error, the fit residual divided by the pulse height. At this stage "
+         "we only record them. Finally the measured trace is aligned by "
+         "shifting it by the fitted pretrigger minus 16050. The two fan "
+         "plots show the output of the fit step: every fitted curve drawn at "
+         "the common pretrigger, peak-normalized. On the left, all physical "
+         "fits - you can see stragglers spreading off the main bundle. On "
+         "the right, after the NRMSE cut, a single tight shape family "
+         "remains. Where that cut comes from is the next part of the talk.")
 
 # ------------------------------------------------------ 4 · fit example grids
 s = slide()
@@ -211,7 +224,7 @@ notes(s, "To judge the fits we use event-by-channel grids: each row is one "
 s = slide()
 title(s, "Alignment result — overlaid measured traces")
 bullets(s, [
-    "All fit_ok traces shifted to the common onset (blue) + point-by-point mean (red) + NRMSE-weighted mean of the fitted curves (orange, w = 1/max(NRMSE, 0.01)²)",
+    "All fit_ok traces shifted to the common pretrigger (blue) + point-by-point mean (red) + NRMSE-weighted mean of the fitted curves (orange, w = 1/max(NRMSE, 0.01)²)",
     "Peak zoom on a quiet detector: a tight bundle — the template input is well defined. Note the faint displaced bundle beside the main one, visible on both crystal faces (S1 and S2) — more on it later",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.5), size=14)
 pic(s, "aligned_zoom_zip7_PCS1.png", IN(0.35), IN(3.1), IN(6.15), IN(3.4),
@@ -298,16 +311,16 @@ notes(s, "The first lead comes from the fan plot after the cut: some curves "
 s = slide()
 title(s, "Follow-up 2 — genuine slow-rise pulses (“shadow” events)")
 bullets(s, [
-    "Same sampling recipe on the rise side: median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms → the raw traces show real pulses — onset aligned, peak late, consistent across channels",
+    "Same sampling recipe on the rise side: median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms → the raw traces show real pulses — pretrigger aligned, peak late, consistent across channels",
     "They are the faint displaced bundle in the aligned overlays — a genuine second pulse shape (candidate surface/bulk effect, not settled)",
     "Real physics → cannot simply be cut away; exactly the shape variation the multi-template NxM method is built to capture",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "shadow_zip7_crop.png", IN(1.2), IN(2.95), IN(10.9), IN(4.15),
-    "Z7 shadow events (first 4 channels): raw (gray) / LP (blue) / fit (red) — genuine slow pulses, onset aligned, peak late")
+    "Z7 shadow events (first 4 channels): raw (gray) / LP (blue) / fit (red) — genuine slow pulses, pretrigger aligned, peak late")
 notes(s, "The second lead is the slow rise. Same recipe: take events that "
          "fit well - NRMSE fine - but whose median rise time is above zero "
          "point two milliseconds, sample them, look at the raw traces. This "
-         "time the conclusion is the opposite: these are real pulses. Onset "
+         "time the conclusion is the opposite: these are real pulses. The pretrigger is "
          "aligned, peak arriving late, consistent across all channels - "
          "they are exactly the shadow from the alignment plot. So the slow "
          "rise cannot simply be cut away: there is real physics in it, "
@@ -342,14 +355,14 @@ notes(s, "But on the slow-rise side there is also a troublemaker: on "
 s = slide()
 title(s, "Template family 1 — analytic 2-exp, NRMSE-weighted (1x1)")
 bullets(s, [
-    "Per channel: weighted mean of ALL fit_ok fitted curves at the common onset, weight w = 1/max(NRMSE, 0.01)²",
+    "Per channel: weighted mean of ALL fit_ok fitted curves at the common pretrigger, weight w = 1/max(NRMSE, 0.01)²",
     "Badly-fit events count less but are never excluded — robust and smooth (noise-free by construction)",
     "Delivered as peak-normalized 32768-bin ROOT TH1D per channel + summed PT/PS1/PS2 templates",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "fan_zip7_PBS1_after.png", IN(1.4), IN(3.35), IN(10.5), IN(3.1),
     "Z7 PBS1, fitted curves after NRMSE ≤ 0.4 and τ_rise ≤ 0.3 ms — the NRMSE-weighted mean of this family is the 1x1 template")
 notes(s, "First template family: the analytic one. For each channel we take "
-         "every physical fitted curve at the common onset and average them "
+         "every physical fitted curve at the common pretrigger and average them "
          "with a weight of one over NRMSE squared - badly fit events count "
          "less but nothing is excluded by hand. After the cuts, shown here, "
          "a single tight shape family remains, and its weighted mean is the "
@@ -361,7 +374,7 @@ notes(s, "First template family: the analytic one. For each channel we take "
 s = slide()
 title(s, "Template family 2 — NxM PCA templates")
 bullets(s, [
-    "Input: fitted curves passing fit_ok + NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms, at common onset, peak-normalized (PCA window 15550–24050, ≤ 3000 curves/channel)",
+    "Input: fitted curves passing fit_ok + NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms, at common pretrigger, peak-normalized (PCA window 15550–24050, ≤ 3000 curves/channel)",
     "nxm0 = mean shape;  nxm1…nxm4 = first four principal components — a real pulse is fit as Σᵢ ampᵢ · nxmᵢ",
     "PC1 + PC2 already capture 96–98% of the shape variance; final step before delivery: normalize all five to unit peak — the delivered product",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)

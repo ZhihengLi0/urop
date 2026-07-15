@@ -114,6 +114,14 @@ vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.pn
        "fan_zip7_PBS1_after.png", 1)
 vpanel("pretrigger/zip7_pretrigger.png", "pretrigger_zip7_crop.png", 0)
 
+# fan zooms for the algorithm slide: keep only the pulse region (left 47 %),
+# drop the partial centered title row (top 26 px)
+for _name in ["fan_zip7_PBS1_before", "fan_zip7_PBS1_nrmse"]:
+    _f = Image.open(os.path.join(OUT, _name + ".png"))
+    _f.crop((0, 26, int(_f.width * 0.47), _f.height)).save(
+        os.path.join(OUT, _name + "_zoom.png"))
+    print(f"{_name}_zoom.png: pulse-region zoom")
+
 # ---- event x channel grids: few panels per crop so each panel stays legible
 # fit_examples: first 3 channels; noise-trigger rows and K-line rows separately
 grid("fit_examples/zip7_fit_examples.png", "fit_examples_zip7_noise.png", row0=0, nrows=2, ncols=3)
