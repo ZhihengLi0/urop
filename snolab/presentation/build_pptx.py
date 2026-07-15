@@ -154,32 +154,45 @@ notes(s, "Everything starts from the Ge activation data. After Cf activation "
 # ------------------------------------------------------ 3 · per-trace algorithm
 s = slide()
 title(s, "Per-trace algorithm: low-pass → fit → align")
-steps_tb = textbox(s, IN(0.55), IN(1.25), IN(12.3), IN(2.95))
-_steps = [
-    ("1.  Low-pass", " — 100 kHz 4th-order Butterworth", 0),
-    ("2.  Normalize", " — subtract the baseline, scale the trace to unit peak", 0),
-    ("3.  Fit", " — two-exponential, all 5 parameters free, including the pretrigger offset:", 0),
-    ("", "y(t) = A·[exp(−(t−t₀)/τ_fall) − exp(−(t−t₀)/τ_rise)] + b,    t₀ = pretrigger ∈ 16050 ± 3000 samples", 1),
-    ("4.  Quality numbers", " — fit_ok := A>0 and 0<τ_rise<τ_fall;   NRMSE := RMS(residual)/fit peak", 0),
-    ("5.  Align", " — shift the measured trace by (fitted pretrigger − 16050)", 0),
-]
-first = True
-for head, rest, lvl in _steps:
-    p = steps_tb.text_frame.paragraphs[0] if first else steps_tb.text_frame.add_paragraph()
-    first = False
-    p.level = lvl
-    p.space_after = Pt(7)
-    if head:
+def steps_box(top, height, items):
+    _tb = textbox(s, IN(0.55), top, IN(12.3), height)
+    _first = True
+    for head, rest in items:
+        p = _tb.text_frame.paragraphs[0] if _first else _tb.text_frame.add_paragraph()
+        _first = False
+        p.space_after = Pt(6)
         r = p.add_run(); r.text = head
         r.font.size, r.font.bold, r.font.color.rgb, r.font.name = Pt(16), True, NAVY, "Arial"
-    r = p.add_run(); r.text = ("        " if lvl else "") + rest
-    r.font.size = Pt(16 if lvl == 0 else 14)
-    r.font.color.rgb = DARK if lvl == 0 else GRAY
-    r.font.name = "Arial"
-pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.9), IN(4.35), IN(5.6), IN(2.7),
-    "All fit_ok fitted curves at the common pretrigger, peak-normalized — zoom on the pulse (Z7 PBS1, time in ms)")
-pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.9), IN(4.35), IN(5.6), IN(2.7),
-    "Same, after NRMSE ≤ 0.4 — a single tight shape family remains")
+        r = p.add_run(); r.text = rest
+        r.font.size, r.font.color.rgb, r.font.name = Pt(16), DARK, "Arial"
+
+steps_box(IN(1.2), IN(1.35), [
+    ("1.  Low-pass", " — 100 kHz 4th-order Butterworth"),
+    ("2.  Normalize", " — subtract the baseline, scale the trace to unit peak"),
+    ("3.  Fit", " — two-exponential model, all 5 parameters free (including the pretrigger t₀):"),
+])
+pic(s, "formula_2exp.png", IN(2.6), IN(2.62), IN(8.1), IN(0.95))
+steps_box(IN(3.65), IN(1.5), [
+    ("4.  Two quality numbers per trace", " (recorded here, not cut yet):"),
+])
+# the two quality-number sub-lines, plain English
+q_tb = textbox(s, IN(1.15), IN(4.02), IN(11.6), IN(0.9))
+for i, (lead, rest) in enumerate([
+        ("fit_ok", " — amplitude is positive, and the pulse rises faster than it falls"),
+        ("NRMSE", " — RMS of the fit residual ÷ pulse peak  (smaller = better fit)")]):
+    p = q_tb.text_frame.paragraphs[0] if i == 0 else q_tb.text_frame.add_paragraph()
+    p.space_after = Pt(4)
+    r = p.add_run(); r.text = "•  " + lead
+    r.font.size, r.font.bold, r.font.color.rgb, r.font.name = Pt(15), True, DARK, "Arial"
+    r = p.add_run(); r.text = rest
+    r.font.size, r.font.color.rgb, r.font.name = Pt(15), DARK, "Arial"
+steps_box(IN(4.95), IN(0.55), [
+    ("5.  Align", " — shift the measured trace by (fitted pretrigger − 16050)"),
+])
+pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.9), IN(5.32), IN(5.6), IN(1.5),
+    "All fit_ok fitted curves (Z7 PBS1) — no cut")
+pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.9), IN(5.32), IN(5.6), IN(1.5),
+    "After NRMSE ≤ 0.4 — one tight shape family")
 notes(s, "The per-trace algorithm, five steps. First a low-pass filter to "
          "smooth away the high-frequency noise, then the baseline is "
          "subtracted and the trace is scaled to unit peak - without that "
