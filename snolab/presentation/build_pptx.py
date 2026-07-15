@@ -151,7 +151,27 @@ notes(s, "Everything starts from the Ge activation data. After Cf activation "
          "that is intentional: the cache is raw, so every later cut stays "
          "explicit and reversible.")
 
-# ------------------------------------------------------ 3 · per-trace algorithm
+# ------------------------------------------------------ 3 · fit quality grids (overview)
+s = slide()
+title(s, "Fit quality at a glance — event × channel grids")
+bullets(s, [
+    "One row per event, one column per channel: the low-passed trace (blue) with the fitted pulse model (red) overlaid",
+    "A real event fits well in every channel at once; a noise trigger fails in every channel — a clean handle on which events are real (how we fit each trace: next slide)",
+], IN(0.55), IN(1.2), IN(12.3), IN(1.3), size=14)
+pic(s, "fit_examples_zip7_noise.png", IN(0.2), IN(2.75), IN(6.55), IN(3.55),
+    "Noise triggers: the fit fails in every channel at once")
+pic(s, "fit_examples_zip7_good.png", IN(6.6), IN(2.75), IN(6.55), IN(3.55),
+    "K-line events: consistent good fits across channels")
+notes(s, "Before the algorithm, a quick look at the data itself. We use "
+         "event-by-channel grids: each row is one event, each column one "
+         "channel, with the low-passed trace in blue and a fitted pulse model "
+         "in red on top. The pattern is already clear: a real K-line event "
+         "fits well in every channel at once, while a noise trigger fails in "
+         "every channel at once. So the events split cleanly into two kinds. "
+         "How we actually fit and align each trace is the next slide, and how "
+         "we turn that split into a quantitative cut comes shortly after.")
+
+# ------------------------------------------------------ 4 · per-trace algorithm
 s = slide()
 title(s, "Per-trace algorithm: low-pass → fit → align")
 def steps_box(top, height, items):
@@ -212,25 +232,27 @@ notes(s, "The per-trace algorithm, five steps. First a low-pass filter to "
          "the common pretrigger, peak-normalized. On the left, all physical "
          "fits - you can see stragglers spreading off the main bundle. On "
          "the right, after the NRMSE cut, a single tight shape family "
-         "remains. Where that cut comes from is the next part of the talk.")
+         "remains. We'll return to where that cut comes from shortly.")
 
-# ------------------------------------------------------ 4 · fit example grids
+# ------------------------------------------------------ 5 · alignment result
 s = slide()
-title(s, "Fit quality at a glance — event × channel grids")
+title(s, "Alignment — every trace shifted to a common pretrigger")
 bullets(s, [
-    "One row per event, one column per channel: low-passed trace (blue) vs 2-exp fit (red), NRMSE stamped per panel",
-    "The same event fits consistently across channels; a noise trigger fails in all channels at once",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.3), size=14)
-pic(s, "fit_examples_zip7_noise.png", IN(0.2), IN(2.75), IN(6.55), IN(3.55),
-    "Noise triggers: the fit fails in every channel at once")
-pic(s, "fit_examples_zip7_good.png", IN(6.6), IN(2.75), IN(6.55), IN(3.55),
-    "K-line events: consistent good fits across channels")
-notes(s, "To judge the fits we use event-by-channel grids: each row is one "
-         "event, each column one channel. A real K-line event fits well in "
-         "all channels simultaneously, while a noise trigger - like the top "
-         "rows here - fails everywhere at once. The per-panel NRMSE makes "
-         "this quantitative. All our figures carry the processing chain "
-         "stamped in the header, so each PNG is self-documenting.")
+    "Each measured trace is shifted by (fitted pretrigger − 16050) — a pure translation; the aligned traces stack into a tight bundle",
+], IN(0.55), IN(1.2), IN(12.3), IN(0.9), size=15)
+pic(s, "aligned_zoom_zip7_PBS1_clean.png", IN(0.6), IN(2.4), IN(12.1), IN(4.7),
+    "Z7 PBS1 (peak zoom): shift-aligned measured traces (blue)  ·  mean (red)  ·  "
+    "NRMSE-weighted mean of the fitted curves (orange)  ·  dotted line = common pretrigger 16050")
+notes(s, "This is the alignment step, on its own. Each measured trace is "
+         "shifted by its fitted pretrigger minus the nominal 16050 - a pure "
+         "translation, nothing about the waveform is regenerated. The dotted "
+         "vertical line is the common pretrigger everything is aligned to. "
+         "The blue band is the aligned measured traces stacked together; they "
+         "form a tight bundle, which tells us the pulse shape is highly "
+         "consistent once the trigger-time jitter is removed. Red is the plain "
+         "mean of the measured traces, and orange is the NRMSE-weighted mean "
+         "of the fitted curves - already essentially the template. This tight "
+         "bundle is what makes a well-defined template possible.")
 
 # ------------------------------------------------------ 6 · NRMSE cut
 s = slide()

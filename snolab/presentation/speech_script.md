@@ -1,6 +1,6 @@
 # Speaker Script / 演讲稿 — SNOLAB R4 Phonon Pulse Templates
 
-约 8 分钟，10 页。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
+约 9 分钟，11 页。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
 原则：稿子是说的话，不是幻灯片的复读——具体参数都在屏幕上，嘴里讲思路和为什么。
 斜体是给自己的提示，不用念。
 
@@ -22,23 +22,31 @@
 
 ---
 
-## Slide 3 — Per-trace algorithm（约 80 秒）
+## Slide 3 — Fit quality at a glance / data overview（约 40 秒）
 
-**中文**：拿到原始波形后，每一条都过同样的五步。完整参数都在屏幕上，我挑重点讲。前三步是准备：低通滤波抹掉高频噪声，扣基线，按峰值归一。核心是第四步的拟合：一个双指数函数，一个指数管上升、一个管下降——这是声子脉冲的标准形状。重点在于，五个拟合参数里，连 pretrigger——脉冲的起始时刻——也是放开的。为什么？因为真实触发时刻每个事件都不一样——拟合结果显示，pretrigger 普遍比名义位置晚两百多个采样点。如果把它钉死，这个误差就会被转嫁到上升、下降时间上，把所有参数都带歪。拟合完，每条波形记两个质量指标：一个叫 fit_ok，检查参数物不物理——幅度得是正的，上升得比下降快；另一个叫 NRMSE，全称 Normalized Root-Mean-Square Error，归一化均方根误差——就是拟合残差除以脉冲峰值，衡量拟合得好不好；NRMSE 等于 0.05，意思就是拟合偏差只有脉冲高度的 5%。注意，这一步只记录、不筛选。最后一步，把实测波形按拟合出的 pretrigger 平移对齐——只是平移，波形本身一点没动。下面两张图就是拟合的产出：所有拟合曲线画在同一个 pretrigger 位置上。左边是全部曲线，主束旁边有些散开的；右边是用 NRMSE 筛过之后，只剩一束非常一致的形状。这个筛选标准怎么定的，接下来讲。
+**中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。规律非常清楚：左边这批是噪声触发，它在**所有**通道里同时拟合失败；右边是真正的 K 线事件，**所有**通道同时拟合得很好，残差只有百分之几。也就是说，事件干干净净地分成两类——要么全通道都好，要么全通道都坏。至于每一条波形具体怎么滤波、怎么拟合、怎么对齐，就是下一页的内容。
 
-**English**: Once we have the raw traces, every single one goes through the same five steps — the full parameters are on the slide, so let me just walk through the ideas. The first three steps are preparation: a low-pass filter to smooth away high-frequency noise, baseline subtraction, and normalization to the peak. The core is the fit: a two-exponential function — one exponential for the rise, one for the fall — which is the standard shape of a phonon pulse. And here's the important part: among the five fit parameters, even the pretrigger — the pulse start time — is left free. Why? Because the true trigger time is different for every event — the fits tell us the pretrigger is typically more than two hundred samples later than the nominal position. If you pin it, that error gets pushed into the rise and fall times, and everything comes out biased. After the fit, each trace gets two quality numbers. One is called fit_ok — a sanity check that the parameters are physical: positive amplitude, rise faster than fall. The other is the NRMSE — the normalized root-mean-square error — which is simply the fit residual divided by the pulse height, so it tells you how good the fit actually is: an NRMSE of zero point zero five means the fit misses the data by five percent of the pulse height. At this stage we only record these; we don't cut on them yet. The last step: shift the measured trace by the fitted pretrigger, so all pulses line up — a pure shift, the waveform itself is untouched. The two plots at the bottom show what the fit gives us: all the fitted curves drawn from the same starting point. On the left, everything — you can see stragglers spreading away from the main bundle. On the right, after selecting on NRMSE, one tight, consistent shape remains. Where that selection comes from is what I'll show next.
-
----
-
-## Slide 4 — Fit quality at a glance（约 40 秒）
-
-**中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。规律非常清楚：左边这批是噪声触发，它在**所有**通道里同时拟合失败；右边是真正的 K 线事件，**所有**通道同时拟合得很好，NRMSE 只有百分之几。也就是说，"拟合好坏"这个指标真的能把两类事件分开——这给了我们用 NRMSE 做筛选的底气。
-
-**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. The pattern is very clear. The left block is noise triggers: the fit fails in **every** channel at the same time. The right block is genuine K-line events: **every** channel fits well at the same time, with NRMSE at the level of a few percent. So "how well the fit went" genuinely separates the two kinds of events — and that's what gives us the confidence to select on NRMSE.
+**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. The pattern is very clear. The left block is noise triggers: the fit fails in **every** channel at the same time. The right block is genuine K-line events: **every** channel fits well at the same time, with a residual of only a few percent. So the events split cleanly into two kinds — good in every channel, or bad in every channel. Exactly how each trace is filtered, fitted and aligned is the next slide.
 
 ---
 
-## Slide 5 — Quality cut 1: NRMSE ≤ 0.4（约 55 秒）
+## Slide 4 — Per-trace algorithm（约 80 秒）
+
+**中文**：拿到原始波形后，每一条都过同样的五步。完整参数都在屏幕上，我挑重点讲。前三步是准备：低通滤波抹掉高频噪声，扣基线，按峰值归一。核心是第四步的拟合：一个双指数函数，一个指数管上升、一个管下降——这是声子脉冲的标准形状。重点在于，五个拟合参数里，连 pretrigger——脉冲的起始时刻——也是放开的。为什么？因为真实触发时刻每个事件都不一样——拟合结果显示，pretrigger 普遍比名义位置晚两百多个采样点。如果把它钉死，这个误差就会被转嫁到上升、下降时间上，把所有参数都带歪。拟合完，每条波形记两个质量指标：一个叫 fit_ok，检查参数物不物理——幅度得是正的，上升得比下降快；另一个叫 NRMSE，全称 Normalized Root-Mean-Square Error，归一化均方根误差——就是拟合残差除以脉冲峰值，衡量拟合得好不好；NRMSE 等于 0.05，意思就是拟合偏差只有脉冲高度的 5%。注意，这一步只记录、不筛选。最后一步，把实测波形按拟合出的 pretrigger 平移对齐——只是平移，波形本身一点没动。下面两张图就是拟合的产出：所有拟合曲线画在同一个 pretrigger 位置上。左边是全部曲线，主束旁边有些散开的；右边是用 NRMSE 筛过之后，只剩一束非常一致的形状。对齐的效果下一页专门看；这个筛选标准怎么定的，随后再讲。
+
+**English**: Once we have the raw traces, every single one goes through the same five steps — the full parameters are on the slide, so let me just walk through the ideas. The first three steps are preparation: a low-pass filter to smooth away high-frequency noise, baseline subtraction, and normalization to the peak. The core is the fit: a two-exponential function — one exponential for the rise, one for the fall — which is the standard shape of a phonon pulse. And here's the important part: among the five fit parameters, even the pretrigger — the pulse start time — is left free. Why? Because the true trigger time is different for every event — the fits tell us the pretrigger is typically more than two hundred samples later than the nominal position. If you pin it, that error gets pushed into the rise and fall times, and everything comes out biased. After the fit, each trace gets two quality numbers. One is called fit_ok — a sanity check that the parameters are physical: positive amplitude, rise faster than fall. The other is the NRMSE — the normalized root-mean-square error — which is simply the fit residual divided by the pulse height, so it tells you how good the fit actually is: an NRMSE of zero point zero five means the fit misses the data by five percent of the pulse height. At this stage we only record these; we don't cut on them yet. The last step: shift the measured trace by the fitted pretrigger, so all pulses line up — a pure shift, the waveform itself is untouched. The two plots at the bottom show what the fit gives us: all the fitted curves drawn from the same starting point. On the left, everything — you can see stragglers spreading away from the main bundle. On the right, after selecting on NRMSE, one tight, consistent shape remains. The alignment result gets its own slide next; where that selection comes from, I'll show shortly after.
+
+---
+
+## Slide 5 — Alignment result（约 40 秒）
+
+**中文**：这一页单独讲对齐。每一条实测波形，按它自己拟合出的 pretrigger 减去名义的 16050 平移——纯平移，波形本身没有任何再生成。图里那条竖虚线，就是所有波形对齐到的公共 pretrigger。蓝色是上千条对齐后的实测波形叠在一起——它们聚成很紧的一束，说明只要把触发时刻的抖动去掉，脉冲形状其实高度一致。红线是实测波形的平均，橙线是拟合曲线的 NRMSE 加权平均——基本上就是模板的形状了。正是这条紧致的束，让我们能做出一个良定义的模板。
+
+**English**: This slide is just about alignment. Each measured trace is shifted by its own fitted pretrigger minus the nominal 16050 — a pure translation, nothing about the waveform is regenerated. The dotted vertical line is the common pretrigger everything is aligned to. The blue band is thousands of aligned measured traces stacked together — they form a very tight bundle, which tells us that once the trigger-time jitter is removed, the pulse shape is highly consistent. Red is the mean of the measured traces, and orange is the NRMSE-weighted mean of the fitted curves — essentially already the template shape. It's this tight bundle that makes a well-defined template possible.
+
+---
+
+## Slide 6 — Quality cut 1: NRMSE ≤ 0.4（约 55 秒）
 
 **中文**：现在讲第一个 cut 怎么定的。把所有物理拟合的 NRMSE 画成分布，每个探测器都是同一个样子：两个峰。左边的峰是拟合好的，典型值百分之五到百分之十；右边的峰在 1 到 2 附近，就是那些根本没有脉冲的噪声触发。两峰之间有一个很深的谷，位置在 0.4 左右——阈值就取 0.4。我想强调：这个数不是调出来的，是分布自己长出来的。上图是安静的 Z7，两个峰离得很远；下图是噪声大的探测器 Z22，噪声峰是主体——对这些探测器来说，这一刀就是把真脉冲从噪声堆里捞出来的那一刀。
 
@@ -46,7 +54,7 @@
 
 ---
 
-## Slide 6 — The rejected population is noise（约 45 秒）
+## Slide 7 — The rejected population is noise（约 45 秒）
 
 **中文**：定了 cut 还不够，得验证它切掉的确实是垃圾。左边是被切掉的事件的**原始**波形——可以看到，里面就没有脉冲，纯粹是噪声，只不过一条很慢的曲线恰好凑在了它上面。右边换个角度看同一件事，这张图有三层：底下灰蓝色的是对齐后的实测波形，上面绿色是**通过** cut 的拟合曲线，红色是**被切掉**的；右上角标着两个群体各自的中位 NRMSE 和事件数。可以看到绿的又快又一致，聚成一束；红的四处发散，中位 NRMSE 差不多是绿的三倍——在 Z22 这个通道上，被切掉的有四千八百多个，占了四成。结论很干净：这一刀切掉的是噪声，没有伤到物理。
 
@@ -54,7 +62,7 @@
 
 ---
 
-## Slide 7 — Follow-up 1: the slow-fall tail（约 50 秒）
+## Slide 8 — Follow-up 1: the slow-fall tail（约 50 秒）
 
 **中文**：第一条线索来自 cut 之后的扇形图：还剩一些"拖尾巴"的曲线，下降特别慢。我们的办法是抽样验证：在通过 0.4 的事件里，挑下降时间超过 1.5 毫秒的，随机抽 10 个，把每个事件在全部 12 个通道里的原始波形和拟合画出来对比。结论有两层。第一层：**抽到的这些事件都是真脉冲**——所以保留，我们没有为下降时间设任何 cut。第二层，看左边这张图——我特别想强调这一点：**Z7 本身是我们最好的探测器，但它有一个坏通道，PDS2**。你看每一行是一个事件，除了 PDS2 那一列，其他每一列都是干干净净的快脉冲；唯独 PDS2 这一列，波形上叠着一个大幅度的低频晃动，拟合去追那个晃动，才给出了几毫秒的假"下降时间"。也就是说，慢的不是事件，是 PDS2 这一个通道坏。右边这两张图是同一件事的量化，横轴都是 0 到 20 毫秒，可以直接比：上面是正常通道 PAS1——所有事件挤在 0.25 毫秒一根窄峰里，1 毫秒之后什么都没有；下面是 PDS2——一条明显的宽尾一路拖到五六毫秒，中位数 0.51 毫秒，是正常通道的两倍。所以最夸张的拖尾不是慢物理，是单通道的低频伪影，而且这个探测器好不好、跟这一个通道坏不坏是两回事。
 
@@ -62,7 +70,7 @@
 
 ---
 
-## Slide 8 — Template family 1: 2-exp weighted (1x1)（约 50 秒）
+## Slide 9 — Template family 1: 2-exp weighted (1x1)（约 50 秒）
 
 **中文**：现在到产出。第一族模板走解析路线：每个通道，把所有物理拟合的曲线放到同一个 pretrigger 位置，做加权平均——权重是 NRMSE 平方的倒数。这个设计的好处是：拟合差的事件权重自动变得极小，等于被压没了，但我们不需要人为剔除任何事件。屏幕上就是参与平均的这束曲线。因为平均的对象是解析函数，做出来的模板天然光滑、完全没有噪声。这就是标准的单模板，1x1。每个通道一条，交付成峰值归一的 32768 点 ROOT 直方图，另外还有把各通道求和得到的 PT、PS1、PS2 模板。
 
@@ -70,7 +78,7 @@
 
 ---
 
-## Slide 9 — Template family 2: NxM PCA（约 55 秒）
+## Slide 10 — Template family 2: NxM PCA（约 55 秒）
 
 **中文**：第二族模板是为了捕捉不同事件之间脉冲形状的变化。做法是对干净的拟合曲线做主成分分析，也就是 PCA——输入是通过 NRMSE cut、再加一条上升时间上限（挡掉缓慢的基线漂移）之后剩下的曲线。直观理解：黑色的 nxm0 是平均形状；后面四条彩色的，是数据里最主要的四个"变形方向"——比如上升更慢一点、下降更快一点。真实脉冲就用这五条的线性组合去拟合。效果非常好：前两个成分就已经覆盖了 96 到 98% 的形状差异。也就是说，事件之间的形状差异被显式地表示进了模板空间里。最后一步，交付之前把五条模板统一归一到峰值为 1，方便对比和使用——这就是最终产物。
 
@@ -78,7 +86,7 @@
 
 ---
 
-## Slide 10 — Delivered, and what remains（约 30 秒）
+## Slide 11 — Delivered, and what remains（约 30 秒）
 
 **中文**：一句话总结：我们为全部 13 个探测器做出了两族模板——1x1 和 NxM PCA，都按官方格式交付了。两个 cut 都是从数据里读出来、又回到原始波形验证过的。谢谢大家，欢迎提问。（如被问后续：下一步是对新模板跑一遍组里的验证流程。）
 
