@@ -96,6 +96,24 @@ aligned_zoom(3, "aligned_zoom_zip7_PCS1.png")   # PCS1: shadow bundle clearest
 aligned_zoom(8, "aligned_zoom_zip7_PBS2.png")   # PBS2: shadow visible on the S2 face too
 vpanel("nrmse/zip7_nrmse.png", "nrmse_zip7_PBS1.png", 1)
 vpanel("nrmse/zip22_nrmse.png", "nrmse_zip22_PAS1.png", 0)
+
+# annotate the NRMSE=0.4 cut with a red downward arrow in the valley.
+# x_04 read off the log axis (decade ticks): see comments per file.
+from PIL import ImageDraw as _ImageDraw, ImageFont as _ImageFont
+def annotate_cut(fname, x_04):
+    im = Image.open(os.path.join(OUT, fname)).convert("RGB")
+    d = _ImageDraw.Draw(im)
+    f = _ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 22)
+    H = im.height
+    x = int(x_04)
+    y_top, y_tip = int(H * 0.30), int(H * 0.82)
+    d.line([(x, y_top), (x, y_tip)], fill=(210, 30, 30), width=4)
+    d.polygon([(x, y_tip + 10), (x - 8, y_tip - 6), (x + 8, y_tip - 6)], fill=(210, 30, 30))
+    d.text((x + 10, y_top - 4), "NRMSE = 0.4 cut", fill=(210, 30, 30), font=f)
+    im.save(os.path.join(OUT, fname))
+    print(f"{fname}: 0.4 arrow at x={x}")
+annotate_cut("nrmse_zip7_PBS1.png", 462)   # 10^-1 at x≈308, decade≈255 px
+annotate_cut("nrmse_zip22_PAS1.png", 243)  # 10^-1 at x≈155, decade≈146 px
 vpanel("overlay_fan_cut/zip22_overlay_fan_cut_nrmse0.4.png", "fan_cut_zip22_PCS1.png", 2)
 vpanel("time_constants/zip7_time_constants.png", "time_constants_zip7_PAS1.png", 0)
 vpanel("time_constants/zip7_time_constants.png", "time_constants_zip7_PDS2.png", 9)  # zip7 has no PFS2: 11 panels, PDS2 = 9

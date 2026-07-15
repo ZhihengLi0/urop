@@ -244,8 +244,7 @@ s = slide()
 title(s, "The rejected population is noise — verified in the raw traces")
 bullets(s, [
     "Event grids of NRMSE-rejected events (median NRMSE > 0.4 across channels): the raw traces show no pulse — the cut removes noise triggers, not physics",
-    "Fan-cut view: fitted curves that pass (green) vs cut away (red) on top of the aligned data, median NRMSE of each population stamped per channel",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.35), size=14)
+], IN(0.55), IN(1.2), IN(12.3), IN(1.0), size=14)
 pic(s, "slow_rise_zip22_crop.png", IN(0.55), IN(2.7), IN(5.9), IN(4.35),
     "Z22: NRMSE-rejected events — raw traces are noise")
 pic(s, "fan_cut_zip22_PCS1.png", IN(6.7), IN(2.9), IN(6.3), IN(3.7),
