@@ -99,6 +99,12 @@ vpanel("nrmse/zip22_nrmse.png", "nrmse_zip22_PAS1.png", 0)
 vpanel("overlay_fan_cut/zip22_overlay_fan_cut_nrmse0.4.png", "fan_cut_zip22_PCS1.png", 2)
 vpanel("time_constants/zip7_time_constants.png", "time_constants_zip7_PAS1.png", 0)
 vpanel("time_constants/zip7_time_constants.png", "time_constants_zip7_PDS2.png", 9)  # zip7 has no PFS2: 11 panels, PDS2 = 9
+# t_fall half of the PDS2 strip (the artifact side), used large on the slow-fall slide
+_pd = Image.open(os.path.join(OUT, "time_constants_zip7_PDS2.png"))
+_cb = [c for c in col_blocks(_pd, min_gap=20) if c[1] - c[0] > 200]
+_pd.crop((max(_cb[-1][0] - 10, 0), 0, _pd.width, _pd.height)).save(
+    os.path.join(OUT, "time_constants_zip7_PDS2_tfall.png"))
+print("time_constants_zip7_PDS2_tfall.png: right (t_fall) panel")
 vpanel("pca_templates/zip7_pca_templates.png", "pca_zip7_PAS1.png", 0)
 vpanel("pca_templates/zip7_pca_templates.png", "pca_zip7_PBS1.png", 1)
 vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay.png", "fan_zip7_PBS1_before.png", 1)

@@ -67,11 +67,14 @@ def bullets(s, items, l, t, w, h, size=15):
     return tb
 
 
-def pic(s, name, l, t, max_w, max_h, caption=None):
+def pic(s, name, l, t, max_w, max_h, caption=None, stretch=False):
     path = os.path.join(FIG, name)
     w0, h0 = Image.open(path).size
-    scale = min(max_w / w0, max_h / h0)
-    w, h = int(w0 * scale), int(h0 * scale)
+    if stretch:                      # fill the whole box, aspect not preserved
+        w, h = int(max_w), int(max_h)
+    else:
+        scale = min(max_w / w0, max_h / h0)
+        w, h = int(w0 * scale), int(h0 * scale)
     # center inside the box
     left = l + int((max_w - w) / 2)
     s.shapes.add_picture(path, left, t, width=w, height=h)
@@ -243,8 +246,9 @@ bullets(s, [
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.35), size=14)
 pic(s, "slow_rise_zip22_crop.png", IN(0.55), IN(2.7), IN(5.9), IN(4.35),
     "Z22: NRMSE-rejected events — raw traces are noise")
-pic(s, "fan_cut_zip22_PCS1.png", IN(6.7), IN(3.4), IN(6.3), IN(3.1),
-    "Z22 PCS1: pass (green) vs rejected (red)")
+pic(s, "fan_cut_zip22_PCS1.png", IN(6.7), IN(2.9), IN(6.3), IN(3.7),
+    "Z22 PCS1: pass (green) vs rejected (red) — vertically stretched for visibility",
+    stretch=True)
 notes(s, "Before trusting the cut we looked at what it throws away. These are "
          "event grids of the rejected population on Z22: the raw traces show "
          "no pulse at all - they are noise triggers whose slow two-exp fit "
@@ -264,8 +268,9 @@ bullets(s, [
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "slow_fall_zip7_crop.png", IN(0.45), IN(2.9), IN(7.3), IN(4.1),
     "Z7, 3 of the sampled slow-fall events: normal pulses in PBS2/PCS2/PES2, low-frequency swings only in PDS2")
-pic(s, "time_constants_zip7_PDS2.png", IN(8.0), IN(3.6), IN(5.1), IN(2.2),
-    "Z7 PDS2: broad τ_fall tail — the artifact in the distributions")
+pic(s, "time_constants_zip7_PDS2_tfall.png", IN(8.0), IN(3.1), IN(5.1), IN(3.2),
+    "Z7 PDS2, fitted τ_fall: broad tail (median 0.51 ms) — the artifact in the distributions",
+    stretch=True)
 notes(s, "The first lead comes from the fan plot after the cut: some curves "
          "still fall very slowly. We chased it by sampling: among events "
          "passing the cut, take fall times above one point five "
