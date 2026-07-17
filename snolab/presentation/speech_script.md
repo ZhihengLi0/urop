@@ -80,9 +80,9 @@
 
 ## Slide 10 — Template family 2: NxM PCA（约 55 秒）
 
-**中文**：第二族模板是为了捕捉不同事件之间脉冲形状的变化。做法是对干净的拟合曲线做主成分分析，也就是 PCA——输入是通过 NRMSE cut、再加一条上升时间上限（挡掉缓慢的基线漂移）之后剩下的曲线。直观理解：黑色的 nxm0 是平均形状；后面四条彩色的，是数据里最主要的四个"变形方向"——比如上升更慢一点、下降更快一点。真实脉冲就用这五条的线性组合去拟合。效果非常好：前两个成分就已经覆盖了 96 到 98% 的形状差异。也就是说，事件之间的形状差异，就明明白白地装进了这套模板里。最后一步，交付之前把五条模板统一归一到峰值为 1，方便对比和使用——这就是最终产物。
+**中文**：第二族模板是为了捕捉不同事件之间脉冲形状的变化。做法是对干净的拟合曲线做主成分分析，也就是 PCA——输入就是同时通过前面两刀的曲线：NRMSE ≤ 0.4，再加上升时间 ≤ 0.3 毫秒（这刀挡掉慢基线漂移）。直观理解：黑色的 nxm0 是平均形状；后面四条彩色的，是数据里最主要的四个"变形方向"——比如上升更慢一点、下降更快一点。真实脉冲就用这五条的线性组合去拟合。效果非常好：前两个成分就已经覆盖了 96 到 98% 的形状差异。也就是说，事件之间的形状差异，就明明白白地装进了这套模板里。最后一步，交付之前把五条模板统一归一到峰值为 1，方便对比和使用——这就是最终产物。
 
-**English**: The second family is built to capture the variation in pulse shape across events. I run a principal component analysis — PCA — on the clean fitted curves: the ones passing the NRMSE cut plus a rise-time ceiling that removes slow baseline drift. The intuition: the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data — say, a slightly slower rise, or a faster fall. A real pulse is then fitted as a linear combination of these five. And it works remarkably well: the first two components already cover ninety-six to ninety-eight percent of the shape variation. So the shape variation is built right into the templates. As a final step before delivery, all five templates are normalized to unit peak, so they're easy to compare and use — and that is the final product.
+**English**: The second family is built to capture the variation in pulse shape across events. I run a principal component analysis — PCA — on the curves that pass both cuts: NRMSE ≤ 0.4, plus rise time ≤ 0.3 milliseconds, which removes the slow baseline drift. The intuition: the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data — say, a slightly slower rise, or a faster fall. A real pulse is then fitted as a linear combination of these five. And it works remarkably well: the first two components already cover ninety-six to ninety-eight percent of the shape variation. So the shape variation is built right into the templates. As a final step before delivery, all five templates are normalized to unit peak, so they're easy to compare and use — and that is the final product.
 
 ---
 
