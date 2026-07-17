@@ -102,14 +102,67 @@
 
 ---
 
-*备用问答提示 / Q&A hints*
+## 可能被问的问题 / Likely questions（回答一两句即可）
 
-- **τ_rise ≤ 0.3 ms 相对上一步切掉多少？/ How much does the rise-time ceiling remove, relative to the NRMSE step?** 安静探测器几乎不切：Z7 1.6%（大头是坏通道 PDS2，单通道 21%，其余通道 ≤0.4%）、Z9 4.7%、Z16 5.9%。弱探测器切 55–74%：Z24 74%、Z4 和 Z22 各 71%、Z18 71%、Z19 68%、Z6 56%。13 个 zip 合计 54%。切掉的主要是通过了 NRMSE 的残余慢漂移。 / Quiet detectors lose almost nothing: Z7 1.6% (mostly the bad channel PDS2 at 21%; every other channel ≤0.4%), Z9 4.7%, Z16 5.9%. Weak detectors lose 55–74% (Z24 74%, Z4/Z22 71%, Z18 71%, Z19 68%, Z6 56%). Pooled over all 13 zips: 54%. What it removes is residual slow baseline drift that survived the NRMSE cut.
+**Q1 — 窗口的 1.35 倍是怎么定的？/ How was the 1.35 window factor chosen?**
 
-- **为什么不用实测波形的平均做模板？/ Why not average the measured traces?** 解析拟合曲线本身没有噪声，加权平均出来的模板天然光滑；NRMSE 权重让拟合差的事件自动降权。对齐叠加图上实测均值（红）和加权拟合均值（橙）可以互相对照。 / The analytic fitted curves carry no noise, so their weighted mean is smooth by construction; the NRMSE weight down-weights badly-fit events automatically. The overlays show the measured mean (red) and the weighted fitted mean (orange) side by side for comparison.
-- **0.4 怎么定的，敏感吗？/ How was 0.4 chosen — is it sensitive?** 取在双峰分布的谷底，谷里本来就没多少事件——这正是选谷底的理由。还有交互 notebook，改阈值几秒内能重跑所有探测器。 / It sits in the valley of the bimodal distribution, where there are few events by construction — that's exactly why the valley was chosen. An interactive notebook re-runs any threshold within seconds.
-- **两族模板的 cut 为什么不一样？/ Why do the two families apply cuts differently?** 1x1 不硬切，靠权重：好拟合 NRMSE≈0.05 权重 400，噪声 NRMSE≈2 权重 0.25，差四个数量级，噪声自动压没，不需要人为定一刀。PCA 对离群点敏感——一条噪声曲线就能污染主成分方向——所以 NxM 的输入必须硬切干净（fit_ok + NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms）。 / The 1x1 uses weighting instead of a hard cut: a good fit at NRMSE 0.05 gets weight 400, a noise trigger at 2 gets 0.25 — four orders of magnitude apart, so noise is automatically suppressed without choosing a threshold. PCA is sensitive to outliers — one noise curve can contaminate the components — so the NxM input must be hard-cut clean.
-- **慢脉冲群体到底留不留？/ Keep the slow pulses or not?** 这是明确记录在案的待定事项。目前 PCA 的输入应用了 τ_rise cut；这个取舍要不要放开，正是想和大家讨论决定的。 / This is the documented open item. The PCA input currently applies the rise-time cut; whether to relax that trade-off is exactly what I'd like to discuss and decide.
+**中文**：粗略目测定的，故意开得宽——选样阶段宁多勿漏，后面的筛选都是显式、可回退的。
+
+**English**: It was a rough, eyeballed choice, deliberately wide — at the selection stage I'd rather over-collect, since every later cut is explicit and reversible.
+
+**Q2 — 为什么拟合时连 pretrigger 也放开？/ Why is the pretrigger left free in the fit?**
+
+**中文**：真实触发时刻逐事件抖动，拟合显示普遍比名义位置晚两百多个采样点；钉死它会把误差转嫁到上升、下降时间上。
+
+**English**: The true trigger time jitters event by event — the fits sit about two hundred samples after the nominal position — and pinning it pushes that error into the rise and fall times.
+
+**Q3 — 为什么用双指数模型？/ Why the two-exponential model?**
+
+**中文**：一个指数管上升、一个管下降，是声子脉冲的标准形状；好事件的 NRMSE 只有百分之几，说明模型够用。
+
+**English**: One exponential for the rise and one for the fall is the standard phonon pulse shape, and good events fit at the few-percent level — the model is sufficient.
+
+**Q4 — 0.4 这个阈值敏感吗？/ Is the 0.4 threshold sensitive?**
+
+**中文**：不敏感——它取在双峰分布的谷底，谷里本来就没多少事件；交互 notebook 改任意阈值几秒就能重跑。
+
+**English**: No — it sits in the valley of the bimodal distribution, where there are few events by construction, and an interactive notebook re-runs any threshold within seconds.
+
+**Q5 — 为什么不用实测波形的平均做模板？/ Why not average the measured traces?**
+
+**中文**：解析拟合曲线本身没有噪声，加权平均出来的模板天然光滑；NRMSE 权重让拟合差的事件自动降权。
+
+**English**: The analytic fitted curves carry no noise, so their weighted mean is smooth by construction, and the NRMSE weight down-weights badly-fit events automatically.
+
+**Q6 — 两族模板的 cut 为什么不一样？/ Why do the two families apply cuts differently?**
+
+**中文**：1x1 靠权重（NRMSE 0.05 和 2 的权重差四个数量级，噪声自动压没）；PCA 对离群点敏感，一条噪声曲线就能污染主成分，所以 NxM 的输入必须硬切干净。
+
+**English**: The 1x1 relies on weighting — NRMSE 0.05 versus 2 differ by four orders of magnitude in weight, so noise is suppressed automatically — while PCA is outlier-sensitive, so the NxM input must be hard-cut clean.
+
+**Q7 — τ_rise ≤ 0.3 ms 相对上一步切掉多少？/ How much does the rise-time ceiling remove, after the NRMSE cut?**
+
+**中文**：安静探测器几乎不切——Z7 只有 1.6%，大头还是坏通道 PDS2（21%）；弱探测器切 55–74%（Z22 是 71%），切掉的是残余慢漂移。
+
+**English**: Almost nothing on the quiet detectors — 1.6% on Z7, mostly the bad channel PDS2 at 21% — versus 55–74% on the weak ones (71% on Z22), and what it removes is residual slow drift.
+
+**Q8 — 真正的慢脉冲留不留？/ Do the genuine slow pulses stay?**
+
+**中文**：这是记录在案的待定事项：目前 PCA 输入应用了 τ_rise cut，要不要放开这个取舍，正想和大家讨论。
+
+**English**: That's the documented open item — the PCA input currently applies the rise-time cut, and whether to relax that trade-off is exactly what I'd like to discuss.
+
+**Q9 — Z7 的坏通道 PDS2 怎么处理的？/ What about the bad channel PDS2 on Z7?**
+
+**中文**：没有剔除——每个通道都用自己的拟合出自己的模板；PDS2 的低频晃动主要抬高拟合的下降时间，NRMSE 权重会自动压低受影响最重的事件。
+
+**English**: It's not excluded — every channel gets its own template from its own fits; the low-frequency swing mainly inflates fitted fall times, and the NRMSE weighting automatically suppresses the worst-affected events.
+
+**Q10 — 下一步是什么？/ What's next?**
+
+**中文**：对新模板跑一遍组里的模板验证流程，再定慢脉冲那个取舍。
+
+**English**: Run the group's template-validation procedure on the new templates, then settle the slow-pulse trade-off.
 
 ---
 
