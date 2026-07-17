@@ -305,7 +305,7 @@ title(s, "Follow-up 1 — the slow-fall tail is a one-channel artifact")
 bullets(s, [
     "The post-cut fan still shows slow-fall tails → sample them: NRMSE ≤ 0.4 AND τ_fall > 1.5 ms, 10 random events, raw vs fit drawn in all 12 channels",
     "The sampled events are real pulses → kept. Their extreme fall times trace to one channel: only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere) — a low-frequency disturbance",
-    "Conclusion: no τ_fall cut — slow-fall events passing NRMSE stay in; the extreme tail is a one-channel artifact, not physics",
+    "Conclusion: no τ_fall cut — slow-fall events passing NRMSE stay in; the extreme tail is a one-channel artifact, not a slow pulse",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "slow_fall_zip7_crop.png", IN(0.3), IN(2.95), IN(6.7), IN(4.0),
     "Z7, 3 sampled slow-fall events: normal in PBS2/PCS2/PES2, swings only in PDS2")
@@ -327,7 +327,7 @@ notes(s, "The first lead comes from the fan plot after the cut: some curves "
          "extreme fall times all trace back to one channel: only PDS2 is "
          "swinging wildly, while the same events are normal fast pulses in "
          "the other eleven channels - so the extreme tail is a one-channel "
-         "low-frequency artifact, not slow physics.")
+         "low-frequency artifact, not a genuinely slow pulse.")
 
 # ------------------------------------------------- 11 · template family 1
 s = slide()
