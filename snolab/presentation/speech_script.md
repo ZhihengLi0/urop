@@ -1,6 +1,6 @@
 # Speaker Script / 演讲稿 — SNOLAB R4 Phonon Pulse Templates
 
-约 9 分钟，11 页。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
+约 9 分钟，11 页 + 1 页 backup（弱探测器 Z22 示例，不占正片时间）。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
 原则：稿子是说的话，不是幻灯片的复读——具体参数都在屏幕上，嘴里讲思路和为什么。
 斜体是给自己的提示，不用念。
 
@@ -48,17 +48,17 @@
 
 ## Slide 6 — Quality cut 1: NRMSE ≤ 0.4（约 55 秒）
 
-**中文**：现在讲第一个 cut 怎么定的。把所有物理拟合的 NRMSE 画成分布，每个探测器都是同一个样子：两个峰。左边的峰是拟合好的，典型值百分之五到百分之十；右边的峰在 1 到 2 附近，就是那些根本没有脉冲的噪声触发。两峰之间有一个很深的谷，位置在 0.4 左右——阈值就取 0.4。我想强调：这个数不是调出来的，是分布自己长出来的。上图是安静的 Z7，两个峰离得很远；下图是较弱的探测器 Z22，噪声峰是主体——对这些探测器来说，这一刀就是把真脉冲从噪声堆里捞出来的那一刀。
+**中文**：现在讲第一个 cut 怎么定的。把所有物理拟合的 NRMSE 画成分布，每个探测器都是同一个样子：两个峰。左边的峰是拟合好的，典型值百分之五到百分之十；右边的峰在 1 到 2 附近，就是那些根本没有脉冲的噪声触发。两峰之间有一个很深的谷，位置在 0.4 左右——阈值就取 0.4。我想强调：这个数不是调出来的，是分布自己长出来的。图里是 Z7 的 PBS1——全场用的就是这条通道——两个峰离得很远，谷一目了然。较弱的探测器是同样的双峰图景，只是噪声峰是主体，对它们来说这一刀就是把真脉冲从噪声堆里捞出来的那一刀；具体例子放在 backup 页。
 
-**English**: Now, how the first cut was set. If you histogram the NRMSE of all physical fits, every detector shows the same picture: two populations. The left one is the good fits, typically five to ten percent. The right one, around one or two, is the noise triggers — traces with no pulse in them at all. In between there's a deep valley, at about zero point four — and that's where I put the threshold. I want to stress: this number wasn't tuned, it's simply what the distribution itself shows. The top plot is quiet Z7, where the two populations are far apart. The bottom is Z22, a weak detector, where noise dominates — and for those detectors, this cut is exactly what pulls the real pulses out of the noise.
+**English**: Now, how the first cut was set. If you histogram the NRMSE of all physical fits, every detector shows the same picture: two populations. The left one is the good fits, typically five to ten percent. The right one, around one or two, is the noise triggers — traces with no pulse in them at all. In between there's a deep valley, at about zero point four — and that's where I put the threshold. I want to stress: this number wasn't tuned, it's simply what the distribution itself shows. The plot is Z7 PBS1 — the same channel used throughout the talk — where the two populations are far apart and the valley is obvious. The weak detectors show the same bimodal picture with the noise peak dominating, and for them this cut is exactly what pulls the real pulses out of the noise; an example is in the backup slide.
 
 ---
 
 ## Slide 7 — The rejected population is noise（约 45 秒）
 
-**中文**：定了 cut 还不够，得验证它切掉的确实是垃圾。左边是被切掉的事件的**原始**波形——可以看到，里面就没有脉冲，纯粹是噪声，只不过一条很慢的曲线恰好凑在了它上面。右边换个角度看同一件事，这张图有三层：底下灰蓝色的是对齐后的实测波形，上面绿色是**通过** cut 的拟合曲线，红色是**被切掉**的；右上角标着两个群体各自的中位 NRMSE 和事件数。可以看到绿的又快又一致，聚成一束；红的四处发散，中位 NRMSE 差不多是绿的三倍——在 Z22 这个通道上，被切掉的有四千八百多个，占了四成。结论很干净：这一刀切掉的是噪声，没有伤到物理。
+**中文**：定了 cut 还不够，得验证它切掉的确实是垃圾。左边是被切掉的事件的**原始**波形——可以看到，里面就没有脉冲，纯粹是噪声，只不过一条很慢的曲线恰好凑在了它上面。右边换个角度看同一件事，这张图有三层：底下灰蓝色的是对齐后的实测波形，上面绿色是**通过** cut 的拟合曲线，红色是**被切掉**的；右上角标着两个群体各自的中位 NRMSE 和事件数。可以看到绿的又快又一致，聚成一束；红的四处发散，中位 NRMSE 是绿的四十倍——1.87 对 0.045。在 Z7 这条通道上，被切掉的只有 77 个，不到百分之四。结论很干净：这一刀切掉的是噪声，没有伤到物理。
 
-**English**: Setting a cut isn't enough — I have to verify that what it removes really is junk. On the left are the **raw** traces of the rejected events. As you can see, there is simply no pulse there — it's pure noise, on which some slow curve happened to converge. On the right, the same thing from another angle — this figure has three layers: the gray-blue underneath is the aligned measured traces, green on top is the fitted curves that **pass** the cut, and red is the ones **removed**; the top-right corner shows each population's median NRMSE and its event count. The green ones are fast and consistent, bundled together; the red ones scatter everywhere, with a median NRMSE about three times higher — and on this Z22 channel, over four thousand eight hundred events are removed, about forty percent. So the conclusion is clean: this cut removes noise, and it doesn't touch the physics.
+**English**: Setting a cut isn't enough — I have to verify that what it removes really is junk. On the left are the **raw** traces of the rejected events. As you can see, there is simply no pulse there — it's pure noise, on which some slow curve happened to converge. On the right, the same thing from another angle — this figure has three layers: the gray-blue underneath is the aligned measured traces, green on top is the fitted curves that **pass** the cut, and red is the ones **removed**; the top-right corner shows each population's median NRMSE and its event count. The green ones are fast and consistent, bundled together; the red ones scatter everywhere, with a median NRMSE about forty times higher — one point eight seven against zero point zero four five. On this Z7 channel, only seventy-seven events are removed, under four percent. So the conclusion is clean: this cut removes noise, and it doesn't touch the physics.
 
 ---
 
@@ -94,7 +94,17 @@
 
 ---
 
+## Backup — Weak detectors（仅备查，不占正片时间）
+
+**中文**：弱探测器（Z1/Z4/Z6/Z18/Z19/Z22/Z24）的 K 线插在噪声堆里，窗口收进来的是噪声为主的混合体。NRMSE 分布同样双峰、但噪声峰是主体，同一条 0.4 的 cut 把真脉冲捞出来——Z22 PCS1：保留 7198、切掉 4788，约四成。保留束比安静探测器宽；红色里那些陡峭曲线是拟合抓到噪声尖刺，不是快脉冲被切掉。τ_rise ≤ 0.3 ms 在弱探测器上再切掉 NRMSE 之后余下的 55–74%（Z22 是 71%），主要是残余的慢基线漂移。
+
+**English**: On the weak detectors (Z1/Z4/Z6/Z18/Z19/Z22/Z24) the K-line sits inside the noise population, so the window admits a noise-dominated mixture. The NRMSE distribution is still bimodal, only with the noise peak dominating, and the same 0.4 cut digs the real pulses out — on Z22 PCS1, 7198 kept and 4788 cut, about forty percent. The kept bundle is broader than on a quiet detector, and the steep red curves are fits latching onto sharp noise spikes, not fast pulses being cut. The rise-time ceiling then removes another 55–74% of what survived the NRMSE cut on the weak zips (71% on Z22) — residual slow baseline drift.
+
+---
+
 *备用问答提示 / Q&A hints*
+
+- **τ_rise ≤ 0.3 ms 相对上一步切掉多少？/ How much does the rise-time ceiling remove, relative to the NRMSE step?** 安静探测器几乎不切：Z7 1.6%（大头是坏通道 PDS2，单通道 21%，其余通道 ≤0.4%）、Z9 4.7%、Z16 5.9%。弱探测器切 55–74%：Z24 74%、Z4 和 Z22 各 71%、Z18 71%、Z19 68%、Z6 56%。13 个 zip 合计 54%。切掉的主要是通过了 NRMSE 的残余慢漂移。 / Quiet detectors lose almost nothing: Z7 1.6% (mostly the bad channel PDS2 at 21%; every other channel ≤0.4%), Z9 4.7%, Z16 5.9%. Weak detectors lose 55–74% (Z24 74%, Z4/Z22 71%, Z18 71%, Z19 68%, Z6 56%). Pooled over all 13 zips: 54%. What it removes is residual slow baseline drift that survived the NRMSE cut.
 
 - **为什么不用实测波形的平均做模板？/ Why not average the measured traces?** 解析拟合曲线本身没有噪声，加权平均出来的模板天然光滑；NRMSE 权重让拟合差的事件自动降权。对齐叠加图上实测均值（红）和加权拟合均值（橙）可以互相对照。 / The analytic fitted curves carry no noise, so their weighted mean is smooth by construction; the NRMSE weight down-weights badly-fit events automatically. The overlays show the measured mean (red) and the weighted fitted mean (orange) side by side for comparison.
 - **0.4 怎么定的，敏感吗？/ How was 0.4 chosen — is it sensitive?** 取在双峰分布的谷底，谷里本来就没多少事件——这正是选谷底的理由。还有交互 notebook，改阈值几秒内能重跑所有探测器。 / It sits in the valley of the bimodal distribution, where there are few events by construction — that's exactly why the valley was chosen. An interactive notebook re-runs any threshold within seconds.

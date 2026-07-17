@@ -248,19 +248,19 @@ title(s, "Quality cut 1: NRMSE ≤ 0.4 — where the number comes from")
 bullets(s, [
     "NRMSE of fit_ok events is bimodal: good fits (median ≈ 0.05–0.1) vs noise triggers (≈ 1–2), valley at ≈ 0.4–0.5",
     "The cut sits in the valley — it is read off the distribution, not tuned on the templates",
-    "Weak detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): the PTOF window admits a noise-dominated mixture — this cut is what extracts the real-pulse population",
+    "Weak detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): same bimodal picture, noise peak dominates — backup slide",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
-pic(s, "nrmse_zip7_PBS1.png", IN(1.9), IN(2.9), IN(9.5), IN(2.05),
-    "Z7 PBS1 (quiet): two clean populations, log-log axes")
-pic(s, "nrmse_zip22_PAS1.png", IN(1.9), IN(5.2), IN(9.5), IN(2.05),
-    "Z22 PAS1 (weak): noise population dominates — the window alone is not enough")
+pic(s, "nrmse_zip7_PBS1.png", IN(1.4), IN(3.1), IN(10.5), IN(3.4),
+    "Z7 PBS1: two clean populations, log-log axes")
 notes(s, "First quality cut. The NRMSE distribution of physical fits is "
          "bimodal on every detector: a good-fit population around 0.05 to "
          "0.1, and a noise-trigger population around 1 to 2, separated by a "
          "valley at about 0.4. We place the cut in the valley - it is read "
-         "off the distribution itself. On quiet detectors like Z7 the noise "
-         "population is small; on weak detectors like Z22 it dominates, and "
-         "this cut is what digs the real pulses out of the mixture.")
+         "off the distribution itself. This is Z7 PBS1, the channel used "
+         "throughout the talk. On the weak detectors the same bimodal "
+         "picture appears with the noise peak dominating - one example is "
+         "in the backup slide - and there this same cut is what digs the "
+         "real pulses out of the mixture.")
 
 # ------------------------------------------ 7 · what the cut removes
 s = slide()
@@ -268,33 +268,35 @@ title(s, "The rejected population is noise — verified in the raw traces")
 bullets(s, [
     "Event grids of NRMSE-rejected events (median NRMSE > 0.4 across channels): the raw traces show no pulse — the cut removes noise triggers, not physics",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.0), size=14)
-pic(s, "slow_rise_zip22_crop.png", IN(0.4), IN(2.7), IN(5.9), IN(4.35),
-    "Z22: NRMSE-rejected events — raw traces are noise")
+pic(s, "slow_rise_zip7_crop.png", IN(0.4), IN(2.7), IN(5.9), IN(4.35),
+    "Z7: NRMSE-rejected events — raw traces are noise")
 # fan-cut figure enlarged to fill the right column; its legend is pulled out
 # into the readable colour-coded text below
-pic(s, "fan_cut_zip22_PCS1.png", IN(6.5), IN(2.45), IN(6.85), IN(3.75), stretch=True)
+pic(s, "fan_cut_zip7_PBS1.png", IN(6.5), IN(2.45), IN(6.85), IN(3.75), stretch=True)
 _lg = textbox(s, IN(6.6), IN(6.35), IN(6.7), IN(1.05))
 _lg.text_frame.word_wrap = True
 _GREEN, _RED, _BLUE = RGBColor(0x2E, 0x7D, 0x32), RGBColor(0xC0, 0x39, 0x2B), RGBColor(0x4A, 0x70, 0xB0)
 _p = _lg.text_frame.paragraphs[0]
-for _txt, _col, _bold in [("Z22 PCS1   ", DARK, True),
+for _txt, _col, _bold in [("Z7 PBS1   ", DARK, True),
                           ("── passes the cut (kept)", _GREEN, True),
                           ("      ── cut away = rejected", _RED, True)]:
     _r = _p.add_run(); _r.text = _txt
     _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(14), _bold, _col, "Arial"
 _p2 = _lg.text_frame.add_paragraph()
 for _txt, _col, _bold in [("faint blue = measured traces", _BLUE, False),
-                          ("      7198 kept / 4788 cut (~40%)", DARK, False)]:
+                          ("      1931 kept / 77 cut (~3.8%)", DARK, False)]:
     _r = _p2.add_run(); _r.text = _txt
     _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(14), _bold, _col, "Arial"
 notes(s, "Before trusting the cut we looked at what it throws away. These are "
-         "event grids of the rejected population on Z22: the raw traces show "
+         "event grids of the rejected population on Z7: the raw traces show "
          "no pulse at all - they are noise triggers whose slow two-exp fit "
          "happened to converge. The fan-cut view on the right overlays the "
          "passing fitted curves in green and the rejected ones in red on the "
          "aligned data: the green population is the fast physical pulse "
-         "shape, the red one is spread out with a median NRMSE three times "
-         "higher. So the cut removes noise, not physics.")
+         "shape, the red one is spread out with a median NRMSE forty times "
+         "higher - 1.87 against 0.045 - and on this channel only 77 events "
+         "are removed, under four percent. So the cut removes noise, not "
+         "physics.")
 
 # --------------------------------------- 8 · follow-up 1: slow-fall tail
 s = slide()
@@ -353,9 +355,8 @@ bullets(s, [
     "nxm0 = mean shape;  nxm1–4 = principal components;  real pulse = Σᵢ ampᵢ · nxmᵢ",
     "PC1 + PC2 ≈ 96–98% of the shape variance;  delivered peak-normalized",
 ], IN(0.55), IN(1.22), IN(12.3), IN(1.5), size=16)
-pic(s, "pca_zip7_PAS1.png", IN(1.5), IN(2.95), IN(10.3), IN(2.0))
-pic(s, "pca_zip7_PBS1.png", IN(1.5), IN(5.0), IN(10.3), IN(2.0),
-    "Z7 PAS1 / PBS1: nxm0 (mean) + nxm1–4 (PCs) — the oscillating components encode rise/fall-time variation")
+pic(s, "pca_zip7_PBS1.png", IN(1.1), IN(3.3), IN(11.1), IN(3.1),
+    "Z7 PBS1: nxm0 (mean) + nxm1–4 (PCs) — the oscillating components encode rise/fall-time variation")
 notes(s, "Second family: the NxM PCA templates, built to capture the "
          "pulse-shape variation across events. We run a PCA over the fitted curves that "
          "pass all cuts, in a window around the pulse. The mean shape "
@@ -381,6 +382,34 @@ notes(s, "To summarize: both template families are delivered for all 13 "
          "the final call on the rise-time ceiling versus the genuine slow "
          "pulses, and running the group's template-validation method on the "
          "new templates. Thank you - happy to take questions.")
+
+# ------------------------------------------- backup · weak detectors (Z22)
+s = slide()
+title(s, "Backup — weak detectors (example: Z22)")
+bullets(s, [
+    "Z1 / Z4 / Z6 / Z18 / Z19 / Z22 / Z24: K-line sits inside the noise population — the PTOF window admits a noise-dominated mixture",
+    "Same bimodal NRMSE picture, noise peak dominates; the same 0.4 cut digs the real pulses out — Z22 PCS1: 7198 kept / 4788 cut (~40%)",
+    "Kept bundle broader than on quiet detectors; steep red curves = fits latching onto sharp noise spikes, not fast pulses being cut",
+    "τ_rise ≤ 0.3 ms (after NRMSE): removes 55–74% on weak zips (Z22: 71%) vs 1.6% on Z7 — residual slow drift",
+], IN(0.55), IN(1.1), IN(12.3), IN(2.15), size=13)
+pic(s, "nrmse_zip22_PAS1.png", IN(0.4), IN(3.35), IN(6.3), IN(1.7),
+    "Z22 PAS1: NRMSE histogram — noise dominates")
+pic(s, "fan_cut_zip22_PCS1.png", IN(6.9), IN(3.35), IN(6.3), IN(1.7),
+    "Z22 PCS1: kept (green) vs cut (red)")
+pic(s, "fan_final_zip22_PCS1.png", IN(2.2), IN(5.55), IN(8.9), IN(1.55),
+    "Z22 PCS1 after NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms — final shape family (760 fits)")
+notes(s, "Backup. On the weak detectors the K-line overlaps the noise "
+         "population, so the PTOF window admits a noise-dominated mixture. "
+         "The NRMSE distribution is still bimodal but the noise peak "
+         "dominates, and the same 0.4 cut is what extracts the real pulses "
+         "- on Z22 PCS1 about forty percent of the physical fits are "
+         "removed. The kept bundle is broader than on a quiet detector, and "
+         "the steep red curves are fits latching onto sharp noise spikes, "
+         "not fast pulses being thrown away. The rise-time ceiling then "
+         "removes fifty-five to seventy-four percent of what survived the "
+         "NRMSE cut on the weak zips - residual slow drift - versus one "
+         "point six percent on Z7. The surviving shape family is at the "
+         "bottom.")
 
 # page numbers: "N / total" bottom-right, skip the title slide
 _slides = list(prs.slides)
