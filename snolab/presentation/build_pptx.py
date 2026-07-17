@@ -412,6 +412,27 @@ notes(s, "Backup. On the weak detectors the K-line overlaps the noise "
          "point six percent on Z7. The surviving shape family is at the "
          "bottom.")
 
+# ------------------------------------------- backup · τ_rise ≤ 0.3 ms ceiling
+s = slide()
+title(s, "Backup — the τ_rise ≤ 0.3 ms ceiling (PCA input)")
+bullets(s, [
+    "Slow baseline drift survives NRMSE (a slow 2-exp hugs it) → mimics a slow rise",
+    "Fast pulses at τ_rise ≈ 0.1 ms (p90 ≈ 0.15 ms) → ceiling at 0.3 ms blocks the drift tail",
+    "Removed after the NRMSE cut: Z7 1.6% (quiet 2–6%) — weak 55–74% (Z22 71%) — all zips 54%",
+    "Trade-off: trims the very slowest genuine pulses → decision pending",
+], IN(0.55), IN(1.2), IN(12.3), IN(2.15), size=14)
+pic(s, "time_constants_zip7_PAS1.png", IN(1.4), IN(3.6), IN(10.5), IN(2.7),
+    "Z7 PAS1: fitted τ_rise (median 0.105 ms) and τ_fall distributions")
+notes(s, "Backup for the rise-time cut. On weak-window detectors a slow "
+         "baseline drift also fits as a slow rise, with a tiny residual, so "
+         "NRMSE cannot catch it. Real fast pulses cluster near 0.1 ms while "
+         "the drift tail stretches much further, so the PCA input gets a "
+         "ceiling at 0.3 ms. Relative to the NRMSE step it removes almost "
+         "nothing on quiet detectors - 1.6% on Z7, mostly the bad channel "
+         "PDS2 - but 55 to 74% on the weak ones, 71% on Z22, pooled 54% over "
+         "all zips. The price is that the very slowest genuine pulses get "
+         "trimmed too; that trade-off is documented and not final.")
+
 # page numbers: "N / total" bottom-right, skip the title slide
 _slides = list(prs.slides)
 _total = len(_slides)

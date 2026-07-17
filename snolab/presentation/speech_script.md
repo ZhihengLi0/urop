@@ -102,6 +102,14 @@
 
 ---
 
+## Backup — τ_rise ≤ 0.3 ms 上限（PCA 输入用）（仅备查）
+
+**中文**：慢基线漂移能骗过 NRMSE——一条慢 2-exp 贴住它，残差很小——看起来像慢上升。真快脉冲聚在 τ_rise ≈ 0.1 ms，漂移尾巴拖得远得多，所以 PCA 输入加了 0.3 ms 上限挡掉它。相对 NRMSE 那一步切掉：安静探测器几乎不切（Z7 1.6%，大头是坏通道 PDS2），弱探测器 55–74%（Z22 71%），全部合计 54%。代价是最慢的一小撮真脉冲也会被削掉——这个取舍记录在案、尚未定论。
+
+**English**: A slow baseline drift can fool NRMSE — a slow 2-exp hugs it with a tiny residual — and looks like a slow rise. Real fast pulses cluster at τ_rise ≈ 0.1 ms while the drift tail stretches much further, so the PCA input gets a 0.3 ms ceiling to block it. Relative to the NRMSE step it removes almost nothing on quiet detectors (1.6% on Z7, mostly the bad channel PDS2) but 55–74% on the weak ones (71% on Z22), 54% pooled. The price is that the very slowest genuine pulses get trimmed too — a documented, still-open trade-off.
+
+---
+
 ## 可能被问的问题 / Likely questions（回答一两句即可）
 
 **Q1 — 窗口的 1.35 倍是怎么定的？/ How was the 1.35 window factor chosen?**
