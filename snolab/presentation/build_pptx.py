@@ -297,7 +297,7 @@ notes(s, "Before trusting the cut we looked at what it throws away. These are "
          "shape, the red one is spread out with a median NRMSE forty times "
          "higher - 1.87 against 0.045 - and on this channel only three "
          "point eight percent of the events get cut. So the cut removes "
-         "noise, not physics.")
+         "noise triggers, and no real pulses are lost.")
 
 # --------------------------------------- 8 · follow-up 1: slow-fall tail
 s = slide()
