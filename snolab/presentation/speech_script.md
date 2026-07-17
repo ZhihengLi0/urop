@@ -48,9 +48,9 @@
 
 ## Slide 6 — Quality cut 1: NRMSE ≤ 0.4（约 55 秒）
 
-**中文**：现在讲第一个 cut 怎么定的。把所有物理拟合的 NRMSE 画成分布，每个探测器都是同一个样子：两个峰。左边的峰是拟合好的，典型值百分之五到百分之十；右边的峰在 1 到 2 附近，就是那些根本没有脉冲的噪声触发。两峰之间有一个很深的谷，位置在 0.4 左右——阈值就取 0.4。我想强调：这个数不是调出来的，是分布自己长出来的。图里是 Z7 的 PBS1——全场用的就是这条通道——两个峰离得很远，谷一目了然。较弱的探测器是同样的双峰图景，只是噪声峰是主体，对它们来说这一刀就是把真脉冲从噪声堆里捞出来的那一刀；具体例子放在 backup 页。
+**中文**：现在讲第一个 cut 怎么定的。把所有物理拟合的 NRMSE 画成分布，每个探测器都是同一个样子：两个峰。左边的峰是拟合好的，典型值百分之五到百分之十；右边的峰在 1 到 2 附近，就是那些根本没有脉冲的噪声触发。两峰之间有一个很深的谷，位置在 0.4 左右——阈值就取 0.4。我想强调：这个数不是调出来的，是分布自己长出来的。图里是 Z7 的 PBS1——全场用的就是这条通道——两个峰离得很远，谷一目了然。较弱的探测器——比如 Z22——是同样的双峰图景，只是噪声峰是主体，对它们来说这一刀就是把真脉冲从噪声堆里捞出来的那一刀。*（有人问弱探测器长什么样，再翻 backup 页。）*
 
-**English**: Now, how the first cut was set. If you histogram the NRMSE of all physical fits, every detector shows the same picture: two populations. The left one is the good fits, typically five to ten percent. The right one, around one or two, is the noise triggers — traces with no pulse in them at all. In between there's a deep valley, at about zero point four — and that's where I put the threshold. I want to stress: this number wasn't tuned, it's simply what the distribution itself shows. The plot is Z7 PBS1 — the same channel used throughout the talk — where the two populations are far apart and the valley is obvious. The weak detectors show the same bimodal picture with the noise peak dominating, and for them this cut is exactly what pulls the real pulses out of the noise; an example is in the backup slide.
+**English**: Now, how the first cut was set. If you histogram the NRMSE of all physical fits, every detector shows the same picture: two populations. The left one is the good fits, typically five to ten percent. The right one, around one or two, is the noise triggers — traces with no pulse in them at all. In between there's a deep valley, at about zero point four — and that's where I put the threshold. I want to stress: this number wasn't tuned, it's simply what the distribution itself shows. The plot is Z7 PBS1 — the same channel used throughout the talk — where the two populations are far apart and the valley is obvious. The weak detectors — Z22, for example — show the same bimodal picture with the noise peak dominating, and for them this cut is exactly what pulls the real pulses out of the noise.
 
 ---
 

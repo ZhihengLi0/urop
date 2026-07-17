@@ -248,7 +248,7 @@ title(s, "Quality cut 1: NRMSE ≤ 0.4 — where the number comes from")
 bullets(s, [
     "NRMSE of fit_ok events is bimodal: good fits (median ≈ 0.05–0.1) vs noise triggers (≈ 1–2), valley at ≈ 0.4–0.5",
     "The cut sits in the valley — it is read off the distribution, not tuned on the templates",
-    "Weak detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): same bimodal picture, noise peak dominates — backup slide",
+    "Weak detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): same bimodal picture, noise peak dominates",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "nrmse_zip7_PBS1.png", IN(1.4), IN(3.1), IN(10.5), IN(3.4),
     "Z7 PBS1: two clean populations, log-log axes")
@@ -257,10 +257,11 @@ notes(s, "First quality cut. The NRMSE distribution of physical fits is "
          "0.1, and a noise-trigger population around 1 to 2, separated by a "
          "valley at about 0.4. We place the cut in the valley - it is read "
          "off the distribution itself. This is Z7 PBS1, the channel used "
-         "throughout the talk. On the weak detectors the same bimodal "
-         "picture appears with the noise peak dominating - one example is "
-         "in the backup slide - and there this same cut is what digs the "
-         "real pulses out of the mixture.")
+         "throughout the talk. The weak detectors - Z22, for example - show "
+         "the same bimodal picture with the noise peak dominating, and there "
+         "this same cut is what digs the real pulses out of the mixture. "
+         "(If someone asks what a weak detector looks like, show the backup "
+         "slide.)")
 
 # ------------------------------------------ 7 · what the cut removes
 s = slide()
