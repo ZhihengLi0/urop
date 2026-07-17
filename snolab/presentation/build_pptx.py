@@ -159,9 +159,9 @@ bullets(s, [
     "A real event fits well in every channel at once; a noise trigger fails in every channel — a clean handle on which events are real (how we fit each trace: next slide)",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.3), size=14)
 pic(s, "fit_examples_zip7_noise.png", IN(0.2), IN(2.75), IN(6.55), IN(3.55),
-    "Noise triggers: the fit fails in every channel at once")
+    "Noise triggers (Z7): the fit fails in every channel at once")
 pic(s, "fit_examples_zip7_good.png", IN(6.6), IN(2.75), IN(6.55), IN(3.55),
-    "K-line events: consistent good fits across channels")
+    "K-line events (Z7): consistent good fits across channels")
 notes(s, "Before the algorithm, a quick look at the data itself. We use "
          "event-by-channel grids: each row is one event, each column one "
          "channel, with the low-passed trace in blue and a fitted pulse model "
@@ -231,7 +231,7 @@ bullets(s, [
 pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.55), IN(2.55), IN(6.35), IN(3.95),
     "All fit_ok fitted curves (Z7 PBS1) — no cut")
 pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.9), IN(2.55), IN(6.35), IN(3.95),
-    "After NRMSE ≤ 0.4 — one tight shape family")
+    "After NRMSE ≤ 0.4 (Z7 PBS1) — one tight shape family")
 notes(s, "Step five: alignment. Each measured trace is shifted by its fitted "
          "pretrigger minus the nominal 16050 - a pure translation, nothing "
          "about the waveform is regenerated. Once everything is at the common "
@@ -277,13 +277,14 @@ _lg = textbox(s, IN(6.6), IN(6.35), IN(6.7), IN(1.05))
 _lg.text_frame.word_wrap = True
 _GREEN, _RED, _BLUE = RGBColor(0x2E, 0x7D, 0x32), RGBColor(0xC0, 0x39, 0x2B), RGBColor(0x4A, 0x70, 0xB0)
 _p = _lg.text_frame.paragraphs[0]
-for _txt, _col, _bold in [("── passes the cut (kept)", _GREEN, True),
+for _txt, _col, _bold in [("Z22 PCS1   ", DARK, True),
+                          ("── passes the cut (kept)", _GREEN, True),
                           ("      ── cut away = rejected", _RED, True)]:
     _r = _p.add_run(); _r.text = _txt
     _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(14), _bold, _col, "Arial"
 _p2 = _lg.text_frame.add_paragraph()
 for _txt, _col, _bold in [("faint blue = measured traces", _BLUE, False),
-                          ("      Z22 PCS1: 7198 kept / 4788 cut (~40%)", DARK, False)]:
+                          ("      7198 kept / 4788 cut (~40%)", DARK, False)]:
     _r = _p2.add_run(); _r.text = _txt
     _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(14), _bold, _col, "Arial"
 notes(s, "Before trusting the cut we looked at what it throws away. These are "
@@ -307,9 +308,9 @@ pic(s, "slow_fall_zip7_crop.png", IN(0.3), IN(2.95), IN(6.7), IN(4.0),
     "Z7, 3 sampled slow-fall events: normal in PBS2/PCS2/PES2, swings only in PDS2")
 # the two t_fall histograms side by side, cropped to the useful 0-7 ms
 pic(s, "time_constants_zip7_PAS1_tfall.png", IN(7.05), IN(3.35), IN(3.05), IN(2.3),
-    "PAS1 — normal channel: narrow (median 0.25 ms)")
+    "Z7 PAS1 — normal channel: narrow (median 0.25 ms)")
 pic(s, "time_constants_zip7_PDS2_tfall.png", IN(10.2), IN(3.35), IN(3.05), IN(2.3),
-    "PDS2 — bad channel: broad tail (median 0.51 ms)")
+    "Z7 PDS2 — bad channel: broad tail (median 0.51 ms)")
 _ft = textbox(s, IN(7.05), IN(2.62), IN(6.2), IN(0.55))
 _pft = _ft.text_frame.paragraphs[0]
 _rft = _pft.add_run(); _rft.text = "Fitted τ_fall distribution, same 0–7 ms axis:"
