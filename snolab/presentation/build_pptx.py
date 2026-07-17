@@ -248,18 +248,18 @@ title(s, "Quality cut 1: NRMSE ≤ 0.4 — where the number comes from")
 bullets(s, [
     "NRMSE of fit_ok events is bimodal: good fits (median ≈ 0.05–0.1) vs noise triggers (≈ 1–2), valley at ≈ 0.4–0.5",
     "The cut sits in the valley — it is read off the distribution, not tuned on the templates",
-    "Noisy detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): the PTOF window admits a noise-dominated mixture — this cut is what extracts the real-pulse population",
+    "Weak detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): the PTOF window admits a noise-dominated mixture — this cut is what extracts the real-pulse population",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "nrmse_zip7_PBS1.png", IN(1.9), IN(2.9), IN(9.5), IN(2.05),
     "Z7 PBS1 (quiet): two clean populations, log-log axes")
 pic(s, "nrmse_zip22_PAS1.png", IN(1.9), IN(5.2), IN(9.5), IN(2.05),
-    "Z22 PAS1 (noisy): noise population dominates — the window alone is not enough")
+    "Z22 PAS1 (weak): noise population dominates — the window alone is not enough")
 notes(s, "First quality cut. The NRMSE distribution of physical fits is "
          "bimodal on every detector: a good-fit population around 0.05 to "
          "0.1, and a noise-trigger population around 1 to 2, separated by a "
          "valley at about 0.4. We place the cut in the valley - it is read "
          "off the distribution itself. On quiet detectors like Z7 the noise "
-         "population is small; on noisy detectors like Z22 it dominates, and "
+         "population is small; on weak detectors like Z22 it dominates, and "
          "this cut is what digs the real pulses out of the mixture.")
 
 # ------------------------------------------ 7 · what the cut removes
