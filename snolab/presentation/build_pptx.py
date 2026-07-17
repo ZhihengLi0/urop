@@ -295,9 +295,9 @@ notes(s, "Before trusting the cut we looked at what it throws away. These are "
          "passing fitted curves in green and the rejected ones in red on the "
          "aligned data: the green population is the fast physical pulse "
          "shape, the red one is spread out with a median NRMSE forty times "
-         "higher - 1.87 against 0.045 - and on this channel only 77 events "
-         "are removed, under four percent. So the cut removes noise, not "
-         "physics.")
+         "higher - 1.87 against 0.045 - and on this channel only three "
+         "point eight percent of the events get cut. So the cut removes "
+         "noise, not physics.")
 
 # --------------------------------------- 8 · follow-up 1: slow-fall tail
 s = slide()
