@@ -433,6 +433,49 @@ notes(s, "Backup for the rise-time cut. On weak-window detectors a slow "
          "all zips. The price is that the very slowest genuine pulses get "
          "trimmed too; that trade-off is documented and not final.")
 
+# ---------------------------- backup · τ_rise cut, good vs bad channel (Z7)
+s = slide()
+title(s, "Backup — τ_rise cut: a good vs a bad channel (Z7)")
+bullets(s, [
+    "Good channel PBS1: tight clean bundle — the τ_rise ≤ 0.3 ms cut removes ~0% (nearly free on quiet channels)",
+    "Bad channel PDS2: broad, messy fan — the channel itself is bad; the cut trims the slow-rise curves, 1462 → 1154 (21%)",
+], IN(0.55), IN(1.15), IN(12.3), IN(1.35), size=14)
+pic(s, "fan_zip7_PBS1_nrmse.png", IN(0.35), IN(2.7), IN(6.25), IN(1.75),
+    "PBS1 (good) — NRMSE ≤ 0.4")
+pic(s, "fan_zip7_PBS1_after.png", IN(6.85), IN(2.7), IN(6.25), IN(1.75),
+    "PBS1 (good) — + τ_rise ≤ 0.3 ms  (unchanged)")
+pic(s, "fan_zip7_PDS2_nrmse.png", IN(0.35), IN(5.05), IN(6.25), IN(1.75),
+    "PDS2 (bad) — NRMSE ≤ 0.4")
+pic(s, "fan_zip7_PDS2_after.png", IN(6.85), IN(5.05), IN(6.25), IN(1.75),
+    "PDS2 (bad) — + τ_rise ≤ 0.3 ms  (slow risers trimmed)")
+notes(s, "Backup showing the cut channel-by-channel on Z7. On the good "
+         "channel PBS1 the fitted curves are already a tight, clean bundle, "
+         "and adding the rise-time ceiling changes essentially nothing - it "
+         "removes about zero percent. On the bad channel PDS2 the fan is "
+         "broad and messy, which by itself shows the channel is misbehaving; "
+         "there the ceiling trims the slow-rising curves, 1462 down to 1154, "
+         "about twenty-one percent. So the cut is nearly free where the data "
+         "is clean and does real work only where a channel is bad.")
+
+# ---------------------------- backup · what the τ_rise cut removes (Z22)
+s = slide()
+title(s, "Backup — what the τ_rise cut removes: slow drift (Z22)")
+bullets(s, [
+    "Events that pass NRMSE (0.15–0.19) but have a slow rise: the raw traces are slow baseline drift — no clean fast pulse",
+    "A slow 2-exp hugs the drift with a tiny residual → inflated τ_rise → removed by the 0.3 ms ceiling",
+    "Trade-off: the same cut also trims genuine slow-rise pulses — documented, decision pending",
+], IN(0.55), IN(1.15), IN(12.3), IN(1.7), size=14)
+pic(s, "drift_zip22_crop.png", IN(2.1), IN(3.25), IN(9.1), IN(3.8),
+    "Z22: 3 events × PAS1/PBS1/PCS1/PDS1 — PCS1/PDS1 pass NRMSE yet are pure slow drift")
+notes(s, "Backup: what the rise-time cut actually removes. These are Z22 "
+         "events that pass the NRMSE cut but have a slow rise. Look at PCS1 "
+         "and PDS1: their NRMSE is low, around 0.15, because a slow two-exp "
+         "hugs the trace with a tiny residual - but the raw trace is just a "
+         "slow baseline drift, there is no clean fast pulse. That is exactly "
+         "the population the 0.3 ms ceiling removes. The honest caveat is "
+         "that the same cut also trims a small number of genuine slow-rise "
+         "pulses, which is the documented, still-open trade-off.")
+
 # page numbers: "N / total" bottom-right, skip the title slide
 _slides = list(prs.slides)
 _total = len(_slides)

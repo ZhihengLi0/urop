@@ -110,6 +110,22 @@
 
 ---
 
+## Backup — τ_rise cut：好通道 vs 坏通道（Z7）（仅备查）
+
+**English**: This is the τ_rise cut channel by channel on Z7. On the good channel PBS1 the fitted curves are already a tight, clean bundle, and adding the 0.3 ms ceiling changes essentially nothing — it removes about zero percent. On the bad channel PDS2 the fan is broad and messy, which by itself shows the channel is bad; there the ceiling trims the slow-rising curves, 1462 down to 1154, about 21%. So the cut is nearly free where the data is clean and does real work only where a channel is bad.
+
+**中文**：这是 τ_rise 这刀在 Z7 上分通道看。好通道 PBS1 本来就是又紧又干净的一束，加上 0.3 ms 上限几乎没变——切了约 0%。坏通道 PDS2 的扇形又宽又乱，这本身就说明通道坏了；那刀在这里切掉了慢上升的曲线，1462 降到 1154，约 21%。所以这刀在干净数据上近乎免费，只在通道坏的地方才真干活。
+
+---
+
+## Backup — τ_rise 切掉的是什么：慢漂移（Z22）（仅备查）
+
+**English**: What the rise-time cut actually removes. These are Z22 events that pass the NRMSE cut but have a slow rise. Look at PCS1 and PDS1: their NRMSE is low, around 0.15, because a slow 2-exp hugs the trace with a tiny residual — but the raw trace is just a slow baseline drift, there is no clean fast pulse. That is exactly the population the 0.3 ms ceiling removes. The honest caveat: the same cut also trims a small number of genuine slow-rise pulses — the documented, still-open trade-off.
+
+**中文**：这刀实际切掉的是什么。这些是 Z22 上通过了 NRMSE 但上升很慢的事件。看 PCS1 和 PDS1：它们 NRMSE 很低、约 0.15，因为慢 2-exp 用极小残差贴住了波形——但原始波形就是一条慢基线漂移，没有干净的快脉冲。这正是 0.3 ms 上限要切掉的那拨。老实说的代价：这刀也会削掉一小撮真实的慢上升脉冲——就是那个记录在案、尚未定论的取舍。
+
+---
+
 ## 可能被问的问题 / Likely questions（回答一两句即可）
 
 **Q1 — 窗口的 1.35 倍是怎么定的？/ How was the 1.35 window factor chosen?**

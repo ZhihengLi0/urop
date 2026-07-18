@@ -118,6 +118,9 @@ vpanel("overlay_fan_cut/zip22_overlay_fan_cut_nrmse0.4.png", "fan_cut_zip22_PCS1
 vpanel("overlay_fan_cut/zip7_overlay_fan_cut_nrmse0.4.png", "fan_cut_zip7_PBS1.png", 1)
 vpanel("fitted_curves_overlay/zip22_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
        "fan_final_zip22_PCS1.png", 2)  # backup slide: Z22 after both cuts
+# τ_rise-cut backup: good (PBS1, panel 1) vs bad (PDS2, panel 9) channel, before/after
+vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay_nrmse0.4.png", "fan_zip7_PDS2_nrmse.png", 9)
+vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.png", "fan_zip7_PDS2_after.png", 9)
 vpanel("time_constants/zip7_time_constants.png", "time_constants_zip7_PAS1.png", 0)
 vpanel("time_constants/zip7_time_constants.png", "time_constants_zip7_PDS2.png", 9)  # zip7 has no PFS2: 11 panels, PDS2 = 9
 # t_fall half of each strip (the right column of the rise|fall pair); PDS2 is
@@ -158,6 +161,8 @@ grid("fit_examples/zip7_fit_examples.png", "fit_examples_zip7_noise.png", row0=0
 grid("fit_examples/zip7_fit_examples.png", "fit_examples_zip7_good.png", row0=2, nrows=2, ncols=3)
 grid("slow_rise_events/zip22_slow_rise_events.png", "slow_rise_zip22_crop.png", row0=0, nrows=3, ncols=3)
 grid("slow_rise_events/zip7_slow_rise_events.png", "slow_rise_zip7_crop.png", row0=0, nrows=3, ncols=3)
+# τ_rise-cut backup: Z22 slow-rise (drift) events, 3 events x first 4 channels
+grid("shadow_events/zip22_shadow_events.png", "drift_zip22_crop.png", row0=0, nrows=3, ncols=4, min_row=100)
 grid("shadow_events/zip7_shadow_events.png", "shadow_zip7_crop.png", row0=0, nrows=3, ncols=4, min_row=100)
 # slow-fall follow-up: 3 sampled events x PBS2..PES2 (normal, normal, wild PDS2, normal);
 # crop starts below the header row, so stamp the channel names back on
