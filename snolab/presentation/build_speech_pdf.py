@@ -203,7 +203,7 @@ def main(src, dst):
     .slide { break-inside: avoid; page-break-inside: avoid;
              border:1.5px solid #8a8a8a; border-radius:5px;
              padding:6px 11px; margin:0 0 9px; }
-    .stitle { font-size: 10.5pt; font-weight:700; color:#204a34; margin-bottom:2px; }
+    .stitle { font-size: 11pt; font-weight:700; color:#c01818; margin-bottom:2px; }
     .zh { font-size: 10pt; line-height:1.4; margin:2px 0; color:#444; }
     .en { font-size: 11.5pt; line-height:1.46; margin:2px 0 1px; color:#111;
           break-inside: avoid; page-break-inside: avoid; }
