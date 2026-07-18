@@ -201,7 +201,8 @@ def main(src, dst):
               border-radius:5px; padding:4px 8px; margin:0 0 8px; line-height:1.4; }
     .sec { font-size: 11pt; margin: 11px 0 5px; border-bottom:2px solid #333; padding-bottom:3px; }
     .slide { break-inside: avoid; page-break-inside: avoid;
-             padding:0; margin:0 0 11px; }
+             border:1.5px solid #8a8a8a; border-radius:5px;
+             padding:6px 11px; margin:0 0 9px; }
     .stitle { font-size: 10.5pt; font-weight:700; color:#204a34; margin-bottom:2px; }
     .zh { font-size: 10pt; line-height:1.4; margin:2px 0; color:#444; }
     .en { font-size: 11.5pt; line-height:1.46; margin:2px 0 1px; color:#111;
