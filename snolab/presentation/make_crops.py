@@ -161,8 +161,10 @@ grid("fit_examples/zip7_fit_examples.png", "fit_examples_zip7_noise.png", row0=0
 grid("fit_examples/zip7_fit_examples.png", "fit_examples_zip7_good.png", row0=2, nrows=2, ncols=3)
 grid("slow_rise_events/zip22_slow_rise_events.png", "slow_rise_zip22_crop.png", row0=0, nrows=3, ncols=3)
 grid("slow_rise_events/zip7_slow_rise_events.png", "slow_rise_zip7_crop.png", row0=0, nrows=3, ncols=3)
-# τ_rise-cut backup: Z22 slow-rise (drift) events, 3 events x first 4 channels
-grid("shadow_events/zip22_shadow_events.png", "drift_zip22_crop.png", row0=0, nrows=3, ncols=4, min_row=100)
+# τ_rise-cut backup: Z22 events that PASS NRMSE<=0.4 but are REMOVED by the
+# τ_rise<=0.3ms cut (exact 0.3 threshold; made by scripts/plot_trise_removed_grid.py
+# --det 22 --trise-min 3e-4), 3 events x first 4 channels
+grid("trise_removed/zip22_trise_removed.png", "drift_zip22_crop.png", row0=0, nrows=3, ncols=4, min_row=100)
 grid("shadow_events/zip7_shadow_events.png", "shadow_zip7_crop.png", row0=0, nrows=3, ncols=4, min_row=100)
 # slow-fall follow-up: 3 sampled events x PBS2..PES2 (normal, normal, wild PDS2, normal);
 # crop starts below the header row, so stamp the channel names back on

@@ -459,22 +459,24 @@ notes(s, "Backup showing the cut channel-by-channel on Z7. On the good "
 
 # ---------------------------- backup · what the τ_rise cut removes (Z22)
 s = slide()
-title(s, "Backup — what the τ_rise cut removes: slow drift (Z22)")
+title(s, "Backup — what the τ_rise cut removes: noise NRMSE missed (Z22)")
 bullets(s, [
-    "Events that pass NRMSE (0.15–0.19) but have a slow rise: the raw traces are slow baseline drift — no clean fast pulse",
-    "A slow 2-exp hugs the drift with a tiny residual → inflated τ_rise → removed by the 0.3 ms ceiling",
+    "Exactly the events that PASS NRMSE ≤ 0.4 but are REMOVED by τ_rise ≤ 0.3 ms — the noise 0.4 let through, 0.3 catches",
+    "PCS1 / PDS1 pass at NRMSE ≈ 0.15 (a slow 2-exp hugs a slow baseline drift) — but the raw trace has no clean fast pulse",
     "Trade-off: the same cut also trims genuine slow-rise pulses — documented, decision pending",
 ], IN(0.55), IN(1.15), IN(12.3), IN(1.7), size=14)
 pic(s, "drift_zip22_crop.png", IN(2.1), IN(3.25), IN(9.1), IN(3.8),
-    "Z22: 3 events × PAS1/PBS1/PCS1/PDS1 — PCS1/PDS1 pass NRMSE yet are pure slow drift")
-notes(s, "Backup: what the rise-time cut actually removes. These are Z22 "
-         "events that pass the NRMSE cut but have a slow rise. Look at PCS1 "
-         "and PDS1: their NRMSE is low, around 0.15, because a slow two-exp "
-         "hugs the trace with a tiny residual - but the raw trace is just a "
-         "slow baseline drift, there is no clean fast pulse. That is exactly "
-         "the population the 0.3 ms ceiling removes. The honest caveat is "
-         "that the same cut also trims a small number of genuine slow-rise "
-         "pulses, which is the documented, still-open trade-off.")
+    "Z22: 3 events × PAS1/PBS1/PCS1/PDS1 — pass NRMSE ≤ 0.4, removed by τ_rise ≤ 0.3 ms; PCS1/PDS1 are pure slow drift")
+notes(s, "Backup: what the rise-time cut actually removes. These are exactly "
+         "the Z22 events that pass the NRMSE cut - median NRMSE below 0.4 - "
+         "but are removed by the rise-time ceiling, median t_rise above 0.3 "
+         "ms. In other words, the noise that 0.4 let through and 0.3 catches. "
+         "Look at PCS1 and PDS1: their NRMSE is low, around 0.15, because a "
+         "slow two-exp hugs the trace with a tiny residual - but the raw "
+         "trace is just a slow baseline drift, there is no clean fast pulse. "
+         "The honest caveat is that the same cut also trims a small number of "
+         "genuine slow-rise pulses, which is the documented, still-open "
+         "trade-off.")
 
 # page numbers: "N / total" bottom-right, skip the title slide
 _slides = list(prs.slides)

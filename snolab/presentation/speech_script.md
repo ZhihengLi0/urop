@@ -120,9 +120,9 @@
 
 ## Backup — τ_rise 切掉的是什么：慢漂移（Z22）（仅备查）
 
-**English**: What the rise-time cut actually removes. These are Z22 events that pass the NRMSE cut but have a slow rise. Look at PCS1 and PDS1: their NRMSE is low, around 0.15, because a slow 2-exp hugs the trace with a tiny residual — but the raw trace is just a slow baseline drift, there is no clean fast pulse. That is exactly the population the 0.3 ms ceiling removes. The honest caveat: the same cut also trims a small number of genuine slow-rise pulses — the documented, still-open trade-off.
+**English**: What the rise-time cut actually removes. These are exactly the Z22 events that pass the NRMSE cut — median NRMSE below 0.4 — but are removed by the rise-time ceiling, median t_rise above 0.3 ms. In other words, the noise that 0.4 let through and 0.3 catches. Look at PCS1 and PDS1: their NRMSE is low, around 0.15, because a slow 2-exp hugs the trace with a tiny residual — but the raw trace is just a slow baseline drift, there is no clean fast pulse. The honest caveat: the same cut also trims a small number of genuine slow-rise pulses — the documented, still-open trade-off.
 
-**中文**：这刀实际切掉的是什么。这些是 Z22 上通过了 NRMSE 但上升很慢的事件。看 PCS1 和 PDS1：它们 NRMSE 很低、约 0.15，因为慢 2-exp 用极小残差贴住了波形——但原始波形就是一条慢基线漂移，没有干净的快脉冲。这正是 0.3 ms 上限要切掉的那拨。老实说的代价：这刀也会削掉一小撮真实的慢上升脉冲——就是那个记录在案、尚未定论的取舍。
+**中文**：这刀实际切掉的是什么。这些正是 Z22 上"通过了 NRMSE（中位 < 0.4）、却被上升时间上限（中位 t_rise > 0.3 ms）切掉"的事件——也就是 0.4 放过、0.3 才抓住的那批噪声。看 PCS1 和 PDS1：它们 NRMSE 很低、约 0.15，因为慢 2-exp 用极小残差贴住了波形——但原始波形就是一条慢基线漂移，没有干净的快脉冲。老实说的代价：这刀也会削掉一小撮真实的慢上升脉冲——就是那个记录在案、尚未定论的取舍。
 
 ---
 
