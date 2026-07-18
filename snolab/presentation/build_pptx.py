@@ -337,8 +337,13 @@ bullets(s, [
     "Smooth & noise-free by construction",
     "ROOT TH1D, peak-normalized (+ summed PT / PS1 / PS2)",
 ], IN(0.55), IN(1.25), IN(12.3), IN(1.5), size=18)
-pic(s, "fan_zip7_PBS1_after.png", IN(1.4), IN(3.35), IN(10.5), IN(3.1),
-    "Z7 PBS1, fitted curves after NRMSE ≤ 0.4 and τ_rise ≤ 0.3 ms — the NRMSE-weighted mean of this family is the 1x1 template")
+pic(s, "fan_zip7_PBS1_after.png", IN(0.35), IN(3.15), IN(6.2), IN(3.3),
+    "INPUT — the fitted curves that pass the cuts (Z7 PBS1)")
+pic(s, "template_1x1_zip7_PBS1.png", IN(6.85), IN(3.15), IN(6.2), IN(3.3),
+    "OUTPUT — their NRMSE-weighted mean: the delivered 1x1 template")
+# arrow between input and output (MSO_SHAPE.RIGHT_ARROW = 33)
+_ar = s.shapes.add_shape(33, IN(6.28), IN(4.55), IN(0.55), IN(0.34))
+_ar.fill.solid(); _ar.fill.fore_color.rgb = NAVY; _ar.line.fill.background()
 notes(s, "First template family: the analytic one. For each channel we take "
          "every physical fitted curve at the common pretrigger and average them "
          "with a weight of one over NRMSE squared - badly fit events count "

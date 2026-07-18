@@ -72,9 +72,9 @@
 
 ## Slide 9 — Template family 1: 2-exp weighted (1x1)（约 50 秒）
 
-**中文**：现在到产出。第一族模板走解析路线：每个通道，把所有物理拟合的曲线放到同一个 pretrigger 位置，做加权平均——权重是 NRMSE 平方的倒数。这个设计的好处是：拟合差的事件权重自动变得极小，等于被压没了，但我不需要人为剔除任何事件。屏幕上就是参与平均的这束曲线。因为平均的对象是解析函数，做出来的模板天然光滑、完全没有噪声。这就是标准的单模板，1x1。每个通道一条，交付成峰值归一的 32768 点 ROOT 直方图，另外还有把各通道求和得到的 PT、PS1、PS2 模板。
+**中文**：现在到产出。第一族模板走解析路线：每个通道，把所有物理拟合的曲线放到同一个 pretrigger 位置，做加权平均——权重是 NRMSE 平方的倒数。这个设计的好处是：拟合差的事件权重自动变得极小，等于被压没了，但我不需要人为剔除任何事件。屏幕上左边就是参与平均的那**一束**曲线——注意这还不是模板，是模板的原料；右边才是它们加权平均之后的结果，**一条**曲线，这就是真正交付的 1x1 模板。因为平均的对象是解析函数，做出来的模板天然光滑、完全没有噪声。这就是标准的单模板，1x1。每个通道一条，交付成峰值归一的 32768 点 ROOT 直方图，另外还有把各通道求和得到的 PT、PS1、PS2 模板。
 
-**English**: Now to the deliverables. The first template family takes the analytic route: for each channel, I put all the physical fitted curves at the same pretrigger and take a weighted average — the weight is one over NRMSE squared. The nice property of this design is that badly-fit events automatically get an extremely small weight, so they're effectively suppressed — but I never have to remove anything by hand. What's on screen is the bundle of curves that goes into that average. And because I'm averaging analytic functions, the resulting template is smooth and completely noise-free by construction. That's the standard single template — the one-by-one — delivered as a peak-normalized 32768-bin ROOT histogram per channel, plus the summed PT, PS1 and PS2 templates.
+**English**: Now to the deliverables. The first template family takes the analytic route: for each channel, I put all the physical fitted curves at the same pretrigger and take a weighted average — the weight is one over NRMSE squared. The nice property of this design is that badly-fit events automatically get an extremely small weight, so they're effectively suppressed — but I never have to remove anything by hand. On the left of the screen is the **bundle** of curves that goes into that average — that's the input, not the template. On the right is the result of averaging them: a **single** curve, and that is the 1x1 template we actually deliver. And because I'm averaging analytic functions, the resulting template is smooth and completely noise-free by construction. That's the standard single template — the one-by-one — delivered as a peak-normalized 32768-bin ROOT histogram per channel, plus the summed PT, PS1 and PS2 templates.
 
 ---
 
