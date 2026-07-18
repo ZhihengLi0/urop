@@ -84,14 +84,21 @@ def main(src, dst):
     out = []
     i, n = 0, len(lines)
     cur_slide = None      # int for "Slide N", 0 for backup/other cards
-    in_card = False
     ref_mode = False      # after the Q&A header: render generically
+    card = None           # dict(title, en, zh, notes) buffered so EN prints first
 
     def close_card():
-        nonlocal in_card
-        if in_card:
+        nonlocal card
+        if card is not None:
+            out.append('<div class="slide">')
+            out.append(f'<div class="stitle">{card["title"]}</div>')
+            if card["en"]:
+                out.append(card["en"])
+            if card["zh"]:
+                out.append(card["zh"])
+            out.extend(card["notes"])
             out.append('</div>')
-            in_card = False
+            card = None
 
     # header block (title + intro + legend)
     out.append('<h1>Speaker Script — SNOLAB R4 Phonon Pulse Templates</h1>')
@@ -121,9 +128,7 @@ def main(src, dst):
             close_card()
             cur_slide = int(m.group(2)) if m else 0
             title = m.group(1) if m else mb.group(1)
-            out.append('<div class="slide">')
-            out.append(f'<div class="stitle">{inline(title)}</div>')
-            in_card = True
+            card = {"title": inline(title), "en": None, "zh": None, "notes": []}
             i += 1
             continue
 
@@ -167,19 +172,23 @@ def main(src, dst):
             i += 1
             continue
 
-        # inside a slide card: 中文 / English / italic note
-        if s.startswith('**中文**：'):
+        # inside a slide card: English printed first, then 中文, then notes
+        if card is not None and s.startswith('**中文**：'):
             body = s[len('**中文**：'):]
-            out.append(f'<div class="zh"><span class="lbl">中文</span>{inline(body, cur_slide)}</div>')
+            card["zh"] = f'<div class="zh"><span class="lbl">中文</span>{inline(body, cur_slide)}</div>'
             i += 1
             continue
-        if s.startswith('**English**:'):
+        if card is not None and s.startswith('**English**:'):
             body = s[len('**English**:'):].lstrip()
-            out.append(f'<div class="en"><span class="lbl">EN</span>{inline(body, cur_slide)}</div>')
+            card["en"] = f'<div class="en"><span class="lbl">EN</span>{inline(body, cur_slide)}</div>'
             i += 1
             continue
         # italic self-note or other line inside a card
-        out.append(f'<p class="note">{inline(s, cur_slide)}</p>')
+        note = f'<p class="note">{inline(s, cur_slide)}</p>'
+        if card is not None:
+            card["notes"].append(note)
+        else:
+            out.append(note)
         i += 1
 
     close_card()
@@ -192,11 +201,10 @@ def main(src, dst):
               border-radius:5px; padding:4px 8px; margin:0 0 8px; line-height:1.4; }
     .sec { font-size: 11pt; margin: 11px 0 5px; border-bottom:2px solid #333; padding-bottom:3px; }
     .slide { break-inside: avoid; page-break-inside: avoid;
-             border:1px solid #dcdcdc; border-left:3px solid #2f6f4f;
-             border-radius:5px; padding:3px 8px; margin:0 0 4px; }
-    .stitle { font-size: 9.5pt; font-weight:700; color:#204a34; margin-bottom:1px; }
-    .zh { font-size: 8.8pt; line-height:1.3; margin:1px 0; }
-    .en { font-size: 10pt; line-height:1.34; margin:2px 0 1px; color:#111;
+             padding:0; margin:0 0 11px; }
+    .stitle { font-size: 10.5pt; font-weight:700; color:#204a34; margin-bottom:2px; }
+    .zh { font-size: 10pt; line-height:1.4; margin:2px 0; color:#444; }
+    .en { font-size: 11.5pt; line-height:1.46; margin:2px 0 1px; color:#111;
           break-inside: avoid; page-break-inside: avoid; }
     .lbl { display:inline-block; font-size:7pt; font-weight:700; color:#fff;
            background:#7a8a99; border-radius:3px; padding:0 4px; margin-right:5px;
