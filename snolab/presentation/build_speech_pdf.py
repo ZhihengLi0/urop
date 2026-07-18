@@ -185,38 +185,38 @@ def main(src, dst):
     close_card()
 
     css = """
-    @page { size: A4; margin: 12mm 12mm; }
+    @page { size: A4; margin: 9mm 10mm; }
     body { font-family: 'Droid Sans','DroidSansFallback',sans-serif; color:#111; }
-    h1 { font-size: 17pt; margin: 0 0 8px; }
-    .legend { font-size: 10.5pt; background:#f4f7fa; border:1px solid #d6e0ea;
-              border-radius:6px; padding:7px 10px; margin:0 0 14px; line-height:1.5; }
-    .sec { font-size: 14pt; margin: 18px 0 8px; border-bottom:2px solid #333; padding-bottom:4px; }
+    h1 { font-size: 13pt; margin: 0 0 5px; }
+    .legend { font-size: 8.5pt; background:#f4f7fa; border:1px solid #d6e0ea;
+              border-radius:5px; padding:4px 8px; margin:0 0 8px; line-height:1.4; }
+    .sec { font-size: 11pt; margin: 11px 0 5px; border-bottom:2px solid #333; padding-bottom:3px; }
     .slide { break-inside: avoid; page-break-inside: avoid;
-             border:1px solid #d9d9d9; border-left:4px solid #2f6f4f;
-             border-radius:6px; padding:9px 13px; margin:0 0 11px; }
-    .stitle { font-size: 12.5pt; font-weight:700; color:#204a34; margin-bottom:5px; }
-    .zh { font-size: 12pt; line-height:1.62; margin:4px 0; }
-    .en { font-size: 13.5pt; line-height:1.66; margin:5px 0 2px; color:#111;
+             border:1px solid #dcdcdc; border-left:3px solid #2f6f4f;
+             border-radius:5px; padding:3px 8px; margin:0 0 4px; }
+    .stitle { font-size: 9.5pt; font-weight:700; color:#204a34; margin-bottom:1px; }
+    .zh { font-size: 8.8pt; line-height:1.3; margin:1px 0; }
+    .en { font-size: 10pt; line-height:1.34; margin:2px 0 1px; color:#111;
           break-inside: avoid; page-break-inside: avoid; }
-    .lbl { display:inline-block; font-size:8.5pt; font-weight:700; color:#fff;
-           background:#7a8a99; border-radius:3px; padding:1px 5px; margin-right:6px;
+    .lbl { display:inline-block; font-size:7pt; font-weight:700; color:#fff;
+           background:#7a8a99; border-radius:3px; padding:0 4px; margin-right:5px;
            vertical-align:1.5px; }
     .en .lbl { background:#2f6f4f; }
     .point { color:#0b3d66; background:#e4eff9; border-radius:2px;
              padding:0 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
     strong { color:#111; font-weight:700; }
     em { color:#666; }
-    .note { font-size:10.5pt; color:#777; font-style:italic; margin:3px 0; }
-    code { background:#f0f0f0; padding:0 4px; border-radius:3px; font-family:monospace; font-size:11pt; }
+    .note { font-size:8.5pt; color:#777; font-style:italic; margin:2px 0; }
+    code { background:#f0f0f0; padding:0 3px; border-radius:3px; font-family:monospace; font-size:9pt; }
     .qa { break-inside: avoid; page-break-inside: avoid; border:1px solid #e3e3e3;
-          border-radius:5px; padding:6px 10px; margin:0 0 8px; }
-    .qa .q { font-weight:700; color:#204a34; font-size:11.5pt; margin-bottom:2px; }
-    .qa p { font-size:11pt; line-height:1.55; margin:2px 0; }
-    table { border-collapse:collapse; width:100%; margin:10px 0; font-size:10.5pt; }
-    th,td { border:1px solid #ccc; padding:4px 7px; text-align:left; vertical-align:top; }
+          border-radius:5px; padding:4px 8px; margin:0 0 5px; }
+    .qa .q { font-weight:700; color:#204a34; font-size:9.5pt; margin-bottom:1px; }
+    .qa p { font-size:9pt; line-height:1.38; margin:1px 0; }
+    table { border-collapse:collapse; width:100%; margin:7px 0; font-size:8.5pt; }
+    th,td { border:1px solid #ccc; padding:3px 6px; text-align:left; vertical-align:top; }
     th { background:#eee; }
-    blockquote { background:#f7f7f7; border-left:4px solid #bbb; margin:8px 0;
-                 padding:6px 10px; color:#555; font-size:10.5pt; }
+    blockquote { background:#f7f7f7; border-left:4px solid #bbb; margin:6px 0;
+                 padding:4px 8px; color:#555; font-size:8.5pt; }
     """
     doc = ('<!doctype html><html lang="zh"><head><meta charset="utf-8">'
            f'<style>{css}</style></head><body>' + '\n'.join(out) + '</body></html>')
