@@ -7,7 +7,7 @@ fit_ok fitted 2-exp curves (each curve evaluated at the common pretrigger
 curve shown in the aligned_overlay figures), finally re-normalized to peak 1
 and stored as a TH1D over the full 32768-sample trace window.
 
-Output: results/root_files/Templates_SNOLAB_R4_zip{N}_2expfit_weighted.root
+Output: deliverables/1x1/root_files/Templates_SNOLAB_R4_zip{N}_2expfit_weighted.root
         one TH1D per channel, named t2exp_zip{N}_{chan}
 
 Reads only the fit checkpoints; requires PyROOT (run inside the CDMS
@@ -49,7 +49,8 @@ for fname in ckpts:
         fits_all[c] += [fp for fp in (fits.get(c) or [])
                         if fp is not None and fp["fit_ok"]]
 
-out_dir = os.path.join(BASE_DIR, "results", "root_files")
+DELIV = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "deliverables"))
+out_dir = os.path.join(DELIV, "1x1", "root_files")
 os.makedirs(out_dir, exist_ok=True)
 out_path = os.path.join(
     out_dir, f"Templates_SNOLAB_R4_zip{det}_2expfit_weighted.root")

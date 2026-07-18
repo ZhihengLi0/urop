@@ -143,8 +143,7 @@ Two template families, both 32768-bin `TH1D`, both peak-normalized:
 **(a) Analytic 2-exp weighted template** (`scripts/write_2exp_templates_root.py`)
 — per channel, the NRMSE-weighted mean of all fit_ok fitted curves at common
 pretrigger 16050 (weight `1/max(NRMSE,0.01)²`: badly-fit events count less
-but are never excluded), re-normalized to peak 1. Local archive:
-`results/root_files/Templates_SNOLAB_R4_zip{N}_2expfit_weighted.root`.
+but are never excluded), re-normalized to peak 1. Archive: `deliverables/1x1/root_files/`.
 
 **(b) NxM PCA templates** (`scripts/build_pca_templates.py`,
 `scripts/normalize_pca_templates.py`) — per channel, PCA over the fitted
@@ -155,8 +154,7 @@ subsample). Templates are `nxm0` = mean curve and
 `nxm1..nxm4` = the first four principal components (oscillating basis
 vectors, may be negative; a real pulse is fit as Σᵢ ampᵢ·nxmᵢ). PC1+PC2
 capture 96–98 % of the shape variance. All five are peak-normalized to 1 in
-the delivered files. Local archive:
-`results/root_files/Templates_SNOLAB_R4_zip{N}_nxm_pca.root`.
+the delivered files. Archive: `deliverables/nxm/root_files/` (figures in `deliverables/nxm/plots/`).
 
 **Deployment (cdmsbats `PulseTemplates` format).** The official layout is a
 top-level `zip{N}` `TDirectory` containing `{chan}` (1x1 template),
@@ -189,6 +187,8 @@ SNOLAB_R4_20260707_ZhihengLi_pca_zip{N}.root    # PCA nxm templates (normalized)
     unprocessed raw-trace pickle cache (section 1);
   - `lp_fit_align/` — stage 2: the fit/align/diagnostics/template pipeline
     (sections 2–6). This is the definitive analysis.
+  - `deliverables/` — final products only: `1x1/` and `nxm/` template ROOT
+    files and template figures (see `deliverables/README.md`).
   Earlier template iterations (`1x1_final/`, `nxm_final/` — pinned-pretrigger
   fits, superseded methodology) were removed from the tree; their history is
   preserved in git tags v0.1–v5.0.

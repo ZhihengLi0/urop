@@ -26,3 +26,6 @@ CONTEXT_FOR_NEXT_AI.md
 !presentation/*.pdf
 .~*.pptx
 speech_script.html
+# Deliverables are versioned
+!deliverables/**/*.root
+!deliverables/**/*.png

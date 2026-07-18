@@ -17,8 +17,8 @@ pulses). Templates written:
 A real pulse is fit as sum_i amp_i * nxm_i by the optimal filter.
 
 Outputs:
-  results/plots/pca_templates/zip{N}_pca_templates.png
-  results/root_files/Templates_SNOLAB_R4_zip{N}_nxm_pca.root
+  deliverables/nxm/plots/zip{N}_pca_templates.png
+  deliverables/nxm/root_files/Templates_SNOLAB_R4_zip{N}_nxm_pca.root
       (nxm{k}_zip{N}_{chan}, 32768 bins, PCA window embedded, zero elsewhere)
 
 Usage:
@@ -114,7 +114,8 @@ if not templates:
     raise SystemExit(f"zip{det}: no channel had enough clean curves")
 
 # ── ROOT ──────────────────────────────────────────────────────────────────────
-root_dir = os.path.join(BASE_DIR, "results", "root_files")
+DELIV = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "deliverables"))
+root_dir = os.path.join(DELIV, "nxm", "root_files")
 os.makedirs(root_dir, exist_ok=True)
 root_path = os.path.join(root_dir, f"Templates_SNOLAB_R4_zip{det}_nxm_pca.root")
 tf = TFile(root_path, "RECREATE")
@@ -174,6 +175,8 @@ add_pipeline_note(fig, "NxM PCA templates: population = fitted 2-exp curves with
                   "be negative); a real pulse = sum_i amp_i * nxm_i in the optimal filter. "
                   "PLOT ONLY: nxm1-4 each normalized to unit peak-abs so the shape is "
                   "visible (ROOT templates keep the raw unit-norm components)")
-out = plot_path("pca_templates", f"zip{det}_pca_templates.png")
+plot_dir = os.path.join(DELIV, "nxm", "plots")
+os.makedirs(plot_dir, exist_ok=True)
+out = os.path.join(plot_dir, f"zip{det}_pca_templates.png")
 fig.savefig(out, dpi=120, bbox_inches="tight")
 print(f"Saved: {out}")

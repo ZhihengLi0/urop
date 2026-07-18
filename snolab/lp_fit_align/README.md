@@ -25,13 +25,8 @@ scripts/                 pipeline + plotting code (in git)
 notebooks/               interactive NRMSE-cut exploration (in git)
 results/plots/<type>/    one sub-dir per figure type, all zips together
 results/stats/           per-zip JSON summaries (in git)
-results/root_files/      final templates, one TH1D per channel, 32768 bins:
-                         Templates_SNOLAB_R4_zip{N}_2expfit_weighted.root —
-                         NRMSE-weighted mean of all fit_ok fitted 2-exp curves
-                         (the orange curve of aligned_overlay);
-                         Templates_SNOLAB_R4_zip{N}_nxm_pca.root — PCA
-                         templates nxm0 (mean) + nxm1..4 (components), all
-                         peak-normalized to 1
+../deliverables/         final template ROOT files and template figures
+                         (1x1/ and nxm/) — see ../deliverables/README.md
 run/checkpoints/zip{N}/  per-series fit-parameter pkl (index-aligned with the
                          raw cache's event_numbers_ch; analyses never refit)
 run/logs/                SLURM logs
@@ -52,7 +47,6 @@ run/logs/                SLURM logs
 | `slow_rise_events/` | NRMSE 被拒群体的事件网格（跨通道中位 NRMSE>0.4）——raw 显示为噪声触发 | event grid of the NRMSE-rejected population; raw traces show noise triggers |
 | `shadow_events/` | 重影群体：拟合良好且慢上升（中位 NRMSE≤0.4 且中位 t_rise>0.2ms）——真实慢脉冲 | well-fit slow-rise events (the faint displaced bundle in aligned overlays) |
 | `slow_fall_events/` | 慢下降研究（Z7/PDS2）：长 t_fall 事件全通道展开——证明是 PDS2 单通道低频伪影 | long-t_fall study: real pulses in 11 channels, PDS2-only artifact |
-| `pca_templates/` | 最终 NxM PCA 模板 nxm0–4（峰值归一化）+ 各 PC 方差占比 | final NxM PCA templates with explained-variance ratios |
 
 Every PNG carries the full processing chain + a one-line figure description
 stamped at the top, so each file is self-documenting.

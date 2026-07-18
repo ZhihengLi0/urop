@@ -42,7 +42,8 @@ parser.add_argument("--out-dir", default=OUT_DIR_DEFAULT)
 args = parser.parse_args()
 det = args.det
 
-src_path = os.path.join(BASE_DIR, "results", "root_files",
+DELIV = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "deliverables"))
+src_path = os.path.join(DELIV, "nxm", "root_files",
                         f"Templates_SNOLAB_R4_zip{det}_nxm_pca.root")
 if not os.path.exists(src_path):
     raise SystemExit(f"no existing PCA ROOT: {src_path}")
@@ -140,6 +141,8 @@ add_pipeline_note(fig, "NxM PCA templates, ALL peak-normalized to unit peak-abs 
                   "(nxm0 mean + nxm1-4 PCA components 1-4). Population = fitted 2-exp "
                   "curves with fit_ok AND NRMSE<=0.4 AND t_rise<=0.30ms at common "
                   "pretrigger 16050; per-channel PCA. Real pulse = sum_i amp_i * nxm_i.")
-out = plot_path("pca_templates", f"zip{det}_pca_templates.png")
+plot_dir = os.path.join(DELIV, "nxm", "plots")
+os.makedirs(plot_dir, exist_ok=True)
+out = os.path.join(plot_dir, f"zip{det}_pca_templates.png")
 fig.savefig(out, dpi=120, bbox_inches="tight")
 print(f"Saved plot: {out}")
