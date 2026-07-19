@@ -122,7 +122,7 @@ bullets(s, [
     "Per detector, Prof. Saab's study marked the 10.37 keV K-line position in PTOFamps — the red line in each panel below",
     "Our event selection: a PTOFamps window bracketing the red line — position ×/÷ 1.35, a rough, somewhat arbitrary eyeballed choice; deliberately minimal, no other cuts",
     "For every selected event: cache the fully unprocessed raw MIDAS traces of all channels + event metadata",
-    "13 detectors (zips) × 27–30 series → ~120 GB raw cache",
+    "13 detectors (zips) × 27–30 series — full raw traces cached",
 ], IN(0.25), IN(1.18), IN(12.3), IN(1.45), size=14)
 # credit box, top-right of the title band
 ctb = textbox(s, IN(9.35), IN(0.30), IN(3.5), IN(0.72))
