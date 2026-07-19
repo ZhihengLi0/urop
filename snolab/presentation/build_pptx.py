@@ -193,7 +193,7 @@ steps_box(IN(1.2), IN(1.35), [
 ])
 pic(s, "formula_2exp.png", IN(2.6), IN(2.62), IN(8.1), IN(0.95))
 steps_box(IN(3.65), IN(1.5), [
-    ("4.  Two quality numbers per trace", " (recorded here, not cut yet):"),
+    ("4.  Two quality checks per trace", " (recorded here, not cut yet):"),
 ])
 # the two quality-number sub-lines, plain English
 q_tb = textbox(s, IN(1.15), IN(4.02), IN(11.6), IN(0.9))
