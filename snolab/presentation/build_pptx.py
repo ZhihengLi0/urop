@@ -187,7 +187,7 @@ def steps_box(top, height, items):
         r.font.size, r.font.color.rgb, r.font.name = Pt(16), DARK, "Arial"
 
 steps_box(IN(1.2), IN(1.35), [
-    ("1.  Low-pass", " — 100 kHz 4th-order Butterworth"),
+    ("1.  Low-pass", " — 100 kHz Butterworth"),
     ("2.  Normalize", " — subtract the baseline, scale the trace to unit peak"),
     ("3.  Fit", " — two-exponential model, all 5 parameters free (including the pretrigger t₀):"),
 ])
