@@ -24,9 +24,9 @@
 
 ## Slide 3 — Fit quality at a glance / data overview（约 40 秒）
 
-**中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。规律非常清楚：左边这批是噪声触发，它在**所有**通道里同时拟合失败；右边是真正的 K 线事件，**所有**通道同时拟合得很好，残差只有百分之几。也就是说，事件干干净净地分成两类——要么全通道都好，要么全通道都坏。至于每一条波形具体怎么滤波、怎么拟合、怎么对齐，就是下一页的内容。
+**中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。规律非常清楚：左边这批是噪声触发，它在**所有**通道里都拟合失败；右边是真正的 K 线事件，**所有**通道都拟合得很好，残差只有百分之几。也就是说，事件干干净净地分成两类——要么全通道都好，要么全通道都坏。
 
-**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. The pattern is very clear. The left block is noise triggers: the fit fails in **every** channel at the same time. The right block is true K-line events: **every** channel fits well at the same time, with a residual of only a few percent. So the events split cleanly into two kinds — good in every channel, or bad in every channel. Exactly how each trace is filtered, fitted and aligned is the next slide.
+**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. The pattern is very clear. The left block is noise triggers: the fit fails in **every** channel. The right block is true K-line events: **every** channel fits well, with a residual of only a few percent. So the events split cleanly into two kinds — good in every channel, or bad in every channel.
 
 ---
 
