@@ -40,9 +40,9 @@
 
 ## Slide 5 — Alignment result（约 40 秒）
 
-**中文**：这一页讲第五步——对齐。每一条实测波形，按它自己拟合出的 pretrigger 减去名义的 16050 平移——纯平移，波形本身没有任何再生成。图里那条竖虚线，就是所有波形对齐到的公共 pretrigger。对齐之后，把所有拟合曲线画在这个公共起点上，就是这两张扇形图。左边是全部物理拟合的曲线——可以看到主束旁边有一些明显散开、下降很慢的曲线；右边是用 NRMSE 筛过之后，只剩一束非常紧、非常一致的形状。正是把触发抖动对齐掉、再筛掉坏拟合之后，剩下这条紧致的束，我才能做出一个定义清楚、稳定的模板。至于 NRMSE 这个筛选阈值具体怎么定的，下一页讲。
+**中文**：这一页讲第五步——对齐。每一条实测波形，按它自己拟合出的 pretrigger 减去名义的 16050 平移——纯平移，波形本身没有任何再生成。图里那条竖虚线，就是所有波形对齐到的公共 pretrigger。对齐之后，把所有拟合曲线画在这个公共起点上，就是这两张扇形图。左边是全部物理拟合的曲线——可以看到主束旁边有一些明显散开、下降很慢的曲线；右边是用 NRMSE 筛过之后，只剩一束非常紧、非常一致的形状。正是把触发抖动对齐掉、再筛掉坏拟合之后，剩下这条紧致的束，我才能做出一个定义清楚、稳定的模板。
 
-**English**: This slide is step five — alignment. Each measured trace is shifted by its own fitted pretrigger minus 16050 — a pure translation, nothing about the waveform is regenerated. The dotted vertical line is the common pretrigger everything is aligned to. Once aligned, I draw all the fitted curves from that common starting point — these two fan plots. On the left, all the physical fits: you can see some clearly separated, slow-falling curves that spread off the main bundle. On the right, after selecting on NRMSE, only one very tight, consistent shape family remains. Alignment removes the jitter, the NRMSE cut removes the bad fits, and what's left is this tight bundle — tight enough to build a template from. Exactly how the NRMSE threshold is set is the next slide.
+**English**: This slide is step five — alignment. Each measured trace is shifted by its own fitted pretrigger minus 16050 — a pure translation, nothing about the waveform is regenerated. The dotted vertical line is the common pretrigger everything is aligned to. Once aligned, I draw all the fitted curves from that common starting point — these two fan plots. On the left, all the physical fits: you can see some clearly separated, slow-falling curves that spread off the main bundle. On the right, after selecting on NRMSE, only one very tight, consistent shape family remains. Alignment removes the jitter, the NRMSE cut removes the bad fits, and what's left is this tight bundle — tight enough to build a template from.
 
 ---
 

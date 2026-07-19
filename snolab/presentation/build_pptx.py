@@ -156,7 +156,7 @@ s = slide()
 title(s, "Fit quality at a glance — event × channel grids")
 bullets(s, [
     "One row per event, one column per channel: the low-passed trace (blue) with the fitted pulse model (red) overlaid",
-    "A real event fits well in every channel at once; a noise trigger fails in every channel — a clean handle on which events are real (how we fit each trace: next slide)",
+    "A real event fits well in every channel at once; a noise trigger fails in every channel — a clean handle on which events are real",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.3), size=14)
 pic(s, "fit_examples_zip7_noise.png", IN(0.2), IN(2.75), IN(6.55), IN(3.55),
     "Noise triggers (Z7): the fit fails in every channel at once")
@@ -335,7 +335,7 @@ title(s, "Template family 1 — analytic 2-exp, NRMSE-weighted (1x1)")
 bullets(s, [
     "NRMSE-weighted mean of the fit_ok 2-exp curves",
     "Smooth & noise-free by construction",
-    "ROOT TH1D, peak-normalized (+ summed PT / PS1 / PS2)",
+    "ROOT histograms, peak-normalized (+ summed PT / PS1 / PS2)",
 ], IN(0.55), IN(1.25), IN(12.3), IN(1.5), size=18)
 pic(s, "template_overlay_zip7_PBS1.png", IN(0.5), IN(3.1), IN(12.3), IN(3.6),
     "Z7 PBS1 — blue: the fitted curves (200 of 1931 drawn);  red: the delivered 1x1 template, "
