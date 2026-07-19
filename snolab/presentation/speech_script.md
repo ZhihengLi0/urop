@@ -26,7 +26,7 @@
 
 **中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。规律非常清楚：左边这批是噪声触发，它在**所有**通道里同时拟合失败；右边是真正的 K 线事件，**所有**通道同时拟合得很好，残差只有百分之几。也就是说，事件干干净净地分成两类——要么全通道都好，要么全通道都坏。至于每一条波形具体怎么滤波、怎么拟合、怎么对齐，就是下一页的内容。
 
-**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. The pattern is very clear. The left block is noise triggers: the fit fails in **every** channel at the same time. The right block is genuine K-line events: **every** channel fits well at the same time, with a residual of only a few percent. So the events split cleanly into two kinds — good in every channel, or bad in every channel. Exactly how each trace is filtered, fitted and aligned is the next slide.
+**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. The pattern is very clear. The left block is noise triggers: the fit fails in **every** channel at the same time. The right block is true K-line events: **every** channel fits well at the same time, with a residual of only a few percent. So the events split cleanly into two kinds — good in every channel, or bad in every channel. Exactly how each trace is filtered, fitted and aligned is the next slide.
 
 ---
 
@@ -66,7 +66,7 @@
 
 **中文**：第一条线索来自 cut 之后的扇形图：还剩一些"拖尾巴"的曲线，下降特别慢。我的办法是抽样验证：在通过 0.4 的事件里，挑下降时间超过 1.5 毫秒的，随机抽 10 个，把每个事件在全部 12 个通道里的原始波形和拟合画出来对比。结论有两层。第一层：**抽到的这些事件都是真脉冲**——所以保留，我没有为下降时间设任何 cut。第二层，看左边这张图——我特别想强调这一点：**Z7 本身是最好的探测器，但它有一个坏通道，PDS2**。你看每一行是一个事件，除了 PDS2 那一列，其他每一列都是干干净净的快脉冲；唯独 PDS2 这一列，波形上叠着一个大幅度的低频晃动，拟合去追那个晃动，才给出了几毫秒的假"下降时间"。也就是说，慢的不是事件，是 PDS2 这一个通道坏。右边这两张图是同一件事的量化，横轴都是 0 到 7 毫秒，可以直接比：其中左边是正常通道 PAS1——几乎所有事件都集中在 0.25 毫秒附近，1 毫秒往后基本就没有了；右边是 PDS2——一条明显的宽尾一路拖到五六毫秒，中位数 0.51 毫秒，是正常通道的两倍。所以最夸张的拖尾不是真实的慢脉冲，而是单通道的低频伪影。Z7 整体是最好的探测器，但 PDS2 这一个通道确实坏了。
 
-**English**: The first lead comes from the fan plot after the cut: some curves still have long tails — a very slow fall. My approach was to verify by sampling: among the events that pass the cut, take the ones with a fall time above one and a half milliseconds, randomly sample ten of them, and draw raw versus fit in every one of the twelve channels. The conclusion has two layers. First: **the sampled events are real pulses** — so they stay in, and I apply no fall-time cut at all. Second — and this is the point I really want to make with the left plot: **Z7 is the best detector overall, but it has one bad channel, PDS2**. Each row is one event, and in every column except PDS2 you see a clean, fast pulse; only in the PDS2 column is there a large low-frequency swing riding on top of the trace, and the fit chases that swing, which is what produces the fake fall times of several milliseconds. So it's not the event that's slow — it's that one channel, PDS2, that's misbehaving. The two plots on the right are the same story quantified, on the same zero-to-seven-millisecond axis so you can compare directly: the left one is a normal channel, PAS1 — almost every event sits in one narrow peak at about 0.25 milliseconds, and there's basically nothing past one millisecond; the right one is PDS2 — a broad tail that stretches all the way out to five or six milliseconds, with a median of 0.51 milliseconds, twice that of the normal channel. So the most extreme tails are not a genuinely slow pulse; they're a one-channel low-frequency artifact. Z7 is the best detector overall, and it still has one genuinely bad channel in PDS2.
+**English**: The first lead comes from the fan plot after the cut: some curves still have long tails — a very slow fall. My approach was to verify by sampling: among the events that pass the cut, take the ones with a fall time above one and a half milliseconds, randomly sample ten of them, and draw raw versus fit in every one of the twelve channels. The conclusion has two layers. First: **the sampled events are real pulses** — so they stay in, and I apply no fall-time cut at all. Second — and this is the point I really want to make with the left plot: **Z7 is the best detector overall, but it has one bad channel, PDS2**. Each row is one event, and in every column except PDS2 you see a clean, fast pulse; only in the PDS2 column is there a large low-frequency swing riding on top of the trace, and the fit chases that swing, which is what produces the fake fall times of several milliseconds. So it's not the event that's slow — it's that one channel, PDS2, that's misbehaving. The two plots on the right are the same story quantified, on the same zero-to-seven-millisecond axis so you can compare directly: the left one is a normal channel, PAS1 — almost every event sits in one narrow peak at about 0.25 milliseconds, and there's basically nothing past one millisecond; the right one is PDS2 — a broad tail that stretches all the way out to five or six milliseconds, with a median of 0.51 milliseconds, twice that of the normal channel. So the most extreme tails are not a truly slow pulse; they're a one-channel low-frequency artifact. Z7 is the best detector overall, and it still has one really bad channel in PDS2.
 
 ---
 
@@ -106,7 +106,7 @@
 
 **中文**：慢基线漂移能骗过 NRMSE——一条慢 2-exp 贴住它，残差很小——看起来像慢上升。真快脉冲聚在 τ_rise ≈ 0.1 ms，漂移尾巴拖得远得多，所以 PCA 输入加了 0.3 ms 上限挡掉它。相对 NRMSE 那一步切掉：安静探测器几乎不切（Z7 1.6%，大头是坏通道 PDS2），弱探测器 55–74%（Z22 71%），全部合计 54%。代价是最慢的一小撮真脉冲也会被削掉——这个取舍记录在案、尚未定论。
 
-**English**: A slow baseline drift can fool NRMSE — a slow 2-exp hugs it with a tiny residual — and looks like a slow rise. Real fast pulses cluster at τ_rise ≈ 0.1 ms while the drift tail stretches much further, so the PCA input gets a 0.3 ms ceiling to block it. Relative to the NRMSE step it removes almost nothing on quiet detectors (1.6% on Z7, mostly the bad channel PDS2) but 55–74% on the weak ones (71% on Z22), 54% pooled. The price is that the very slowest genuine pulses get trimmed too — a documented, still-open trade-off.
+**English**: A slow baseline drift can fool NRMSE — a slow 2-exp hugs it with a tiny residual — and looks like a slow rise. Real fast pulses cluster at τ_rise ≈ 0.1 ms while the drift tail stretches much further, so the PCA input gets a 0.3 ms ceiling to block it. Relative to the NRMSE step it removes almost nothing on quiet detectors (1.6% on Z7, mostly the bad channel PDS2) but 55–74% on the weak ones (71% on Z22), 54% pooled. The price is that the very slowest real pulses get trimmed too — a documented, still-open trade-off.
 
 ---
 
@@ -120,7 +120,7 @@
 
 ## Backup — τ_rise 切掉的是什么：慢漂移（Z22）（仅备查）
 
-**English**: What the rise-time cut actually removes. These are exactly the Z22 events that pass the NRMSE cut — median NRMSE below 0.4 — but are removed by the rise-time ceiling, median t_rise above 0.3 ms. In other words, the noise that 0.4 let through and 0.3 catches. Look at PCS1 and PDS1: their NRMSE is low, around 0.15, because a slow 2-exp hugs the trace with a tiny residual — but the raw trace is just a slow baseline drift, there is no clean fast pulse. The honest caveat: the same cut also trims a small number of genuine slow-rise pulses — the documented, still-open trade-off.
+**English**: What the rise-time cut actually removes. These are exactly the Z22 events that pass the NRMSE cut — median NRMSE below 0.4 — but are removed by the rise-time ceiling, median t_rise above 0.3 ms. In other words, the noise that 0.4 let through and 0.3 catches. Look at PCS1 and PDS1: their NRMSE is low, around 0.15, because a slow 2-exp hugs the trace with a tiny residual — but the raw trace is just a slow baseline drift, there is no clean fast pulse. The honest caveat: the same cut also trims a small number of real slow-rise pulses — the documented, still-open trade-off.
 
 **中文**：这刀实际切掉的是什么。这些正是 Z22 上"通过了 NRMSE（中位 < 0.4）、却被上升时间上限（中位 t_rise > 0.3 ms）切掉"的事件——也就是 0.4 放过、0.3 才抓住的那批噪声。看 PCS1 和 PDS1：它们 NRMSE 很低、约 0.15，因为慢 2-exp 用极小残差贴住了波形——但原始波形就是一条慢基线漂移，没有干净的快脉冲。老实说的代价：这刀也会削掉一小撮真实的慢上升脉冲——就是那个记录在案、尚未定论的取舍。
 
@@ -170,7 +170,7 @@
 
 **English**: Almost nothing on the quiet detectors — 1.6% on Z7, mostly the bad channel PDS2 at 21% — versus 55–74% on the weak ones (71% on Z22), and what it removes is residual slow drift.
 
-**Q8 — 真正的慢脉冲留不留？/ Do the genuine slow pulses stay?**
+**Q8 — 真正的慢脉冲留不留？/ Do the real slow pulses stay?**
 
 **中文**：这是记录在案的待定事项：目前 PCA 输入应用了 τ_rise cut，要不要放开这个取舍，正想和大家讨论。
 
