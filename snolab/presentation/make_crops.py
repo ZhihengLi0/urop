@@ -214,13 +214,23 @@ print("slow_fall_zip7_crop.png: channel labels stamped")
 # stamp channel labels on the K-line (good) fit-example crop, same channels
 # as the noise block (PAS1/PBS1/PCS1); the source rows carry no header line
 _im2 = Image.open(os.path.join(OUT, "fit_examples_zip7_good.png"))
-_pad = Image.new("RGB", (_im2.width, _im2.height + 46), (255, 255, 255))
-_pad.paste(_im2, (0, 46))
+_hdr = 16   # same header height/scale as the embedded titles on the noise crop
+_pad = Image.new("RGB", (_im2.width, _im2.height + _hdr), (255, 255, 255))
+_pad.paste(_im2, (0, _hdr))
 _d2 = ImageDraw.Draw(_pad)
+for _fp in ("/usr/share/fonts/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"):
+    try:
+        _fsm = ImageFont.truetype(_fp, 13)
+        break
+    except OSError:
+        continue
+else:
+    _fsm = ImageFont.load_default()
 _w2 = _pad.width / 3
 for _i, _c in enumerate(["PAS1", "PBS1", "PCS1"]):
-    _x = int(_i * _w2 + _w2 / 2 - 34)
-    _d2.text((_x, 8), _c, font=_f, fill="#333333")
+    _x = int(_i * _w2 + _w2 / 2 - 16)
+    _d2.text((_x, 1), _c, font=_fsm, fill="#262626")
 _pad.save(os.path.join(OUT, "fit_examples_zip7_good.png"))
 print("fit_examples_zip7_good.png: channel labels stamped")
 
