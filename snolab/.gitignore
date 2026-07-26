@@ -24,6 +24,7 @@ CONTEXT_FOR_NEXT_AI.md
 # Presentation deliverables are versioned (exceptions to *.png / *.pdf)
 !presentation/figures/*.png
 !presentation/*.pdf
+!presentation/backup_galleries/*.pdf
 .~*.pptx
 speech_script.html
 # Deliverables are versioned
