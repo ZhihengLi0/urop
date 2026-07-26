@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""Two NxM template figures for the NxM results slide (Z7 PBS1), zoomed to
+"""The NxM template figure for the NxM results slide (Z7 PBS1), zoomed to
 the pulse — the late tail carries no information:
 
-  figures/nxm_plain_zip7_PBS1.png    — nxm0 (plain mean, as delivered) + nxm1-4
-  figures/nxm_weighted_zip7_PBS1.png — NRMSE-weighted mean (the 1x1 template)
-                                        drawn with the same nxm1-4 components
+  figures/nxm_plain_zip7_PBS1.png — nxm0 (plain mean, as delivered) + nxm1-4
 
 Curves are read back from the delivered ROOT files. Run inside the CDMS
 singularity image (needs PyROOT).
@@ -39,17 +37,10 @@ f_pca = TFile(os.path.join(DELIV, "nxm", "root_files",
 nxm = [read_hist(f_pca, f"nxm{k}_zip{DET}_{CHAN}") for k in range(5)]
 f_pca.Close()
 
-f_1x1 = TFile(os.path.join(DELIV, "1x1", "root_files",
-                           f"Templates_SNOLAB_R4_zip{DET}_2expfit_weighted.root"))
-wmean = read_hist(f_1x1, f"t2exp_zip{DET}_{CHAN}")
-f_1x1.Close()
-
 pc_colors = ["crimson", "royalblue", "darkorange", "forestgreen"]
 for mean_curve, mean_label, mean_color, fname in [
         (nxm[0], "nxm0 = plain mean (delivered)", "black",
-         "nxm_plain_zip7_PBS1.png"),
-        (wmean, "NRMSE-weighted mean (= 1x1 template)", "#C0392B",
-         "nxm_weighted_zip7_PBS1.png")]:
+         "nxm_plain_zip7_PBS1.png")]:
     fig, ax = plt.subplots(figsize=(7.0, 3.1))
     ax.plot(t_ms, mean_curve, lw=2.2, color=mean_color, label=mean_label)
     for k, arr in enumerate(nxm[1:], start=1):

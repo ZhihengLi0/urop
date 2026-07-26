@@ -451,10 +451,8 @@ bullets(s, [
     "nxm0 = mean shape;  nxm1–4 = principal components;  real pulse = Σᵢ ampᵢ · nxmᵢ",
     "PC1 + PC2 ≈ 96–98% of the shape variance",
 ], IN(0.55), IN(1.22), IN(12.3), IN(1.5), size=16)
-pic(s, "nxm_plain_zip7_PBS1.png", IN(0.35), IN(3.0), IN(6.25), IN(3.6),
-    "NxM with the plain mean: nxm0 (delivered) + nxm1–4")
-pic(s, "nxm_weighted_zip7_PBS1.png", IN(6.75), IN(3.0), IN(6.25), IN(3.6),
-    "NxM with the NRMSE-weighted mean (= 1x1) + the same nxm1–4")
+pic(s, "nxm_plain_zip7_PBS1.png", IN(2.4), IN(2.85), IN(8.5), IN(4.3),
+    "Z7 PBS1: nxm0 (plain mean over the fit_ok + NRMSE-cut curves) + nxm1–4, zoomed to the pulse")
 notes(s, "Second family: the NxM PCA templates, built to capture the "
          "pulse-shape variation across events. We run a PCA over the fitted curves that "
          "pass all cuts, in a window around the pulse. The mean shape "
