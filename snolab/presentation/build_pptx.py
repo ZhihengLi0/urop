@@ -132,7 +132,7 @@ for _i, (_head, _rest) in enumerate([
         ("Data cleaning", "fit_ok, NRMSE valley cut (0.4), rise-time ceiling (0.3 ms)"),
         ("Cross-checks", "cuts remove noise, real pulses stay; slow-fall follow-up"),
         ("Template generation", "1x1 weighted template, NxM PCA templates"),
-        ("Deliverables and future steps", "cdmsbats ROOT files; three-, four-exponential fits"),
+        ("Template file and future steps", "cdmsbats ROOT files, ready for merge; three-, four-exponential fits"),
         ("Backup", "weak detectors, rise-time cut details, full results for every zip")]):
     _p = _toc.text_frame.paragraphs[0] if _i == 0 else _toc.text_frame.add_paragraph()
     _p.space_after = Pt(10)
@@ -466,26 +466,25 @@ title(s, "Template file")
 bullets(s, [
     "Two template sets for all 13 detectors: 1x1 (2-exp weighted) + NxM PCA",
     "In cdmsbats_config feature branch, ready for merge",
-], IN(0.55), IN(1.9), IN(12.3), IN(2.2), size=22)
-notes(s, "Both template sets are ready for all 13 detectors: the analytic "
-         "1x1 templates and the PCA NxM set, in the official PulseTemplates "
-         "format, sitting in the cdmsbats underscore config feature branch "
-         "and ready for merge.")
-
-# ------------------------------------------------- 13b · future steps
-s = slide()
-title(s, "Future Steps")
+], IN(0.55), IN(1.75), IN(12.3), IN(1.4), size=22)
+_fh = textbox(s, IN(0.55), IN(3.55), IN(12.3), IN(0.6))
+_pf = _fh.text_frame.paragraphs[0]
+_rf = _pf.add_run(); _rf.text = "Future Steps"
+_rf.font.size, _rf.font.bold, _rf.font.color.rgb, _rf.font.name = Pt(26), True, NAVY, "Arial"
 bullets(s, [
     "Three-, four-exponential fits",
     "Exercise NxM processing",
     "Other detectors: worse noise, a few more cuts added, in the backup slides",
-], IN(0.55), IN(1.9), IN(12.3), IN(2.6), size=22)
-notes(s, "Future steps: extend the fit to three and four exponentials, "
-         "exercise the NxM processing chain on the new templates, and the "
-         "other detectors - they have worse noise and needed a few more "
-         "cuts, all documented in the backup slides. If anyone is "
-         "interested, I am happy to walk through the backup slides. Thank "
-         "you - happy to take questions.")
+], IN(0.55), IN(4.25), IN(12.3), IN(2.2), size=22)
+notes(s, "Both template sets are ready for all 13 detectors: the analytic "
+         "1x1 templates and the PCA NxM set, in the official PulseTemplates "
+         "format, sitting in the cdmsbats underscore config feature branch "
+         "and ready for merge. Future steps: extend the fit to three and "
+         "four exponentials, exercise the NxM processing chain on the new "
+         "templates, and the other detectors - they have worse noise and "
+         "needed a few more cuts, all documented in the backup slides. If "
+         "anyone is interested, I am happy to walk through the backup "
+         "slides. Thank you - happy to take questions.")
 
 # ------------------------------------------- backup · weak detectors (Z22)
 s = slide()
