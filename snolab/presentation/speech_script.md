@@ -48,9 +48,17 @@
 
 ## Slide 6 — Alignment result（约 40 秒）
 
-**中文**：这一页讲第五步——对齐。每一条实测波形，按它自己拟合出的 pretrigger 减去名义的 16050 平移——纯平移，波形本身没有任何再生成。图里那条竖虚线，就是所有波形对齐到的公共 pretrigger。对齐之后，把所有拟合曲线画在这个公共起点上，就是这两张扇形图。左边是全部物理拟合的曲线——可以看到主束旁边有一些明显散开、下降很慢的曲线；右边是用 NRMSE 筛过之后，只剩一束非常紧、非常一致的形状。正是把触发抖动对齐掉、再筛掉坏拟合之后，剩下这条紧致的束，我才能做出一个定义清楚、稳定的模板。
+**中文**：这一页讲第五步——对齐。每一条实测波形，按它自己拟合出的 pretrigger 减去名义的 16050 平移——纯平移，波形本身没有任何再生成。图里那条竖虚线，就是所有波形对齐到的公共 pretrigger。对齐之后，把所有拟合曲线画在这个公共起点上，就是这张扇形图——这一页画的是这个通道**全部**拟合出来的事件，2008 条曲线，没有 fit_ok、没有 NRMSE、什么 cut 都没有，因为到这里我们还没有做任何筛选。可以看到占主体的快脉冲束，和散开的慢曲线；怎么定量把它们分开，是下一页的事。
 
-**English**: This slide is step five — alignment. Each measured trace is shifted by its own fitted pretrigger minus 16050 — a pure translation, nothing about the waveform is regenerated. The dotted vertical line is the common pretrigger everything is aligned to. Once aligned, I draw all the fitted curves from that common starting point — these two fan plots. On the left, all the physical fits: you can see some clearly separated, slow-falling curves that spread off the main bundle. On the right, after selecting on NRMSE, only one very tight, consistent shape family remains. Alignment removes the jitter, the NRMSE cut removes the bad fits, and what's left is this tight bundle — tight enough to build a template from.
+**English**: This slide is step five — alignment. Each measured trace is shifted by its own fitted pretrigger minus 16050 — a pure translation, nothing about the waveform is regenerated. The dotted vertical line is the common pretrigger everything is aligned to. Once aligned, I draw all the fitted curves from that common starting point — this fan plot shows **every** fitted event on this channel, 2008 curves, with no fit_ok, no NRMSE, no cuts of any kind, because at this point nothing has been selected yet. You can see the dominant fast bundle and the stragglers spreading off it; separating them quantitatively is the next slide.
+
+---
+
+## Slide 8 — Aligned curves before vs after the NRMSE cut（约 25 秒）
+
+**中文**：定了 0.4 之后回头看扇形图：左边是全部物理拟合（画了 200 条抽样，慢曲线按真实占比出现）；右边是 cut 之后，只剩一束非常紧、非常一致的形状。正是这条紧致的束，让一个定义清楚、稳定的模板成为可能。
+
+**English**: With the 0.4 threshold set, back to the fan: on the left all physical fits — a 200-curve sample, so the slow stragglers appear in proportion to their real share; on the right, after the cut, one very tight, consistent shape family remains. That tight family is what makes a well-defined, stable template possible.
 
 ---
 
@@ -62,7 +70,7 @@
 
 ---
 
-## Slide 8 — The rejected population is noise（约 45 秒）
+## Slide 9 — The rejected population is noise（约 45 秒）
 
 **中文**：定了 cut 还不够，得验证它切掉的确实是噪声、不是真脉冲。左边是被切掉的事件的**原始**波形——可以看到，里面就没有脉冲。但还是有一条很慢的曲线恰好凑在了它上面。右边换个角度看同一件事，这张图有三层：底下灰蓝色的是对齐后的实测波形，上面绿色是**通过** cut 的拟合曲线，红色是**被切掉**的；右上角标着两个群体各自的中位 NRMSE 和事件数。可以看到绿的又快又一致，聚成一束；红的四处发散，中位 NRMSE 是绿的四十倍。在 Z7 这条通道上，仅仅只有 3.8% 被切掉。结论很明确：这一刀移除的是噪声触发，不损失任何真实脉冲。PDS2 单独做不出可用的模板；这在分析/软件层面很难修，需要修的是噪声本身。临时方案：用 PDS1 的模板顶替 PDS2，交付的 ROOT 文件里已经这样替换。
 
@@ -70,7 +78,7 @@
 
 ---
 
-## Slide 9 — Follow-up 1: the slow-fall tail（约 50 秒）
+## Slide 10 — Follow-up 1: the slow-fall tail（约 50 秒）
 
 **中文**：第一条线索来自 cut 之后的扇形图：还剩一些"拖尾巴"的曲线，下降特别慢。我的办法是抽样验证：在通过 0.4 的事件里，挑下降时间超过 1.5 毫秒的，随机抽 10 个，把每个事件在全部 12 个通道里的原始波形和拟合画出来对比。结论有两层。第一层：**抽到的这些事件都是真脉冲**——所以保留，我没有为下降时间设任何 cut。第二层——我特别想强调这一点：**Z7 本身是最好的探测器，但它有一个坏通道，PDS2**。你看每一行是一个事件，除了 PDS2 那一列，其他每一列都是干干净净的快脉冲；唯独 PDS2 这一列，波形上叠着一个大幅度的低频晃动，拟合就去追那个晃动。这才给出了几毫秒的假"下降时间"。也就是说，慢的不是事件，是 PDS2 这一个通道坏。右边这两张图也证明了这一点。它们的横轴一样，可以直接比：其中左边是正常通道 PAS1——几乎所有事件都集中在 0.25 毫秒附近，1 毫秒往后基本就没有了；右边是 PDS2——一条明显的宽尾一路拖到五六毫秒，中位数 0.51 毫秒，是正常通道的两倍。所以最夸张的拖尾不是真实的慢脉冲，而是单通道的低频伪影。Z7 整体是最好的探测器，但 PDS2 这一个通道确实坏了。
 
@@ -78,7 +86,7 @@
 
 ---
 
-## Slide 10 — Template family 1: 2-exp weighted (1x1)（约 50 秒）
+## Slide 11 — Template family 1: 2-exp weighted (1x1)（约 50 秒）
 
 **中文**：现在到产出。第一族模板走解析路线：每个通道，把所有物理拟合的曲线放到同一个 pretrigger 位置，做加权平均——权重是 NRMSE 平方的倒数。这个设计的好处是：拟合差的事件权重自动变得极小，等于被压没了，但我不需要人为剔除任何事件。屏幕上蓝色的那**一束**是参与平均的拟合曲线——这是原料，不是模板；红色**那一条**才是它们加权平均之后的结果，也就是真正交付的 1x1 模板，这条线是直接从交付的 ROOT 文件里读回来画上去的。因为平均的对象是解析函数，做出来的模板天然光滑、完全没有噪声。这就是标准的单模板，1x1。每个通道一条，交付成峰值归一的 ROOT 直方图，另外还有把各通道求和得到的 PT、PS1、PS2 模板。
 
@@ -86,7 +94,7 @@
 
 ---
 
-## Slide 11 — Template family 2: NxM PCA（约 55 秒）
+## Slide 12 — Template family 2: NxM PCA（约 55 秒）
 
 **中文**：第二族模板是为了捕捉不同事件之间脉冲形状的变化。做法是对干净的拟合曲线做主成分分析，也就是 PCA——输入就是同时通过前面两刀的曲线：NRMSE ≤ 0.4，再加上升时间 ≤ 0.3 毫秒（这刀挡掉慢基线漂移）。直观理解：黑色的 nxm0 是平均形状；后面四条彩色的，是数据里最主要的四个"变形方向"——比如上升更慢一点、下降更快一点。真实脉冲就用这五条的线性组合去拟合。效果非常好：前两个成分就已经覆盖了 96 到 98% 的形状差异。也就是说，事件之间的形状差异，就明明白白地装进了这套模板里。最后一步，交付之前把五条模板统一归一到峰值为 1，方便对比和使用——这就是最终产物。
 
@@ -94,7 +102,7 @@
 
 ---
 
-## Slide 12+13 — Template file / Future steps（约 30 秒）
+## Slide 13+14 — Template file / Future steps（约 30 秒）
 
 **中文**：两套模板都做好了，覆盖全部 13 个探测器：解析的 1x1 模板和 PCA 的 NxM 模板，官方 PulseTemplates 格式，放在 cdmsbats_config 的 feature branch 里，随时可以 merge。下一步：扩展到三指数、四指数拟合；把 NxM 处理链真正跑起来；其他探测器噪声更差、多加了几个 cut，细节都在 backup slides 里——如果大家有兴趣，我可以讲一讲 backup slides。
 

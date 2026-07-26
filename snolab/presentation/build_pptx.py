@@ -282,23 +282,18 @@ notes(s, "The per-trace algorithm. First a low-pass filter to "
 
 # ------------------------------------------------------ 5 · alignment result
 s = slide()
-title(s, "5. Align — shift each trace to a common pretrigger")
-bullets(s, [
-    "Shift the measured trace by (fitted pretrigger − 16050) — a pure translation. Drawn at the common pretrigger, the fitted curves stack into one shape family:",
-], IN(0.55), IN(1.2), IN(12.3), IN(0.95), size=16)
-pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.55), IN(2.55), IN(6.35), IN(3.95),
-    "All fit_ok fitted curves (Z7 PBS1) — no cut")
-pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.9), IN(2.55), IN(6.35), IN(3.95),
-    "After NRMSE ≤ 0.4 (Z7 PBS1) — one tight shape family")
+title(s, "5. Align")
+pic(s, "fan_zip7_PBS1_allfits.png", IN(1.7), IN(1.45), IN(9.9), IN(5.5),
+    "Z7 PBS1: every fitted event drawn at the common pretrigger, no cuts of any kind (n = 2008 events)")
 notes(s, "Step five: alignment. Each measured trace is shifted by its fitted "
          "pretrigger minus the nominal 16050 - a pure translation, nothing "
-         "about the waveform is regenerated. Once everything is at the common "
-         "pretrigger, the fitted curves stack up. On the left, all physical "
-         "fits: you can see the slow stragglers spreading off the main "
-         "bundle. On the right, after the NRMSE cut, a single tight, "
-         "consistent shape family remains. That tight family is what makes a "
-         "well-defined template possible - and where the cut comes from is "
-         "what I show next.")
+         "about the waveform is regenerated. Drawn at the common pretrigger, "
+         "the fitted curves stack into one shape family. This is every "
+         "fitted event on this channel - two thousand and eight curves, no "
+         "fit_ok requirement, no NRMSE, no cuts of any kind, because at this "
+         "point in the story we have not selected anything yet. You can see "
+         "the dominant fast bundle and the stragglers spreading off it; how "
+         "we separate them quantitatively is the next slide.")
 
 # ------------------------------------------------------ 6 · NRMSE cut
 s = slide()
@@ -320,6 +315,20 @@ notes(s, "First quality cut. The NRMSE distribution of physical fits is "
          "this same cut is what digs the real pulses out of the mixture. "
          "(If someone asks what a weak detector looks like, show the backup "
          "slide.)")
+
+# ------------------------------ 6b · fan before vs after the NRMSE cut
+s = slide()
+title(s, "Aligned fitted curves: before and after the NRMSE cut")
+pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.55), IN(1.5), IN(6.35), IN(4.6),
+    "All fit_ok fitted curves (Z7 PBS1), 200-curve sample drawn")
+pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.9), IN(1.5), IN(6.35), IN(4.6),
+    "After NRMSE ≤ 0.4 (Z7 PBS1): one tight shape family")
+notes(s, "The same aligned fitted curves before and after the cut. On the "
+         "left, all physical fits - a 200-curve sample is drawn, so the "
+         "slow stragglers appear in proportion to their share of the "
+         "population. On the right, after the NRMSE cut, a single tight, "
+         "consistent shape family remains. That tight family is what makes "
+         "a well-defined template possible.")
 
 # ------------------------------------------ 7 · what the cut removes
 s = slide()
