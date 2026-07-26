@@ -479,6 +479,94 @@ notes(s, "Backup: what the rise-time cut actually removes. These are exactly "
          "genuine slow-rise pulses, which is the documented, still-open "
          "trade-off.")
 
+
+# ================= backup gallery · every Z7 result figure (appendix) =======
+# One slide per figure: full screenshot + the figure's name and how to read it.
+GAL = os.path.join("backup_zip7")
+_gallery = [
+    ("zip7_lp_aligned_overlay.png",
+     "aligned_overlay — shift-aligned measured traces",
+     "Blue = measured LP traces shifted by (fitted pretrigger − 16050); red = point-by-point mean of ALL fit_ok "
+     "events; orange = NRMSE-weighted mean of the fitted curves (w = 1/max(NRMSE,0.01)²). Rise edges line up at 16050."),
+    ("zip7_fitted_curves_overlay.png",
+     "fitted_curves_overlay — fan of fitted 2-exp curves (no cut)",
+     "Every fit_ok event's fitted curve re-evaluated at common pretrigger 16050, peak-normalized. "
+     "Pure shape distribution; the broad slow curves are noise fits that the cuts remove."),
+    ("zip7_fitted_curves_overlay_nrmse0.4.png",
+     "fitted_curves_overlay — after NRMSE ≤ 0.4",
+     "Same fan after the NRMSE cut: the noise fan collapses; the fast-pulse bundle remains."),
+    ("zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
+     "fitted_curves_overlay — after NRMSE ≤ 0.4 and τ_rise ≤ 0.3 ms",
+     "The exact PCA input population: clean fast-pulse bundle only."),
+    ("zip7_raw_vs_fit_examples.png",
+     "raw_vs_fit_examples — first 15 events × all channels",
+     "Gray = raw unfiltered, blue = 100 kHz LP, red = 2-exp fit; per-panel NRMSE top-right. "
+     "Same 15 events as fit_examples; noise vs pulse size is directly visible."),
+    ("zip7_fit_examples.png",
+     "fit_examples — first 15 events × all channels (LP vs fit)",
+     "One ROW per event, one COLUMN per channel. A real event shows a clean pulse and a good fit in every "
+     "channel simultaneously; a noise trigger fails across the whole row."),
+    ("zip7_overlay_fan_cut_nrmse0.4.png",
+     "overlay_fan_cut — measured traces + kept/rejected fits",
+     "Gray-blue = aligned measured traces; green = fitted curves with NRMSE ≤ 0.4 (kept); red = NRMSE > 0.4 "
+     "(cut away). Median NRMSE and counts of both populations stamped per channel."),
+    ("zip7_nrmse.png",
+     "nrmse — NRMSE distribution (log-log)",
+     "NRMSE = RMS(fit residual)/fitted peak. Bimodal: good-fit population (~0.05–0.1) vs noise triggers (~1–2); "
+     "the valley at ≈0.4 sets the cut."),
+    ("zip7_pretrigger.png",
+     "pretrigger — fitted onset distribution",
+     "The onset is a FREE fit parameter; fitted values cluster ≈230 samples after the nominal 16050, "
+     "which is why pinning it inside the fit was wrong."),
+    ("zip7_time_constants.png",
+     "time_constants — fitted τ_rise / τ_fall distributions",
+     "Fast-pulse population sits at τ_rise ≈ 0.1 ms; isolated spikes at the parameter bounds (5 ms / 20 ms) "
+     "are fits pinned at the fit limits (noise), removed by the NRMSE cut."),
+    ("zip7_slow_rise_events.png",
+     "slow_rise_events — the NRMSE-rejected population",
+     "Events whose median NRMSE across channels > 0.4. Raw traces show no pulse in any channel: "
+     "the rejected population is noise triggers, not physics."),
+    ("zip7_shadow_events.png",
+     "shadow_events — well-fit slow-rise (echo-trigger) events",
+     "Median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms: genuinely slow, well-fit pulses — the faint displaced "
+     "bundle seen in aligned overlays; kept, and exactly what NxM multi-templates are for."),
+    ("zip7_PDS2_slow_fall.png",
+     "slow_fall_events — long-τ_fall study (PDS2 reference)",
+     "10 random events with PDS2 τ_fall > 1.5 ms drawn in every channel: 11 channels show normal fast pulses; "
+     "the long fall is a PDS2-only low-frequency artifact — not slow physics, no event-level cut."),
+    ("zip7_pca_templates.png",
+     "deliverables/nxm — PCA templates nxm0–4",
+     "nxm0 = mean curve; nxm1–4 = PCA components (oscillating basis vectors, may be negative), all "
+     "peak-normalized to 1; PC1+PC2 capture 96–98% of the shape variance."),
+]
+for _f, _label, _info in _gallery:
+    s = slide()
+    title(s, f"Backup gallery — Z7 · {_label}",
+          sub=f"figure: lp_fit_align results — {_f}")
+    tb = textbox(s, IN(0.55), IN(1.18), IN(12.3), IN(0.85))
+    _p = tb.text_frame.paragraphs[0]
+    _r = _p.add_run(); _r.text = _info
+    _r.font.size, _r.font.color.rgb, _r.font.name = Pt(12.5), DARK, "Arial"
+    pic(s, os.path.join(GAL, _f), IN(0.55), IN(2.1), IN(12.3), IN(5.05))
+    notes(s, f"Backup gallery, Z7, {_label}. {_info}")
+
+# summed 1x1 templates: three figures on one slide
+s = slide()
+title(s, "Backup gallery — Z7 · deliverables/1x1 — summed templates PT / PS1 / PS2",
+      sub="figures: deliverables/1x1/plots/{PT,PS1,PS2}/zip7_*.png")
+tb = textbox(s, IN(0.55), IN(1.18), IN(12.3), IN(0.6))
+_p = tb.text_frame.paragraphs[0]
+_r = _p.add_run()
+_r.text = ("Single-template (1x1) summed curves: peak-normalized average of the per-channel nxm0 templates — "
+           "PT = all channels, PS1 / PS2 = side-1 / side-2 only.")
+_r.font.size, _r.font.color.rgb, _r.font.name = Pt(12.5), DARK, "Arial"
+for _k, _f in enumerate(["zip7_PT.png", "zip7_PS1.png", "zip7_PS2.png"]):
+    pic(s, os.path.join(GAL, _f), IN(0.4 + 4.3 * _k), IN(2.3), IN(4.1), IN(4.2),
+        caption=_f.replace("zip7_", "Z7 ").replace(".png", ""))
+notes(s, "Backup gallery: the three summed 1x1 templates of Z7 — PT over all "
+         "channels, PS1 and PS2 over each side, all peak-normalized averages "
+         "of the channel nxm0 templates.")
+
 # page numbers: "N / total" bottom-right, skip the title slide
 _slides = list(prs.slides)
 _total = len(_slides)

@@ -26,3 +26,15 @@ pulse) is called **echo-trigger** (per Prof. Saab). The `shadow_events/` figure
 folder in `lp_fit_align/` keeps its original name.
 
 11 main slides + 2 backup. The echo-trigger (slow-rise) slide was dropped per Prof. Saab; the τ_rise-ceiling slide is now a backup (removal fractions relative to the NRMSE step: Z7 1.6% — mostly the bad channel PDS2 — vs 55–74% on the weak zips, 54% pooled; see `lp_fit_align/scripts/trise_cut_stats.py`). Slide 7 (slow-fall follow-up) is the designated skip-slide if running long.
+
+## Backup gallery (appendix)
+
+Per Prof. Liu's request the deck now ends with a **Z7 full-results gallery**:
+15 backup slides, one per Z7 diagnostic/template figure (aligned overlay, the
+three fitted-curve fans no-cut → NRMSE → NRMSE+τ_rise, raw-vs-fit and
+fit-example event grids, overlay_fan_cut, NRMSE / pretrigger / time-constant
+distributions, slow-rise / shadow / slow-fall studies, PCA templates, and the
+summed 1x1 PT/PS1/PS2). Each slide shows the full figure with its file name
+and a one-paragraph how-to-read note; source PNGs are copied under
+`figures/backup_zip7/`. Note: the .pdf export is regenerated from PowerPoint,
+so it lags the .pptx until re-exported.
