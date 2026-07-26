@@ -642,8 +642,14 @@ def _panel_units(img):
     small = [b for b in blocks if b[1] - b[0] < thr]
     starts = []
     for ps, pe in panels:
-        titles = [b for b in small if b[1] <= ps + 2 and ps - b[1] < 55]
-        starts.append(max(0, (titles[-1][0] if titles else ps) - 4))
+        above = sorted(b for b in small if b[1] <= ps + 2)
+        top = ps
+        for b in reversed(above):
+            if top - b[1] <= 18 and ps - b[0] <= 70:
+                top = b[0]
+            else:
+                break
+        starts.append(max(0, top - 4))
     units, tails = [], []
     for i, (ps, pe) in enumerate(panels[:-1]):
         end = starts[i + 1] - 4
@@ -772,11 +778,11 @@ channel_fig_pages("zip7_nrmse.png",
     "NRMSE = RMS(fit residual)/fitted peak, log-log. Bimodal: good fits (~0.05–0.1) vs "
     "noise triggers (~1–2); the valley at ≈0.4 sets quality cut 1.")
 channel_fig_pages("zip7_pretrigger.png",
-    "pretrigger — fitted onset distribution per channel",
+    "pretrigger — fitted onset per channel",
     "The onset is a FREE fit parameter; fitted values cluster ≈230 samples after the nominal "
     "16050 — pinning it inside the fit would bias every other parameter.")
 channel_fig_pages("zip7_time_constants.png",
-    "time_constants — fitted τ_rise / τ_fall per channel",
+    "time_constants — τ_rise / τ_fall per channel",
     "Fast-pulse population at τ_rise ≈ 0.1 ms; isolated spikes at the parameter bounds are "
     "noise fits pinned at the fit limits, removed by the NRMSE cut.")
 
@@ -789,20 +795,21 @@ channel_fig_pages("zip7_fitted_curves_overlay_nrmse0.4.png",
     "fitted_curves_overlay — after NRMSE ≤ 0.4",
     "Same fan after quality cut 1: the noise fan collapses, the fast-pulse bundle remains.")
 channel_fig_pages("zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
-    "fitted_curves_overlay — after NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms",
-    "The exact PCA input population: the clean fast-pulse bundle only.")
+    "fitted_curves_overlay — after both cuts",
+    "After NRMSE ≤ 0.4 AND τ_rise ≤ 0.3 ms — the exact PCA input population: "
+    "the clean fast-pulse bundle only.")
 channel_fig_pages("zip7_overlay_fan_cut_nrmse0.4.png",
     "overlay_fan_cut — kept vs rejected fits",
     "Gray-blue = aligned measured traces; green = fits with NRMSE ≤ 0.4 (kept); red = "
     "NRMSE > 0.4 (cut away). Median NRMSE and counts of both populations stamped per channel.")
 channel_fig_pages("zip7_lp_aligned_overlay.png",
-    "aligned_overlay — shift-aligned measured traces",
+    "aligned_overlay — aligned measured traces",
     "Blue = measured LP traces shifted by (fitted pretrigger − 16050); red = mean of all "
     "fit_ok events; orange = NRMSE-weighted mean of the fitted curves. Rise edges line up at 16050.")
 
 # ------------------------------------------------ special populations
 grid_fig_pages("zip7_slow_rise_events.png",
-    "slow_rise_events — the NRMSE-rejected population",
+    "slow_rise_events — NRMSE-rejected events",
     "Events with median NRMSE > 0.4 across channels: the raw traces show no pulse in any "
     "channel — the rejected population is noise triggers, not physics.")
 grid_fig_pages("zip7_shadow_events.png",
@@ -832,7 +839,13 @@ _r.text = ("Single-template (1x1) summed curves: peak-normalized average of the 
            "PT = all channels, PS1 / PS2 = side-1 / side-2 only.")
 _r.font.size, _r.font.color.rgb, _r.font.name = Pt(12.5), DARK, "Arial"
 for _k, _f in enumerate(["zip7_PT.png", "zip7_PS1.png", "zip7_PS2.png"]):
-    pic(s, os.path.join(GAL, _f), IN(0.4 + 4.3 * _k), IN(2.3), IN(4.1), IN(4.2),
+    _img = Image.open(os.path.join(FIG, GAL, _f))
+    _u = _panel_units(_img)
+    _crop = _img.crop((0, _u[0][0], _img.size[0], _u[-1][1]))
+    _cp = os.path.join(_SPLIT_DIR, _f.replace(".png", "_clean.png"))
+    _crop.save(_cp)
+    pic(s, os.path.join(GAL, "_split", _f.replace(".png", "_clean.png")),
+        IN(0.4 + 4.3 * _k), IN(2.3), IN(4.1), IN(4.2),
         caption=_f.replace("zip7_", "Z7 ").replace(".png", ""))
 notes(s, "Backup gallery: the three summed 1x1 templates of Z7 — PT over all "
          "channels, PS1 and PS2 over each side, all peak-normalized averages "
