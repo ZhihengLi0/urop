@@ -300,8 +300,8 @@ s = slide()
 title(s, "Quality cut 1: NRMSE ≤ 0.4 — where the number comes from")
 bullets(s, [
     "NRMSE of fit_ok events is bimodal: good fits (median ≈ 0.05–0.1) vs noise triggers (≈ 1–2), valley at ≈ 0.4–0.5",
-    "The cut sits in the valley — it is read off the distribution, not tuned on the templates",
-    "Weak detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): same bimodal picture, noise peak dominates",
+    "The cut sits in the valley: eyeball read off the distribution",
+    "Worse detectors (Z1, Z4, Z6, Z18, Z19, Z22, Z24): same bimodal picture, noise peak dominates",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
 pic(s, "nrmse_zip7_PBS1.png", IN(1.4), IN(3.1), IN(10.5), IN(3.4),
     "Z7 PBS1: two clean populations, log-log axes")
@@ -334,16 +334,34 @@ notes(s, "The same aligned fitted curves before and after the cut. On the "
 s = slide()
 title(s, "The rejected population is noise — verified in the raw traces")
 bullets(s, [
-    "Event grids of NRMSE-rejected events (median NRMSE > 0.4 across channels): the raw traces show no pulse — the cut removes noise triggers, not physics",
+    "Example of NRMSE-rejected events (median NRMSE > 0.4 across channels): the raw traces show no pulse",
+    "the cut removes noise triggers, not physics",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.0), size=14)
-pic(s, "slow_rise_zip7_crop.png", IN(0.4), IN(2.7), IN(5.9), IN(4.35),
+def _midlabel(x, w, txt):
+    _tb = textbox(s, x, IN(2.12), w, IN(0.4))
+    _pp = _tb.text_frame.paragraphs[0]
+    _rr = _pp.add_run(); _rr.text = txt
+    _rr.font.size, _rr.font.bold, _rr.font.color.rgb, _rr.font.name = Pt(17), True, NAVY, "Arial"
+    _pp.alignment = PP_ALIGN.CENTER
+_midlabel(IN(0.4), IN(5.9), "Rejected events: raw vs fit")
+_midlabel(IN(6.5), IN(6.85), "Aligned curves: kept vs rejected")
+pic(s, "slow_rise_zip7_crop.png", IN(0.4), IN(2.75), IN(5.9), IN(4.3),
     "Z7: NRMSE-rejected events — raw traces are noise")
 # fan-cut figure enlarged to fill the right column; its legend is pulled out
 # into the readable colour-coded text below
-pic(s, "fan_cut_zip7_PBS1.png", IN(6.5), IN(2.45), IN(6.85), IN(3.75), stretch=True)
-_lg = textbox(s, IN(6.6), IN(6.35), IN(6.7), IN(1.05))
-_lg.text_frame.word_wrap = True
+# in-figure legend/median text is tiny; the same information is restated at
+# normal size right above and below the image
 _GREEN, _RED, _BLUE = RGBColor(0x2E, 0x7D, 0x32), RGBColor(0xC0, 0x39, 0x2B), RGBColor(0x4A, 0x70, 0xB0)
+_md = textbox(s, IN(6.5), IN(2.48), IN(6.85), IN(0.35))
+_pmd = _md.text_frame.paragraphs[0]
+for _txt, _col in [("median NRMSE:  ", DARK), ("kept 0.045 (n = 1931)", _GREEN),
+                   ("   ·   ", DARK), ("rejected 1.873 (n = 77)", _RED)]:
+    _r = _pmd.add_run(); _r.text = _txt
+    _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(14), True, _col, "Arial"
+_pmd.alignment = PP_ALIGN.CENTER
+pic(s, "fan_cut_zip7_PBS1.png", IN(6.5), IN(2.9), IN(6.85), IN(3.45), stretch=True)
+_lg = textbox(s, IN(6.6), IN(6.42), IN(6.7), IN(1.0))
+_lg.text_frame.word_wrap = True
 _p = _lg.text_frame.paragraphs[0]
 for _txt, _col, _bold in [("Z7 PBS1   ", DARK, True),
                           ("── passes the cut (kept)", _GREEN, True),
@@ -368,11 +386,11 @@ notes(s, "Before trusting the cut we looked at what it throws away. These are "
 
 # --------------------------------------- 8 · follow-up 1: slow-fall tail
 s = slide()
-title(s, "Follow-up 1 — the slow-fall tail is a one-channel artifact")
+title(s, "Slow-fall tail in one particular channel")
 bullets(s, [
-    "The post-cut fan still shows slow-fall tails → sample them: NRMSE ≤ 0.4 AND τ_fall > 1.5 ms, 10 random events, raw vs fit drawn in all 12 channels",
-    "The sampled events are real pulses → kept. Their extreme fall times trace to one channel: only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere) — a low-frequency disturbance",
-    "Conclusion: no τ_fall cut — slow-fall events passing NRMSE stay in; the extreme tail is a one-channel artifact, not a slow pulse",
+    "The post-cut plot still shows slow-fall tails → sample them: NRMSE ≤ 0.4 AND τ_fall > 1.5 ms, 10 random events, raw vs fit drawn in all 12 channels",
+    "The sampled events are real pulses. Their extreme fall times trace to one channel: only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere)",
+    "Conclusion: no τ_fall cut — slow-fall events passing NRMSE stay in",
     "PDS2 alone: can not make useful templates; hard to fix in analysis/software, the noise itself needs to be fixed",
     "Temporary solution: use the PDS1 template in place of PDS2 (applied in the delivered ROOT files)",
 ], IN(0.55), IN(1.2), IN(12.3), IN(2.2), size=13)
@@ -405,12 +423,11 @@ notes(s, "The first lead comes from the fan plot after the cut: some curves "
 
 # ------------------------------------------------- 11 · template family 1
 s = slide()
-title(s, "Template family 1 — analytic 2-exp, NRMSE-weighted (1x1)")
+title(s, "Results: 1x1 Templates")
 bullets(s, [
     "NRMSE-weighted mean of the fit_ok 2-exp curves",
     "Smooth & noise-free by construction",
-    "ROOT histograms, peak-normalized (+ summed PT / PS1 / PS2)",
-], IN(0.55), IN(1.25), IN(12.3), IN(1.5), size=18)
+], IN(0.55), IN(1.25), IN(12.3), IN(1.1), size=18)
 pic(s, "template_overlay_zip7_PBS1.png", IN(0.5), IN(2.6), IN(12.3), IN(2.05),
     "Z7 PBS1 — blue: the fitted curves (200 of 1931 drawn);  red: the 1x1 template")
 pic(s, "mean_compare_zip7_PBS1.png", IN(0.5), IN(5.05), IN(12.3), IN(2.0),
@@ -426,11 +443,11 @@ notes(s, "First template family: the analytic one. For each channel we take "
 
 # ------------------------------------------------- 12 · template family 2
 s = slide()
-title(s, "Template family 2 — NxM PCA templates")
+title(s, "Results: NxM Templates")
 bullets(s, [
-    "Per-channel PCA over the fitted curves (fit_ok + NRMSE ≤ 0.4)",
+    "channel-specific PCA over the fitted curves (fit_ok + NRMSE ≤ 0.4)",
     "nxm0 = mean shape;  nxm1–4 = principal components;  real pulse = Σᵢ ampᵢ · nxmᵢ",
-    "PC1 + PC2 ≈ 96–98% of the shape variance;  delivered peak-normalized",
+    "PC1 + PC2 ≈ 96–98% of the shape variance",
 ], IN(0.55), IN(1.22), IN(12.3), IN(1.5), size=16)
 pic(s, "pca_zip7_PBS1.png", IN(1.1), IN(3.3), IN(11.1), IN(3.1),
     "Z7 PBS1: nxm0 (mean) + nxm1–4 (PCs) — the oscillating components encode rise/fall-time variation")
