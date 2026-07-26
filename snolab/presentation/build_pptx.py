@@ -166,7 +166,7 @@ _row(False, [("• For every selected event: cache the fully unprocessed raw MID
               "saved as per-series pickle files (reusable for any later analysis)", DARK, False)])
 _row(False, [("• Events in the window per zip:  Z1 10.1k   Z4 26.1k   Z6 17.0k   Z7 2.2k   Z9 2.6k   Z10 7.6k   Z13 9.1k   "
               "Z15 4.2k   Z16 1.6k   Z18 22.1k   Z19 23.3k   Z22 25.0k   Z24 22.9k   (total 174k)", DARK, False)], size=12.5)
-_row(False, [("• This talk focuses on Z7, the best detector; all other detectors are covered in the backup slides", NAVY, True)])
+_row(False, [("• Focus: Z7, the best detector; examples use its PBS1 channel; other detectors in the backup slides", NAVY, True)])
 # credit box, top-right of the title band
 ctb = textbox(s, IN(9.35), IN(0.30), IN(3.5), IN(0.72))
 _p = ctb.text_frame.paragraphs[0]

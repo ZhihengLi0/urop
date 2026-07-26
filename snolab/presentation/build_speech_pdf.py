@@ -39,7 +39,7 @@ POINT = {
         "this fan plot shows **every** fitted event on this channel, 2008 curves",
     ],
     7: [
-        "The plot is Z7 PBS1 — the same channel used throughout the talk — where the two populations are far apart and the valley is obvious.",
+        "In this plot the two populations are far apart and the valley is obvious.",
     ],
     8: [
         "on the left all physical fits — a 200-curve sample, so the slow stragglers appear in proportion to their real share; on the right, after the cut, one very tight, consistent shape family remains",
