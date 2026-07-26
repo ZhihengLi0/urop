@@ -25,35 +25,39 @@ import sys
 # English phrases (verbatim from speech_script.md) said while pointing at the
 # on-screen figure, keyed by slide number.
 POINT = {
-    2: [
+    3: [
         "What you see here are the PTOFamps spectra of all thirteen detectors",
         "The red line in each panel is the K-line position marked by Professor Saab's analysis",
         "Now look at the spectra: on a quiet detector like Z7, the K-line peak is well separated from the noise peak. But on the weaker detectors, the red line sits right inside the noise population",
     ],
-    3: [
+    4: [
         "In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit.",
-        "The left block is noise triggers: the fit fails in **every** channel at the same time. The right block is genuine K-line events: **every** channel fits well at the same time, with a residual of only a few percent.",
-    ],
-    5: [
-        "The dotted vertical line is the common pretrigger everything is aligned to.",
-        "On the left, all the physical fits: you can see some clearly separated, slow-falling curves that spread off the main bundle. On the right, after selecting on NRMSE, only one very tight, consistent shape family remains.",
+        "the left block is noise triggers, the right block is true K-line events",
     ],
     6: [
-        "The plot is Z7 PBS1 — the same channel used throughout the talk — where the two populations are far apart and the valley is obvious.",
+        "The dotted vertical line is the common pretrigger everything is aligned to.",
+        "this fan plot shows **every** fitted event on this channel, 2008 curves",
     ],
     7: [
+        "The plot is Z7 PBS1 — the same channel used throughout the talk — where the two populations are far apart and the valley is obvious.",
+    ],
+    8: [
+        "on the left all physical fits — a 200-curve sample, so the slow stragglers appear in proportion to their real share; on the right, after the cut, one very tight, consistent shape family remains",
+    ],
+    9: [
         "On the left are the **raw** traces of the rejected events. As you can see, there is simply no pulse there",
         "this figure has three layers: the gray-blue underneath is the aligned measured traces, green on top is the fitted curves that **pass** the cut, and red is the ones **removed**; the top-right corner shows each population's median NRMSE and its event count.",
         "The green ones are fast and consistent, bundled together; the red ones scatter everywhere",
     ],
-    8: [
-        "Each row is one event, and in every column except PDS2 you see a clean, fast pulse; only in the PDS2 column is there a large low-frequency swing riding on top of the trace",
-        "the top one is a normal channel, PAS1 — almost every event sits in one narrow peak at about 0.25 milliseconds, and there's basically nothing past one millisecond; the bottom one is PDS2 — a broad tail that stretches all the way out to five or six milliseconds",
-    ],
-    9: [
-        "What's on screen is the bundle of curves that goes into that average.",
-    ],
     10: [
+        "Each row is one event, and in every column except PDS2 you see a clean, fast pulse; only in the PDS2 column is there a large low-frequency swing riding on top of the trace",
+        "the left one is a normal channel, PAS1 — almost every event sits in one narrow peak at about 0.25 milliseconds, and there's basically nothing past one millisecond; the right one is PDS2 — a broad tail that stretches all the way out to five or six milliseconds",
+    ],
+    11: [
+        "On the screen, the blue **bundle** is the fitted curves that go into the average — that's the input, not the template.",
+        "The two plots at the bottom compare the two averages: on the left the NRMSE-weighted mean — the delivered 1x1 template; on the right the plain unweighted mean of the clean PCA input curves — and that is exactly nxm0.",
+    ],
+    12: [
         'the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data',
     ],
 }
