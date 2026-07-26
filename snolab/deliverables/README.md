@@ -37,3 +37,10 @@ Generation scripts: `../lp_fit_align/scripts/`
 (`write_2exp_templates_root.py`, `build_pca_templates.py`,
 `normalize_pca_templates.py`, `plot_pt_ps_templates.py`,
 `export_cdmsbats_templates.py`).
+
+## Known substitution
+
+Z7 PDS2 carries a low-frequency disturbance and cannot make a useful template
+on its own; as a temporary solution its template entries (1x1 and nxm0..4, and
+the PT/PS1/PS2 sums) are copies of the PDS1 template. The histogram titles
+record the substitution. Applied by lp_fit_align/scripts/substitute_pds2_zip7.py.

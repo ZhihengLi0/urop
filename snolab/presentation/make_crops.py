@@ -74,7 +74,19 @@ def grid(src, out, row0, nrows, ncols, pad=6, min_row=140, col0=0):
     cols = [c for c in col_blocks(strip, min_gap=6) if c[1] - c[0] > 80]
     l = max(cols[col0][0] - pad, 0) if col0 else 0
     r = min(cols[col0 + ncols - 1][1] + pad, im.width)
-    im.crop((l, t, r, b)).save(os.path.join(OUT, out))
+    crop = im.crop((l, t, r, b))
+    if row0 != 0:
+        # stitch the channel-title strip on top so every crop keeps its labels
+        titles = [bb for bb in rb if bb[1] - bb[0] <= 100 and bb[1] < panels[0][0]]
+        if titles:
+            tstrip = im.crop((l, max(titles[-1][0] - pad, 0),
+                              r, titles[-1][1] + pad))
+            combo = Image.new("RGB", (crop.width, tstrip.height + crop.height),
+                              (255, 255, 255))
+            combo.paste(tstrip, (0, 0))
+            combo.paste(crop, (0, tstrip.height))
+            crop = combo
+    crop.save(os.path.join(OUT, out))
     print(f"{out}: rows {t}-{b}, x {l}-{r}  ({len(panels)} rows x {len(cols)} cols)")
 
 
@@ -103,7 +115,16 @@ from PIL import ImageDraw as _ImageDraw, ImageFont as _ImageFont
 def annotate_cut(fname, x_04):
     im = Image.open(os.path.join(OUT, fname)).convert("RGB")
     d = _ImageDraw.Draw(im)
-    f = _ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 22)
+    for _fp in ("/System/Library/Fonts/Helvetica.ttc",
+                "/usr/share/fonts/dejavu/DejaVuSans.ttf",
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"):
+        try:
+            f = _ImageFont.truetype(_fp, 22)
+            break
+        except OSError:
+            continue
+    else:
+        f = _ImageFont.load_default()
     H = im.height
     x = int(x_04)
     y_top, y_tip = int(H * 0.30), int(H * 0.82)
@@ -138,8 +159,8 @@ def tfall_half(src, out):
     print(f"{out}: t_fall panel, title trimmed, zoomed to ~0-7 ms")
 tfall_half("time_constants_zip7_PDS2.png", "time_constants_zip7_PDS2_tfall.png")
 tfall_half("time_constants_zip7_PAS1.png", "time_constants_zip7_PAS1_tfall.png")
-vpanel("pca_templates/zip7_pca_templates.png", "pca_zip7_PAS1.png", 0)
-vpanel("pca_templates/zip7_pca_templates.png", "pca_zip7_PBS1.png", 1)
+vpanel("../../../deliverables/nxm/plots/zip7_pca_templates.png", "pca_zip7_PAS1.png", 0)
+vpanel("../../../deliverables/nxm/plots/zip7_pca_templates.png", "pca_zip7_PBS1.png", 1)
 vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay.png", "fan_zip7_PBS1_before.png", 1)
 vpanel("fitted_curves_overlay/zip7_fitted_curves_overlay_nrmse0.4.png",
        "fan_zip7_PBS1_nrmse.png", 1)
@@ -173,7 +194,16 @@ grid("slow_fall_events/zip7_PDS2_slow_fall.png", "slow_fall_zip7_crop.png",
 from PIL import ImageDraw, ImageFont
 _im = Image.open(os.path.join(OUT, "slow_fall_zip7_crop.png"))
 _d = ImageDraw.Draw(_im)
-_f = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 30)
+for _fp in ("/System/Library/Fonts/Helvetica.ttc",
+            "/usr/share/fonts/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"):
+    try:
+        _f = ImageFont.truetype(_fp, 30)
+        break
+    except OSError:
+        continue
+else:
+    _f = ImageFont.load_default()
 _w = _im.width / 4
 for _i, _c in enumerate(["PBS2", "PCS2", "PDS2", "PES2"]):
     _x = int(_i * _w + _w / 2 - 40)
@@ -181,3 +211,16 @@ for _i, _c in enumerate(["PBS2", "PCS2", "PDS2", "PES2"]):
     _d.text((_x, 10), _c, font=_f, fill="white")
 _im.save(os.path.join(OUT, "slow_fall_zip7_crop.png"))
 print("slow_fall_zip7_crop.png: channel labels stamped")
+# stamp channel labels on the K-line (good) fit-example crop, same channels
+# as the noise block (PAS1/PBS1/PCS1); the source rows carry no header line
+_im2 = Image.open(os.path.join(OUT, "fit_examples_zip7_good.png"))
+_pad = Image.new("RGB", (_im2.width, _im2.height + 46), (255, 255, 255))
+_pad.paste(_im2, (0, 46))
+_d2 = ImageDraw.Draw(_pad)
+_w2 = _pad.width / 3
+for _i, _c in enumerate(["PAS1", "PBS1", "PCS1"]):
+    _x = int(_i * _w2 + _w2 / 2 - 34)
+    _d2.text((_x, 8), _c, font=_f, fill="#333333")
+_pad.save(os.path.join(OUT, "fit_examples_zip7_good.png"))
+print("fit_examples_zip7_good.png: channel labels stamped")
+

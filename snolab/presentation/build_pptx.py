@@ -103,8 +103,15 @@ r.font.size, r.font.bold, r.font.color.rgb, r.font.name = Pt(36), True, NAVY, "A
 tb2 = textbox(s, IN(0.9), IN(3.7), IN(11.5), IN(0.9))
 p = tb2.text_frame.paragraphs[0]
 r = p.add_run()
-r.text = "K-line event selection  ·  free-pretrigger two-exponential fits  ·  1x1 and NxM (PCA) templates"
+r.text = "K-line event selection  ·  free-pretrigger two-exponential fits"
 r.font.size, r.font.color.rgb, r.font.name = Pt(18), GRAY, "Arial"
+r2 = p.add_run()
+r2.text = " (future step: three-, four-exponential fits)"
+r2.font.size, r2.font.italic = Pt(14), True
+r2.font.color.rgb, r2.font.name = ACCENT, "Arial"
+r3 = p.add_run()
+r3.text = "  ·  1x1 and NxM (PCA) templates"
+r3.font.size, r3.font.color.rgb, r3.font.name = Pt(18), GRAY, "Arial"
 tb3 = textbox(s, IN(0.9), IN(5.6), IN(11.5), IN(0.8))
 p = tb3.text_frame.paragraphs[0]
 r = p.add_run(); r.text = "Zhiheng Li  —  July 2026"
@@ -114,62 +121,95 @@ notes(s, "Today I will present the phonon pulse-template work for SNOLAB Run 4: 
          "pipeline, the quality cuts and how each was derived, and the two "
          "template families we delivered for all 13 detectors.")
 
+
+# ------------------------------------------------- 1b · table of contents
+s = slide()
+title(s, "Table of Contents")
+bullets(s, [
+    "1.  Dataset:  Ge activation K-line event selection, raw trace cache (13 detectors)",
+    "2.  Pulse fit:  100 kHz low-pass, free-pretrigger two-exponential fit, alignment at 16050",
+    "3.  Data cleaning:  fit_ok, NRMSE valley cut (0.4), rise-time ceiling (0.3 ms)",
+    "4.  Cross-checks:  cuts remove noise, real pulses stay; slow-fall follow-up",
+    "5.  Template generation:  1x1 weighted template, NxM PCA templates (nxm0..4)",
+    "6.  Deliverables and future steps:  cdmsbats ROOT files; three-, four-exponential fits",
+    "7.  Backup:  weak detectors, rise-time cut details, Z7 full results gallery",
+], IN(1.1), IN(1.6), IN(11.0), IN(4.9), size=19)
+notes(s, "Quick roadmap: the dataset and how events were selected, the fit and "
+         "alignment, the two cleaning cuts and the checks behind them, the two "
+         "template families we deliver, and the future steps. Backup slides "
+         "hold the weak-detector picture and the full Z7 gallery.")
+
 # ------------------------------------------------- 2 · motivation / selection
 s = slide()
-title(s, "From the Ge-activation K-line to an event sample",
-      "Goal: one clean, minimally-biased pulse population per detector × channel")
-bullets(s, [
-    "Per detector, Prof. Saab's study marked the 10.37 keV K-line position in PTOFamps — the red line in each panel below",
-    "Our event selection: a PTOFamps window bracketing the red line — position ×/÷ 1.35, a rough, somewhat arbitrary eyeballed choice; deliberately minimal, no other cuts",
-    "For every selected event: cache the fully unprocessed raw MIDAS traces of all channels + event metadata",
-    "13 detectors (zips) × 27–30 series — full raw traces cached",
-], IN(0.25), IN(1.18), IN(12.3), IN(1.45), size=14)
+title(s, "Ge activation dataset - R4")
+_tb = textbox(s, IN(0.25), IN(1.14), IN(12.6), IN(1.85))
+_tf = _tb.text_frame
+def _row(first, parts, size=13.5):
+    _p = _tf.paragraphs[0] if first else _tf.add_paragraph()
+    _p.space_after = Pt(4)
+    for _txt, _c, _b in parts:
+        _r = _p.add_run(); _r.text = _txt
+        _r.font.size, _r.font.name = Pt(size), "Arial"
+        _r.font.color.rgb = _c; _r.font.bold = _b
+_row(True, [("• Per detector, Prof. Saab's study marked the 10.37 keV K-line position in ", DARK, False),
+            ("PTOFamps", ACCENT, True),
+            (" (the red line in each panel below)", DARK, False)])
+_row(False, [("• A ", DARK, False), ("PTOFamps", ACCENT, True),
+             (" window bracketing the red line: position ×/÷ 1.35, a rough eyeballed choice; deliberately minimal, no other cuts", DARK, False)])
+_row(False, [("• For every selected event: cache the fully unprocessed raw MIDAS traces of all channels + event metadata, "
+              "saved as per-series pickle files (reusable for any later analysis)", DARK, False)])
+_row(False, [("• Events in the window per zip:  Z1 10.1k   Z4 26.1k   Z6 17.0k   Z7 2.2k   Z9 2.6k   Z10 7.6k   Z13 9.1k   "
+              "Z15 4.2k   Z16 1.6k   Z18 22.1k   Z19 23.3k   Z22 25.0k   Z24 22.9k   (total 174k)", DARK, False)], size=12.5)
+_row(False, [("• This talk focuses on Z7, the best detector; all other detectors are covered in the backup slides", NAVY, True)])
 # credit box, top-right of the title band
 ctb = textbox(s, IN(9.35), IN(0.30), IN(3.5), IN(0.72))
-for i, (txt, link) in enumerate([
-        ("Data: Ge Activation Data — Ops Shift 260612", None),
-        ("Credit: Prof. Tarek Saab  ·  SuperCDMS Confluence",
-         "https://confluence.slac.stanford.edu/spaces/CDMS/pages/716899864/Ge+Activation+Data+-+Ops+Shift+260612")]):
-    p = ctb.text_frame.paragraphs[0] if i == 0 else ctb.text_frame.add_paragraph()
-    r = p.add_run(); r.text = txt
-    r.font.size, r.font.color.rgb, r.font.name = Pt(10), GRAY, "Arial"
-    if link:
-        r.hyperlink.address = link
-    p.alignment = PP_ALIGN.RIGHT
-pic(s, "kline_all_zips.png", IN(0.42), IN(2.72), IN(12.5), IN(4.35),
+_p = ctb.text_frame.paragraphs[0]
+_r = _p.add_run(); _r.text = "Credit: Prof. Tarek Saab"
+_r.font.size, _r.font.color.rgb, _r.font.name = Pt(10), GRAY, "Arial"
+_r.hyperlink.address = "https://confluence.slac.stanford.edu/spaces/CDMS/pages/716899864/Ge+Activation+Data+-+Ops+Shift+260612"
+_p.alignment = PP_ALIGN.RIGHT
+pic(s, "kline_all_zips.png", IN(0.42), IN(3.05), IN(12.5), IN(4.05),
     "All 13 detectors, PTOFamps spectra (Prof. Saab's study)")
-notes(s, "Everything starts from the Ge activation data. After Cf activation "
-         "every detector shows the 10.37 keV K-line. Professor Saab's study "
-         "located the K-line position in the PTOFamps spectrum of each "
-         "detector - that is the red line in every panel here. Our event "
+notes(s, "This is the Ge activation dataset from Run 4, credit to Professor "
+         "Saab's study on the SuperCDMS Confluence. The goal of the whole "
+         "project is one clean, minimally biased pulse population per "
+         "detector and channel. After Cf activation every detector shows the "
+         "10.37 keV K-line; the study located its position in the PTOFamps "
+         "spectrum of each detector, the red line in every panel. Our event "
          "selection is exactly one condition: a window around the red line, "
-         "a factor 1.35 both ways - a rough, eyeballed choice - and nothing "
-         "else. For each selected event "
-         "we cache the fully unprocessed raw MIDAS traces of all channels. "
-         "You can already see on the weak detectors that the window will "
-         "admit part of the noise-trigger population next to the K-line - "
-         "that is intentional: the cache is raw, so every later cut stays "
-         "explicit and reversible.")
+         "a factor 1.35 both ways, and nothing else. Every selected event is "
+         "cached with its fully unprocessed raw MIDAS traces and metadata as "
+         "per-series pickle files, so the sample can be reused for any later "
+         "analysis. The window holds from about 1.6 thousand events on Z16 "
+         "up to 26 thousand on Z4, 174 thousand in total; Z7 has about 2.2 "
+         "thousand. In this talk I focus on Z7, the best detector; the other "
+         "detectors are covered in the backup slides.")
 
 # ------------------------------------------------------ 3 · fit quality grids (overview)
 s = slide()
-title(s, "Fit quality at a glance — event × channel grids")
+title(s, "Fit quality at a glance: event × channel grids")
 bullets(s, [
-    "One row per event, one column per channel: the low-passed trace (blue) with the fitted pulse model (red) overlaid",
-    "A real event fits well in every channel at once; a noise trigger fails in every channel — a clean handle on which events are real",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.3), size=14)
-pic(s, "fit_examples_zip7_noise.png", IN(0.2), IN(2.75), IN(6.55), IN(3.55),
-    "Noise triggers (Z7): the fit fails in every channel at once")
-pic(s, "fit_examples_zip7_good.png", IN(6.6), IN(2.75), IN(6.55), IN(3.55),
-    "K-line events (Z7): consistent good fits across channels")
+    "Real events and noise triggers can be told apart by visual comparison (no cut applied at this stage)",
+], IN(0.55), IN(1.2), IN(12.3), IN(0.7), size=14)
+def _biglabel(x, w, txt, color):
+    _tb = textbox(s, x, IN(1.95), w, IN(0.5))
+    _p = _tb.text_frame.paragraphs[0]
+    _r = _p.add_run(); _r.text = txt
+    _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(24), True, color, "Arial"
+    _p.alignment = PP_ALIGN.CENTER
+_biglabel(IN(0.2), IN(6.55), "NOISE", ACCENT)
+_biglabel(IN(6.6), IN(6.55), "REAL PULSE", NAVY)
+pic(s, "fit_examples_zip7_noise.png", IN(0.2), IN(2.55), IN(6.55), IN(4.0))
+pic(s, "fit_examples_zip7_good.png", IN(6.6), IN(2.55), IN(6.55), IN(4.0))
 notes(s, "Before the algorithm, a quick look at the data itself. We use "
          "event-by-channel grids: each row is one event, each column one "
          "channel, with the low-passed trace in blue and a fitted pulse model "
-         "in red on top. The pattern is already clear: a real K-line event "
-         "fits well in every channel at once, while a noise trigger fails in "
-         "every channel at once. So the events split cleanly into two kinds. "
+         "in red on top. By visual comparison you can already tell the two "
+         "kinds apart: on the left, noise triggers; on the right, K-line "
+         "events. No cut is applied at this stage, and an event is not "
+         "necessarily good or bad in every channel at once. "
          "How we actually fit and align each trace is the next slide, and how "
-         "we turn that split into a quantitative cut comes shortly after.")
+         "we turn this into a quantitative cut comes shortly after.")
 
 # ------------------------------------------------------ 4 · per-trace algorithm
 s = slide()
@@ -188,15 +228,23 @@ def steps_box(top, height, items):
 
 steps_box(IN(1.2), IN(1.35), [
     ("1.  Low-pass", " — 100 kHz Butterworth"),
-    ("2.  Normalize", " — subtract the baseline, scale the trace to unit peak"),
-    ("3.  Fit", " — two-exponential model, all 5 parameters free (including the pretrigger t₀):"),
+    ("2.  Normalize", " — subtract the baseline (median of the pre-pulse samples), scale the trace to unit peak"),
+    ("3.  Fit", " — two-exponential model:"),
 ])
 pic(s, "formula_2exp.png", IN(2.6), IN(2.62), IN(8.1), IN(0.95))
-steps_box(IN(3.65), IN(1.5), [
-    ("4.  Two quality checks per trace", " (recorded here, not cut yet):"),
+# fit parameter definitions, right under the formula
+_pdef = textbox(s, IN(1.15), IN(3.58), IN(11.6), IN(0.35))
+_pp = _pdef.text_frame.paragraphs[0]
+_pr = _pp.add_run()
+_pr.text = ("Fit parameters:  A amplitude   ·   τ_rise rise time constant   ·   "
+            "τ_fall fall time constant   ·   t₀ pulse onset (pretrigger)   ·   b baseline")
+_pr.font.size, _pr.font.italic = Pt(12.5), True
+_pr.font.color.rgb, _pr.font.name = GRAY, "Arial"
+steps_box(IN(3.95), IN(0.55), [
+    ("4.  Two quality checks per trace", " (calculated and recorded here, not cut yet):"),
 ])
 # the two quality-number sub-lines, plain English
-q_tb = textbox(s, IN(1.15), IN(4.02), IN(11.6), IN(0.9))
+q_tb = textbox(s, IN(1.15), IN(4.42), IN(11.6), IN(0.9))
 for i, (lead, rest) in enumerate([
         ("fit_ok", " — amplitude is positive, and the pulse rises faster than it falls"),
         ("NRMSE", " — RMS of the fit residual ÷ pulse peak  (smaller = better fit)")]):
@@ -220,7 +268,11 @@ notes(s, "The per-trace algorithm. First a low-pass filter to "
          "faster than fall - and the NRMSE, the normalized root-mean-square "
          "error, the fit residual divided by the pulse height. At this stage "
          "we only record them. Step five, alignment, and its output get "
-         "their own slide next.")
+         "their own slide next. Q and A backup: why fit_ok demands rise "
+         "faster than fall - the rise time is set by L over R, an electrical "
+         "property of the readout circuit, while the fall time is set by C "
+         "over G, a thermal property of the detector; physically the "
+         "electrical rise is the faster of the two.")
 
 # ------------------------------------------------------ 5 · alignment result
 s = slide()
@@ -306,15 +358,17 @@ bullets(s, [
     "The post-cut fan still shows slow-fall tails → sample them: NRMSE ≤ 0.4 AND τ_fall > 1.5 ms, 10 random events, raw vs fit drawn in all 12 channels",
     "The sampled events are real pulses → kept. Their extreme fall times trace to one channel: only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere) — a low-frequency disturbance",
     "Conclusion: no τ_fall cut — slow-fall events passing NRMSE stay in; the extreme tail is a one-channel artifact, not a slow pulse",
-], IN(0.55), IN(1.2), IN(12.3), IN(1.55), size=14)
-pic(s, "slow_fall_zip7_crop.png", IN(0.3), IN(2.95), IN(6.7), IN(4.0),
+    "PDS2 alone: can not make useful templates; hard to fix in analysis/software, the noise itself needs to be fixed",
+    "Temporary solution: use the PDS1 template in place of PDS2 (applied in the delivered ROOT files)",
+], IN(0.55), IN(1.2), IN(12.3), IN(2.2), size=13)
+pic(s, "slow_fall_zip7_crop.png", IN(0.3), IN(3.5), IN(6.7), IN(3.45),
     "Z7, 3 sampled slow-fall events: normal in PBS2/PCS2/PES2, swings only in PDS2")
 # the two t_fall histograms side by side, cropped to the useful 0-7 ms
-pic(s, "time_constants_zip7_PAS1_tfall.png", IN(7.05), IN(3.35), IN(3.05), IN(2.3),
+pic(s, "time_constants_zip7_PAS1_tfall.png", IN(7.05), IN(3.9), IN(3.05), IN(2.2),
     "Z7 PAS1 — normal channel: narrow (median 0.25 ms)")
-pic(s, "time_constants_zip7_PDS2_tfall.png", IN(10.2), IN(3.35), IN(3.05), IN(2.3),
+pic(s, "time_constants_zip7_PDS2_tfall.png", IN(10.2), IN(3.9), IN(3.05), IN(2.2),
     "Z7 PDS2 — bad channel: broad tail (median 0.51 ms)")
-_ft = textbox(s, IN(7.05), IN(2.62), IN(6.2), IN(0.55))
+_ft = textbox(s, IN(7.05), IN(3.42), IN(6.2), IN(0.5))
 _pft = _ft.text_frame.paragraphs[0]
 _rft = _pft.add_run(); _rft.text = "Fitted τ_fall distribution, same 0–7 ms axis:"
 _rft.font.size, _rft.font.bold, _rft.font.color.rgb, _rft.font.name = Pt(15), True, NAVY, "Arial"
@@ -327,7 +381,12 @@ notes(s, "The first lead comes from the fan plot after the cut: some curves "
          "extreme fall times all trace back to one channel: only PDS2 is "
          "swinging wildly, while the same events are normal fast pulses in "
          "the other eleven channels - so the extreme tail is a one-channel "
-         "low-frequency artifact, not a genuinely slow pulse.")
+         "low-frequency artifact, not a genuinely slow pulse. PDS2 alone "
+         "cannot make a useful template, and this is hard to fix on the "
+         "analysis or software side - the noise itself needs to be fixed in "
+         "hardware. As a temporary solution we use the PDS1 template in "
+         "place of PDS2, and that substitution is applied in the delivered "
+         "ROOT files.")
 
 # ------------------------------------------------- 11 · template family 1
 s = slide()
@@ -337,9 +396,10 @@ bullets(s, [
     "Smooth & noise-free by construction",
     "ROOT histograms, peak-normalized (+ summed PT / PS1 / PS2)",
 ], IN(0.55), IN(1.25), IN(12.3), IN(1.5), size=18)
-pic(s, "template_overlay_zip7_PBS1.png", IN(0.5), IN(3.1), IN(12.3), IN(3.6),
-    "Z7 PBS1 — blue: the fitted curves (200 of 1931 drawn);  red: the delivered 1x1 template, "
-    "the NRMSE-weighted mean of all fit_ok curves, read back from the ROOT file")
+pic(s, "template_overlay_zip7_PBS1.png", IN(0.5), IN(2.6), IN(12.3), IN(2.05),
+    "Z7 PBS1 — blue: the fitted curves (200 of 1931 drawn);  red: the 1x1 template")
+pic(s, "mean_compare_zip7_PBS1.png", IN(0.5), IN(5.05), IN(12.3), IN(2.0),
+    "Same curves, two averages (zoomed): NRMSE-weighted (the 1x1 template) vs plain mean (= nxm0); dashed gray = the other one")
 notes(s, "First template family: the analytic one. For each channel we take "
          "every physical fitted curve at the common pretrigger and average them "
          "with a weight of one over NRMSE squared - badly fit events count "
@@ -353,7 +413,7 @@ notes(s, "First template family: the analytic one. For each channel we take "
 s = slide()
 title(s, "Template family 2 — NxM PCA templates")
 bullets(s, [
-    "Per-channel PCA over the clean fitted curves (fit_ok + NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms)",
+    "Per-channel PCA over the fitted curves (fit_ok + NRMSE ≤ 0.4)",
     "nxm0 = mean shape;  nxm1–4 = principal components;  real pulse = Σᵢ ampᵢ · nxmᵢ",
     "PC1 + PC2 ≈ 96–98% of the shape variance;  delivered peak-normalized",
 ], IN(0.55), IN(1.22), IN(12.3), IN(1.5), size=16)
@@ -370,20 +430,30 @@ notes(s, "Second family: the NxM PCA templates, built to capture the "
 
 # ------------------------------------------------- 13 · summary
 s = slide()
-title(s, "Delivered — and what remains")
+title(s, "Template file")
 bullets(s, [
-    "Two template families built for all 13 detectors:  1x1 (2-exp weighted)  +  NxM PCA",
-    "Delivered in the official cdmsbats PulseTemplates format",
-    "Cuts read off the data, verified in raw traces:  NRMSE ≤ 0.4,  τ_rise ≤ 0.3 ms",
-], IN(0.55), IN(1.7), IN(12.3), IN(3.5), size=22)
-notes(s, "To summarize: both template families are delivered for all 13 "
-         "detectors in the official PulseTemplates format - the analytic "
-         "1x1 templates and the PCA NxM set. The whole chain is traceable "
-         "from raw traces to every figure, and both quality cuts were read "
-         "off the data and verified in the raw traces. Two things remain: "
-         "the final call on the rise-time ceiling versus the genuine slow "
-         "pulses, and running the group's template-validation method on the "
-         "new templates. Thank you - happy to take questions.")
+    "Two template sets for all 13 detectors: 1x1 (2-exp weighted) + NxM PCA",
+    "In cdmsbats_config feature branch, ready for merge",
+], IN(0.55), IN(1.9), IN(12.3), IN(2.2), size=22)
+notes(s, "Both template sets are ready for all 13 detectors: the analytic "
+         "1x1 templates and the PCA NxM set, in the official PulseTemplates "
+         "format, sitting in the cdmsbats underscore config feature branch "
+         "and ready for merge.")
+
+# ------------------------------------------------- 13b · future steps
+s = slide()
+title(s, "Future Steps")
+bullets(s, [
+    "Three-, four-exponential fits",
+    "Exercise NxM processing",
+    "Other detectors: worse noise, a few more cuts added, in the backup slides",
+], IN(0.55), IN(1.9), IN(12.3), IN(2.6), size=22)
+notes(s, "Future steps: extend the fit to three and four exponentials, "
+         "exercise the NxM processing chain on the new templates, and the "
+         "other detectors - they have worse noise and needed a few more "
+         "cuts, all documented in the backup slides. If anyone is "
+         "interested, I am happy to walk through the backup slides. Thank "
+         "you - happy to take questions.")
 
 # ------------------------------------------- backup · weak detectors (Z22)
 s = slide()

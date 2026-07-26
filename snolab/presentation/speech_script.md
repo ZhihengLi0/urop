@@ -24,9 +24,9 @@
 
 ## Slide 3 — Fit quality at a glance / data overview（约 40 秒）
 
-**中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。规律非常清楚：左边这批是噪声触发，它在**所有**通道里都拟合失败；右边是真正的 K 线事件，**所有**通道都拟合得很好，残差只有百分之几。也就是说，事件干干净净地分成两类——要么全通道都好，要么全通道都坏。
+**中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。通过肉眼对比就能把两类分开：左边这批是噪声触发，右边是真正的 K 线事件。这一步我们还没有做任何 cut，也不下"哪个拟合成功哪个失败"的结论——一个事件也不一定在所有通道里都好或都坏。
 
-**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. The pattern is very clear. The left block is noise triggers: the fit fails in **every** channel. The right block is true K-line events: **every** channel fits well, with a residual of only a few percent. So the events split cleanly into two kinds — good in every channel, or bad in every channel.
+**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. By visual comparison you can already tell the two kinds apart: the left block is noise triggers, the right block is true K-line events. No cut is applied at this stage, and we do not label individual fits as pass or fail here — an event is not necessarily good or bad in every channel at once.
 
 ---
 
@@ -56,9 +56,9 @@
 
 ## Slide 7 — The rejected population is noise（约 45 秒）
 
-**中文**：定了 cut 还不够，得验证它切掉的确实是噪声、不是真脉冲。左边是被切掉的事件的**原始**波形——可以看到，里面就没有脉冲。但还是有一条很慢的曲线恰好凑在了它上面。右边换个角度看同一件事，这张图有三层：底下灰蓝色的是对齐后的实测波形，上面绿色是**通过** cut 的拟合曲线，红色是**被切掉**的；右上角标着两个群体各自的中位 NRMSE 和事件数。可以看到绿的又快又一致，聚成一束；红的四处发散，中位 NRMSE 是绿的四十倍。在 Z7 这条通道上，仅仅只有 3.8% 被切掉。结论很明确：这一刀移除的是噪声触发，不损失任何真实脉冲。
+**中文**：定了 cut 还不够，得验证它切掉的确实是噪声、不是真脉冲。左边是被切掉的事件的**原始**波形——可以看到，里面就没有脉冲。但还是有一条很慢的曲线恰好凑在了它上面。右边换个角度看同一件事，这张图有三层：底下灰蓝色的是对齐后的实测波形，上面绿色是**通过** cut 的拟合曲线，红色是**被切掉**的；右上角标着两个群体各自的中位 NRMSE 和事件数。可以看到绿的又快又一致，聚成一束；红的四处发散，中位 NRMSE 是绿的四十倍。在 Z7 这条通道上，仅仅只有 3.8% 被切掉。结论很明确：这一刀移除的是噪声触发，不损失任何真实脉冲。PDS2 单独做不出可用的模板；这在分析/软件层面很难修，需要修的是噪声本身。临时方案：用 PDS1 的模板顶替 PDS2，交付的 ROOT 文件里已经这样替换。
 
-**English**: Setting a cut isn't enough — I have to verify that what it removes really is noise, not real pulses. On the left are the **raw** traces of the rejected events. As you can see, there is simply no pulse there. But some slow curve still happened to converge on it. On the right, the same thing from another angle — this figure has three layers: the gray-blue underneath is the aligned measured traces, green on top is the fitted curves that **pass** the cut, and red is the ones **removed**; the top-right corner shows each population's median NRMSE and its event count. The green ones are fast and consistent, bundled together; the red ones scatter everywhere, with a median NRMSE about forty times higher. On this Z7 channel, only 3.8% of the events get cut. So the conclusion is clear: the cut removes noise triggers, and no real pulses are lost.
+**English**: Setting a cut isn't enough — I have to verify that what it removes really is noise, not real pulses. On the left are the **raw** traces of the rejected events. As you can see, there is simply no pulse there. But some slow curve still happened to converge on it. On the right, the same thing from another angle — this figure has three layers: the gray-blue underneath is the aligned measured traces, green on top is the fitted curves that **pass** the cut, and red is the ones **removed**; the top-right corner shows each population's median NRMSE and its event count. The green ones are fast and consistent, bundled together; the red ones scatter everywhere, with a median NRMSE about forty times higher. On this Z7 channel, only 3.8% of the events get cut. So the conclusion is clear: the cut removes noise triggers, and no real pulses are lost. PDS2 alone cannot make a useful template; this is hard to fix in analysis or software, the noise itself needs fixing. Temporary solution: use the PDS1 template in place of PDS2 - the substitution is applied in the delivered ROOT files.
 
 ---
 
@@ -86,11 +86,11 @@
 
 ---
 
-## Slide 11 — Delivered, and what remains（约 30 秒）
+## Slide 11 — Template file / Future steps（约 30 秒）
 
-**中文**：一句话总结：我为全部 13 个探测器做出了两族模板——1x1 和 NxM PCA，都按官方格式交付了。两个 cut 都是从数据里读出来、又回到原始波形验证过的。谢谢大家，欢迎提问。（如被问后续：下一步是对新模板跑一遍组里的验证流程。）
+**中文**：两套模板都做好了，覆盖全部 13 个探测器：解析的 1x1 模板和 PCA 的 NxM 模板，官方 PulseTemplates 格式，放在 cdmsbats_config 的 feature branch 里，随时可以 merge。下一步：扩展到三指数、四指数拟合；把 NxM 处理链真正跑起来；其他探测器噪声更差、多加了几个 cut，细节都在 backup slides 里——如果大家有兴趣，我可以讲一讲 backup slides。
 
-**English**: In one line: I built two template families for all thirteen detectors — the 1x1 and the NxM PCA — and delivered both in the official format. Both cuts were read off the data and verified in the raw traces. Thank you — happy to take questions. (If asked about next steps: run the group's validation procedure on the new templates.)
+**English**: Both template sets are ready for all 13 detectors: the analytic 1x1 templates and the PCA NxM set, in the official PulseTemplates format, sitting in the cdmsbats_config feature branch and ready for merge. Next: extend to three- and four-exponential fits, exercise the NxM processing chain, and the other detectors — worse noise, a few more cuts, all in the backup slides. If anyone is interested, I am happy to walk through the backup slides.
 
 ---
 
@@ -139,6 +139,12 @@
 **中文**：真实触发时刻逐事件抖动，拟合显示普遍比名义位置晚两百多个采样点；钉死它会把误差转嫁到上升、下降时间上。
 
 **English**: The true trigger time jitters event by event — the fits sit about two hundred samples after the nominal position — and pinning it pushes that error into the rise and fall times.
+
+**Q2b — fit_ok 为什么要求 rise 比 fall 快？/ Why does fit_ok require the rise to be faster than the fall?**
+
+**中文**：这是物理性质决定的：上升时间由 L/R 决定，是读出电路的电学性质；下降时间由 C/G 决定，是探测器的热学性质。物理上电学的上升沿本来就比热学的衰减快，所以反过来的拟合不是物理脉冲。
+
+**English**: It follows from the physics: the rise time is set by L/R, an electrical property of the readout circuit, while the fall time is set by C/G, a thermal property of the detector. Physically the electrical rise is faster than the thermal decay, so a fit with the opposite ordering is not a physical pulse.
 
 **Q3 — 为什么用双指数模型？/ Why the two-exponential model?**
 

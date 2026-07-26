@@ -13,7 +13,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOTF = os.path.join(HERE, "..", "lp_fit_align", "results", "root_files",
+ROOTF = os.path.join(HERE, "..", "deliverables", "1x1", "root_files",
                      "Templates_SNOLAB_R4_zip7_2expfit_weighted.root")
 OUT = os.path.join(HERE, "figures", "template_1x1_zip7_PBS1.png")
 
