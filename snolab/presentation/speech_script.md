@@ -32,9 +32,9 @@
 
 ## Slide 4 — Fit quality at a glance / data overview（约 40 秒）
 
-**中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。通过肉眼对比就能把两类分开：左边这批是噪声触发，右边是真正的 K 线事件。这一步我们还没有做任何 cut，也不下"哪个拟合成功哪个失败"的结论——一个事件也不一定在所有通道里都好或都坏。
+**中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。通过肉眼对比就能把两类分开：左边这批是噪声触发，右边是真正的 K 线事件。这一步我们还没有做任何 cut，也不下"哪个拟合成功哪个失败"的结论。
 
-**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. By visual comparison you can already tell the two kinds apart: the left block is noise triggers, the right block is true K-line events. No cut is applied at this stage, and we do not label individual fits as pass or fail here — an event is not necessarily good or bad in every channel at once.
+**English**: First, a sanity check at the level of individual events. In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit. By visual comparison you can already tell the two kinds apart: the left block is noise triggers, the right block is true K-line events. No cut is applied at this stage, and we do not label individual fits as pass or fail here.
 
 ---
 
