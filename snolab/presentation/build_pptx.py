@@ -608,149 +608,218 @@ def snap_cut(white, target, window):
     return best if best is not None else target
 
 
-def split_pic(s, relname, l, t, box_w, box_h, gap=Inches(0.12)):
-    """Place a (possibly very tall) figure readably: choose the number of
-    vertical segments k that maximizes the displayed scale, cut the image into
-    k bands (top-to-bottom) and lay them out side by side."""
-    path = os.path.join(FIG, relname)
-    img = Image.open(path)
-    w0, h0 = img.size
-    best_k, best_scale = 1, 0.0
-    for k in (1, 2, 3, 4):
-        seg_w = (box_w - gap * (k - 1)) / k
-        scale = min(seg_w / w0, box_h / (h0 / k))
-        if scale > best_scale:
-            best_k, best_scale = k, scale
-    k = best_k
-    base = os.path.splitext(os.path.basename(relname))[0]
-    seg_h0 = h0 // k
-    seg_w = (box_w - gap * (k - 1)) / k
+def _white_cols(img):
+    """Boolean list: column is (almost) pure background white."""
+    import numpy as np
+    g = np.asarray(img.convert("L"))
+    return (g.min(axis=0) > 247)
+
+
+def _content_blocks(mask):
+    """Contiguous non-white index ranges."""
+    blocks, start = [], None
+    for i, w in enumerate(mask):
+        if not w and start is None:
+            start = i
+        elif w and start is not None:
+            blocks.append((start, i)); start = None
+    if start is not None:
+        blocks.append((start, len(mask)))
+    return blocks
+
+
+def _panel_units(img):
+    """Vertical (start, end) unit per panel: the panel box plus its title
+    above and tick/label text below. Panels are the tall content blocks
+    (inside a plot box no row is all-white thanks to the frame spines);
+    text lines are the short ones. Header text above the first panel is
+    dropped — the slide carries the description."""
     white = _white_rows(img)
-    cuts = [0] + [snap_cut(white, i * seg_h0, seg_h0 // 4)
-                  for i in range(1, k)] + [h0]
-    crops = []
-    for i in range(k):
-        crop = img.crop((0, cuts[i], w0, cuts[i + 1]))
-        cp = os.path.join(_SPLIT_DIR, f"{base}_p{i+1}of{k}.png")
-        crop.save(cp)
-        crops.append((cp, crop.size))
-    max_dh = max(int(ch * min(seg_w / cw, box_h / ch)) for _, (cw, ch) in crops)
-    t = t + int((box_h - max_dh) / 2)          # center the block vertically
-    for i, (cp, (cw, ch)) in enumerate(crops):
-        sc = min(seg_w / cw, box_h / ch)
-        dw, dh = int(cw * sc), int(ch * sc)
-        left = l + i * (seg_w + gap) + int((seg_w - dw) / 2)
-        s.shapes.add_picture(cp, left, t, width=dw, height=dh)
-        if k > 1:
-            tb = textbox(s, l + i * (seg_w + gap), t + dh + Emu(20000),
-                         seg_w, Inches(0.25))
-            _p = tb.text_frame.paragraphs[0]
-            _r = _p.add_run(); _r.text = f"part {i+1}/{k} (top to bottom)"
-            _r.font.size, _r.font.italic = Pt(9), True
-            _r.font.color.rgb, _r.font.name = GRAY, "Arial"
-            _p.alignment = PP_ALIGN.CENTER
-
-def zoom_pic(s, relname, l, t, box_w, box_h):
-    """1:1 detail slide: crop the top(-left) region of the figure with the
-    same aspect as the display box and show it full-size — in-figure text
-    becomes readable (near the authored size)."""
-    path = os.path.join(FIG, relname)
-    img = Image.open(path)
-    w0, h0 = img.size
-    box_aspect = float(box_h) / float(box_w)
-    if h0 / w0 > 1.6:                     # tall multi-channel figure
-        cw = w0
-    else:                                 # wide event grid: left half
-        cw = int(w0 * 0.55)
-    ch = min(h0, int(cw * box_aspect))
-    if ch < h0:
-        ch = snap_cut(_white_rows(img), ch, max(1, int(ch * 0.45)))
-    crop = img.crop((0, 0, cw, ch))
-    base = os.path.splitext(os.path.basename(relname))[0]
-    cp = os.path.join(_SPLIT_DIR, f"{base}_zoom.png")
-    crop.save(cp)
-    sc = min(box_w / cw, box_h / ch)
-    dw, dh = int(cw * sc), int(ch * sc)
-    s.shapes.add_picture(cp, l + int((box_w - dw) / 2), t, width=dw, height=dh)
+    blocks = _content_blocks(white)
+    hmax = max(b[1] - b[0] for b in blocks)
+    thr = max(60, int(hmax * 0.35))
+    panels = [b for b in blocks if b[1] - b[0] >= thr]
+    small = [b for b in blocks if b[1] - b[0] < thr]
+    starts = []
+    for ps, pe in panels:
+        titles = [b for b in small if b[1] <= ps + 2 and ps - b[1] < 55]
+        starts.append(max(0, (titles[-1][0] if titles else ps) - 4))
+    units, tails = [], []
+    for i, (ps, pe) in enumerate(panels[:-1]):
+        end = starts[i + 1] - 4
+        units.append((starts[i], end))
+        tails.append(end - pe)
+    ps, pe = panels[-1]
+    tail = sorted(tails)[len(tails) // 2] if tails else 60
+    units.append((starts[-1], min(img.size[1], pe + tail)))
+    return units
 
 
-# ================= backup gallery · every Z7 result figure (appendix) =======
-# One slide per figure: full screenshot + the figure's name and how to read it.
-GAL = os.path.join("backup_zip7")
-_gallery = [
-    ("zip7_lp_aligned_overlay.png",
-     "aligned_overlay — shift-aligned measured traces",
-     "Blue = measured LP traces shifted by (fitted pretrigger − 16050); red = point-by-point mean of ALL fit_ok "
-     "events; orange = NRMSE-weighted mean of the fitted curves (w = 1/max(NRMSE,0.01)²). Rise edges line up at 16050."),
-    ("zip7_fitted_curves_overlay.png",
-     "fitted_curves_overlay — fan of fitted 2-exp curves (no cut)",
-     "Every fit_ok event's fitted curve re-evaluated at common pretrigger 16050, peak-normalized. "
-     "Pure shape distribution; the broad slow curves are noise fits that the cuts remove."),
-    ("zip7_fitted_curves_overlay_nrmse0.4.png",
-     "fitted_curves_overlay — after NRMSE ≤ 0.4",
-     "Same fan after the NRMSE cut: the noise fan collapses; the fast-pulse bundle remains."),
-    ("zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
-     "fitted_curves_overlay — after NRMSE ≤ 0.4 and τ_rise ≤ 0.3 ms",
-     "The exact PCA input population: clean fast-pulse bundle only."),
-    ("zip7_raw_vs_fit_examples.png",
-     "raw_vs_fit_examples — first 15 events × all channels",
-     "Gray = raw unfiltered, blue = 100 kHz LP, red = 2-exp fit; per-panel NRMSE top-right. "
-     "Same 15 events as fit_examples; noise vs pulse size is directly visible."),
-    ("zip7_fit_examples.png",
-     "fit_examples — first 15 events × all channels (LP vs fit)",
-     "One ROW per event, one COLUMN per channel. A real event shows a clean pulse and a good fit in every "
-     "channel simultaneously; a noise trigger fails across the whole row."),
-    ("zip7_overlay_fan_cut_nrmse0.4.png",
-     "overlay_fan_cut — measured traces + kept/rejected fits",
-     "Gray-blue = aligned measured traces; green = fitted curves with NRMSE ≤ 0.4 (kept); red = NRMSE > 0.4 "
-     "(cut away). Median NRMSE and counts of both populations stamped per channel."),
-    ("zip7_nrmse.png",
-     "nrmse — NRMSE distribution (log-log)",
-     "NRMSE = RMS(fit residual)/fitted peak. Bimodal: good-fit population (~0.05–0.1) vs noise triggers (~1–2); "
-     "the valley at ≈0.4 sets the cut."),
-    ("zip7_pretrigger.png",
-     "pretrigger — fitted onset distribution",
-     "The onset is a FREE fit parameter; fitted values cluster ≈230 samples after the nominal 16050, "
-     "which is why pinning it inside the fit was wrong."),
-    ("zip7_time_constants.png",
-     "time_constants — fitted τ_rise / τ_fall distributions",
-     "Fast-pulse population sits at τ_rise ≈ 0.1 ms; isolated spikes at the parameter bounds (5 ms / 20 ms) "
-     "are fits pinned at the fit limits (noise), removed by the NRMSE cut."),
-    ("zip7_slow_rise_events.png",
-     "slow_rise_events — the NRMSE-rejected population",
-     "Events whose median NRMSE across channels > 0.4. Raw traces show no pulse in any channel: "
-     "the rejected population is noise triggers, not physics."),
-    ("zip7_shadow_events.png",
-     "shadow_events — well-fit slow-rise (echo-trigger) events",
-     "Median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms: genuinely slow, well-fit pulses — the faint displaced "
-     "bundle seen in aligned overlays; kept, and exactly what NxM multi-templates are for."),
-    ("zip7_PDS2_slow_fall.png",
-     "slow_fall_events — long-τ_fall study (PDS2 reference)",
-     "10 random events with PDS2 τ_fall > 1.5 ms drawn in every channel: 11 channels show normal fast pulses; "
-     "the long fall is a PDS2-only low-frequency artifact — not slow physics, no event-level cut."),
-    ("zip7_pca_templates.png",
-     "deliverables/nxm — PCA templates nxm0–4",
-     "nxm0 = mean curve; nxm1–4 = PCA components (oscillating basis vectors, may be negative), all "
-     "peak-normalized to 1; PC1+PC2 capture 96–98% of the shape variance."),
-]
-for _f, _label, _info in _gallery:
-    _short, _rest = (_label.split(" — ", 1) + [""])[:2]
+GAL = "backup_zip7"
+
+
+def _gal_slide(head, sub_txt, info):
     s = slide()
-    title(s, f"Backup — Z7 · {_short}",
-          sub=(_rest + "  ·  " if _rest else "") + f"figure: {_f}")
-    tb = textbox(s, IN(0.55), IN(1.14), IN(12.3), IN(0.78))
+    title(s, head, sub=sub_txt)
+    tb = textbox(s, IN(0.55), IN(1.18), IN(12.3), IN(0.62))
     _p = tb.text_frame.paragraphs[0]
-    _r = _p.add_run(); _r.text = _info
+    _r = _p.add_run(); _r.text = info
     _r.font.size, _r.font.color.rgb, _r.font.name = Pt(11.5), DARK, "Arial"
-    split_pic(s, os.path.join(GAL, _f), IN(0.55), IN(2.0), IN(12.3), IN(4.95))
-    notes(s, f"Backup gallery, Z7, {_label}. {_info}")
-    # companion 1:1 zoom slide so in-figure labels are readable
-    s = slide()
-    title(s, f"Backup — Z7 · {_short}  (detail 1:1)",
-          sub="top region of the same figure at full resolution — whole figure on the previous slide")
-    zoom_pic(s, os.path.join(GAL, _f), IN(0.55), IN(1.25), IN(12.3), IN(5.8))
-    notes(s, f"Same figure as the previous slide, top region at full "
-             f"resolution so the per-panel labels and numbers are readable.")
+    return s
+
+
+def _place_stack(s, crops, l, t, box_w, box_h, gap=Inches(0.22)):
+    """Stack crops vertically, each aspect-fit in an equal cell, centered."""
+    n = len(crops)
+    cell_h = (box_h - gap * (n - 1)) / n
+    for i, (cp, (cw, ch)) in enumerate(crops):
+        sc = min(box_w / cw, cell_h / ch)
+        dw, dh = int(cw * sc), int(ch * sc)
+        left = l + int((box_w - dw) / 2)
+        top = t + i * (cell_h + gap) + int((cell_h - dh) / 2)
+        s.shapes.add_picture(cp, left, top, width=dw, height=dh)
+
+
+def channel_fig_pages(fname, short, info, per_page=2):
+    """One channel-stacked figure -> pages of per_page full-width strips."""
+    img = Image.open(os.path.join(FIG, GAL, fname))
+    w0 = img.size[0]
+    units = _panel_units(img)
+    n = len(units)
+    base = os.path.splitext(fname)[0]
+    npages = (n + per_page - 1) // per_page
+    for p in range(npages):
+        i0, i1 = p * per_page, min((p + 1) * per_page, n)
+        crops = []
+        for i in range(i0, i1):
+            crop = img.crop((0, units[i][0], w0, units[i][1]))
+            cp = os.path.join(_SPLIT_DIR, f"{base}_r{i+1}.png")
+            crop.save(cp)
+            crops.append((cp, crop.size))
+        s = _gal_slide(f"Backup — Z7 · {short}  ({p+1}/{npages})",
+                       f"figure: {fname} — channel panels {i0+1}–{i1} of {n}, "
+                       f"top to bottom",
+                       info)
+        _place_stack(s, crops, IN(0.55), IN(1.95), IN(12.3), IN(5.3))
+        notes(s, f"Backup gallery, Z7, {short}, page {p+1} of {npages}. {info}")
+
+
+def grid_fig_pages(fname, short, info, rows_per_page=3):
+    """Event x channel grid -> pages of rows_per_page event rows, channels
+    split into a left and a right half so every panel stays readable."""
+    img = Image.open(os.path.join(FIG, GAL, fname))
+    w0 = img.size[0]
+    units = _panel_units(img)
+    n = len(units)
+    body = img.crop((0, units[0][0], w0, units[-1][1]))
+    xh = snap_cut(_white_cols(body), w0 // 2, w0 // 10)
+    base = os.path.splitext(fname)[0]
+    groups = [(a, min(a + rows_per_page, n))
+              for a in range(0, n, rows_per_page)]
+    pages = [(a, b, side) for a, b in groups for side in (0, 1)]
+    for p, (a, b, side) in enumerate(pages):
+        x0, x1 = (0, xh) if side == 0 else (xh, w0)
+        half = "left" if side == 0 else "right"
+        crop = img.crop((x0, units[a][0], x1, units[b - 1][1]))
+        cp = os.path.join(_SPLIT_DIR, f"{base}_e{a+1}-{b}_{half}.png")
+        crop.save(cp)
+        s = _gal_slide(f"Backup — Z7 · {short}  ({p+1}/{len(pages)})",
+                       f"figure: {fname} — event rows {a+1}–{b} of {n}, "
+                       f"{half} half of the channels",
+                       info)
+        _place_stack(s, [(cp, crop.size)], IN(0.55), IN(1.95), IN(12.3), IN(5.3))
+        notes(s, f"Backup gallery, Z7, {short}, page {p+1} of {len(pages)}. {info}")
+
+
+# ------------------------------------------------ gallery intro / contents
+s = slide()
+title(s, "Backup — Z7 full results gallery",
+      sub="every diagnostic and result figure of the Z7 pipeline, in processing order")
+bullets(s, [
+    "Dataset: the K-line selection window",
+    "Example grids: LP + fit and raw vs fit, event × channel",
+    "Fit diagnostics: NRMSE, fitted pretrigger, τ_rise / τ_fall distributions",
+    "Aligned fans: no cut → NRMSE ≤ 0.4 → + τ_rise ≤ 0.3 ms; kept vs rejected; measured traces",
+    "Special populations: rejected events, well-fit slow-rise events, PDS2 slow-fall study",
+    "Templates: PCA nxm0–4 per channel, summed PT / PS1 / PS2",
+    "Tall figures are cut at white space into full-width panels, two per page; grids into 3-event × half-channel blocks",
+], IN(0.55), IN(1.6), IN(12.3), IN(4.6), size=16)
+notes(s, "The full Z7 gallery: every figure the pipeline produces, in "
+         "processing order, split into readable pieces.")
+
+# ------------------------------------------------ dataset window
+s = _gal_slide("Backup — Z7 · K-line selection window",
+               "figure: kline_zip7.png",
+               "Summed PTOFamps spectrum of Z7; red line = Prof. Saab's 10.37 keV K-line position, "
+               "shaded band = the ×/÷ 1.35 selection window; everything inside is cached raw.")
+pic(s, "kline_zip7.png", IN(2.65), IN(2.0), IN(8.0), IN(5.2),
+    caption="Z7 PTOFamps spectrum with the K-line selection window")
+notes(s, "Backup gallery: the Z7 K-line window on the PTOFamps spectrum.")
+
+# ------------------------------------------------ example grids
+grid_fig_pages("zip7_fit_examples.png",
+    "fit_examples — LP trace vs 2-exp fit",
+    "First 15 cached events × all channels; blue = 100 kHz LP trace, red = 2-exp fit. "
+    "A real event fits well in every channel at once; a noise trigger fails across the whole row.")
+grid_fig_pages("zip7_raw_vs_fit_examples.png",
+    "raw_vs_fit_examples — raw trace vs fit",
+    "Same 15 events × all channels; gray = raw unfiltered trace, blue = LP, red = fit, "
+    "per-panel NRMSE top-right. Noise vs pulse size is directly visible in the raw data.")
+
+# ------------------------------------------------ fit diagnostics
+channel_fig_pages("zip7_nrmse.png",
+    "nrmse — NRMSE distribution per channel",
+    "NRMSE = RMS(fit residual)/fitted peak, log-log. Bimodal: good fits (~0.05–0.1) vs "
+    "noise triggers (~1–2); the valley at ≈0.4 sets quality cut 1.")
+channel_fig_pages("zip7_pretrigger.png",
+    "pretrigger — fitted onset distribution per channel",
+    "The onset is a FREE fit parameter; fitted values cluster ≈230 samples after the nominal "
+    "16050 — pinning it inside the fit would bias every other parameter.")
+channel_fig_pages("zip7_time_constants.png",
+    "time_constants — fitted τ_rise / τ_fall per channel",
+    "Fast-pulse population at τ_rise ≈ 0.1 ms; isolated spikes at the parameter bounds are "
+    "noise fits pinned at the fit limits, removed by the NRMSE cut.")
+
+# ------------------------------------------------ aligned fans
+channel_fig_pages("zip7_fitted_curves_overlay.png",
+    "fitted_curves_overlay — fan, no cut",
+    "Every fit_ok fitted curve at the common pretrigger 16050, peak-normalized. Pure shape "
+    "distribution; the broad slow curves are noise fits that the cuts remove.")
+channel_fig_pages("zip7_fitted_curves_overlay_nrmse0.4.png",
+    "fitted_curves_overlay — after NRMSE ≤ 0.4",
+    "Same fan after quality cut 1: the noise fan collapses, the fast-pulse bundle remains.")
+channel_fig_pages("zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
+    "fitted_curves_overlay — after NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms",
+    "The exact PCA input population: the clean fast-pulse bundle only.")
+channel_fig_pages("zip7_overlay_fan_cut_nrmse0.4.png",
+    "overlay_fan_cut — kept vs rejected fits",
+    "Gray-blue = aligned measured traces; green = fits with NRMSE ≤ 0.4 (kept); red = "
+    "NRMSE > 0.4 (cut away). Median NRMSE and counts of both populations stamped per channel.")
+channel_fig_pages("zip7_lp_aligned_overlay.png",
+    "aligned_overlay — shift-aligned measured traces",
+    "Blue = measured LP traces shifted by (fitted pretrigger − 16050); red = mean of all "
+    "fit_ok events; orange = NRMSE-weighted mean of the fitted curves. Rise edges line up at 16050.")
+
+# ------------------------------------------------ special populations
+grid_fig_pages("zip7_slow_rise_events.png",
+    "slow_rise_events — the NRMSE-rejected population",
+    "Events with median NRMSE > 0.4 across channels: the raw traces show no pulse in any "
+    "channel — the rejected population is noise triggers, not physics.")
+grid_fig_pages("zip7_shadow_events.png",
+    "shadow_events — well-fit slow-rise events",
+    "Median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms: genuinely slow, well-fit pulses — kept, "
+    "and exactly what the NxM multi-templates are for.")
+grid_fig_pages("zip7_PDS2_slow_fall.png",
+    "slow_fall_events — long-τ_fall study (PDS2)",
+    "10 random events with τ_fall > 1.5 ms drawn in every channel: 11 channels show normal "
+    "fast pulses; the long fall is the PDS2 low-frequency hardware noise, not slow physics.")
+
+# ------------------------------------------------ templates
+channel_fig_pages("zip7_pca_templates.png",
+    "deliverables/nxm — PCA templates nxm0–4",
+    "nxm0 = mean curve; nxm1–4 = PCA components (oscillating basis vectors, may be negative), "
+    "all peak-normalized; PC1+PC2 capture 96–98% of the shape variance. PDS2 replaced by the "
+    "PDS1 template in the delivered files.")
 
 # summed 1x1 templates: three figures on one slide
 s = slide()
