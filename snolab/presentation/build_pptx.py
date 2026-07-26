@@ -480,6 +480,70 @@ notes(s, "Backup: what the rise-time cut actually removes. These are exactly "
          "trade-off.")
 
 
+
+_SPLIT_DIR = os.path.join(FIG, "backup_zip7", "_split")
+os.makedirs(_SPLIT_DIR, exist_ok=True)
+
+
+def split_pic(s, relname, l, t, box_w, box_h, gap=Inches(0.12)):
+    """Place a (possibly very tall) figure readably: choose the number of
+    vertical segments k that maximizes the displayed scale, cut the image into
+    k bands (top-to-bottom) and lay them out side by side."""
+    path = os.path.join(FIG, relname)
+    img = Image.open(path)
+    w0, h0 = img.size
+    best_k, best_scale = 1, 0.0
+    for k in (1, 2, 3, 4):
+        seg_w = (box_w - gap * (k - 1)) / k
+        scale = min(seg_w / w0, box_h / (h0 / k))
+        if scale > best_scale:
+            best_k, best_scale = k, scale
+    k = best_k
+    base = os.path.splitext(os.path.basename(relname))[0]
+    seg_h0 = h0 // k
+    seg_w = (box_w - gap * (k - 1)) / k
+    for i in range(k):
+        top_px = i * seg_h0
+        bot_px = h0 if i == k - 1 else (i + 1) * seg_h0
+        crop = img.crop((0, top_px, w0, bot_px))
+        cp = os.path.join(_SPLIT_DIR, f"{base}_p{i+1}of{k}.png")
+        crop.save(cp)
+        cw, ch = crop.size
+        sc = min(seg_w / cw, box_h / ch)
+        dw, dh = int(cw * sc), int(ch * sc)
+        left = l + i * (seg_w + gap) + int((seg_w - dw) / 2)
+        s.shapes.add_picture(cp, left, t, width=dw, height=dh)
+        if k > 1:
+            tb = textbox(s, l + i * (seg_w + gap), t + dh + Emu(20000),
+                         seg_w, Inches(0.25))
+            _p = tb.text_frame.paragraphs[0]
+            _r = _p.add_run(); _r.text = f"part {i+1}/{k} (top to bottom)"
+            _r.font.size, _r.font.italic = Pt(9), True
+            _r.font.color.rgb, _r.font.name = GRAY, "Arial"
+            _p.alignment = PP_ALIGN.CENTER
+
+def zoom_pic(s, relname, l, t, box_w, box_h):
+    """1:1 detail slide: crop the top(-left) region of the figure with the
+    same aspect as the display box and show it full-size — in-figure text
+    becomes readable (near the authored size)."""
+    path = os.path.join(FIG, relname)
+    img = Image.open(path)
+    w0, h0 = img.size
+    box_aspect = float(box_h) / float(box_w)
+    if h0 / w0 > 1.6:                     # tall multi-channel figure
+        cw = w0
+    else:                                 # wide event grid: left half
+        cw = int(w0 * 0.55)
+    ch = min(h0, int(cw * box_aspect))
+    crop = img.crop((0, 0, cw, ch))
+    base = os.path.splitext(os.path.basename(relname))[0]
+    cp = os.path.join(_SPLIT_DIR, f"{base}_zoom.png")
+    crop.save(cp)
+    sc = min(box_w / cw, box_h / ch)
+    dw, dh = int(cw * sc), int(ch * sc)
+    s.shapes.add_picture(cp, l + int((box_w - dw) / 2), t, width=dw, height=dh)
+
+
 # ================= backup gallery · every Z7 result figure (appendix) =======
 # One slide per figure: full screenshot + the figure's name and how to read it.
 GAL = os.path.join("backup_zip7")
@@ -543,12 +607,19 @@ for _f, _label, _info in _gallery:
     s = slide()
     title(s, f"Backup gallery — Z7 · {_label}",
           sub=f"figure: lp_fit_align results — {_f}")
-    tb = textbox(s, IN(0.55), IN(1.18), IN(12.3), IN(0.85))
+    tb = textbox(s, IN(0.55), IN(1.14), IN(12.3), IN(0.78))
     _p = tb.text_frame.paragraphs[0]
     _r = _p.add_run(); _r.text = _info
-    _r.font.size, _r.font.color.rgb, _r.font.name = Pt(12.5), DARK, "Arial"
-    pic(s, os.path.join(GAL, _f), IN(0.55), IN(2.1), IN(12.3), IN(5.05))
+    _r.font.size, _r.font.color.rgb, _r.font.name = Pt(11.5), DARK, "Arial"
+    split_pic(s, os.path.join(GAL, _f), IN(0.55), IN(2.0), IN(12.3), IN(4.95))
     notes(s, f"Backup gallery, Z7, {_label}. {_info}")
+    # companion 1:1 zoom slide so in-figure labels are readable
+    s = slide()
+    title(s, f"Backup gallery — Z7 · {_label}  (detail, 1:1)",
+          sub="top region of the same figure at full resolution — whole figure on the previous slide")
+    zoom_pic(s, os.path.join(GAL, _f), IN(0.55), IN(1.25), IN(12.3), IN(5.8))
+    notes(s, f"Same figure as the previous slide, top region at full "
+             f"resolution so the per-panel labels and numbers are readable.")
 
 # summed 1x1 templates: three figures on one slide
 s = slide()

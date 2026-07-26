@@ -30,7 +30,7 @@ folder in `lp_fit_align/` keeps its original name.
 ## Backup gallery (appendix)
 
 Per Prof. Liu's request the deck now ends with a **Z7 full-results gallery**:
-15 backup slides, one per Z7 diagnostic/template figure (aligned overlay, the
+29 backup slides: each Z7 figure gets an overview slide (tall figures auto-split into side-by-side columns) plus a companion 1:1 detail slide (top region at full resolution, in-figure labels readable) (aligned overlay, the
 three fitted-curve fans no-cut → NRMSE → NRMSE+τ_rise, raw-vs-fit and
 fit-example event grids, overlay_fan_cut, NRMSE / pretrigger / time-constant
 distributions, slow-rise / shadow / slow-fall studies, PCA templates, and the
