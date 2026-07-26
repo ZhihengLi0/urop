@@ -38,3 +38,16 @@ summed 1x1 PT/PS1/PS2). Each slide shows the full figure with its file name
 and a one-paragraph how-to-read note; source PNGs are copied under
 `figures/backup_zip7/`. Note: the .pdf export is regenerated from PowerPoint,
 so it lags the .pptx until re-exported.
+
+## Revision (round 2, July 26)
+
+Slide flow now: title → Table of Contents → dataset (real per-zip event
+counts) → fit-quality grids (NOISE vs REAL PULSE, visual comparison, no
+claims about per-channel pass/fail) → per-trace algorithm (baseline method,
+fit-parameter definitions) → alignment → NRMSE cut → rejected = noise →
+slow-fall follow-up (+ PDS2 conclusion and the temporary PDS1-for-PDS2
+substitution, applied in the delivered ROOT files) → 1x1 templates (weighted
+vs plain-mean comparison, plain mean = nxm0) → NxM PCA → Template file →
+Future Steps → backups (4 topic slides + 29-slide Z7 gallery). 46 slides.
+Speech script renumbered to match; Q2b (rise = L/R electrical, fall = C/G
+thermal) added to the likely-questions list.

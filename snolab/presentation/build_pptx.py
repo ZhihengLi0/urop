@@ -130,14 +130,14 @@ bullets(s, [
     "2.  Pulse fit:  100 kHz low-pass, free-pretrigger two-exponential fit, alignment at 16050",
     "3.  Data cleaning:  fit_ok, NRMSE valley cut (0.4), rise-time ceiling (0.3 ms)",
     "4.  Cross-checks:  cuts remove noise, real pulses stay; slow-fall follow-up",
-    "5.  Template generation:  1x1 weighted template, NxM PCA templates (nxm0..4)",
+    "5.  Template generation:  1x1 weighted template, NxM PCA templates",
     "6.  Deliverables and future steps:  cdmsbats ROOT files; three-, four-exponential fits",
-    "7.  Backup:  weak detectors, rise-time cut details, Z7 full results gallery",
+    "7.  Backup:  weak detectors, rise-time cut details, full results for every zip",
 ], IN(1.1), IN(1.6), IN(11.0), IN(4.9), size=19)
 notes(s, "Quick roadmap: the dataset and how events were selected, the fit and "
          "alignment, the two cleaning cuts and the checks behind them, the two "
          "template families we deliver, and the future steps. Backup slides "
-         "hold the weak-detector picture and the full Z7 gallery.")
+         "hold the weak-detector picture and the full results for every zip.")
 
 # ------------------------------------------------- 2 · motivation / selection
 s = slide()
