@@ -1,4 +1,4 @@
-# presentation/ — 10-min group-meeting talk (July 15, 2026)
+# presentation/ — 10-min group-meeting talk (July 2026)
 
 Slides and speaker script for the SNOLAB R4 phonon pulse-template talk.
 
