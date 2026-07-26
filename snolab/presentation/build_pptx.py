@@ -125,15 +125,21 @@ notes(s, "Today I will present the phonon pulse-template work for SNOLAB Run 4: 
 # ------------------------------------------------- 1b · table of contents
 s = slide()
 title(s, "Table of Contents")
-bullets(s, [
-    "1.  Dataset:  Ge activation K-line event selection, raw trace cache (13 detectors)",
-    "2.  Pulse fit:  100 kHz low-pass, free-pretrigger two-exponential fit, alignment at 16050",
-    "3.  Data cleaning:  fit_ok, NRMSE valley cut (0.4), rise-time ceiling (0.3 ms)",
-    "4.  Cross-checks:  cuts remove noise, real pulses stay; slow-fall follow-up",
-    "5.  Template generation:  1x1 weighted template, NxM PCA templates",
-    "6.  Deliverables and future steps:  cdmsbats ROOT files; three-, four-exponential fits",
-    "7.  Backup:  weak detectors, rise-time cut details, full results for every zip",
-], IN(1.1), IN(1.6), IN(11.0), IN(4.9), size=19)
+_toc = textbox(s, IN(1.1), IN(1.7), IN(11.0), IN(4.9))
+for _i, (_head, _rest) in enumerate([
+        ("Dataset", "Ge activation K-line event selection, raw trace cache (13 detectors)"),
+        ("Pulse fit", "100 kHz low-pass, free-pretrigger two-exponential fit, alignment at 16050"),
+        ("Data cleaning", "fit_ok, NRMSE valley cut (0.4), rise-time ceiling (0.3 ms)"),
+        ("Cross-checks", "cuts remove noise, real pulses stay; slow-fall follow-up"),
+        ("Template generation", "1x1 weighted template, NxM PCA templates"),
+        ("Deliverables and future steps", "cdmsbats ROOT files; three-, four-exponential fits"),
+        ("Backup", "weak detectors, rise-time cut details, full results for every zip")]):
+    _p = _toc.text_frame.paragraphs[0] if _i == 0 else _toc.text_frame.add_paragraph()
+    _p.space_after = Pt(10)
+    _r = _p.add_run(); _r.text = f"{_i+1}.  {_head}: "
+    _r.font.size, _r.font.bold, _r.font.color.rgb, _r.font.name = Pt(19), True, NAVY, "Arial"
+    _r = _p.add_run(); _r.text = _rest
+    _r.font.size, _r.font.color.rgb, _r.font.name = Pt(18), DARK, "Arial"
 notes(s, "Quick roadmap: the dataset and how events were selected, the fit and "
          "alignment, the two cleaning cuts and the checks behind them, the two "
          "template families we deliver, and the future steps. Backup slides "
