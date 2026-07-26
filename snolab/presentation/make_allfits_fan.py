@@ -37,7 +37,7 @@ for fp in fits:
                         float(RISE_REF_IDX))
     pk = float(np.max(y))
     if pk > 0 and np.isfinite(pk):
-        ax.plot(t_ms, y / pk, lw=0.35, alpha=0.05, color="steelblue")
+        ax.plot(t_ms, y / pk, lw=0.45, alpha=0.16, color="steelblue")
         n_drawn += 1
 ax.axvline(RISE_REF_IDX / SAMPLERATE * 1e3, color="gray", lw=0.8, ls=":")
 ax.set_title(f"Z{DET} {CHAN}: every fitted event, no cuts   "
