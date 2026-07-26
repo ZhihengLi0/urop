@@ -644,11 +644,13 @@ def _panel_units(img):
     for ps, pe in panels:
         above = sorted(b for b in small if b[1] <= ps + 2)
         top = ps
-        for b in reversed(above):
-            if top - b[1] <= 18 and ps - b[0] <= 70:
-                top = b[0]
-            else:
-                break
+        if above and ps - above[-1][1] <= 12:      # the title hugs its panel
+            top = above[-1][0]
+            for b in reversed(above[:-1]):         # merge artifact slivers
+                if top - b[1] <= 6:
+                    top = b[0]
+                else:
+                    break
         starts.append(max(0, top - 4))
     units, tails = [], []
     for i, (ps, pe) in enumerate(panels[:-1]):
