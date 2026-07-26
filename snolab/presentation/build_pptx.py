@@ -485,6 +485,26 @@ _SPLIT_DIR = os.path.join(FIG, "backup_zip7", "_split")
 os.makedirs(_SPLIT_DIR, exist_ok=True)
 
 
+def _white_rows(img):
+    """Boolean list: row is (almost) pure background white."""
+    import numpy as np
+    g = np.asarray(img.convert("L"))
+    return (g.min(axis=1) > 247)
+
+
+def snap_cut(white, target, window):
+    """Nearest all-white row to target within +-window (else target)."""
+    lo = max(1, target - window)
+    hi = min(len(white) - 1, target + window)
+    best, bestd = None, None
+    for y in range(lo, hi):
+        if white[y]:
+            d = abs(y - target)
+            if bestd is None or d < bestd:
+                best, bestd = y, d
+    return best if best is not None else target
+
+
 def split_pic(s, relname, l, t, box_w, box_h, gap=Inches(0.12)):
     """Place a (possibly very tall) figure readably: choose the number of
     vertical segments k that maximizes the displayed scale, cut the image into
@@ -502,13 +522,18 @@ def split_pic(s, relname, l, t, box_w, box_h, gap=Inches(0.12)):
     base = os.path.splitext(os.path.basename(relname))[0]
     seg_h0 = h0 // k
     seg_w = (box_w - gap * (k - 1)) / k
+    white = _white_rows(img)
+    cuts = [0] + [snap_cut(white, i * seg_h0, seg_h0 // 4)
+                  for i in range(1, k)] + [h0]
+    crops = []
     for i in range(k):
-        top_px = i * seg_h0
-        bot_px = h0 if i == k - 1 else (i + 1) * seg_h0
-        crop = img.crop((0, top_px, w0, bot_px))
+        crop = img.crop((0, cuts[i], w0, cuts[i + 1]))
         cp = os.path.join(_SPLIT_DIR, f"{base}_p{i+1}of{k}.png")
         crop.save(cp)
-        cw, ch = crop.size
+        crops.append((cp, crop.size))
+    max_dh = max(int(ch * min(seg_w / cw, box_h / ch)) for _, (cw, ch) in crops)
+    t = t + int((box_h - max_dh) / 2)          # center the block vertically
+    for i, (cp, (cw, ch)) in enumerate(crops):
         sc = min(seg_w / cw, box_h / ch)
         dw, dh = int(cw * sc), int(ch * sc)
         left = l + i * (seg_w + gap) + int((seg_w - dw) / 2)
@@ -535,6 +560,8 @@ def zoom_pic(s, relname, l, t, box_w, box_h):
     else:                                 # wide event grid: left half
         cw = int(w0 * 0.55)
     ch = min(h0, int(cw * box_aspect))
+    if ch < h0:
+        ch = snap_cut(_white_rows(img), ch, max(1, int(ch * 0.45)))
     crop = img.crop((0, 0, cw, ch))
     base = os.path.splitext(os.path.basename(relname))[0]
     cp = os.path.join(_SPLIT_DIR, f"{base}_zoom.png")
@@ -604,9 +631,10 @@ _gallery = [
      "peak-normalized to 1; PC1+PC2 capture 96–98% of the shape variance."),
 ]
 for _f, _label, _info in _gallery:
+    _short, _rest = (_label.split(" — ", 1) + [""])[:2]
     s = slide()
-    title(s, f"Backup gallery — Z7 · {_label}",
-          sub=f"figure: lp_fit_align results — {_f}")
+    title(s, f"Backup — Z7 · {_short}",
+          sub=(_rest + "  ·  " if _rest else "") + f"figure: {_f}")
     tb = textbox(s, IN(0.55), IN(1.14), IN(12.3), IN(0.78))
     _p = tb.text_frame.paragraphs[0]
     _r = _p.add_run(); _r.text = _info
@@ -615,7 +643,7 @@ for _f, _label, _info in _gallery:
     notes(s, f"Backup gallery, Z7, {_label}. {_info}")
     # companion 1:1 zoom slide so in-figure labels are readable
     s = slide()
-    title(s, f"Backup gallery — Z7 · {_label}  (detail, 1:1)",
+    title(s, f"Backup — Z7 · {_short}  (detail 1:1)",
           sub="top region of the same figure at full resolution — whole figure on the previous slide")
     zoom_pic(s, os.path.join(GAL, _f), IN(0.55), IN(1.25), IN(12.3), IN(5.8))
     notes(s, f"Same figure as the previous slide, top region at full "
@@ -623,7 +651,7 @@ for _f, _label, _info in _gallery:
 
 # summed 1x1 templates: three figures on one slide
 s = slide()
-title(s, "Backup gallery — Z7 · deliverables/1x1 — summed templates PT / PS1 / PS2",
+title(s, "Backup — Z7 · 1x1 summed templates PT / PS1 / PS2",
       sub="figures: deliverables/1x1/plots/{PT,PS1,PS2}/zip7_*.png")
 tb = textbox(s, IN(0.55), IN(1.18), IN(12.3), IN(0.6))
 _p = tb.text_frame.paragraphs[0]
