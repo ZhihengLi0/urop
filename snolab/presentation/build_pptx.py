@@ -428,8 +428,12 @@ bullets(s, [
     "NRMSE-weighted mean of the fit_ok 2-exp curves",
     "Smooth & noise-free by construction",
 ], IN(0.55), IN(1.25), IN(12.3), IN(1.1), size=18)
-pic(s, "template_overlay_zip7_PBS1.png", IN(0.5), IN(2.7), IN(12.3), IN(4.3),
+pic(s, "template_overlay_zip7_PBS1.png", IN(0.5), IN(2.55), IN(12.3), IN(2.2),
     "Z7 PBS1 — blue: the fitted curves (200 of 1931 drawn);  red: the 1x1 template")
+pic(s, "mean_weighted_zip7_PBS1.png", IN(0.35), IN(5.05), IN(6.25), IN(2.1),
+    "NRMSE-weighted mean of all fit_ok curves (n = 2008) — exactly the 1x1 template")
+pic(s, "mean_plain_zip7_PBS1.png", IN(6.75), IN(5.05), IN(6.25), IN(2.1),
+    "Plain mean of the PCA input curves (n = 1931) — exactly nxm0")
 notes(s, "First template family: the analytic one. For each channel we take "
          "every physical fitted curve at the common pretrigger and average them "
          "with a weight of one over NRMSE squared - badly fit events count "
@@ -447,12 +451,10 @@ bullets(s, [
     "nxm0 = mean shape;  nxm1–4 = principal components;  real pulse = Σᵢ ampᵢ · nxmᵢ",
     "PC1 + PC2 ≈ 96–98% of the shape variance",
 ], IN(0.55), IN(1.22), IN(12.3), IN(1.5), size=16)
-pic(s, "mean_weighted_zip7_PBS1.png", IN(0.35), IN(2.72), IN(6.25), IN(2.0),
-    "NRMSE-weighted mean of all fit_ok curves (n = 2008) — exactly the 1x1 template")
-pic(s, "mean_plain_zip7_PBS1.png", IN(6.75), IN(2.72), IN(6.25), IN(2.0),
-    "Plain mean of the PCA input curves (n = 1931) — exactly nxm0")
-pic(s, "pca_zip7_PBS1.png", IN(1.6), IN(5.3), IN(10.1), IN(1.8),
-    "Z7 PBS1: nxm0 (mean) + nxm1–4 (PCs) — the oscillating components encode rise/fall-time variation")
+pic(s, "nxm_plain_zip7_PBS1.png", IN(0.35), IN(3.0), IN(6.25), IN(3.6),
+    "NxM with the plain mean: nxm0 (delivered) + nxm1–4")
+pic(s, "nxm_weighted_zip7_PBS1.png", IN(6.75), IN(3.0), IN(6.25), IN(3.6),
+    "NxM with the NRMSE-weighted mean (= 1x1) + the same nxm1–4")
 notes(s, "Second family: the NxM PCA templates, built to capture the "
          "pulse-shape variation across events. We run a PCA over the fitted curves that "
          "pass all cuts, in a window around the pulse. The mean shape "
