@@ -45,7 +45,7 @@ POINT = {
         "In this plot the two populations are far apart and the valley is obvious.",
     ],
     9: [
-        "on the left all physical fits — a 200-curve sample, so the slow stragglers appear in proportion to their real share; on the right, after the cut, one very tight, consistent shape family remains",
+        "on the left all fit_ok curves, all 2008 of them drawn, no sampling; on the right the 1931 that survive the NRMSE cut — one very tight, consistent shape family remains",
     ],
     10: [
         "On the left are the **raw** traces of the rejected events. As you can see, there is simply no pulse there",

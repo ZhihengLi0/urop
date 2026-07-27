@@ -330,10 +330,10 @@ notes(s, "First quality cut. The NRMSE distribution of physical fits is "
 # ------------------------------ 6b · fan before vs after the NRMSE cut
 s = slide()
 title(s, "Aligned fitted curves: before and after the NRMSE cut")
-pic(s, "fan_zip7_PBS1_before_zoom.png", IN(0.3), IN(1.5), IN(6.35), IN(4.6),
-    "All fit_ok fitted curves (Z7 PBS1), 200-curve sample drawn")
-pic(s, "fan_zip7_PBS1_nrmse_zoom.png", IN(6.65), IN(1.5), IN(6.35), IN(4.6),
-    "After NRMSE ≤ 0.4 (Z7 PBS1): one tight shape family")
+pic(s, "fan_zip7_PBS1_before_all.png", IN(0.3), IN(1.5), IN(6.35), IN(4.6),
+    "All fit_ok fitted curves (Z7 PBS1, n = 2008, every curve drawn)")
+pic(s, "fan_zip7_PBS1_after_all.png", IN(6.65), IN(1.5), IN(6.35), IN(4.6),
+    "After NRMSE ≤ 0.4 (n = 1931): one tight shape family")
 notes(s, "The same aligned fitted curves before and after the cut. On the "
          "left, all physical fits - a 200-curve sample is drawn, so the "
          "slow stragglers appear in proportion to their share of the "

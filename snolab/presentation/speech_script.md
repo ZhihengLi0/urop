@@ -73,9 +73,9 @@
 
 ## Slide 9 — Aligned curves before vs after the NRMSE cut（约 25 秒）
 
-**中文**：定了 0.4 之后回头看扇形图：左边是全部物理拟合（画了 200 条抽样，慢曲线按真实占比出现）；右边是 cut 之后，只剩一束非常紧、非常一致的形状。正是这条紧致的束，让一个定义清楚、稳定的模板成为可能。
+**中文**：定了 0.4 之后回头看扇形图：左边是全部通过 fit_ok 的拟合曲线，2008 条全部画出，不做抽样；右边是 NRMSE cut 之后剩下的 1931 条，只剩一束非常紧、非常一致的形状。正是这条紧致的束，让一个定义清楚、稳定的模板成为可能。
 
-**English**: With the 0.4 threshold set, back to the fan: on the left all physical fits — a 200-curve sample, so the slow stragglers appear in proportion to their real share; on the right, after the cut, one very tight, consistent shape family remains. That tight family is what makes a well-defined, stable template possible.
+**English**: With the 0.4 threshold set, back to the fan: on the left all fit_ok curves, all 2008 of them drawn, no sampling; on the right the 1931 that survive the NRMSE cut — one very tight, consistent shape family remains. That tight family is what makes a well-defined, stable template possible.
 
 ---
 
