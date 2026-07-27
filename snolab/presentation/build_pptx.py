@@ -98,20 +98,13 @@ IN = Inches  # shorthand
 s = slide()
 tb = textbox(s, IN(0.9), IN(2.3), IN(11.5), IN(1.6))
 p = tb.text_frame.paragraphs[0]
-r = p.add_run(); r.text = "NxM Templates for SuperCDMS SNOLAB Run 4 — Ge Activation Data"
+r = p.add_run(); r.text = "NxM Templates for SuperCDMS SNOLAB Run 4 using Ge Activation Data"
 r.font.size, r.font.bold, r.font.color.rgb, r.font.name = Pt(36), True, NAVY, "Arial"
 tb2 = textbox(s, IN(0.9), IN(3.7), IN(11.5), IN(0.9))
 p = tb2.text_frame.paragraphs[0]
 r = p.add_run()
-r.text = "K-line event selection  ·  free-pretrigger two-exponential fits"
+r.text = "K-line event selection  ·  1x1 and NxM (PCA) templates"
 r.font.size, r.font.color.rgb, r.font.name = Pt(18), GRAY, "Arial"
-r2 = p.add_run()
-r2.text = " (future step: three-, four-exponential fits)"
-r2.font.size, r2.font.italic = Pt(14), True
-r2.font.color.rgb, r2.font.name = ACCENT, "Arial"
-r3 = p.add_run()
-r3.text = "  ·  1x1 and NxM (PCA) templates"
-r3.font.size, r3.font.color.rgb, r3.font.name = Pt(18), GRAY, "Arial"
 tb3 = textbox(s, IN(0.9), IN(5.6), IN(11.5), IN(0.8))
 p = tb3.text_frame.paragraphs[0]
 r = p.add_run(); r.text = "Zhiheng Li  —  July 2026"
