@@ -16,9 +16,9 @@
 
 ## Slide 2 — Table of Contents（约 15 秒）
 
-**中文**：快速过一下路线图：数据集和选样、拟合与对齐、两道清洗 cut 和背后的核查、两族模板、交付与下一步；backup 里有弱探测器和每个 zip 的全套结果。
+**中文**：简单过一下目录：数据集和选样、拟合与对齐、两道清洗 cut 和背后的核查、两族模板、交付与下一步；backup 里有弱探测器和每个 zip 的全套结果。
 
-**English**: A quick roadmap: the dataset and selection, the fit and alignment, the two cleaning cuts and the checks behind them, the two template families, deliverables and future steps; the backups hold the weak detectors and the full results for every zip.
+**English**: Here is the table of contents: the dataset and selection, the fit and alignment, the two cleaning cuts and the checks behind them, the two template families, deliverables and future steps; the backups hold the weak detectors and the full results for every zip.
 
 ---
 
