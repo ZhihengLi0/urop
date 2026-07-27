@@ -8,9 +8,9 @@
 
 ## Slide 1 — Title（约 30 秒）
 
-**中文**：大家下午好。今天讲我为 SNOLAB Run 4 做的声子脉冲模板。简单说，就是给 13 个探测器的每个声子通道做出一个"标准脉冲形状"，给 optimal filter 用。我按实际做的顺序讲：事件怎么选的，波形怎么拟合和对齐的，两个质量 cut 是怎么从数据里定出来的，最后是交付的两族模板。
+**中文**：大家下午好。今天讲我为 SNOLAB Run 4 做的声子脉冲模板。简单说，就是给 13 个探测器的每个声子通道做出一个"标准脉冲形状"，给 optimal filter 用。我按实际做的顺序讲：事件怎么选的，波形怎么拟合和对齐的，两道质量 cut 是怎么定的，最后是交付的两族模板。
 
-**English**: Good afternoon everyone. Today I'll talk about the phonon pulse templates I built for SNOLAB Run 4. In short: for each phonon channel of thirteen detectors, I build a standard pulse shape for the optimal filter to use. I'll go in the order I actually did the work: how the events were selected, how each trace is fitted and aligned, how the two quality cuts were derived from the data itself, and finally the two template families I delivered.
+**English**: Good afternoon everyone. Today I'll talk about the phonon pulse templates I built for SNOLAB Run 4. In short: for each phonon channel of thirteen detectors, I build a standard pulse shape for the optimal filter to use. I'll go in the order I actually did the work: how the events were selected, how each trace is fitted and aligned, how the two quality cuts were set, and finally the two template families I delivered.
 
 ---
 
