@@ -25,6 +25,7 @@ CONTEXT_FOR_NEXT_AI.md
 !presentation/figures/*.png
 !presentation/*.pdf
 !presentation/backup_galleries/*.pdf
+presentation/backup_galleries/_pptx/
 .~*.pptx
 speech_script.html
 # Deliverables are versioned
