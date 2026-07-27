@@ -140,7 +140,7 @@ notes(s, "Quick roadmap: the dataset and how events were selected, the fit and "
 
 # ------------------------------------------------- 2 · motivation / selection
 s = slide()
-title(s, "Ge activation dataset - R4")
+title(s, "Ge activation dataset")
 _tb = textbox(s, IN(0.25), IN(1.14), IN(12.6), IN(1.85))
 _tf = _tb.text_frame
 def _row(first, parts, size=13.5):
@@ -186,7 +186,7 @@ notes(s, "This is the Ge activation dataset from Run 4, credit to Professor "
 
 # ------------------------------------------------------ 3 · fit quality grids (overview)
 s = slide()
-title(s, "Fit quality at a glance: event × channel grids")
+title(s, "Fit examples")
 bullets(s, [
     "Real events and noise triggers can be told apart by visual comparison (no cut applied at this stage)",
 ], IN(0.55), IN(1.2), IN(12.3), IN(0.7), size=14)

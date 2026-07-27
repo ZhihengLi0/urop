@@ -22,15 +22,15 @@
 
 ---
 
-## Slide 3 — Ge activation dataset - R4（约 65 秒）
+## Slide 3 — Ge activation dataset（约 70 秒）
 
-**中文**：先说事件从哪来。做模板需要一大批干净、彼此相同的脉冲。我用的是 Ge 活化 K 线：Cf 活化之后，每个探测器里都会持续出现 10.37 keV 的单能事件，这是现成的理想样本。屏幕上是 13 个探测器的 PTOFamps 谱。每格里的红线，是 Saab 教授的分析标出来的 K 线位置，我直接拿来用。我做的事情非常简单：以红线为中心开一个窗，上下各 1.35 倍——这个倍数是粗略目测定的，带点随意性，反正开得够宽就行——窗内的事件全要，不加任何别的条件。然后把每个选中事件所有通道的原始波形，原封不动存下来。大家看这些谱：安静的探测器比如 Z7，K 线峰和噪声峰分得很开；但不少噪声大的探测器，红线就插在噪声堆里——窗口一开，噪声肯定跟着进来。这是故意的：我宁愿先多收，也要让后面每一步筛选清清楚楚、随时可以回退——因为存的是原始数据，什么都没丢。后面全场的例子都用 Z7，它是最好的探测器，用的是它的 PBS1 这一条通道；其他探测器都在 backup 里。
+**中文**：先说事件从哪来。做模板需要一大批干净、彼此相同的脉冲。我用的是 Ge 活化 K 线：Cf 活化之后，每个探测器里都会持续出现 10.37 keV 的单能事件，这是现成的理想样本。屏幕上是 13 个探测器的 PTOFamps 谱。每格里的红线，是 Saab 教授的分析标出来的 K 线位置，我直接拿来用。我做的事情非常简单：以红线为中心开一个窗，上下各 1.35 倍——这个倍数是粗略目测定的，带点随意性，反正开得够宽就行——窗内的事件全要，不加任何别的条件。然后把每个选中事件所有通道的原始波形，原封不动存下来。大家看这些谱：安静的探测器比如 Z7，K 线峰和噪声峰分得很开；但不少噪声大的探测器，红线就插在噪声堆里——窗口一开，噪声肯定跟着进来。这是故意的：我宁愿先多收，也要让后面每一步筛选清清楚楚、随时可以回退——因为存的是原始数据，什么都没丢。顺便强调：窗内的事件数不等于真 K-line 脉冲数——安静的探测器，比如 Z7 和 Z16，窗里大约九成都是真脉冲；噪声大的比如 Z6，窗里一万七千个事件绝大多数其实是噪声触发，真脉冲要靠后面的质量 cut 捞出来。后面全场的例子都用 Z7，它是最好的探测器，用的是它的 PBS1 这一条通道；其他探测器都在 backup 里。
 
-**English**: Let me start with where the events come from. To build a template, you need a large sample of clean, identical pulses. I use the germanium activation K-line: after the californium activation, every detector keeps producing mono-energetic events at 10.37 keV — a perfect, ready-made sample. What you see here are the PTOFamps spectra of all thirteen detectors. The red line in each panel is the K-line position marked by Professor Saab's analysis, and I simply take that as given. What I do is very simple: open a window around the red line, a factor of one point three five on each side — a rough, eyeballed choice; it just needs to be wide enough — keep everything inside, and apply no other condition. Then, for every selected event, I save the raw traces of all channels, completely untouched. Now look at the spectra: on a quiet detector like Z7, the K-line peak is well separated from the noise peak. But on the weaker detectors, the red line sits right inside the noise population — so the window will let noise in. And that's deliberate. I'd rather collect too much, and keep every later selection explicit and reversible — nothing is lost, because what I stored is raw. Throughout the talk the examples use Z7, the best detector, and its PBS1 channel; all the other detectors are in the backup slides.
+**English**: Let me start with where the events come from. To build a template, you need a large sample of clean, identical pulses. I use the germanium activation K-line: after the californium activation, every detector keeps producing mono-energetic events at 10.37 keV — a perfect, ready-made sample. What you see here are the PTOFamps spectra of all thirteen detectors. The red line in each panel is the K-line position marked by Professor Saab's analysis, and I simply take that as given. What I do is very simple: open a window around the red line, a factor of one point three five on each side — a rough, eyeballed choice; it just needs to be wide enough — keep everything inside, and apply no other condition. Then, for every selected event, I save the raw traces of all channels, completely untouched. Now look at the spectra: on a quiet detector like Z7, the K-line peak is well separated from the noise peak. But on the weaker detectors, the red line sits right inside the noise population — so the window will let noise in. And that's deliberate. I'd rather collect too much, and keep every later selection explicit and reversible — nothing is lost, because what I stored is raw. One thing to keep in mind: the number of events in the window is not the number of true K-line pulses. On quiet detectors like Z7 and Z16 about ninety percent of the window is real pulses; on a noisy one like Z6, most of its seventeen thousand window events are actually noise triggers, and the real pulses are dug out later by the quality cuts. Throughout the talk the examples use Z7, the best detector, and its PBS1 channel; all the other detectors are in the backup slides.
 
 ---
 
-## Slide 4 — Fit quality at a glance / data overview（约 40 秒）
+## Slide 4 — Fit examples（约 40 秒）
 
 **中文**：先看单个事件层面，拟合到底靠不靠谱。网格图里一行是一个事件、一列是一个通道，蓝色是滤波后的波形，红色是拟合。通过肉眼对比就能把两类分开：左边这批是噪声触发，右边是真正的 K 线事件。这一步我们还没有做任何 cut，也不下"哪个拟合成功哪个失败"的结论。
 
@@ -150,6 +150,12 @@
 **中文**：粗略目测定的，故意开得宽——选样阶段宁多勿漏，后面的筛选都是显式、可回退的。
 
 **English**: It was a rough, eyeballed choice, deliberately wide — at the selection stage I'd rather over-collect, since every later cut is explicit and reversible.
+
+**Q1b — 谱图看着面积差不多，为什么窗内事件数差这么大？/ The spectra look similar in area, why are the window counts so different?**
+
+**中文**：因为横轴、纵轴都是对数刻度，图上的视觉面积不能直接换算成事件数，不是线性对应。计数是窗内的线性积分：红线贴着噪声肩的探测器，窗的低端在对数轴上看着不起眼，线性计数却非常大。
+
+**English**: Because the axes are logarithmic, the visual area on the plot is not an easy translation into an event count. The count is the linear integral inside the window: when the red line sits next to the noise shoulder, the low edge of the window looks small on a log axis but holds a very large linear count.
 
 **Q2 — 为什么拟合时连 pretrigger 也放开？/ Why is the pretrigger left free in the fit?**
 
