@@ -346,7 +346,7 @@ notes(s, "The same aligned fitted curves before and after the cut. On the "
 s = slide()
 title(s, "After NRMSE ≤ 0.4: a closer look")
 pic(s, "fan_zip7_PBS1_100zoom.png", IN(1.2), IN(1.5), IN(10.9), IN(5.6),
-    "Z7 PBS1: 100 randomly drawn curves of the 1931 kept, zoomed to 25.5\u201326.5 ms")
+    "Z7 PBS1: 100 randomly drawn curves of the 1931 kept, zoomed to 25.6\u201326.5 ms")
 notes(s, "A closer look at the kept population: one hundred curves randomly "
          "drawn from the 1931 that pass the cut, zoomed to 25 to 27 "
          "milliseconds, so the individual shapes are visible.")

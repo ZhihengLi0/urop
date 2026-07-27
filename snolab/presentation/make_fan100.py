@@ -29,7 +29,7 @@ for f in sorted(os.listdir(ck)):
 rng = np.random.default_rng(42)
 sample = [fits[i] for i in rng.choice(len(fits), 100, replace=False)]
 
-lo, hi = int(25.5e-3 * SAMPLERATE), int(26.5e-3 * SAMPLERATE)
+lo, hi = int(25.6e-3 * SAMPLERATE), int(26.5e-3 * SAMPLERATE)
 x = X_FULL[lo:hi]
 t_ms = x / SAMPLERATE * 1e3
 fig, ax = plt.subplots(figsize=(10.5, 4.8))
@@ -40,11 +40,11 @@ for fp in sample:
     if pk > 0 and np.isfinite(pk):
         ax.plot(t_ms, y / pk, lw=0.7, alpha=0.4, color="steelblue")
 ax.axvline(RISE_REF_IDX / SAMPLERATE * 1e3, color="gray", lw=0.8, ls=":")
-ax.set_title(f"Z{DET} {CHAN}: 100 of the {len(fits)} kept curves, zoom 25.5-26.5 ms",
+ax.set_title(f"Z{DET} {CHAN}: 100 of the {len(fits)} kept curves, zoom 25.6-26.5 ms",
              fontsize=12)
 ax.set_xlabel("Time (ms)", fontsize=11)
 ax.set_ylabel("Norm. amp.", fontsize=11)
-ax.set_xlim(25.5, 26.5)
+ax.set_xlim(25.6, 26.5)
 ax.grid(alpha=0.25)
 fig.tight_layout()
 out = os.path.join(HERE, "figures", "fan_zip7_PBS1_100zoom.png")
