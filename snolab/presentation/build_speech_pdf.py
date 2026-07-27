@@ -47,20 +47,20 @@ POINT = {
     9: [
         "on the left all fit_ok curves, all 2008 of them drawn, no sampling; on the right the 1931 that survive the NRMSE cut — one very tight, consistent shape family remains",
     ],
-    10: [
+    11: [
         "On the left are the **raw** traces of the rejected events. As you can see, there is simply no pulse there",
         "this figure has three layers: the gray-blue underneath is the aligned measured traces, green on top is the fitted curves that **pass** the cut, and red is the ones **removed**; the top-right corner shows each population's median NRMSE and its event count.",
         "The green ones are fast and consistent, bundled together; the red ones scatter everywhere",
     ],
-    11: [
+    12: [
         "Each row is one event, and in every column except PDS2 you see a clean, fast pulse; only in the PDS2 column is there a large low-frequency swing riding on top of the trace",
         "the left one is a normal channel, PAS1 — almost every event sits in one narrow peak at about 0.25 milliseconds, and there's basically nothing past one millisecond; the right one is PDS2 — a broad tail that stretches all the way out to five or six milliseconds",
     ],
-    12: [
+    13: [
         "On the screen, the blue **bundle** is the fitted curves that go into the average — that's the input, not the template.",
         "The plot at the bottom draws the two averages on top of each other: the solid red line is the NRMSE-weighted mean, the delivered 1x1 template; the dashed navy line is the plain unweighted mean of the clean PCA input curves, which is exactly nxm0.",
     ],
-    13: [
+    14: [
         'the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data',
     ],
 }
