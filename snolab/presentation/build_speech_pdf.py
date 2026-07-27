@@ -58,7 +58,7 @@ POINT = {
     ],
     12: [
         "On the screen, the blue **bundle** is the fitted curves that go into the average — that's the input, not the template.",
-        "The two plots at the bottom compare the two averages: on the left the NRMSE-weighted mean — the delivered 1x1 template; on the right the plain unweighted mean of the clean PCA input curves — and that is exactly nxm0.",
+        "The plot at the bottom draws the two averages on top of each other: the solid red line is the NRMSE-weighted mean, the delivered 1x1 template; the dashed navy line is the plain unweighted mean of the clean PCA input curves, which is exactly nxm0.",
     ],
     13: [
         'the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data',

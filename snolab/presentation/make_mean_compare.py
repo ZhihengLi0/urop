@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Weighted vs plain mean of the same fit_ok fitted curves (Z7 PBS1).
 
-Two separate single-panel figures (placed side by side on the NxM slide),
-each computed over EXACTLY the population of its deliverable:
-  figures/mean_weighted_zip7_PBS1.png — NRMSE-weighted mean, w = 1/max(NRMSE,0.01)^2,
-      over ALL fit_ok curves (exactly how the delivered 1x1 template is built)
-  figures/mean_plain_zip7_PBS1.png    — plain mean, no weights, over the PCA input
-      population fit_ok + NRMSE <= 0.4 + t_rise <= 0.3 ms (exactly nxm0)
+One combined figure, each curve computed over EXACTLY the population of
+its deliverable:
+  solid red    — NRMSE-weighted mean, w = 1/max(NRMSE,0.01)^2, over ALL fit_ok
+                 curves (exactly how the delivered 1x1 template is built)
+  dashed navy  — plain mean, no weights, over the PCA input population
+                 fit_ok + NRMSE <= 0.4 + t_rise <= 0.3 ms (exactly nxm0)
 Both peak-normalized; zoom kept tight on the pulse (the late tail is flat and
-carries no information). Dashed gray = the other mean, for comparison.
+carries no information). Output: figures/mean_compare_zip7_PBS1.png
 """
 import os, pickle, sys
 import numpy as np
@@ -48,24 +48,19 @@ for f in sorted(os.listdir(ck)):
 mw = acc_w / wsum; mw /= mw.max()
 mp = acc_p / n_p;  mp /= mp.max()
 
-for arr, other, ttl, col, fname in [
-        (mw, mp, "NRMSE-weighted mean  (the 1x1 template)", "#C0392B",
-         "mean_weighted_zip7_PBS1.png"),
-        (mp, mw, "plain mean, no weights  (= nxm0)", "#1F3864",
-         "mean_plain_zip7_PBS1.png")]:
-    fig, ax = plt.subplots(figsize=(7.0, 2.6))
-    ax.plot(t_ms, arr, lw=2.4, color=col)
-    ax.plot(t_ms, other, lw=1.0, ls="--", color="gray", alpha=0.8,
-            label="the other mean (dashed) for comparison")
-    ax.axvline(RISE_REF_IDX / SAMPLERATE * 1e3, color="gray", lw=0.8, ls=":")
-    ax.set_title(f"Z{DET} {CHAN}: {ttl}", fontsize=12)
-    ax.set_xlabel("Time (ms)", fontsize=11)
-    ax.set_ylabel("Norm. amp.", fontsize=11)
-    ax.legend(fontsize=9)
-    ax.grid(alpha=0.25)
-    fig.tight_layout()
-    out = os.path.join(HERE, "figures", fname)
-    fig.savefig(out, dpi=170, bbox_inches="tight")
-    plt.close(fig)
-    print(f"saved {out}")
+fig, ax = plt.subplots(figsize=(11.5, 3.0))
+ax.plot(t_ms, mw, lw=2.6, color="#C0392B",
+        label="NRMSE-weighted mean of all fit_ok curves (n = 2008)  =  the 1x1 template")
+ax.plot(t_ms, mp, lw=2.2, ls=(0, (6, 4)), color="#1F3864",
+        label="plain mean of the PCA input curves (n = 1931)  =  nxm0")
+ax.axvline(RISE_REF_IDX / SAMPLERATE * 1e3, color="gray", lw=0.8, ls=":")
+ax.set_title(f"Z{DET} {CHAN}: the two averages, drawn on top of each other", fontsize=12)
+ax.set_xlabel("Time (ms)", fontsize=11)
+ax.set_ylabel("Norm. amp.", fontsize=11)
+ax.legend(fontsize=10)
+ax.grid(alpha=0.25)
+fig.tight_layout()
+out = os.path.join(HERE, "figures", "mean_compare_zip7_PBS1.png")
+fig.savefig(out, dpi=170, bbox_inches="tight")
+print(f"saved {out}")
 print(f"weighted: n={n_w} (all fit_ok) | plain: n={n_p} (NRMSE<=0.4 & t_rise<=0.3ms)")
