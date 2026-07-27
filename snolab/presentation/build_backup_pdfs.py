@@ -190,7 +190,7 @@ def channel_fig_pages(prs, z, path, short, info, per_page=2):
             crop.save(cp)
             crops.append((cp, crop.size))
         s = _gal_slide(prs, f"Z{z} · {short}  ({p+1}/{npages})",
-                       f"figure: {fname} — channel panels {i0+1}–{i1} of {n}, "
+                       f"figure: {fname}, channel panels {i0+1}–{i1} of {n}, "
                        f"top to bottom", info)
         _place_stack(s, crops, IN(0.55), IN(1.95), IN(12.3), IN(5.3))
         notes(s, f"Z{z} gallery, {short}, page {p+1} of {npages}. {info}")
@@ -215,7 +215,7 @@ def grid_fig_pages(prs, z, path, short, info, rows_per_page=3):
         cp = os.path.join(SPLIT_DIR, f"{base}_e{a+1}-{b}_{half}.png")
         crop.save(cp)
         s = _gal_slide(prs, f"Z{z} · {short}  ({p+1}/{len(pages)})",
-                       f"figure: {fname} — event rows {a+1}–{b} of {n}, "
+                       f"figure: {fname}, event rows {a+1}–{b} of {n}, "
                        f"{half} half of the channels", info)
         _place_stack(s, [(cp, crop.size)], IN(0.55), IN(1.95), IN(12.3), IN(5.3))
         notes(s, f"Z{z} gallery, {short}, page {p+1} of {len(pages)}. {info}")
@@ -228,7 +228,7 @@ def build_zip(z):
 
     # intro
     s = prs.slides.add_slide(prs.slide_layouts[6])
-    title(s, f"Backup — Z{z} full results gallery",
+    title(s, f"Backup · Z{z} full results gallery",
           sub="every diagnostic and result figure of the pipeline, in processing order")
     tb = textbox(s, IN(0.55), IN(1.6), IN(12.3), IN(4.6))
     for i, line in enumerate([
@@ -256,72 +256,72 @@ def build_zip(z):
         caption=f"Z{z} PTOFamps spectrum with the K-line selection window")
 
     grid_fig_pages(prs, z, f"{RES}/fit_examples/zip{z}_fit_examples.png",
-        "fit_examples — LP trace vs 2-exp fit",
+        "fit_examples: LP trace vs 2-exp fit",
         "First 15 cached events × all channels; blue = 100 kHz LP trace, red = 2-exp fit. "
         "A real event fits well in every channel at once; a noise trigger fails across the whole row.")
     grid_fig_pages(prs, z, f"{RES}/raw_vs_fit_examples/zip{z}_raw_vs_fit_examples.png",
-        "raw_vs_fit_examples — raw trace vs fit",
+        "raw_vs_fit_examples: raw trace vs fit",
         "Same 15 events × all channels; gray = raw unfiltered trace, blue = LP, red = fit, "
         "per-panel NRMSE top-right. Noise vs pulse size is directly visible in the raw data.")
 
     channel_fig_pages(prs, z, f"{RES}/nrmse/zip{z}_nrmse.png",
-        "nrmse — NRMSE distribution per channel",
+        "nrmse: NRMSE distribution per channel",
         "NRMSE = RMS(fit residual)/fitted peak, log-log. Bimodal: good fits vs noise "
         "triggers; the valley at ≈0.4 sets quality cut 1.")
     channel_fig_pages(prs, z, f"{RES}/pretrigger/zip{z}_pretrigger.png",
-        "pretrigger — fitted onset per channel",
+        "pretrigger: fitted onset per channel",
         "The onset is a FREE fit parameter; pinning it inside the fit would bias every "
         "other parameter.")
     channel_fig_pages(prs, z, f"{RES}/time_constants/zip{z}_time_constants.png",
-        "time_constants — τ_rise / τ_fall per channel",
+        "time_constants: τ_rise / τ_fall per channel",
         "Fast-pulse population at τ_rise ≈ 0.1 ms; isolated spikes at the parameter bounds "
         "are noise fits pinned at the fit limits, removed by the NRMSE cut.")
 
     channel_fig_pages(prs, z, f"{RES}/fitted_curves_overlay/zip{z}_fitted_curves_overlay.png",
-        "fitted_curves_overlay — fan, no cut",
+        "fitted_curves_overlay: fan, no cut",
         "Every fit_ok fitted curve at the common pretrigger 16050, peak-normalized. Pure "
         "shape distribution; the broad slow curves are noise fits that the cuts remove.")
     channel_fig_pages(prs, z, f"{RES}/fitted_curves_overlay/zip{z}_fitted_curves_overlay_nrmse0.4.png",
-        "fitted_curves_overlay — after NRMSE ≤ 0.4",
+        "fitted_curves_overlay: after NRMSE ≤ 0.4",
         "Same fan after quality cut 1: the noise fan collapses, the fast-pulse bundle remains.")
     channel_fig_pages(prs, z, f"{RES}/fitted_curves_overlay/zip{z}_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
-        "fitted_curves_overlay — after both cuts",
-        "After NRMSE ≤ 0.4 AND τ_rise ≤ 0.3 ms — the exact PCA input population: the clean "
+        "fitted_curves_overlay: after both cuts",
+        "After NRMSE ≤ 0.4 AND τ_rise ≤ 0.3 ms, the exact PCA input population: the clean "
         "fast-pulse bundle only.")
     channel_fig_pages(prs, z, f"{RES}/overlay_fan_cut/zip{z}_overlay_fan_cut_nrmse0.4.png",
-        "overlay_fan_cut — kept vs rejected fits",
+        "overlay_fan_cut: kept vs rejected fits",
         "Gray-blue = aligned measured traces; green = fits with NRMSE ≤ 0.4 (kept); red = "
         "NRMSE > 0.4 (cut away). Median NRMSE and counts of both populations stamped per channel.")
     channel_fig_pages(prs, z, f"{RES}/aligned_overlay/zip{z}_lp_aligned_overlay.png",
-        "aligned_overlay — aligned measured traces",
+        "aligned_overlay: aligned measured traces",
         "Blue = measured LP traces shifted by (fitted pretrigger − 16050); red = mean of all "
         "fit_ok events; orange = NRMSE-weighted mean of the fitted curves. Rise edges line up at 16050.")
 
     grid_fig_pages(prs, z, f"{RES}/slow_rise_events/zip{z}_slow_rise_events.png",
-        "slow_rise_events — NRMSE-rejected events",
+        "slow_rise_events: NRMSE-rejected events",
         "Events with median NRMSE > 0.4 across channels: the raw traces show no pulse in "
-        "any channel — the rejected population is noise triggers, not physics.")
+        "any channel: noise triggers, not physics.")
     shadow = f"{RES}/shadow_events/zip{z}_shadow_events.png"
     if os.path.exists(shadow):
         grid_fig_pages(prs, z, shadow,
-            "shadow_events — well-fit slow-rise events",
+            "shadow_events: well-fit slow-rise events",
             "Median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms: genuinely slow, well-fit pulses "
-            "— kept, and exactly what the NxM multi-templates are for.")
+            "; kept, and exactly what the NxM multi-templates are for.")
     slow_fall = f"{RES}/slow_fall_events/zip{z}_PDS2_slow_fall.png"
     if os.path.exists(slow_fall):
         grid_fig_pages(prs, z, slow_fall,
-            "slow_fall_events — long-τ_fall study (PDS2)",
+            "slow_fall_events: long-τ_fall study (PDS2)",
             "Random events with τ_fall > 1.5 ms drawn in every channel: the long fall is the "
             "PDS2 low-frequency hardware noise, not slow physics.")
     trise_rm = f"{RES}/trise_removed/zip{z}_trise_removed.png"
     if os.path.exists(trise_rm):
         grid_fig_pages(prs, z, trise_rm,
-            "trise_removed — noise that NRMSE missed",
+            "trise_removed: noise that NRMSE missed",
             "Events that PASS NRMSE ≤ 0.4 but are removed by τ_rise ≤ 0.3 ms: a slow 2-exp "
-            "hugging a slow baseline drift — no clean fast pulse in the raw trace.")
+            "hugging a slow baseline drift; no clean fast pulse in the raw trace.")
 
     channel_fig_pages(prs, z, f"{DELIV}/nxm/plots/zip{z}_pca_templates.png",
-        "deliverables/nxm — PCA templates nxm0–4",
+        "deliverables/nxm: PCA templates nxm0–4",
         "nxm0 = mean curve; nxm1–4 = PCA components (oscillating basis vectors, may be "
         "negative), all peak-normalized; population = fit_ok + NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms.")
 
@@ -329,7 +329,7 @@ def build_zip(z):
     s = _gal_slide(prs, f"Z{z} · 1x1 summed templates PT / PS1 / PS2",
                    f"figures: deliverables/1x1/plots/{{PT,PS1,PS2}}/zip{z}_*.png",
                    "Single-template (1x1) summed curves: peak-normalized average of the "
-                   "per-channel nxm0 templates — PT = all channels, PS1 / PS2 = side-1 / side-2 only.")
+                   "per-channel nxm0 templates: PT = all channels, PS1 / PS2 = side-1 / side-2 only.")
     for k, name in enumerate(["PT", "PS1", "PS2"]):
         path = f"{DELIV}/1x1/plots/{name}/zip{z}_{name}.png"
         img = Image.open(path)

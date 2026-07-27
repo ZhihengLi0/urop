@@ -490,19 +490,19 @@ notes(s, "Both template sets are ready for all 13 detectors: the analytic "
 
 # ------------------------------------------- backup · weak detectors (Z22)
 s = slide()
-title(s, "Backup — weak detectors (example: Z22)")
+title(s, "Backup · weak detectors (example: Z22)")
 bullets(s, [
-    "Z1 / Z4 / Z6 / Z18 / Z19 / Z22 / Z24: K-line sits inside the noise population — the PTOF window admits a noise-dominated mixture",
-    "Same bimodal NRMSE picture, noise peak dominates; the same 0.4 cut digs the real pulses out — Z22 PCS1: 7198 kept / 4788 cut (~40%)",
-    "Kept bundle broader than on quiet detectors; steep red curves = fits latching onto sharp noise spikes, not fast pulses being cut",
-    "τ_rise ≤ 0.3 ms (after NRMSE): removes 55–74% on weak zips (Z22: 71%) vs 1.6% on Z7 — residual slow drift",
+    "Z1 / Z4 / Z6 / Z18 / Z19 / Z22 / Z24: K-line inside the noise population, the window admits a noise-dominated mixture",
+    "Same bimodal NRMSE picture, noise peak dominant; the 0.4 cut digs the real pulses out (Z22 PCS1: 7198 kept / 4788 cut, ~40%)",
+    "Kept bundle broader; steep red curves = fits latching onto noise spikes, no real pulses lost",
+    "τ_rise ≤ 0.3 ms (after NRMSE): removes 55–74% on weak zips (Z22: 71%) vs 1.6% on Z7; removes residual slow drift",
 ], IN(0.55), IN(1.1), IN(12.3), IN(2.15), size=13)
 pic(s, "nrmse_zip22_PAS1.png", IN(0.4), IN(3.35), IN(6.3), IN(1.7),
-    "Z22 PAS1: NRMSE histogram — noise dominates")
+    "Z22 PAS1 NRMSE histogram: noise dominates")
 pic(s, "fan_cut_zip22_PCS1.png", IN(6.9), IN(3.35), IN(6.3), IN(1.7),
     "Z22 PCS1: kept (green) vs cut (red)")
 pic(s, "fan_final_zip22_PCS1.png", IN(2.2), IN(5.55), IN(8.9), IN(1.55),
-    "Z22 PCS1 after NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms — final shape family (760 fits)")
+    "Z22 PCS1 after NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms: final shape family (760 fits)")
 notes(s, "Backup. On the weak detectors the K-line overlaps the noise "
          "population, so the PTOF window admits a noise-dominated mixture. "
          "The NRMSE distribution is still bimodal but the noise peak "
@@ -518,11 +518,11 @@ notes(s, "Backup. On the weak detectors the K-line overlaps the noise "
 
 # ------------------------------------------- backup · τ_rise ≤ 0.3 ms ceiling
 s = slide()
-title(s, "Backup — the τ_rise ≤ 0.3 ms ceiling (PCA input)")
+title(s, "Backup · τ_rise ≤ 0.3 ms ceiling (PCA input)")
 bullets(s, [
     "Slow baseline drift survives NRMSE (a slow 2-exp hugs it) → mimics a slow rise",
     "Fast pulses at τ_rise ≈ 0.1 ms (p90 ≈ 0.15 ms) → ceiling at 0.3 ms blocks the drift tail",
-    "Removed after the NRMSE cut: Z7 1.6% (quiet 2–6%) — weak 55–74% (Z22 71%) — all zips 54%",
+    "Removed after the NRMSE cut: Z7 1.6% (quiet 2–6%), weak 55–74% (Z22 71%), all zips 54%",
     "Trade-off: trims the very slowest genuine pulses → decision pending",
 ], IN(0.55), IN(1.2), IN(12.3), IN(2.15), size=14)
 pic(s, "time_constants_zip7_PAS1.png", IN(1.4), IN(3.6), IN(10.5), IN(2.7),
@@ -539,19 +539,19 @@ notes(s, "Backup for the rise-time cut. On weak-window detectors a slow "
 
 # ---------------------------- backup · τ_rise cut, good vs bad channel (Z7)
 s = slide()
-title(s, "Backup — τ_rise cut: a good vs a bad channel (Z7)")
+title(s, "Backup · τ_rise cut: good vs bad channel (Z7)")
 bullets(s, [
-    "Good channel PBS1: tight clean bundle — the τ_rise ≤ 0.3 ms cut removes ~0% (nearly free on quiet channels)",
-    "Bad channel PDS2: broad, messy fan — the channel itself is bad; the cut trims the slow-rise curves, 1462 → 1154 (21%)",
+    "Good channel PBS1: tight clean bundle; the cut removes ~0% (nearly free on quiet channels)",
+    "Bad channel PDS2: broad messy fan, the channel itself is bad; the cut trims slow risers, 1462 → 1154 (21%)",
 ], IN(0.55), IN(1.15), IN(12.3), IN(1.35), size=14)
 pic(s, "fan_zip7_PBS1_nrmse.png", IN(0.35), IN(2.7), IN(6.25), IN(1.75),
-    "PBS1 (good) — NRMSE ≤ 0.4")
+    "PBS1 (good): NRMSE ≤ 0.4")
 pic(s, "fan_zip7_PBS1_after.png", IN(6.85), IN(2.7), IN(6.25), IN(1.75),
-    "PBS1 (good) — + τ_rise ≤ 0.3 ms  (unchanged)")
+    "PBS1 (good): + τ_rise ≤ 0.3 ms (unchanged)")
 pic(s, "fan_zip7_PDS2_nrmse.png", IN(0.35), IN(5.05), IN(6.25), IN(1.75),
-    "PDS2 (bad) — NRMSE ≤ 0.4")
+    "PDS2 (bad): NRMSE ≤ 0.4")
 pic(s, "fan_zip7_PDS2_after.png", IN(6.85), IN(5.05), IN(6.25), IN(1.75),
-    "PDS2 (bad) — + τ_rise ≤ 0.3 ms  (slow risers trimmed)")
+    "PDS2 (bad): + τ_rise ≤ 0.3 ms (slow risers trimmed)")
 notes(s, "Backup showing the cut channel-by-channel on Z7. On the good "
          "channel PBS1 the fitted curves are already a tight, clean bundle, "
          "and adding the rise-time ceiling changes essentially nothing - it "
@@ -563,14 +563,14 @@ notes(s, "Backup showing the cut channel-by-channel on Z7. On the good "
 
 # ---------------------------- backup · what the τ_rise cut removes (Z22)
 s = slide()
-title(s, "Backup — what the τ_rise cut removes: noise NRMSE missed (Z22)")
+title(s, "Backup · what the τ_rise cut removes (Z22)")
 bullets(s, [
-    "Exactly the events that PASS NRMSE ≤ 0.4 but are REMOVED by τ_rise ≤ 0.3 ms — the noise 0.4 let through, 0.3 catches",
-    "PCS1 / PDS1 pass at NRMSE ≈ 0.15 (a slow 2-exp hugs a slow baseline drift) — but the raw trace has no clean fast pulse",
-    "Trade-off: the same cut also trims genuine slow-rise pulses — documented, decision pending",
+    "Events that PASS NRMSE ≤ 0.4 but are REMOVED by τ_rise ≤ 0.3 ms: the noise 0.4 let through, 0.3 catches",
+    "PCS1 / PDS1 pass at NRMSE ≈ 0.15 (a slow 2-exp hugs the drift); the raw trace has no clean fast pulse",
+    "Trade-off: also trims genuine slow-rise pulses; decision pending",
 ], IN(0.55), IN(1.15), IN(12.3), IN(1.7), size=14)
 pic(s, "drift_zip22_crop.png", IN(2.1), IN(3.25), IN(9.1), IN(3.8),
-    "Z22: 3 events × PAS1/PBS1/PCS1/PDS1 — pass NRMSE ≤ 0.4, removed by τ_rise ≤ 0.3 ms; PCS1/PDS1 are pure slow drift")
+    "Z22, 3 events × PAS1/PBS1/PCS1/PDS1: pass NRMSE ≤ 0.4, removed by τ_rise ≤ 0.3 ms; PCS1/PDS1 = pure slow drift")
 notes(s, "Backup: what the rise-time cut actually removes. These are exactly "
          "the Z22 events that pass the NRMSE cut - median NRMSE below 0.4 - "
          "but are removed by the rise-time ceiling, median t_rise above 0.3 "
@@ -704,8 +704,8 @@ def channel_fig_pages(fname, short, info, per_page=2):
             cp = os.path.join(_SPLIT_DIR, f"{base}_r{i+1}.png")
             crop.save(cp)
             crops.append((cp, crop.size))
-        s = _gal_slide(f"Backup — Z7 · {short}  ({p+1}/{npages})",
-                       f"figure: {fname} — channel panels {i0+1}–{i1} of {n}, "
+        s = _gal_slide(f"Backup · Z7 · {short}  ({p+1}/{npages})",
+                       f"figure: {fname}, channel panels {i0+1}–{i1} of {n}, "
                        f"top to bottom",
                        info)
         _place_stack(s, crops, IN(0.55), IN(1.95), IN(12.3), IN(5.3))
@@ -731,8 +731,8 @@ def grid_fig_pages(fname, short, info, rows_per_page=3):
         crop = img.crop((x0, units[a][0], x1, units[b - 1][1]))
         cp = os.path.join(_SPLIT_DIR, f"{base}_e{a+1}-{b}_{half}.png")
         crop.save(cp)
-        s = _gal_slide(f"Backup — Z7 · {short}  ({p+1}/{len(pages)})",
-                       f"figure: {fname} — event rows {a+1}–{b} of {n}, "
+        s = _gal_slide(f"Backup · Z7 · {short}  ({p+1}/{len(pages)})",
+                       f"figure: {fname}, event rows {a+1}–{b} of {n}, "
                        f"{half} half of the channels",
                        info)
         _place_stack(s, [(cp, crop.size)], IN(0.55), IN(1.95), IN(12.3), IN(5.3))
@@ -741,7 +741,7 @@ def grid_fig_pages(fname, short, info, rows_per_page=3):
 
 # ------------------------------------------------ gallery intro / contents
 s = slide()
-title(s, "Backup — Z7 full results gallery",
+title(s, "Backup · Z7 full results gallery",
       sub="every diagnostic and result figure of the Z7 pipeline, in processing order")
 bullets(s, [
     "Dataset: the K-line selection window",
@@ -756,7 +756,7 @@ notes(s, "The full Z7 gallery: every figure the pipeline produces, in "
          "processing order, split into readable pieces.")
 
 # ------------------------------------------------ dataset window
-s = _gal_slide("Backup — Z7 · K-line selection window",
+s = _gal_slide("Backup · Z7 · K-line selection window",
                "figure: kline_zip7.png",
                "Summed PTOFamps spectrum of Z7; red line = Prof. Saab's 10.37 keV K-line position, "
                "shaded band = the ×/÷ 1.35 selection window; everything inside is cached raw.")
@@ -766,78 +766,78 @@ notes(s, "Backup gallery: the Z7 K-line window on the PTOFamps spectrum.")
 
 # ------------------------------------------------ example grids
 grid_fig_pages("zip7_fit_examples.png",
-    "fit_examples — LP trace vs 2-exp fit",
+    "fit_examples: LP trace vs 2-exp fit",
     "First 15 cached events × all channels; blue = 100 kHz LP trace, red = 2-exp fit. "
     "A real event fits well in every channel at once; a noise trigger fails across the whole row.")
 grid_fig_pages("zip7_raw_vs_fit_examples.png",
-    "raw_vs_fit_examples — raw trace vs fit",
+    "raw_vs_fit_examples: raw trace vs fit",
     "Same 15 events × all channels; gray = raw unfiltered trace, blue = LP, red = fit, "
     "per-panel NRMSE top-right. Noise vs pulse size is directly visible in the raw data.")
 
 # ------------------------------------------------ fit diagnostics
 channel_fig_pages("zip7_nrmse.png",
-    "nrmse — NRMSE distribution per channel",
+    "nrmse: NRMSE distribution per channel",
     "NRMSE = RMS(fit residual)/fitted peak, log-log. Bimodal: good fits (~0.05–0.1) vs "
     "noise triggers (~1–2); the valley at ≈0.4 sets quality cut 1.")
 channel_fig_pages("zip7_pretrigger.png",
-    "pretrigger — fitted onset per channel",
+    "pretrigger: fitted onset per channel",
     "The onset is a FREE fit parameter; fitted values cluster ≈230 samples after the nominal "
-    "16050 — pinning it inside the fit would bias every other parameter.")
+    "16050; pinning it inside the fit would bias every other parameter.")
 channel_fig_pages("zip7_time_constants.png",
-    "time_constants — τ_rise / τ_fall per channel",
+    "time_constants: τ_rise / τ_fall per channel",
     "Fast-pulse population at τ_rise ≈ 0.1 ms; isolated spikes at the parameter bounds are "
     "noise fits pinned at the fit limits, removed by the NRMSE cut.")
 
 # ------------------------------------------------ aligned fans
 channel_fig_pages("zip7_fitted_curves_overlay.png",
-    "fitted_curves_overlay — fan, no cut",
+    "fitted_curves_overlay: fan, no cut",
     "Every fit_ok fitted curve at the common pretrigger 16050, peak-normalized. Pure shape "
     "distribution; the broad slow curves are noise fits that the cuts remove.")
 channel_fig_pages("zip7_fitted_curves_overlay_nrmse0.4.png",
-    "fitted_curves_overlay — after NRMSE ≤ 0.4",
+    "fitted_curves_overlay: after NRMSE ≤ 0.4",
     "Same fan after quality cut 1: the noise fan collapses, the fast-pulse bundle remains.")
 channel_fig_pages("zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
-    "fitted_curves_overlay — after both cuts",
-    "After NRMSE ≤ 0.4 AND τ_rise ≤ 0.3 ms — the exact PCA input population: "
+    "fitted_curves_overlay: after both cuts",
+    "After NRMSE ≤ 0.4 AND τ_rise ≤ 0.3 ms, the exact PCA input population: "
     "the clean fast-pulse bundle only.")
 channel_fig_pages("zip7_overlay_fan_cut_nrmse0.4.png",
-    "overlay_fan_cut — kept vs rejected fits",
+    "overlay_fan_cut: kept vs rejected fits",
     "Gray-blue = aligned measured traces; green = fits with NRMSE ≤ 0.4 (kept); red = "
     "NRMSE > 0.4 (cut away). Median NRMSE and counts of both populations stamped per channel.")
 channel_fig_pages("zip7_lp_aligned_overlay.png",
-    "aligned_overlay — aligned measured traces",
+    "aligned_overlay: aligned measured traces",
     "Blue = measured LP traces shifted by (fitted pretrigger − 16050); red = mean of all "
     "fit_ok events; orange = NRMSE-weighted mean of the fitted curves. Rise edges line up at 16050.")
 
 # ------------------------------------------------ special populations
 grid_fig_pages("zip7_slow_rise_events.png",
-    "slow_rise_events — NRMSE-rejected events",
+    "slow_rise_events: NRMSE-rejected events",
     "Events with median NRMSE > 0.4 across channels: the raw traces show no pulse in any "
-    "channel — the rejected population is noise triggers, not physics.")
+    "channel: noise triggers, not physics.")
 grid_fig_pages("zip7_shadow_events.png",
-    "shadow_events — well-fit slow-rise events",
-    "Median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms: genuinely slow, well-fit pulses — kept, "
+    "shadow_events: well-fit slow-rise events",
+    "Median NRMSE ≤ 0.4 AND median τ_rise > 0.2 ms: genuinely slow, well-fit pulses; kept, "
     "and exactly what the NxM multi-templates are for.")
 grid_fig_pages("zip7_PDS2_slow_fall.png",
-    "slow_fall_events — long-τ_fall study (PDS2)",
+    "slow_fall_events: long-τ_fall study (PDS2)",
     "10 random events with τ_fall > 1.5 ms drawn in every channel: 11 channels show normal "
     "fast pulses; the long fall is the PDS2 low-frequency hardware noise, not slow physics.")
 
 # ------------------------------------------------ templates
 channel_fig_pages("zip7_pca_templates.png",
-    "deliverables/nxm — PCA templates nxm0–4",
+    "deliverables/nxm: PCA templates nxm0–4",
     "nxm0 = mean curve; nxm1–4 = PCA components (oscillating basis vectors, may be negative), "
     "all peak-normalized; PC1+PC2 capture 96–98% of the shape variance. PDS2 replaced by the "
     "PDS1 template in the delivered files.")
 
 # summed 1x1 templates: three figures on one slide
 s = slide()
-title(s, "Backup — Z7 · 1x1 summed templates PT / PS1 / PS2",
+title(s, "Backup · Z7 · 1x1 summed templates PT / PS1 / PS2",
       sub="figures: deliverables/1x1/plots/{PT,PS1,PS2}/zip7_*.png")
 tb = textbox(s, IN(0.55), IN(1.18), IN(12.3), IN(0.6))
 _p = tb.text_frame.paragraphs[0]
 _r = _p.add_run()
-_r.text = ("Single-template (1x1) summed curves: peak-normalized average of the per-channel nxm0 templates — "
+_r.text = ("Single-template (1x1) summed curves: peak-normalized average of the per-channel nxm0 templates: "
            "PT = all channels, PS1 / PS2 = side-1 / side-2 only.")
 _r.font.size, _r.font.color.rgb, _r.font.name = Pt(12.5), DARK, "Arial"
 for _k, _f in enumerate(["zip7_PT.png", "zip7_PS1.png", "zip7_PS2.png"]):
