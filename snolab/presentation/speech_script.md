@@ -48,9 +48,9 @@
 
 ## Slide 6 — Alignment result（约 40 秒）
 
-**中文**：这一页讲第五步——对齐。每一条实测波形，按它自己拟合出的 pretrigger 减去名义的 16050 平移——纯平移，波形本身没有任何再生成。图里那条竖虚线，就是所有波形对齐到的公共 pretrigger。对齐之后，把所有拟合曲线画在这个公共起点上，就是这张扇形图——这一页画的是这个通道**全部**拟合出来的事件，2008 条曲线，没有 fit_ok、没有 NRMSE、什么 cut 都没有，因为到这里我们还没有做任何筛选。
+**中文**：这一页讲第五步——对齐。每一条实测波形，按它自己拟合出的 pretrigger 减去名义的 16050 平移——纯平移，波形本身没有任何再生成。图里那条竖虚线，就是所有波形对齐到的公共 pretrigger。对齐之后，把所有拟合曲线画在这个公共起点上，就是这张扇形图——这一页画的是这个通道**全部**拟合出来的事件，2203 条曲线，没有 fit_ok、没有 NRMSE、什么 cut 都没有，因为到这里我们还没有做任何筛选——图下方那些倒立的曲线也在里面，它们就是下一页要处理的非物理拟合。
 
-**English**: This slide is step five — alignment. Each measured trace is shifted by its own fitted pretrigger minus 16050 — a pure translation, nothing about the waveform is regenerated. The dotted vertical line is the common pretrigger everything is aligned to. Once aligned, I draw all the fitted curves from that common starting point — this fan plot shows **every** fitted event on this channel, 2008 curves, with no fit_ok, no NRMSE, no cuts of any kind, because at this point nothing has been selected yet.
+**English**: This slide is step five — alignment. Each measured trace is shifted by its own fitted pretrigger minus 16050 — a pure translation, nothing about the waveform is regenerated. The dotted vertical line is the common pretrigger everything is aligned to. Once aligned, I draw all the fitted curves from that common starting point — this fan plot shows **every** fitted event on this channel, 2203 curves, with no fit_ok, no NRMSE, no cuts of any kind, because at this point nothing has been selected yet — the inverted curves at the bottom are included too, and they are the non-physical fits handled on the next slide.
 
 ---
 

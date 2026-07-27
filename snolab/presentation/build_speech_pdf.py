@@ -36,7 +36,7 @@ POINT = {
     ],
     6: [
         "The dotted vertical line is the common pretrigger everything is aligned to.",
-        "this fan plot shows **every** fitted event on this channel, 2008 curves",
+        "this fan plot shows **every** fitted event on this channel, 2203 curves",
     ],
     7: [
         "on the right, the fits that fit_ok removes are drawn in red — inverted or negative shapes, clearly non-physical",

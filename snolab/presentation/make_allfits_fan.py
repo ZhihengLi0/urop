@@ -35,7 +35,7 @@ n_drawn = 0
 for fp in fits:
     y = two_exp_free_pt(x, fp["amp"], fp["t_rise"], fp["t_fall"], 0.0,
                         float(RISE_REF_IDX))
-    pk = float(np.max(y))
+    pk = float(np.max(np.abs(y)))     # |peak|: inverted (non-physical) fits stay visible
     if pk > 0 and np.isfinite(pk):
         ax.plot(t_ms, y / pk, lw=0.45, alpha=0.16, color="steelblue")
         n_drawn += 1

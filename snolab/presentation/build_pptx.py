@@ -277,7 +277,7 @@ notes(s, "The per-trace algorithm. First a low-pass filter to "
 s = slide()
 title(s, "5. Align")
 pic(s, "fan_zip7_PBS1_allfits.png", IN(1.7), IN(1.45), IN(9.9), IN(5.5),
-    "Z7 PBS1: every fitted event drawn at the common pretrigger, no cuts of any kind (n = 2008 events)")
+    "Z7 PBS1: every fitted event drawn at the common pretrigger, no cuts of any kind (n = 2203, inverted fits included)")
 notes(s, "Step five: alignment. Each measured trace is shifted by its fitted "
          "pretrigger minus the nominal 16050 - a pure translation, nothing "
          "about the waveform is regenerated. Drawn at the common pretrigger, "
@@ -297,7 +297,7 @@ bullets(s, [
     "Z7 PBS1: 2008 of 2206 events pass; 195 removed (red, inverted or negative shapes), 3 fits did not converge",
 ], IN(0.55), IN(1.2), IN(12.3), IN(1.1), size=15)
 pic(s, "fan_zip7_PBS1_allfits.png", IN(0.3), IN(2.45), IN(6.35), IN(4.4),
-    "All fitted events, no cuts (n = 2008 drawn)")
+    "All fitted events, no cuts (n = 2203 drawn, inverted fits included)")
 pic(s, "fan_zip7_PBS1_fitok_cut.png", IN(6.65), IN(2.45), IN(6.35), IN(4.4),
     "fit_ok: kept (blue) vs removed (red, drawn at |peak| normalization)")
 notes(s, "The first quality cut is fit_ok, a pure physics check: the "
