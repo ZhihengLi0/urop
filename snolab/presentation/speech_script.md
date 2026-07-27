@@ -81,9 +81,9 @@
 
 ## Slide 10 — After NRMSE ≤ 0.4: a closer look（约 10 秒）
 
-**中文**：放大看一下：这是从 cut 后的 1931 条里随机抽的 100 条，25 到 27 毫秒，每一条的形状都能看清。
+**中文**：这是从保留下来的曲线里抽 100 条的放大图。
 
-**English**: A closer look: one hundred curves randomly drawn from the 1931 kept, zoomed to 25 to 27 milliseconds, so the individual shapes are visible.
+**English**: This is a zoomed view of a 100-event sample of the kept curves.
 
 ---
 
