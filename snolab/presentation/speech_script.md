@@ -121,9 +121,9 @@
 
 ## Slide 15 — Template file / Future steps（约 30 秒）
 
-**中文**：两套模板都做好了，覆盖全部 13 个探测器：解析的 1x1 模板和 PCA 的 NxM 模板，官方 PulseTemplates 格式，放在 cdmsbats_config 的 feature branch 里，随时可以 merge。下一步：扩展到三指数、四指数拟合；把 NxM 处理链真正跑起来；其他探测器噪声更差、多加了几个 cut，细节都在 backup slides 里——如果大家有兴趣，我可以讲一讲 backup slides。
+**中文**：两套模板都做好了，覆盖全部 13 个探测器：解析的 1x1 模板和 PCA 的 NxM 模板，官方 PulseTemplates 格式，放在 cdmsbats_config 的 feature branch 里，随时可以 merge。下一步：扩展到三指数、四指数拟合；把 NxM 处理链真正跑起来；其他探测器噪声更差、多加了几个 cut，细节都在 backup slides 里。
 
-**English**: Both template sets are ready for all 13 detectors: the analytic 1x1 templates and the PCA NxM set, in the official PulseTemplates format, sitting in the cdmsbats_config feature branch and ready for merge. Next: extend to three- and four-exponential fits, exercise the NxM processing chain, and the other detectors — worse noise, a few more cuts, all in the backup slides. If anyone is interested, I am happy to walk through the backup slides.
+**English**: Both template sets are ready for all 13 detectors: the analytic 1x1 templates and the PCA NxM set, in the official PulseTemplates format, sitting in the cdmsbats_config feature branch and ready for merge. Next: extend to three- and four-exponential fits, exercise the NxM processing chain, and the other detectors — worse noise, a few more cuts, all in the backup slides.
 
 ---
 
