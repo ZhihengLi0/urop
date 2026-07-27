@@ -209,10 +209,10 @@ def main(src, dst):
     .sec { font-size: 11pt; margin: 11px 0 5px; border-bottom:2px solid #333; padding-bottom:3px; }
     .slide { break-inside: avoid; page-break-inside: avoid;
              border:1.5px solid #8a8a8a; border-radius:5px;
-             padding:6px 11px; margin:0 0 9px; }
+             padding:5px 10px; margin:0 0 6px; }
     .stitle { font-size: 11pt; font-weight:700; color:#c01818; margin-bottom:2px; }
-    .zh { font-size: 10pt; line-height:1.4; margin:2px 0; color:#444; }
-    .en { font-size: 11.5pt; line-height:1.46; margin:2px 0 1px; color:#111;
+    .zh { font-size: 9.5pt; line-height:1.3; margin:1px 0; color:#444; }
+    .en { font-size: 11pt; line-height:1.36; margin:1px 0 1px; color:#111;
           break-inside: avoid; page-break-inside: avoid; }
     .lbl { display:inline-block; font-size:7pt; font-weight:700; color:#fff;
            background:#7a8a99; border-radius:3px; padding:0 4px; margin-right:5px;
