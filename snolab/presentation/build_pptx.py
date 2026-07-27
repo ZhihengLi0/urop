@@ -226,9 +226,9 @@ def steps_box(top, height, items):
         r.font.size, r.font.color.rgb, r.font.name = Pt(16), DARK, "Arial"
 
 steps_box(IN(1.2), IN(1.35), [
-    ("1.  Low-pass", " — 100 kHz Butterworth"),
-    ("2.  Normalize", " — subtract the baseline (median of the pre-pulse samples), scale the trace to unit peak"),
-    ("3.  Fit", " — two-exponential model:"),
+    ("1.  Low-pass", ": 100 kHz Butterworth"),
+    ("2.  Normalize", ": subtract the baseline (median of the pre-pulse samples), scale the trace to unit peak"),
+    ("3.  Fit", ": two-exponential model:"),
 ])
 pic(s, "formula_2exp.png", IN(2.6), IN(2.62), IN(8.1), IN(0.95))
 # fit parameter definitions, right under the formula
@@ -245,8 +245,8 @@ steps_box(IN(3.95), IN(0.55), [
 # the two quality-number sub-lines, plain English
 q_tb = textbox(s, IN(1.15), IN(4.42), IN(11.6), IN(0.9))
 for i, (lead, rest) in enumerate([
-        ("fit_ok", " — amplitude is positive, and the pulse rises faster than it falls"),
-        ("NRMSE", " — RMS of the fit residual ÷ pulse peak  (smaller = better fit)")]):
+        ("fit_ok", ": amplitude is positive, and the pulse rises faster than it falls"),
+        ("NRMSE", ": RMS of the fit residual ÷ pulse peak  (smaller = better fit)")]):
     p = q_tb.text_frame.paragraphs[0] if i == 0 else q_tb.text_frame.add_paragraph()
     p.space_after = Pt(4)
     r = p.add_run(); r.text = "•  " + lead
@@ -289,8 +289,26 @@ notes(s, "Step five: alignment. Each measured trace is shifted by its fitted "
          "we separate them quantitatively is the next slide.")
 
 # ------------------------------------------------------ 6 · NRMSE cut
+# ------------------------------------------------- 6b · quality cut 1: fit_ok
 s = slide()
-title(s, "Quality cut 1: NRMSE ≤ 0.4 — where the number comes from")
+title(s, "Quality cut 1: fit_ok")
+bullets(s, [
+    "fit_ok: amplitude > 0 AND rise faster than fall (the fit is a physical pulse)",
+    "Z7 PBS1: 2008 of 2206 events pass; 195 removed (red, inverted or negative shapes), 3 fits did not converge",
+], IN(0.55), IN(1.2), IN(12.3), IN(1.1), size=15)
+pic(s, "fan_zip7_PBS1_allfits.png", IN(0.3), IN(2.45), IN(6.35), IN(4.4),
+    "All fitted events, no cuts (n = 2008 drawn)")
+pic(s, "fan_zip7_PBS1_fitok_cut.png", IN(6.65), IN(2.45), IN(6.35), IN(4.4),
+    "fit_ok: kept (blue) vs removed (red, drawn at |peak| normalization)")
+notes(s, "The first quality cut is fit_ok, a pure physics check: the "
+         "amplitude must be positive and the rise must be faster than the "
+         "fall. On the left the same all-events fan; on the right the fits "
+         "removed by fit_ok are drawn in red, inverted or negative shapes, "
+         "clearly non-physical. On PBS1 it removes 195 of 2206 events and "
+         "three more fits never converged; 2008 curves move on.")
+
+s = slide()
+title(s, "Quality cut 2: NRMSE ≤ 0.4 — where the number comes from")
 bullets(s, [
     "NRMSE of fit_ok events is bimodal: good fits (median ≈ 0.05–0.1) vs noise triggers (≈ 1–2), valley at ≈ 0.4–0.5",
     "The cut sits in the valley: eyeball read off the distribution",
@@ -381,12 +399,9 @@ notes(s, "Before trusting the cut we looked at what it throws away. These are "
 s = slide()
 title(s, "Slow-fall tail in one particular channel")
 bullets(s, [
-    "The post-cut plot still shows slow-fall tails → sample them: NRMSE ≤ 0.4 AND τ_fall > 1.5 ms, 10 random events, raw vs fit drawn in all 12 channels",
-    "The sampled events are real pulses. Their extreme fall times trace to one channel: only PDS2 swings (τ_fall median 0.51 ms vs ≈ 0.25 ms elsewhere)",
-    "Conclusion: no τ_fall cut — slow-fall events passing NRMSE stay in",
     "PDS2 alone: can not make useful templates; hard to fix in analysis/software, the noise itself needs to be fixed",
-    "Temporary solution: use the PDS1 template in place of PDS2 (applied in the delivered ROOT files)",
-], IN(0.55), IN(1.2), IN(12.3), IN(2.2), size=13)
+    "Temporary solution: use the PDS1 template in place of PDS2 (applied in the ROOT files)",
+], IN(0.55), IN(1.25), IN(12.3), IN(1.0), size=14)
 pic(s, "slow_fall_zip7_crop.png", IN(0.3), IN(3.5), IN(6.7), IN(3.45),
     "Z7, 3 sampled slow-fall events: normal in PBS2/PCS2/PES2, swings only in PDS2")
 # the two t_fall histograms side by side, cropped to the useful 0-7 ms
@@ -771,7 +786,7 @@ grid_fig_pages("zip7_raw_vs_fit_examples.png",
 channel_fig_pages("zip7_nrmse.png",
     "nrmse: NRMSE distribution per channel",
     "NRMSE = RMS(fit residual)/fitted peak, log-log. Bimodal: good fits (~0.05–0.1) vs "
-    "noise triggers (~1–2); the valley at ≈0.4 sets quality cut 1.")
+    "noise triggers (~1–2); the valley at ≈0.4 sets quality cut 2.")
 channel_fig_pages("zip7_pretrigger.png",
     "pretrigger: fitted onset per channel",
     "The onset is a FREE fit parameter; fitted values cluster ≈230 samples after the nominal "
@@ -788,7 +803,7 @@ channel_fig_pages("zip7_fitted_curves_overlay.png",
     "distribution; the broad slow curves are noise fits that the cuts remove.")
 channel_fig_pages("zip7_fitted_curves_overlay_nrmse0.4.png",
     "fitted_curves_overlay: after NRMSE ≤ 0.4",
-    "Same fan after quality cut 1: the noise fan collapses, the fast-pulse bundle remains.")
+    "Same fan after the NRMSE cut: the noise fan collapses, the fast-pulse bundle remains.")
 channel_fig_pages("zip7_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
     "fitted_curves_overlay: after both cuts",
     "After NRMSE ≤ 0.4 AND τ_rise ≤ 0.3 ms, the exact PCA input population: "

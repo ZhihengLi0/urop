@@ -267,7 +267,7 @@ def build_zip(z):
     channel_fig_pages(prs, z, f"{RES}/nrmse/zip{z}_nrmse.png",
         "nrmse: NRMSE distribution per channel",
         "NRMSE = RMS(fit residual)/fitted peak, log-log. Bimodal: good fits vs noise "
-        "triggers; the valley at ≈0.4 sets quality cut 1.")
+        "triggers; the valley at ≈0.4 sets quality cut 2.")
     channel_fig_pages(prs, z, f"{RES}/pretrigger/zip{z}_pretrigger.png",
         "pretrigger: fitted onset per channel",
         "The onset is a FREE fit parameter; pinning it inside the fit would bias every "
@@ -283,7 +283,7 @@ def build_zip(z):
         "shape distribution; the broad slow curves are noise fits that the cuts remove.")
     channel_fig_pages(prs, z, f"{RES}/fitted_curves_overlay/zip{z}_fitted_curves_overlay_nrmse0.4.png",
         "fitted_curves_overlay: after NRMSE ≤ 0.4",
-        "Same fan after quality cut 1: the noise fan collapses, the fast-pulse bundle remains.")
+        "Same fan after the NRMSE cut: the noise fan collapses, the fast-pulse bundle remains.")
     channel_fig_pages(prs, z, f"{RES}/fitted_curves_overlay/zip{z}_fitted_curves_overlay_nrmse0.4_trise0.30ms.png",
         "fitted_curves_overlay: after both cuts",
         "After NRMSE ≤ 0.4 AND τ_rise ≤ 0.3 ms, the exact PCA input population: the clean "

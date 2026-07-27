@@ -39,25 +39,28 @@ POINT = {
         "this fan plot shows **every** fitted event on this channel, 2008 curves",
     ],
     7: [
-        "In this plot the two populations are far apart and the valley is obvious.",
+        "on the right, the fits that fit_ok removes are drawn in red — inverted or negative shapes, clearly non-physical",
     ],
     8: [
-        "on the left all physical fits — a 200-curve sample, so the slow stragglers appear in proportion to their real share; on the right, after the cut, one very tight, consistent shape family remains",
+        "In this plot the two populations are far apart and the valley is obvious.",
     ],
     9: [
+        "on the left all physical fits — a 200-curve sample, so the slow stragglers appear in proportion to their real share; on the right, after the cut, one very tight, consistent shape family remains",
+    ],
+    10: [
         "On the left are the **raw** traces of the rejected events. As you can see, there is simply no pulse there",
         "this figure has three layers: the gray-blue underneath is the aligned measured traces, green on top is the fitted curves that **pass** the cut, and red is the ones **removed**; the top-right corner shows each population's median NRMSE and its event count.",
         "The green ones are fast and consistent, bundled together; the red ones scatter everywhere",
     ],
-    10: [
+    11: [
         "Each row is one event, and in every column except PDS2 you see a clean, fast pulse; only in the PDS2 column is there a large low-frequency swing riding on top of the trace",
         "the left one is a normal channel, PAS1 — almost every event sits in one narrow peak at about 0.25 milliseconds, and there's basically nothing past one millisecond; the right one is PDS2 — a broad tail that stretches all the way out to five or six milliseconds",
     ],
-    11: [
+    12: [
         "On the screen, the blue **bundle** is the fitted curves that go into the average — that's the input, not the template.",
         "The two plots at the bottom compare the two averages: on the left the NRMSE-weighted mean — the delivered 1x1 template; on the right the plain unweighted mean of the clean PCA input curves — and that is exactly nxm0.",
     ],
-    12: [
+    13: [
         'the black curve, nxm-zero, is the average shape; the four colored ones are the four main "directions of deformation" in the data',
     ],
 }
