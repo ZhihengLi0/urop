@@ -57,9 +57,9 @@
 
 ## Slide 7 — Quality cut 1: fit_ok（约 25 秒）
 
-**中文**：第一道质量 cut 是 fit_ok，纯物理性检查：幅度必须为正、上升必须比下降快。左边还是刚才那张全事件扇形图；右边把被 fit_ok 剔除的拟合画成红色——形状要么是倒的、要么是负的，一眼就是非物理拟合。PBS1 上 2206 个事件剔掉 195 个，约 9%，另有 3 个没收敛；剩下 2008 条进入下一步。
+**中文**：第一道质量 cut 是 fit_ok，纯物理性检查：幅度必须为正、上升必须比下降快。左边还是刚才那张全事件扇形图；右边把被 fit_ok 剔除的拟合画成红色——形状是负的，一眼就是非物理拟合。PBS1 上 2206 个事件剔掉 195 个，约 9%，另有 3 个没收敛；剩下 2008 条进入下一步。
 
-**English**: The first quality cut is fit_ok, a pure physics check: the amplitude must be positive and the rise must be faster than the fall. On the left, the same all-events fan as before; on the right, the fits that fit_ok removes are drawn in red — inverted or negative shapes, clearly non-physical. On PBS1 it removes 195 of 2206 events, about nine percent, and three more fits never converged; the remaining 2008 curves move on.
+**English**: The first quality cut is fit_ok, a pure physics check: the amplitude must be positive and the rise must be faster than the fall. On the left, the same all-events fan as before; on the right, the fits that fit_ok removes are drawn in red — negative shapes, clearly non-physical. On PBS1 it removes 195 of 2206 events, about nine percent, and three more fits never converged; the remaining 2008 curves move on.
 
 ---
 

@@ -39,7 +39,7 @@ POINT = {
         "this fan plot shows **every** fitted event on this channel, 2203 curves",
     ],
     7: [
-        "on the right, the fits that fit_ok removes are drawn in red — inverted or negative shapes, clearly non-physical",
+        "on the right, the fits that fit_ok removes are drawn in red — negative shapes, clearly non-physical",
     ],
     8: [
         "In this plot the two populations are far apart and the valley is obvious.",
