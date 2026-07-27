@@ -120,10 +120,10 @@ s = slide()
 title(s, "Table of Contents")
 _toc = textbox(s, IN(1.1), IN(1.7), IN(11.0), IN(4.9))
 for _i, (_head, _rest) in enumerate([
-        ("Dataset", "Ge activation K-line event selection, raw trace cache (13 detectors)"),
-        ("Pulse fit", "100 kHz low-pass, free-pretrigger two-exponential fit, alignment at 16050"),
+        ("Dataset", "Ge activation K-line event selection, raw trace cache (13 detectors, 23–30 series each, ≈1–2 h per series)"),
+        ("Pulse fit", "low-pass → fit → align"),
         ("Data cleaning", "fit_ok, NRMSE valley cut (0.4), rise-time ceiling (0.3 ms)"),
-        ("Cross-checks", "cuts remove noise, real pulses stay; slow-fall follow-up"),
+        ("Cross-checks with real pulses", "cuts remove noise, real pulses stay; slow-fall follow-up"),
         ("Template generation", "1x1 weighted template, NxM PCA templates"),
         ("Template file and future steps", "cdmsbats ROOT files, ready for merge; three-, four-exponential fits"),
         ("Backup", "weak detectors, rise-time cut details, full results for every zip")]):
