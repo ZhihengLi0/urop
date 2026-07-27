@@ -33,12 +33,13 @@ lo, hi = int(25.6e-3 * SAMPLERATE), int(26.5e-3 * SAMPLERATE)
 x = X_FULL[lo:hi]
 t_ms = x / SAMPLERATE * 1e3
 fig, ax = plt.subplots(figsize=(10.5, 4.8))
-for fp in sample:
+colors = plt.cm.turbo(np.linspace(0.02, 0.98, len(sample)))
+for fp, col in zip(sample, colors):
     y = two_exp_free_pt(x, fp["amp"], fp["t_rise"], fp["t_fall"], 0.0,
                         float(RISE_REF_IDX))
     pk = float(np.max(y))
     if pk > 0 and np.isfinite(pk):
-        ax.plot(t_ms, y / pk, lw=0.7, alpha=0.4, color="steelblue")
+        ax.plot(t_ms, y / pk, lw=0.8, alpha=0.65, color=col)
 ax.axvline(RISE_REF_IDX / SAMPLERATE * 1e3, color="gray", lw=0.8, ls=":")
 ax.set_title(f"Z{DET} {CHAN}: 100 of the {len(fits)} kept curves, zoom 25.6-26.5 ms",
              fontsize=12)
