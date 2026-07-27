@@ -121,33 +121,33 @@
 
 ## Backup — Weak detectors（仅备查，不占正片时间）
 
-**中文**：弱探测器（Z1/Z4/Z6/Z18/Z19/Z22/Z24）的 K 线插在噪声堆里，窗口收进来的是噪声为主的混合体。NRMSE 分布同样双峰、但噪声峰是主体，同一条 0.4 的 cut 把真脉冲捞出来——Z22 PCS1：保留 7198、切掉 4788，约四成。保留束比安静探测器宽；红色里那些陡峭曲线是拟合抓到噪声尖刺，不是快脉冲被切掉。τ_rise ≤ 0.3 ms 在弱探测器上再切掉 NRMSE 之后余下的 55–74%（Z22 是 71%），主要是残余的慢基线漂移。
+**中文**：弱探测器（Z1/Z4/Z6/Z18/Z19/Z22/Z24）的 K 线位于噪声群内部，窗口选进来的样本以噪声为主。NRMSE 分布同样是双峰，只是噪声峰更大；用同一条 0.4 的 cut 就能把真脉冲挑出来——Z22 PCS1：保留 7198、切掉 4788，约四成。保留的束比安静探测器宽；红色里那些陡峭曲线是拟合跟随了噪声尖刺的结果，不是快脉冲被误切。τ_rise ≤ 0.3 ms 在弱探测器上再切掉 NRMSE 之后余下的 55–74%（Z22 是 71%），主要是残余的慢基线漂移。
 
-**English**: On the weak detectors (Z1/Z4/Z6/Z18/Z19/Z22/Z24) the K-line sits inside the noise population, so the window admits a noise-dominated mixture. The NRMSE distribution is still bimodal, only with the noise peak dominating, and the same 0.4 cut digs the real pulses out — on Z22 PCS1, 7198 kept and 4788 cut, about forty percent. The kept bundle is broader than on a quiet detector, and the steep red curves are fits latching onto sharp noise spikes, not fast pulses being cut. The rise-time ceiling then removes another 55–74% of what survived the NRMSE cut on the weak zips (71% on Z22) — residual slow baseline drift.
+**English**: On the weak detectors (Z1/Z4/Z6/Z18/Z19/Z22/Z24) the K-line lies inside the noise population, so the window selects a noise-dominated sample. The NRMSE distribution is still bimodal, only with a larger noise peak, and the same 0.4 cut selects the real pulses — on Z22 PCS1, 7198 kept and 4788 cut, about forty percent. The kept bundle is broader than on a quiet detector, and the steep red curves are fits that followed sharp noise spikes, not fast pulses that were wrongly removed. The rise-time ceiling then removes another 55–74% of what survived the NRMSE cut on the weak zips (71% on Z22) — residual slow baseline drift.
 
 ---
 
 ## Backup — τ_rise ≤ 0.3 ms 上限（PCA 输入用）（仅备查）
 
-**中文**：慢基线漂移能骗过 NRMSE——一条慢 2-exp 贴住它，残差很小——看起来像慢上升。真快脉冲聚在 τ_rise ≈ 0.1 ms，漂移尾巴拖得远得多，所以 PCA 输入加了 0.3 ms 上限挡掉它。相对 NRMSE 那一步切掉：安静探测器几乎不切（Z7 1.6%，大头是坏通道 PDS2），弱探测器 55–74%（Z22 71%），全部合计 54%。代价是最慢的一小撮真脉冲也会被削掉——这个取舍记录在案、尚未定论。
+**中文**：慢基线漂移也能得到很小的 NRMSE：一条慢的 2-exp 可以紧跟漂移，残差很小，看起来就像慢上升。真快脉冲聚在 τ_rise ≈ 0.1 ms，漂移尾巴拖得远得多，所以 PCA 输入加了 0.3 ms 上限挡掉它。相对 NRMSE 那一步切掉：安静探测器几乎不切（Z7 1.6%，大头是坏通道 PDS2），弱探测器 55–74%（Z22 71%），全部合计 54%。代价是最慢的一小撮真脉冲也会被削掉——这个取舍记录在案、尚未定论。
 
-**English**: A slow baseline drift can fool NRMSE — a slow 2-exp hugs it with a tiny residual — and looks like a slow rise. Real fast pulses cluster at τ_rise ≈ 0.1 ms while the drift tail stretches much further, so the PCA input gets a 0.3 ms ceiling to block it. Relative to the NRMSE step it removes almost nothing on quiet detectors (1.6% on Z7, mostly the bad channel PDS2) but 55–74% on the weak ones (71% on Z22), 54% pooled. The price is that the very slowest real pulses get trimmed too — a documented, still-open trade-off.
+**English**: A slow baseline drift can also give a small NRMSE: a slow two-exponential follows the drift closely, so the residual is small and it looks like a slow rise. Real fast pulses cluster at τ_rise ≈ 0.1 ms while the drift tail stretches much further, so the PCA input gets a 0.3 ms ceiling to block it. Relative to the NRMSE step it removes almost nothing on quiet detectors (1.6% on Z7, mostly the bad channel PDS2) but 55–74% on the weak ones (71% on Z22), 54% pooled. The price is that the very slowest real pulses get trimmed too — a documented, still-open trade-off.
 
 ---
 
 ## Backup — τ_rise cut：好通道 vs 坏通道（Z7）（仅备查）
 
-**English**: This is the τ_rise cut channel by channel on Z7. On the good channel PBS1 the fitted curves are already a tight, clean bundle, and adding the 0.3 ms ceiling changes essentially nothing — it removes about zero percent. On the bad channel PDS2 the fan is broad and messy, which by itself shows the channel is bad; there the ceiling trims the slow-rising curves, 1462 down to 1154, about 21%. So the cut is nearly free where the data is clean and does real work only where a channel is bad.
+**English**: This is the τ_rise cut channel by channel on Z7. On the good channel PBS1 the fitted curves are already a tight, clean bundle, and adding the 0.3 ms ceiling changes essentially nothing — it removes about zero percent. On the bad channel PDS2 the fan is broad and messy, which by itself shows the channel is bad; there the ceiling trims the slow-rising curves, 1462 down to 1154, about 21%. So the cut removes almost nothing on clean channels, and only has a sizable effect where the channel itself is bad.
 
-**中文**：这是 τ_rise 这刀在 Z7 上分通道看。好通道 PBS1 本来就是又紧又干净的一束，加上 0.3 ms 上限几乎没变——切了约 0%。坏通道 PDS2 的扇形又宽又乱，这本身就说明通道坏了；那刀在这里切掉了慢上升的曲线，1462 降到 1154，约 21%。所以这刀在干净数据上近乎免费，只在通道坏的地方才真干活。
+**中文**：这是 τ_rise 这刀在 Z7 上分通道看。好通道 PBS1 本来就是又紧又干净的一束，加上 0.3 ms 上限几乎没变——切了约 0%。坏通道 PDS2 的扇形又宽又乱，这本身就说明通道坏了；那刀在这里切掉了慢上升的曲线，1462 降到 1154，约 21%。所以这个 cut 在干净通道上几乎不切除任何事件，只在坏通道上才切掉较多事件。
 
 ---
 
 ## Backup — τ_rise 切掉的是什么：慢漂移（Z22）（仅备查）
 
-**English**: What the rise-time cut actually removes. These are exactly the Z22 events that pass the NRMSE cut — median NRMSE below 0.4 — but are removed by the rise-time ceiling, median t_rise above 0.3 ms. In other words, the noise that 0.4 let through and 0.3 catches. Look at PCS1 and PDS1: their NRMSE is low, around 0.15, because a slow 2-exp hugs the trace with a tiny residual — but the raw trace is just a slow baseline drift, there is no clean fast pulse. The honest caveat: the same cut also trims a small number of real slow-rise pulses — the documented, still-open trade-off.
+**English**: What the rise-time cut actually removes. These are exactly the Z22 events that pass the NRMSE cut — median NRMSE below 0.4 — but are removed by the rise-time ceiling, median t_rise above 0.3 ms. In other words, the noise that passes the 0.4 cut but is removed by the 0.3 ms limit. Look at PCS1 and PDS1: their NRMSE is low, around 0.15, because a slow two-exponential follows the trace with a very small residual — but the raw trace is just a slow baseline drift, there is no clean fast pulse. One caveat: the same cut also removes a small number of real slow-rise pulses — the documented, still-open trade-off.
 
-**中文**：这刀实际切掉的是什么。这些正是 Z22 上"通过了 NRMSE（中位 < 0.4）、却被上升时间上限（中位 t_rise > 0.3 ms）切掉"的事件——也就是 0.4 放过、0.3 才抓住的那批噪声。看 PCS1 和 PDS1：它们 NRMSE 很低、约 0.15，因为慢 2-exp 用极小残差贴住了波形——但原始波形就是一条慢基线漂移，没有干净的快脉冲。老实说的代价：这刀也会削掉一小撮真实的慢上升脉冲——就是那个记录在案、尚未定论的取舍。
+**中文**：这刀实际切掉的是什么。这些正是 Z22 上"通过了 NRMSE（中位 < 0.4）、却被上升时间上限（中位 t_rise > 0.3 ms）切掉"的事件——也就是通过了 0.4、但被 0.3 毫秒上限去掉的那批噪声。看 PCS1 和 PDS1：它们 NRMSE 很低、约 0.15，因为慢 2-exp 以很小的残差跟随了波形——但原始波形就是一条慢基线漂移，没有干净的快脉冲。需要说明的代价：这个 cut 也会去掉一小部分真实的慢上升脉冲——就是那个记录在案、尚未定论的取舍。
 
 ---
 
