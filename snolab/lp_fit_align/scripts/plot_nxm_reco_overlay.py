@@ -56,6 +56,16 @@ for c in ALL_CHANS:
         pass
 print(f"templates: {len(templates)} channels")
 
+# delivered 1x1 templates (NRMSE-weighted 2-exp mean, peak-normalized)
+tf1 = uproot.open(os.path.join(DELIV, "1x1", "root_files",
+                               f"Templates_SNOLAB_R4_zip{det}_2expfit_weighted.root"))
+onexone = {}
+for c in ALL_CHANS:
+    try:
+        onexone[c] = tf1[f"t2exp_zip{det}_{c}"].values()
+    except uproot.KeyInFileError:
+        pass
+
 examples = []          # (series, evn, {chan: amps[5]}, delay_s)
 caches = {}
 idx_by_series = {}
@@ -125,9 +135,10 @@ t_ms = x / SAMPLERATE * 1e3
 nrows, ncols = len(examples), len(ALL_CHANS)
 fig, axes = plt.subplots(nrows, ncols, figsize=(2.6 * ncols, 1.9 * nrows),
                          squeeze=False)
-fig.suptitle(f"Zip{det} — raw (gray) / LP (blue) vs NxM "
-             "reconstruction Σ ampₖ·nxmₖ (red), amplitudes from the UMN "
-             "(Addison) processing", fontsize=13)
+fig.suptitle(f"Zip{det} — raw (gray) / LP (blue) vs NxM reconstruction "
+             "Σ ampₖ·nxmₖ (red) and the delivered 1x1 template (green "
+             "dashed); amplitudes from the UMN (Addison) processing",
+             fontsize=13)
 for row, (series, evn, amps, delay_s) in enumerate(examples):
     idx_by_chan = idx_by_series[series]
     cache = caches[series]
@@ -171,13 +182,23 @@ for row, (series, evn, amps, delay_s) in enumerate(examples):
         ax.plot(t_ms, (tr - base)[lo:hi] / pk_lp, lw=0.3, alpha=0.45, color="gray")
         ax.plot(t_ms, (y_lp - base)[lo:hi] / pk_lp, lw=0.4, color="steelblue")
         ax.plot(t_ms, reco_sh[lo:hi] / pk_rc, lw=0.9, color="crimson")
-        ax.text(0.98, 0.95, f"tem0amps={amps[c][0]:.2e}", transform=ax.transAxes,
-                ha="right", va="top", fontsize=5.5, family="monospace",
+        if c in onexone:
+            t1 = onexone[c]
+            d1 = int(np.argmax((y_lp - base)[lo:hi])) - int(np.argmax(t1[lo:hi]))
+            t1s = np.interp(X_FULL - d1, X_FULL, t1, left=0.0, right=0.0)
+            pk1 = float(np.max(t1s[lo:hi]))
+            if pk1 > 0:
+                ax.plot(t_ms, t1s[lo:hi] / pk1, lw=0.8, ls=(0, (4, 2)),
+                        color="darkgreen", alpha=0.9)
+        atxt = "\n".join(f"a{k}={amps[c][k]:.1e}" for k in range(5))
+        ax.text(0.98, 0.95, atxt, transform=ax.transAxes,
+                ha="right", va="top", fontsize=4.6, family="monospace",
                 bbox=dict(facecolor="white", alpha=0.7, edgecolor="none"))
 fig.tight_layout()
 add_pipeline_note(fig, "NxM reconstruction check on real events: raw MIDAS trace "
                   "(gray), 100kHz LP (blue), and sum_k PTOFnxm{chan}tem{k}amps x "
-                  "nxm_k (red, delivered peak-normalized templates); amplitudes from the "
+                  "nxm_k (red, delivered peak-normalized templates) and the delivered 1x1 "
+                  "template (green dashed, peak-aligned); amplitudes from the "
                   "UMN (Addison) Default_tag processing are in physical units, "
                   "so each side is normalized to its own peak and the reconstruction is "
                   "aligned at the pulse peak (PTOFnxmdelay not filled, sentinel); "
