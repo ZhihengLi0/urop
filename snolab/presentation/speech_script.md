@@ -1,6 +1,6 @@
 # Speaker Script / 演讲稿 — SNOLAB R4 Phonon Pulse Templates
 
-约 10 分钟，15 页正片 + backup（4 页专题 + Z7 全结果图集；每个 zip 另有独立的 backup_zipN.pdf 图集）。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
+约 10 分钟，16 页正片 + backup（4 页专题 + Z7 全结果图集；每个 zip 另有独立的 backup_zipN.pdf 图集）。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
 原则：稿子是说的话，不是幻灯片的复读——具体参数都在屏幕上，嘴里讲思路和为什么。
 斜体是给自己的提示，不用念。
 
@@ -119,7 +119,15 @@
 
 ---
 
-## Slide 15 — Template file / Future steps（约 30 秒）
+## Slide 15 — NxM processing example（约 15 秒）
+
+**中文**：承接上一页：UMN 的 Addison 已经用我们交付的模板把 NxM 处理跑起来了——红色是用处理输出的五个幅度重建的 Σ ampₖ·nxmₖ，叠在原始波形上，举三个 K-line 事件的例子。
+
+**English**: Following up on the templates: Addison at UMN has already exercised the NxM processing with our delivered templates — the red curve is the reconstruction, the sum of the five fitted amplitudes times the templates, overlaid on the raw traces for three example K-line events.
+
+---
+
+## Slide 16 — Template file / Future steps（约 30 秒）
 
 **中文**：两套模板都做好了，覆盖全部 13 个探测器：解析的 1x1 模板和 PCA 的 NxM 模板，官方 PulseTemplates 格式，放在 cdmsbats_config 的 feature branch 里，随时可以 merge。下一步：扩展到三指数、四指数拟合；把 NxM 处理链真正跑起来——这一部分 UMN 已经开始 look into 了，Elliott 正在做分析，之后可能会来 present；其他探测器噪声更差、多加了几个 cut，细节都在 backup slides 里。
 

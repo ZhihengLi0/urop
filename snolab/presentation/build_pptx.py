@@ -478,6 +478,21 @@ notes(s, "Second family: the NxM PCA templates, built to capture the "
          "to 98 percent of the shape variance on every detector.")
 
 # ------------------------------------------------- 13 · summary
+# ------------------------------- 13b · NxM processing example (UMN run)
+s = slide()
+title(s, "NxM processing example: raw vs reconstruction")
+pic(s, "nxm_reco_overlay_s1.png", IN(0.4), IN(1.3), IN(12.5), IN(2.8))
+pic(s, "nxm_reco_overlay_s2.png", IN(0.4), IN(4.15), IN(12.5), IN(2.8),
+    "Z7, 3 example K-line events (top: S1 channels, bottom: S2): raw (gray) / LP (blue) vs Σ ampₖ·nxmₖ (red), amplitudes from the UMN (Addison) processing of our templates")
+notes(s, "A first look at the NxM processing exercised on our delivered "
+         "templates: UMN's run by Addison produced the five template "
+         "amplitudes per channel, and the red curve is the reconstruction, "
+         "the sum of amplitude k times template k, overlaid on the raw "
+         "trace. On the S1 channels the reconstruction follows the pulse "
+         "shape closely; some S2 channels show large oscillating "
+         "components, including PDS2 where the substituted PDS1 template "
+         "is in use - exactly the kind of feedback this exercise is for.")
+
 s = slide()
 title(s, "Template file")
 bullets(s, [
