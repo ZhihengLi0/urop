@@ -39,6 +39,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--det", type=int, required=True)
 parser.add_argument("--series", nargs="+", required=True)
 parser.add_argument("--n-events", type=int, default=3)
+parser.add_argument("--events", type=int, nargs="+", default=None,
+                    help="only these event numbers (overrides --n-events)")
 parser.add_argument("--cache-dir", default=CACHE_DIR_DEFAULT)
 args = parser.parse_args()
 det = args.det
@@ -80,7 +82,7 @@ def _load_series(series):
     return cache
 
 for series in args.series:
-  if len(examples) >= args.n_events:
+  if args.events is None and len(examples) >= args.n_events:
       break
   cache = _load_series(series)
   sel = set(int(e) for e in cache["selected_event_numbers"])
@@ -89,7 +91,7 @@ for series in args.series:
            + sorted(glob.glob(os.path.join(ADDISON_DIR,
                                            f"UMN.Addison.*_{series}_F*.root"))))
   for path in paths:
-      if len(examples) >= args.n_events:
+      if args.events is None and len(examples) >= args.n_events:
           break
       h = uproot.open(path)
       if "rqDir" not in h:
@@ -105,7 +107,9 @@ for series in args.series:
       delay = z["PTOFnxmdelay"].array(library="np")
       taken = 0
       for j, evn in hits:
-          if len(examples) >= args.n_events:
+          if args.events is not None and evn not in args.events:
+              continue
+          if args.events is None and len(examples) >= args.n_events:
               break
           if any(evn == e[1] for e in examples):
               continue                        # already taken from another file
@@ -203,6 +207,7 @@ add_pipeline_note(fig, "NxM reconstruction check on real events: raw MIDAS trace
                   "so each side is normalized to its own peak and the reconstruction is "
                   "aligned at the pulse peak (PTOFnxmdelay not filled, sentinel); "
                   "baseline = median LP samples 2000-12000")
-out = plot_path("nxm_reco_overlay", f"zip{det}_nxm_reco_overlay.png")
+suffix = ("_ev" + "_".join(str(e) for e in args.events)) if args.events else ""
+out = plot_path("nxm_reco_overlay", f"zip{det}_nxm_reco_overlay{suffix}.png")
 fig.savefig(out, dpi=110, bbox_inches="tight")
 print(f"Saved: {out}  ({len(examples)} events)")

@@ -481,9 +481,9 @@ notes(s, "Second family: the NxM PCA templates, built to capture the "
 # ------------------------------- 13b · NxM processing example (UMN run)
 s = slide()
 title(s, "NxM processing example: raw vs reconstruction")
-pic(s, "nxm_reco_overlay_s1.png", IN(0.4), IN(1.3), IN(12.5), IN(2.8))
-pic(s, "nxm_reco_overlay_s2.png", IN(0.4), IN(4.15), IN(12.5), IN(2.8),
-    "Z7, 3 example K-line events (top: S1 channels, bottom: S2): raw (gray) / LP (blue) vs Σ ampₖ·nxmₖ (red), amplitudes from the UMN (Addison) processing of our templates")
+pic(s, "nxm_reco_overlay_s1.png", IN(0.4), IN(1.7), IN(12.5), IN(2.4))
+pic(s, "nxm_reco_overlay_s2.png", IN(0.4), IN(4.35), IN(12.5), IN(2.4),
+    "Z7 event 30828 (top: S1 channels, bottom: S2): raw (gray) / LP (blue) vs NxM reconstruction Σ ampₖ·nxmₖ (red) and the 1x1 template (green dashed); amplitudes from the UMN (Addison) processing")
 notes(s, "A first look at the NxM processing exercised on our delivered "
          "templates: UMN's run by Addison produced the five template "
          "amplitudes per channel, and the red curve is the reconstruction, "
@@ -780,6 +780,30 @@ notes(s, "Backup: what fit_ok actually rejects. Sampled events with the full "
          "the pretrigger search range of the fit, so the fit only sees noise "
          "and lands on the swapped-tau negative solution. Removing these is "
          "correct because such pulses cannot enter a template anyway.")
+
+# ---------------- backup · NxM processing, one page per event (15 events)
+_nxm_events = [30646, 30724, 30764, 30828, 40040, 40295, 40488, 40518,
+               40552, 40560, 40613, 40620, 40714, 40751, 50174]
+_img15 = Image.open(os.path.join(FIG, "nxm_reco_overlay_15ev.png"))
+_units15 = _panel_units(_img15)
+assert len(_units15) == len(_nxm_events), (len(_units15), len(_nxm_events))
+_w15 = _img15.size[0]
+_body15 = _img15.crop((0, _units15[0][0], _w15, _units15[-1][1]))
+_xh15 = snap_cut(_white_cols(_body15), _w15 // 2, _w15 // 10)
+for _i, ((_u0, _u1), _evn) in enumerate(zip(_units15, _nxm_events)):
+    s = slide()
+    title(s, f"Backup · NxM processing · event {_evn}  ({_i+1}/{len(_nxm_events)})",
+          sub="raw (gray) / LP (blue) vs NxM reconstruction Σ ampₖ·nxmₖ (red) and the 1x1 template (green dashed); S1 channels top, S2 bottom")
+    _crops = []
+    for _x0, _x1, _half in ((0, _xh15, "s1"), (_xh15, _w15, "s2")):
+        _crop = _img15.crop((_x0, _u0, _x1, _u1))
+        _cp = os.path.join(_SPLIT_DIR, f"nxm15_ev{_evn}_{_half}.png")
+        _crop.save(_cp)
+        _crops.append((_cp, _crop.size))
+    _place_stack(s, _crops, IN(0.55), IN(1.6), IN(12.3), IN(5.55))
+    notes(s, f"NxM processing check for event {_evn}: raw and LP versus the "
+             "reconstruction from the UMN amplitudes and the 1x1 template; "
+             "S1 channels on top, S2 below.")
 
 # ------------------------------------------------ gallery intro / contents
 s = slide()

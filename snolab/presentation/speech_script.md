@@ -121,9 +121,9 @@
 
 ## Slide 15 — NxM processing example（约 15 秒）
 
-**中文**：承接上一页：UMN 的 Addison 已经用我们交付的模板把 NxM 处理跑起来了——红色是用处理输出的五个幅度重建的 Σ ampₖ·nxmₖ，叠在原始波形上，举三个 K-line 事件的例子。
+**中文**：承接上一页：UMN 的 Addison 已经用我们交付的模板把 NxM 处理跑起来了——红色是用处理输出的五个幅度重建的 Σ ampₖ·nxmₖ，叠在原始波形上；这里展示事件 30828 的全部通道，绿色虚线是 1x1 模板作对照，其余事件逐事件放在 backup。
 
-**English**: Following up on the templates: Addison at UMN has already exercised the NxM processing with our delivered templates — the red curve is the reconstruction, the sum of the five fitted amplitudes times the templates, overlaid on the raw traces for three example K-line events.
+**English**: Following up on the templates: Addison at UMN has already exercised the NxM processing with our delivered templates — the red curve is the reconstruction, the sum of the five fitted amplitudes times the templates, overlaid on the raw traces; shown here is event 30828 in all channels, with the 1x1 template as the green dashed reference, and the other events are in the backup, one page each.
 
 ---
 
