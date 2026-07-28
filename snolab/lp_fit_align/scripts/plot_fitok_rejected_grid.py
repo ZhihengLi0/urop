@@ -7,7 +7,10 @@ fitted curves come out negative / with swapped time constants. The first
 --n-events such events (storage order) are shown, one ROW per event x one
 COLUMN per channel, each panel raw (gray) + 100 kHz LP (blue) + 2-exp fit
 (red) with its NRMSE, so one can judge from the RAW traces what these events
-actually are (expected: pulse-free traces with a downward baseline drift).
+actually are. Full 0-52 ms window: most of these events DO contain a real
+pulse, arriving at 35-50 ms — far outside the fit's pretrigger search range
+(16050 +- 3000 samples, about 21-30 ms) — so inside the fit window there is
+only noise/drift and the fit falls into the swapped-tau (negative) corner.
 
 Each row is labeled with the event's PTOFamps (from the cache); the PBS1 and
 PDS2 panels additionally show that channel's OFamps, read back from the
@@ -117,7 +120,7 @@ for series in series_list:
 if not events:
     raise SystemExit(f"zip{det}: no events failing fit_ok on {SEL}")
 
-lo, hi = RISE_REF_IDX - 500, RISE_REF_IDX + 4000
+lo, hi = 0, TRACELENGTH          # full trace, 0-52 ms
 x = X_FULL[lo:hi]
 t_ms = x / SAMPLERATE * 1e3
 nrows, ncols = len(events), len(ALL_CHANS)
