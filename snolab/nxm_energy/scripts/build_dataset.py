@@ -106,7 +106,14 @@ for path in sorted(glob.glob(os.path.join(ADDISON_DIR, "*_Addison.root"))):
     of = np.stack([z[f"{c}OFamps"].array(library="np") for c in chans], axis=1)
     chisq = z["PTOFnxmchisq"].array(library="np")
 
-    in_sel = np.array([int(e) in sel_ev for e in evs])
+    seen = set()
+    first = np.zeros(len(evs), dtype=bool)
+    for i, e in enumerate(evs):
+        e = int(e)
+        if e not in seen:
+            seen.add(e)
+            first[i] = True
+    in_sel = np.array([int(e) in sel_ev for e in evs]) & first
     keep = (in_sel & np.all(A[:, :, 0] != SENTINEL, axis=1)
             & np.all(np.isfinite(A), axis=(1, 2)))
     if not keep.any():

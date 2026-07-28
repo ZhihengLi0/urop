@@ -36,17 +36,17 @@ the median NRMSE of our own free-pretrigger 2-exp fit.
 The line sits on a continuum, so the resolution is the width of a Gaussian
 fitted on a linear background, not the spread of the whole window. The
 min-variance weights are trained on the peak core of one half of the events
-and evaluated on the other half.
+and evaluated on the other half; five independent train/test splits give sigma/E in 3.2-3.5%, so the number is stable.
 
-## Results (Z7, 1717 K-line events after the NRMSE cut)
+## Results (Z7, 1710 K-line events after the NRMSE cut)
 
 | estimator | peak (keV) | sigma (keV) | sigma/E |
 |---|---|---|---|
-| PTOFamps | 9.24 | 1.089 | 11.8% |
-| sum OFamps | 9.98 | 0.615 | 6.2% |
-| nxm0 only | 10.35 | 1.113 | 10.8% |
-| physics NxM | 10.44 | 2.277 | 21.8% |
-| **min-variance (test half)** | **10.38** | **0.333** | **3.2%** |
+| PTOFamps | 9.25 | 1.074 | 11.6% |
+| sum OFamps | 9.97 | 0.609 | 6.1% |
+| nxm0 only | 10.34 | 1.120 | 10.8% |
+| physics NxM | 10.43 | 2.204 | 21.1% |
+| **min-variance (test half)** | **10.39** | **0.330** | **3.2%** |
 
 Two things to note. The physics weights (template integrals) are *worse*
 than using nxm0 alone: the PC amplitudes are noise-dominated on several
