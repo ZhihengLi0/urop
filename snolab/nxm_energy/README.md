@@ -44,7 +44,7 @@ fitted on a linear background, not the spread of the whole window. The
 min-variance weights are trained on the peak core of one half of the events
 and evaluated on the other half; five independent train/test splits give sigma/E in 3.2-3.5%, so the number is stable.
 
-## Results (Z7, 1719 K-line events after the NRMSE cut)
+## Results (Z7, 1717 K-line events after the NRMSE cut)
 
 | estimator | peak (keV) | sigma (keV) | sigma/E |
 |---|---|---|---|
