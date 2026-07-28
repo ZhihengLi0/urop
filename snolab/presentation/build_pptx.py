@@ -757,13 +757,8 @@ def grid_fig_pages(fname, short, info, rows_per_page=3):
 # ---------------------------- backup · fit_ok-rejected events (late pulses)
 s = slide()
 title(s, "Backup · fit_ok-rejected events: normal amplitude, late pulse")
-bullets(s, [
-    "These events have normal K-line amplitude (PBS1OFamps ≈ 2×10⁻⁷, same as kept events); the pulse simply arrives at 35–50 ms",
-    "The fit searches the pretrigger only within 16050 ± 3000 samples (≈ 21–30 ms): the window holds noise only, the fit falls into the swapped-τ negative solution",
-    "fit_ok removes them correctly: a pulse outside the fit window can not be used for templates",
-], IN(0.55), IN(1.15), IN(12.3), IN(1.7), size=13)
-pic(s, "zip7_fitok_rejected_events_3x3.png", IN(2.5), IN(3.0), IN(8.3), IN(4.2),
-    "Z7, 3 fit_ok-rejected events × PAS1/PBS1/PDS2, full 0–52 ms trace: the real pulse sits far right of the fit window")
+pic(s, "zip7_fitok_rejected_events_3x4.png", IN(0.8), IN(1.35), IN(11.7), IN(5.75),
+    "Z7, 3 fit_ok-rejected events × PAS1/PBS1/PCS1/PFS1, full 0–52 ms trace: the real pulse sits far right of the fit window; red (!ok) fits are the negative solutions")
 notes(s, "Backup: what fit_ok actually rejects. Sampled events with the full "
          "52 millisecond trace drawn: the amplitude is perfectly normal "
          "K-line, but the pulse arrives tens of milliseconds late, outside "
