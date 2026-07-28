@@ -9,6 +9,10 @@ COLUMN per channel, each panel raw (gray) + 100 kHz LP (blue) + 2-exp fit
 (red) with its NRMSE, so one can judge from the RAW traces what these events
 actually are (expected: pulse-free traces with a downward baseline drift).
 
+Each row is labeled with the event's PTOFamps (from the cache); the PBS1 and
+PDS2 panels additionally show that channel's OFamps, read back from the
+official Prompt processed file of the series.
+
 Output: results/plots/fitok_rejected_events/zip{N}_fitok_rejected_events.png
 
 Usage:
@@ -21,6 +25,7 @@ import pickle
 import sys
 
 import numpy as np
+import uproot
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -31,6 +36,10 @@ from lp_fit_align import (add_pipeline_note, plot_path,
                           CACHE_DIR_DEFAULT, CKPT_DIR, RISE_REF_IDX,
                           SAMPLERATE, TRACELENGTH, X_FULL, lowpass,
                           two_exp_free_pt)
+
+PROCESSED_DIR = ("/projects/standard/yanliusp/shared/data/CDMS/SNOLAB/R4"
+                 "/Processed/Prompt/Prompt_V07-02_C0.4.5/Submerged")
+AMP_CHANS = ("PBS1", "PDS2")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--det", type=int, required=True)
@@ -59,6 +68,17 @@ for series in series_list:
     with open(raw_path, "rb") as fh:
         payload = pickle.load(fh)
 
+    # per-channel OF amplitudes from the official Prompt processed file
+    proc = os.path.join(PROCESSED_DIR,
+                        f"Prompt_V07-02_C0.4.5_{series}.root")
+    ofamp_by_event = {c: {} for c in AMP_CHANS}
+    if os.path.exists(proc):
+        with uproot.open(proc) as h:
+            evs = h["rqDir/eventTree/EventNumber"].array(library="np").astype(int)
+            for c in AMP_CHANS:
+                vals = h[f"rqDir/zip{det}/{c}OFamps"].array(library="np")
+                ofamp_by_event[c] = dict(zip(evs.tolist(), vals.tolist()))
+
     idx_by_chan = {c: {int(e): i for i, e in
                        enumerate(payload["event_numbers_ch"].get(c, []))}
                    for c in ALL_CHANS}
@@ -72,7 +92,9 @@ for series in series_list:
         fp_sel = fits[SEL][i]
         if fp_sel is None or fp_sel["fit_ok"]:
             continue
-        # qualified: collect traces for all channels
+        # qualified: collect traces + per-channel OF amplitudes
+        ptof = payload.get("selected_ptofamps", {}).get(evn)
+        ofamp = {c: ofamp_by_event[c].get(evn) for c in AMP_CHANS}
         per_chan = {}
         for c in ALL_CHANS:
             i = idx_by_chan[c].get(evn)
@@ -89,7 +111,7 @@ for series in series_list:
             fp = fits[c][i] if i < len(fits.get(c) or []) else None
             per_chan[c] = ((tr - baseline) / peak, (y_lp - baseline) / peak, fp)
         if per_chan:
-            events.append((evn, series, per_chan))
+            events.append((evn, series, ptof, ofamp, per_chan))
     del payload
 
 if not events:
@@ -104,7 +126,14 @@ fig, axes = plt.subplots(nrows, ncols, figsize=(2.6 * ncols, 1.9 * nrows),
 fig.suptitle(f"Zip{det} — fit_ok-rejected population ({SEL} fit failed "
              f"fit_ok), first {len(events)} events: "
              "raw (gray) vs LP (blue) vs 2-exp fit (red)", fontsize=13)
-for row, (evn, series, per_chan) in enumerate(events):
+print(f"{'event':>8} {'PTOFamps':>12} {'PBS1OFamps':>12} {'PDS2OFamps':>12}")
+for evn, series, ptof, ofamp, _ in events:
+    def _f(v):
+        return f"{v:.3e}" if v is not None else "n/a"
+    print(f"{evn:>8} {_f(ptof):>12} {_f(ofamp.get('PBS1')):>12} "
+          f"{_f(ofamp.get('PDS2')):>12}")
+
+for row, (evn, series, ptof, ofamp, per_chan) in enumerate(events):
     for col, c in enumerate(ALL_CHANS):
         ax = axes[row, col]
         ax.tick_params(labelsize=5)
@@ -112,7 +141,8 @@ for row, (evn, series, per_chan) in enumerate(events):
         if row == 0:
             ax.set_title(c, fontsize=9)
         if col == 0:
-            ax.set_ylabel(f"ev {evn}\n{series[-6:]}", fontsize=7)
+            ptxt = f"{ptof:.1e}" if ptof is not None else "n/a"
+            ax.set_ylabel(f"ev {evn}\nPTOF={ptxt}", fontsize=6.5)
         if c not in per_chan:
             ax.text(0.5, 0.5, "missing", transform=ax.transAxes,
                     ha="center", va="center", fontsize=7, color="gray")
@@ -127,6 +157,8 @@ for row, (evn, series, per_chan) in enumerate(events):
             tag = f"nrmse={fp['nrmse']:.2f}" + ("" if fp["fit_ok"] else " (!ok)")
         else:
             tag = "fit failed"
+        if c in AMP_CHANS and ofamp.get(c) is not None:
+            tag += f"\nOFamps={ofamp[c]:.2e}"
         ax.text(0.98, 0.95, tag, transform=ax.transAxes, ha="right", va="top",
                 fontsize=5.5, family="monospace",
                 bbox=dict(facecolor="white", alpha=0.7, edgecolor="none"))
