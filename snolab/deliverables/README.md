@@ -38,6 +38,17 @@ Generation scripts: `../lp_fit_align/scripts/`
 `normalize_pca_templates.py`, `plot_pt_ps_templates.py`,
 `export_cdmsbats_templates.py`).
 
+## Merged all-detector files (2026-07-27)
+
+Per request, the per-detector cdmsbats files are also merged into single
+all-detector files (13 zip{N} TDirectories each, contents cloned unchanged):
+
+    PulseTemplates/files/SNOLAB_R4_20260727_ZhihengLi_all.root       (channel = nxm0, nxm0-4, PT/PS1/PS2)
+    PulseTemplates/files/SNOLAB_R4_20260727_ZhihengLi_2exp_all.root  (2-exp weighted 1x1 set)
+
+Built by lp_fit_align/scripts/merge_template_files.py; bin-level equality
+with the per-zip sources and the zip7 PDS2->PDS1 substitution verified.
+
 ## Known substitution
 
 Z7 PDS2 carries a low-frequency disturbance and cannot make a useful template
