@@ -18,6 +18,12 @@ Run inside the CDMS singularity image:
     python3 scripts/energy_combination.py --det 7
     python3 scripts/validate_linearity.py --det 7
 
+Duplicate handling: four 2026-06-21 series were partially re-processed with
+overlapping event ranges (failed jobs re-run), so the Addison files can hold
+an event several times — once as a sentinel row and once with valid
+amplitudes. The dataset keeps exactly one row per event, preferring the valid
+one.
+
 Data sources: NxM amplitudes `PTOFnxm{CHAN}tem{k}amps` from the UMN (Addison)
 `Default_tag` processing of our delivered templates; the K-line selection is
 the Prompt `PTOFamps` window that defined the raw cache; the quality cut is
@@ -38,7 +44,7 @@ fitted on a linear background, not the spread of the whole window. The
 min-variance weights are trained on the peak core of one half of the events
 and evaluated on the other half; five independent train/test splits give sigma/E in 3.2-3.5%, so the number is stable.
 
-## Results (Z7, 1710 K-line events after the NRMSE cut)
+## Results (Z7, 1719 K-line events after the NRMSE cut)
 
 | estimator | peak (keV) | sigma (keV) | sigma/E |
 |---|---|---|---|

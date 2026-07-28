@@ -106,16 +106,21 @@ for path in sorted(glob.glob(os.path.join(ADDISON_DIR, "*_Addison.root"))):
     of = np.stack([z[f"{c}OFamps"].array(library="np") for c in chans], axis=1)
     chisq = z["PTOFnxmchisq"].array(library="np")
 
-    seen = set()
-    first = np.zeros(len(evs), dtype=bool)
+    # four 2026-06-21 series were partially re-processed with overlapping
+    # event ranges, so an event can appear several times (often once as a
+    # sentinel row from the failed job and once with valid amplitudes).
+    # Keep exactly one row per event, preferring a row with valid amplitudes.
+    row_valid = (np.all(A[:, :, 0] != SENTINEL, axis=1)
+                 & np.all(np.isfinite(A), axis=(1, 2)))
+    choice = {}
     for i, e in enumerate(evs):
         e = int(e)
-        if e not in seen:
-            seen.add(e)
-            first[i] = True
-    in_sel = np.array([int(e) in sel_ev for e in evs]) & first
-    keep = (in_sel & np.all(A[:, :, 0] != SENTINEL, axis=1)
-            & np.all(np.isfinite(A), axis=(1, 2)))
+        if e not in choice or (row_valid[i] and not row_valid[choice[e]]):
+            choice[e] = i
+    chosen = np.zeros(len(evs), dtype=bool)
+    chosen[list(choice.values())] = True
+    in_sel = np.array([int(e) in sel_ev for e in evs])
+    keep = chosen & in_sel & row_valid
     if not keep.any():
         continue
     rows_A.append(A[keep]); rows_ptof.append(ptof[keep])

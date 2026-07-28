@@ -1,10 +1,10 @@
-zip7: 1710 K-line events (median fit NRMSE <= 0.4, from 1918 in the window), 11 channels x 5 amplitudes = 55 numbers per event
+zip7: 1717 K-line events (median fit NRMSE <= 0.4, from 1928 in the window), 11 channels x 5 amplitudes = 55 numbers per event
 
 peak = Gaussian + linear background fitted to the scaled spectrum
 
 estimator                   peak (keV)  sigma (keV)   sigma/E   in peak
-PTOFamps                          9.25        1.074    11.60%       79%
-sum OFamps                        9.97        0.609     6.11%       41%
-nxm0 only                        10.34        1.120    10.83%       85%
-physics NxM                      10.43        2.204    21.13%       72%
-min-variance (test half)         10.39        0.330     3.18%       78%
+PTOFamps                          9.24        1.089    11.78%       82%
+sum OFamps                        9.98        0.615     6.17%       42%
+nxm0 only                        10.35        1.113    10.75%       85%
+physics NxM                      10.44        2.277    21.80%       75%
+min-variance (test half)         10.38        0.333     3.21%       78%
