@@ -126,7 +126,7 @@ for _i, (_head, _rest) in enumerate([
         ("Cross-checks with real pulses", "cuts remove noise, real pulses stay; slow-fall follow-up"),
         ("Template generation", "1x1 weighted template, NxM PCA templates"),
         ("Template file and future steps", "cdmsbats ROOT files, ready for merge; three-, four-exponential fits"),
-        ("Backup", "weak detectors, rise-time cut details, full results for every zip")]):
+        ("Backup", "worse detectors, rise-time cut details, full results for every zip")]):
     _p = _toc.text_frame.paragraphs[0] if _i == 0 else _toc.text_frame.add_paragraph()
     _p.space_after = Pt(10)
     _r = _p.add_run(); _r.text = f"{_i+1}.  {_head}: "
@@ -136,7 +136,7 @@ for _i, (_head, _rest) in enumerate([
 notes(s, "Quick roadmap: the dataset and how events were selected, the fit and "
          "alignment, the two cleaning cuts and the checks behind them, the two "
          "template families we deliver, and the future steps. Backup slides "
-         "hold the weak-detector picture and the full results for every zip.")
+         "hold the worse-detector picture and the full results for every zip.")
 
 # ------------------------------------------------- 2 · motivation / selection
 s = slide()
@@ -321,10 +321,10 @@ notes(s, "First quality cut. The NRMSE distribution of physical fits is "
          "0.1, and a noise-trigger population around 1 to 2, separated by a "
          "valley at about 0.4. We place the cut in the valley - it is read "
          "off the distribution itself. This is Z7 PBS1, the channel used "
-         "throughout the talk. The weak detectors - Z22, for example - show "
+         "throughout the talk. The worse detectors - Z22, for example - show "
          "the same bimodal picture with the noise peak dominating, and there "
          "this same cut is what digs the real pulses out of the mixture. "
-         "(If someone asks what a weak detector looks like, show the backup "
+         "(If someone asks what a worse detector looks like, show the backup "
          "slide.)")
 
 # ------------------------------ 6b · fan before vs after the NRMSE cut
@@ -518,14 +518,14 @@ notes(s, "Both template sets are ready for all 13 detectors: the analytic "
          "anyone is interested, I am happy to walk through the backup "
          "slides. Thank you - happy to take questions.")
 
-# ------------------------------------------- backup · weak detectors (Z22)
+# ------------------------------------------- backup · worse detectors (Z22)
 s = slide()
-title(s, "Backup · weak detectors (example: Z22)")
+title(s, "Backup · worse detectors (example: Z22)")
 bullets(s, [
     "Z1 / Z4 / Z6 / Z18 / Z19 / Z22 / Z24: K-line inside the noise population, the window admits a noise-dominated mixture",
     "Same bimodal NRMSE picture, noise peak dominant; the 0.4 cut digs the real pulses out (Z22 PCS1: 7198 kept / 4788 cut, ~40%)",
     "Kept bundle broader; steep red curves = fits latching onto noise spikes, no real pulses lost",
-    "τ_rise ≤ 0.3 ms (after NRMSE): removes 55–74% on weak zips (Z22: 71%) vs 1.6% on Z7; removes residual slow drift",
+    "τ_rise ≤ 0.3 ms (after NRMSE): removes 55–74% on worse zips (Z22: 71%) vs 1.6% on Z7; removes residual slow drift",
 ], IN(0.55), IN(1.1), IN(12.3), IN(2.15), size=13)
 pic(s, "nrmse_zip22_PAS1.png", IN(0.4), IN(3.35), IN(6.3), IN(1.7),
     "Z22 PAS1 NRMSE histogram: noise dominates")
@@ -533,7 +533,7 @@ pic(s, "fan_cut_zip22_PCS1.png", IN(6.9), IN(3.35), IN(6.3), IN(1.7),
     "Z22 PCS1: kept (green) vs cut (red)")
 pic(s, "fan_final_zip22_PCS1.png", IN(2.2), IN(5.55), IN(8.9), IN(1.55),
     "Z22 PCS1 after NRMSE ≤ 0.4 + τ_rise ≤ 0.3 ms: final shape family (760 fits)")
-notes(s, "Backup. On the weak detectors the K-line overlaps the noise "
+notes(s, "Backup. On the worse detectors the K-line overlaps the noise "
          "population, so the PTOF window admits a noise-dominated mixture. "
          "The NRMSE distribution is still bimodal but the noise peak "
          "dominates, and the same 0.4 cut is what extracts the real pulses "
@@ -542,7 +542,7 @@ notes(s, "Backup. On the weak detectors the K-line overlaps the noise "
          "the steep red curves are fits latching onto sharp noise spikes, "
          "not fast pulses being thrown away. The rise-time ceiling then "
          "removes fifty-five to seventy-four percent of what survived the "
-         "NRMSE cut on the weak zips - residual slow drift - versus one "
+         "NRMSE cut on the worse zips - residual slow drift - versus one "
          "point six percent on Z7. The surviving shape family is at the "
          "bottom.")
 
@@ -552,18 +552,18 @@ title(s, "Backup · τ_rise ≤ 0.3 ms ceiling (PCA input)")
 bullets(s, [
     "Slow baseline drift survives NRMSE (a slow 2-exp hugs it) → mimics a slow rise",
     "Fast pulses at τ_rise ≈ 0.1 ms (p90 ≈ 0.15 ms) → ceiling at 0.3 ms blocks the drift tail",
-    "Removed after the NRMSE cut: Z7 1.6% (quiet 2–6%), weak 55–74% (Z22 71%), all zips 54%",
+    "Removed after the NRMSE cut: Z7 1.6% (quiet 2–6%), worse 55–74% (Z22 71%), all zips 54%",
     "Trade-off: trims the very slowest genuine pulses → decision pending",
 ], IN(0.55), IN(1.2), IN(12.3), IN(2.15), size=14)
 pic(s, "time_constants_zip7_PAS1.png", IN(1.4), IN(3.6), IN(10.5), IN(2.7),
     "Z7 PAS1: fitted τ_rise (median 0.105 ms) and τ_fall distributions")
-notes(s, "Backup for the rise-time cut. On weak-window detectors a slow "
+notes(s, "Backup for the rise-time cut. On worse-window detectors a slow "
          "baseline drift also fits as a slow rise, with a tiny residual, so "
          "NRMSE cannot catch it. Real fast pulses cluster near 0.1 ms while "
          "the drift tail stretches much further, so the PCA input gets a "
          "ceiling at 0.3 ms. Relative to the NRMSE step it removes almost "
          "nothing on quiet detectors - 1.6% on Z7, mostly the bad channel "
-         "PDS2 - but 55 to 74% on the weak ones, 71% on Z22, pooled 54% over "
+         "PDS2 - but 55 to 74% on the worse ones, 71% on Z22, pooled 54% over "
          "all zips. The price is that the very slowest genuine pulses get "
          "trimmed too; that trade-off is documented and not final.")
 

@@ -28,7 +28,7 @@ POINT = {
     3: [
         "What you see here are the PTOFamps spectra of all thirteen detectors",
         "The red line in each panel is the K-line position marked by Professor Saab's analysis",
-        "Now look at the spectra: on a quiet detector like Z7, the K-line peak is well separated from the noise peak. But on the weaker detectors, the red line sits right inside the noise population",
+        "Now look at the spectra: on a quiet detector like Z7, the K-line peak is well separated from the noise peak. But on the worse detectors, the red line sits right inside the noise population",
     ],
     4: [
         "In these grids, each row is one event and each column is one channel — blue is the filtered trace, red is the fit.",

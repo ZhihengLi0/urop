@@ -18,7 +18,7 @@
 
 **中文**：简单过一下目录：数据集和选样、拟合与对齐、两道清洗 cut 和背后的核查、两族模板、交付与下一步；backup 里有弱探测器和每个 zip 的全套结果。
 
-**English**: Here is the table of contents: the dataset and selection, the fit and alignment, the two cleaning cuts and the checks behind them, the two template families, deliverables and future steps; the backups hold the weak detectors and the full results for every zip.
+**English**: Here is the table of contents: the dataset and selection, the fit and alignment, the two cleaning cuts and the checks behind them, the two template families, deliverables and future steps; the backups hold the worse detectors and the full results for every zip.
 
 ---
 
@@ -26,7 +26,7 @@
 
 **中文**：先说事件从哪来。做模板需要一大批干净、彼此相同的脉冲。我用的是 Ge 活化 K 线：Cf 活化之后，每个探测器里都会持续出现 10.37 keV 的单能事件，这是现成的理想样本。屏幕上是 13 个探测器的 PTOFamps 谱。每格里的红线，是 Saab 教授的分析标出来的 K 线位置，我直接拿来用。我做的事情非常简单：以红线为中心开一个窗，上下各 1.35 倍——这个倍数是粗略目测定的，带点随意性，反正开得够宽就行——窗内的事件全要，不加任何别的条件。然后把每个选中事件所有通道的原始波形，原封不动存下来。大家看这些谱：安静的探测器比如 Z7，K 线峰和噪声峰分得很开；但不少噪声大的探测器，红线就插在噪声堆里——窗口一开，噪声肯定跟着进来。这是故意的：我宁愿先多收，也要让后面每一步筛选清清楚楚、随时可以回退——因为存的是原始数据，什么都没丢。真正的 K-line 事件大概只有窗内事件总数的十分之一左右，其余主要是噪声触发，后面的质量 cut 会把它们去掉。后面全场的例子都用 Z7，它是最好的探测器，用的是它的 PBS1 这一条通道；其他探测器都在 backup 里。
 
-**English**: Let me start with where the events come from. To build a template, you need a large sample of clean, identical pulses. I use the germanium activation K-line: after the californium activation, every detector keeps producing mono-energetic events at 10.37 keV — a perfect, ready-made sample. What you see here are the PTOFamps spectra of all thirteen detectors. The red line in each panel is the K-line position marked by Professor Saab's analysis, and I simply take that as given. What I do is very simple: open a window around the red line, a factor of one point three five on each side — a rough, eyeballed choice; it just needs to be wide enough — keep everything inside, and apply no other condition. Then, for every selected event, I save the raw traces of all channels, completely untouched. Now look at the spectra: on a quiet detector like Z7, the K-line peak is well separated from the noise peak. But on the weaker detectors, the red line sits right inside the noise population — so the window will let noise in. And that's deliberate. I'd rather collect too much, and keep every later selection explicit and reversible — nothing is lost, because what I stored is raw. Only about one tenth of these events are true K-line pulses; the rest are mostly noise triggers, removed later by the quality cuts. Throughout the talk the examples use Z7, the best detector, and its PBS1 channel; all the other detectors are in the backup slides.
+**English**: Let me start with where the events come from. To build a template, you need a large sample of clean, identical pulses. I use the germanium activation K-line: after the californium activation, every detector keeps producing mono-energetic events at 10.37 keV — a perfect, ready-made sample. What you see here are the PTOFamps spectra of all thirteen detectors. The red line in each panel is the K-line position marked by Professor Saab's analysis, and I simply take that as given. What I do is very simple: open a window around the red line, a factor of one point three five on each side — a rough, eyeballed choice; it just needs to be wide enough — keep everything inside, and apply no other condition. Then, for every selected event, I save the raw traces of all channels, completely untouched. Now look at the spectra: on a quiet detector like Z7, the K-line peak is well separated from the noise peak. But on the worse detectors, the red line sits right inside the noise population — so the window will let noise in. And that's deliberate. I'd rather collect too much, and keep every later selection explicit and reversible — nothing is lost, because what I stored is raw. Only about one tenth of these events are true K-line pulses; the rest are mostly noise triggers, removed later by the quality cuts. Throughout the talk the examples use Z7, the best detector, and its PBS1 channel; all the other detectors are in the backup slides.
 
 ---
 
@@ -67,7 +67,7 @@
 
 **中文**：现在讲第二道 cut 怎么定的。把所有物理拟合的 NRMSE 画成分布，每个探测器都是同一个样子：两个峰。左边的峰是拟合好的，典型值百分之五到百分之十；右边就是噪声。两峰之间有一个很深的谷，位置在 0.4 左右——阈值就取 0.4。我想强调：这个数不是调出来的，是分布自己长出来的。图里两个峰离得很远，谷一目了然。较弱的探测器——比如 Z22——是同样的双峰图景，只是噪声峰是主体，对它们来说这一刀就是把真脉冲从噪声堆里捞出来的那一刀。*（有人问弱探测器长什么样，再翻 backup 页。）*
 
-**English**: Now, how the second cut was set. If you histogram the NRMSE of all physical fits, every detector shows the same picture: two populations. The left one is the good fits, typically five to ten percent. On the right it is noise. In between there's a deep valley, at about zero point four — and that's where I put the threshold. I want to stress: this number wasn't tuned, it's simply what the distribution itself shows. In this plot the two populations are far apart and the valley is obvious. The weak detectors — Z22, for example — show the same bimodal picture with the noise peak dominating, and for them this cut is exactly what pulls the real pulses out of the noise.
+**English**: Now, how the second cut was set. If you histogram the NRMSE of all physical fits, every detector shows the same picture: two populations. The left one is the good fits, typically five to ten percent. On the right it is noise. In between there's a deep valley, at about zero point four — and that's where I put the threshold. I want to stress: this number wasn't tuned, it's simply what the distribution itself shows. In this plot the two populations are far apart and the valley is obvious. The worse detectors — Z22, for example — show the same bimodal picture with the noise peak dominating, and for them this cut is exactly what pulls the real pulses out of the noise.
 
 ---
 
@@ -135,11 +135,11 @@
 
 ---
 
-## Backup — Weak detectors（仅备查，不占正片时间）
+## Backup — Worse detectors（仅备查，不占正片时间）
 
 **中文**：弱探测器（Z1/Z4/Z6/Z18/Z19/Z22/Z24）的 K 线位于噪声群内部，窗口选进来的样本以噪声为主。NRMSE 分布同样是双峰，只是噪声峰更大；用同一条 0.4 的 cut 就能把真脉冲挑出来——Z22 PCS1：保留 7198、切掉 4788，约四成。保留的束比安静探测器宽；红色里那些陡峭曲线是拟合跟随了噪声尖刺的结果，不是快脉冲被误切。τ_rise ≤ 0.3 ms 在弱探测器上再切掉 NRMSE 之后余下的 55–74%（Z22 是 71%），主要是残余的慢基线漂移。
 
-**English**: On the weak detectors (Z1/Z4/Z6/Z18/Z19/Z22/Z24) the K-line lies inside the noise population, so the window selects a noise-dominated sample. The NRMSE distribution is still bimodal, only with a larger noise peak, and the same 0.4 cut selects the real pulses — on Z22 PCS1, 7198 kept and 4788 cut, about forty percent. The kept bundle is broader than on a quiet detector, and the steep red curves are fits that followed sharp noise spikes, not fast pulses that were wrongly removed. The rise-time ceiling then removes another 55–74% of what survived the NRMSE cut on the weak zips (71% on Z22) — residual slow baseline drift.
+**English**: On the worse detectors (Z1/Z4/Z6/Z18/Z19/Z22/Z24) the K-line lies inside the noise population, so the window selects a noise-dominated sample. The NRMSE distribution is still bimodal, only with a larger noise peak, and the same 0.4 cut selects the real pulses — on Z22 PCS1, 7198 kept and 4788 cut, about forty percent. The kept bundle is broader than on a quiet detector, and the steep red curves are fits that followed sharp noise spikes, not fast pulses that were wrongly removed. The rise-time ceiling then removes another 55–74% of what survived the NRMSE cut on the worse zips (71% on Z22) — residual slow baseline drift.
 
 ---
 
@@ -147,7 +147,7 @@
 
 **中文**：慢基线漂移也能得到很小的 NRMSE：一条慢的 2-exp 可以紧跟漂移，残差很小，看起来就像慢上升。真快脉冲聚在 τ_rise ≈ 0.1 ms，漂移尾巴拖得远得多，所以 PCA 输入加了 0.3 ms 上限挡掉它。相对 NRMSE 那一步切掉：安静探测器几乎不切（Z7 1.6%，大头是坏通道 PDS2），弱探测器 55–74%（Z22 71%），全部合计 54%。代价是最慢的一小撮真脉冲也会被削掉——这个取舍记录在案、尚未定论。
 
-**English**: A slow baseline drift can also give a small NRMSE: a slow two-exponential follows the drift closely, so the residual is small and it looks like a slow rise. Real fast pulses cluster at τ_rise ≈ 0.1 ms while the drift tail stretches much further, so the PCA input gets a 0.3 ms ceiling to block it. Relative to the NRMSE step it removes almost nothing on quiet detectors (1.6% on Z7, mostly the bad channel PDS2) but 55–74% on the weak ones (71% on Z22), 54% pooled. The price is that the very slowest real pulses get trimmed too — a documented, still-open trade-off.
+**English**: A slow baseline drift can also give a small NRMSE: a slow two-exponential follows the drift closely, so the residual is small and it looks like a slow rise. Real fast pulses cluster at τ_rise ≈ 0.1 ms while the drift tail stretches much further, so the PCA input gets a 0.3 ms ceiling to block it. Relative to the NRMSE step it removes almost nothing on quiet detectors (1.6% on Z7, mostly the bad channel PDS2) but 55–74% on the worse ones (71% on Z22), 54% pooled. The price is that the very slowest real pulses get trimmed too — a documented, still-open trade-off.
 
 ---
 
@@ -221,7 +221,7 @@
 
 **中文**：安静探测器几乎不切——Z7 只有 1.6%，大头还是坏通道 PDS2（21%）；弱探测器切 55–74%（Z22 是 71%），切掉的是残余慢漂移。
 
-**English**: Almost nothing on the quiet detectors — 1.6% on Z7, mostly the bad channel PDS2 at 21% — versus 55–74% on the weak ones (71% on Z22), and what it removes is residual slow drift.
+**English**: Almost nothing on the quiet detectors — 1.6% on Z7, mostly the bad channel PDS2 at 21% — versus 55–74% on the worse ones (71% on Z22), and what it removes is residual slow drift.
 
 **Q8 — 真正的慢脉冲留不留？/ Do the real slow pulses stay?**
 
