@@ -239,11 +239,12 @@ _pr.text = ("Fit parameters:  A amplitude   ·   τ_rise rise time constant   ·
             "τ_fall fall time constant   ·   t₀ pulse onset (pretrigger)   ·   b baseline")
 _pr.font.size, _pr.font.italic = Pt(12.5), True
 _pr.font.color.rgb, _pr.font.name = GRAY, "Arial"
-steps_box(IN(3.95), IN(0.55), [
-    ("4.  Two quality checks per trace", " (calculated and recorded here, not cut yet):"),
+steps_box(IN(3.95), IN(0.95), [
+    ("4.  Normalize the fit", ": scale each fitted curve to unit peak (the form used for the templates)"),
+    ("5.  Two quality checks per trace", " (calculated and recorded here, not cut yet):"),
 ])
 # the two quality-number sub-lines, plain English
-q_tb = textbox(s, IN(1.15), IN(4.42), IN(11.6), IN(0.9))
+q_tb = textbox(s, IN(1.15), IN(4.78), IN(11.6), IN(0.9))
 for i, (lead, rest) in enumerate([
         ("fit_ok", ": amplitude is positive, and the pulse rises faster than it falls"),
         ("NRMSE", ": RMS of the fit residual ÷ pulse peak  (smaller = better fit)")]):
@@ -275,7 +276,7 @@ notes(s, "The per-trace algorithm. First a low-pass filter to "
 
 # ------------------------------------------------------ 5 · alignment result
 s = slide()
-title(s, "5. Align")
+title(s, "6. Align")
 pic(s, "fan_zip7_PBS1_allfits.png", IN(1.7), IN(1.45), IN(9.9), IN(5.5),
     "Z7 PBS1: every fitted event drawn at the common pretrigger, no cuts of any kind (n = 2203, inverted fits included)")
 notes(s, "Step five: alignment. Each measured trace is shifted by its fitted "
