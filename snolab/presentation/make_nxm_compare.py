@@ -39,7 +39,7 @@ f_pca.Close()
 
 pc_colors = ["crimson", "royalblue", "darkorange", "forestgreen"]
 for mean_curve, mean_label, mean_color, fname in [
-        (nxm[0], "nxm0 = plain mean (delivered)", "black",
+        (nxm[0], "nxm0 = plain mean", "black",
          "nxm_plain_zip7_PBS1.png")]:
     fig, ax = plt.subplots(figsize=(7.0, 3.1))
     ax.plot(t_ms, mean_curve, lw=2.2, color=mean_color, label=mean_label)

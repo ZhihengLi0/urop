@@ -49,6 +49,8 @@ parser.add_argument("--det", type=int, required=True)
 parser.add_argument("--chan", default="PBS1",
                     help="event qualifies if THIS channel's fit failed fit_ok")
 parser.add_argument("--n-events", type=int, default=15)
+parser.add_argument("--channels", nargs="+", default=None,
+                    help="subset of channels to draw (default: all)")
 parser.add_argument("--cache-dir", default=CACHE_DIR_DEFAULT)
 args = parser.parse_args()
 det, SEL = args.det, args.chan
@@ -120,11 +122,14 @@ for series in series_list:
 if not events:
     raise SystemExit(f"zip{det}: no events failing fit_ok on {SEL}")
 
+SHOW_CHANS = args.channels or ALL_CHANS
 lo, hi = 0, TRACELENGTH          # full trace, 0-52 ms
 x = X_FULL[lo:hi]
 t_ms = x / SAMPLERATE * 1e3
-nrows, ncols = len(events), len(ALL_CHANS)
-fig, axes = plt.subplots(nrows, ncols, figsize=(2.6 * ncols, 1.9 * nrows),
+nrows, ncols = len(events), len(SHOW_CHANS)
+fig, axes = plt.subplots(nrows, ncols,
+                         figsize=((4.2 if ncols <= 4 else 2.6) * ncols,
+                                  (2.6 if ncols <= 4 else 1.9) * nrows),
                          squeeze=False)
 fig.suptitle(f"Zip{det} — fit_ok-rejected population ({SEL} fit failed "
              f"fit_ok), first {len(events)} events: "
@@ -137,7 +142,7 @@ for evn, series, ptof, ofamp, _ in events:
           f"{_f(ofamp.get('PDS2')):>12}")
 
 for row, (evn, series, ptof, ofamp, per_chan) in enumerate(events):
-    for col, c in enumerate(ALL_CHANS):
+    for col, c in enumerate(SHOW_CHANS):
         ax = axes[row, col]
         ax.tick_params(labelsize=5)
         ax.grid(alpha=0.2)
@@ -172,6 +177,8 @@ add_pipeline_note(fig, f"fit_ok-rejected events: {SEL} fit converged but failed 
                   "order); one ROW per event, one COLUMN per channel, gray = raw, "
                   "blue = 100kHz LP, red = free-pretrigger 2-exp fit; judge from "
                   "the raw traces what these events are")
-out = plot_path("fitok_rejected_events", f"zip{det}_fitok_rejected_events.png")
+suffix = "" if args.channels is None else f"_{len(events)}x{len(SHOW_CHANS)}"
+out = plot_path("fitok_rejected_events",
+                f"zip{det}_fitok_rejected_events{suffix}.png")
 fig.savefig(out, dpi=110, bbox_inches="tight")
 print(f"Saved: {out}  ({len(events)} events)")
