@@ -2,7 +2,7 @@ Z7 24260617_063934, K-line events
 method1: P(t) = I0(R_L-R0)*dI(t) +2*R_L*dI(t)^2
 bias point per channel from detectorConfig, ADC/A = 3.145728e+09
 trigger bin 16383, baseline bins 93-15758, 5-pole 20 kHz Butterworth prefilter, shaded band = official integration window (-500/+1000 us)
-the power axis is tied to the current axis by the linear coefficient I0(R_L-R0), so any blue/red separation is the dI^2 term (dashed purple, magnified x20)
+the power axis is tied to the current axis by the linear coefficient I0(R_L-R0), so any blue/red separation is the dI^2 term (dotted purple, magnified x20); the green horizontal line is the equal-area mean power over the window (its rectangle = the energy)
 
 [1] 15 events, channel PBS1
     event   chan  E_window[eV]  E_16ms[eV]  quad[%]

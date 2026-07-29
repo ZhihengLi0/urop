@@ -181,16 +181,52 @@ def draw(ax, chan, evn, label, t_lo_ms=-1.0, t_hi_ms=8.0):
     e_off, e_16, quad = energies(chan, p, di_f)
     p_pk = p[lo:hi].max() * 1e15
     q_pk = (bias[chan]["quad"] * di_f[lo:hi] ** 2).max() * 1e15
+    # equal-area horizontal line: its rectangle over the window has the same
+    # area (= the same energy) as the power curve itself
+    p_avg = p[INT_LO:INT_HI].mean() * 1e15
+    ax2.plot([(INT_LO - TRIGGER_BIN) * dt * 1e3, (INT_HI - TRIGGER_BIN) * dt * 1e3],
+             [p_avg, p_avg], lw=1.2, color="#1B7A3D", zorder=3)
     ax.set_title(f"{label}   $E$ = {e_off:.0f} eV (win) / {e_16:.0f} eV (16 ms),"
                  f" quad {quad:+.2f}%", fontsize=7.5)
     ax.text(0.975, 0.93,
-            f"$P$ peak {p_pk:.0f} fW,  $\\delta I^2$ peak {q_pk:.1f} fW",
+            f"$P$ peak {p_pk:.0f} fW,  $\\delta I^2$ peak {q_pk:.1f} fW,  "
+            f"equal-area $\\overline{{P}}$ {p_avg:.0f} fW",
             transform=ax.transAxes, ha="right", va="top", fontsize=6.5,
             color="#6C3483")
     ax.tick_params(labelsize=6.5)
     ax2.tick_params(labelsize=6.5, colors="#C0392B")
     ax.grid(alpha=0.2)
     return e_off, e_16, quad, ax2
+
+
+def draw_cum(ax, chan, evn, label, t_hi_ms=16.0):
+    """Running integral of the power pulse, in eV: the height where the curve
+    flattens IS the absorbed energy, and the official window cuts it off early."""
+    res = current_and_power(chan, evn)
+    if res is None:
+        ax.set_axis_off()
+        return None
+    _, di_f, p = res
+    dt = bias[chan]["dt"]
+    hi = min(TRIGGER_BIN + int(round(t_hi_ms * 1e-3 / dt)), p.size)
+    t = (np.arange(INT_LO, hi) - TRIGGER_BIN) * dt * 1e3
+    cum = np.cumsum(p[INT_LO:hi]) * dt / J_PER_EV
+    e_off = cum[INT_HI - INT_LO - 1]
+    e_end = cum[-1]
+
+    ax.axvspan((INT_LO - TRIGGER_BIN) * dt * 1e3,
+               (INT_HI - TRIGGER_BIN) * dt * 1e3,
+               color="#FFE9A8", alpha=0.5, zorder=0)
+    ax.plot(t, cum, lw=1.5, color="#E00000", zorder=3)
+    ax.axhline(e_off, color="#1B7A3D", lw=1.0, ls=(0, (5, 3)), zorder=2)
+    ax.axhline(e_end, color="#6C3483", lw=1.0, ls=(0, (2, 1.5)), zorder=2)
+    ax.axhline(0, color="gray", lw=0.5, ls=":", zorder=1)
+    ax.set_title(f"{label}   window {e_off:.0f} eV   {t_hi_ms:.0f} ms "
+                 f"{e_end:.0f} eV   ({e_end / e_off:.2f}x)" if e_off else label,
+                 fontsize=7.5)
+    ax.tick_params(labelsize=6.5)
+    ax.grid(alpha=0.2)
+    return e_off, e_end
 
 
 STAMP = "\n".join([
@@ -203,7 +239,8 @@ STAMP = "\n".join([
     f"(-{INT_LO_US:.0f}/+{INT_HI_US:.0f} us)",
     "the power axis is tied to the current axis by the linear coefficient "
     f"I0(R_L-R0), so any blue/red separation is the dI^2 term "
-    f"(dashed purple, magnified x{QUAD_MAG})",
+    f"(dotted purple, magnified x{QUAD_MAG}); the green horizontal line is the "
+    f"equal-area mean power over the window (its rectangle = the energy)",
 ])
 
 os.makedirs(OUT_DIR, exist_ok=True)
@@ -233,11 +270,13 @@ h, l = axes[0][0].get_legend_handles_labels()
 fig.suptitle(f"Z{det} {chan}: measured current pulse (blue) and the power pulse "
              f"it implies (red), {args.formula}\n" + STAMP, fontsize=8.5, y=0.998)
 fig.legend(h + [plt.Line2D([], [], color="#E00000", lw=2.2),
-                plt.Line2D([], [], color="#6C3483", lw=1.0, ls=(0, (2, 1.5)))],
+                plt.Line2D([], [], color="#6C3483", lw=1.0, ls=(0, (2, 1.5))),
+                plt.Line2D([], [], color="#1B7A3D", lw=1.2)],
            l + ["power $P$ (right axis)",
                 f"$\\delta I^2$ term only, drawn $\\times${QUAD_MAG} "
-                f"(right axis $\\div$ {QUAD_MAG}; true peak printed in panel)"],
-           loc="lower center", ncol=4, fontsize=8, frameon=False)
+                f"(right axis $\\div$ {QUAD_MAG}; true peak printed in panel)",
+                "equal-area $\\overline{P}$ over the window"],
+           loc="lower center", ncol=5, fontsize=8, frameon=False)
 fig.tight_layout(rect=(0, 0.026, 1, 0.935))
 f1 = os.path.join(OUT_DIR,
                   f"zip{det}_{series}_current_power_{chan}_{len(events)}events.png")
@@ -279,6 +318,48 @@ f2 = os.path.join(OUT_DIR, f"zip{det}_{series}_current_power_allchan_ev{ev0}.png
 fig.savefig(f2, dpi=160)
 plt.close(fig)
 print("saved", f2)
+
+# ------------------------------- figures 3 and 4: running integral of the power
+CUM_STAMP = "\n".join([
+    "running integral of the power pulse from the window start: the height where "
+    "the curve flattens is the absorbed energy",
+    "green dashed = value at the official window end (the quoted energy), "
+    "purple dotted = value at 16 ms; drift after the pulse is low-frequency noise",
+] + STAMP.split("\n")[:2])
+
+for tag, panels, getter, ncol3 in [
+        (f"{chan}_{len(events)}events", events, lambda e: (chan, e), 3),
+        (f"allchan_ev{ev0}", chans, lambda c: (c, ev0), 4)]:
+    nrow3 = int(np.ceil(len(panels) / ncol3))
+    fig, axes = plt.subplots(nrow3, ncol3, figsize=(4.5 * ncol3, 2.1 * nrow3),
+                             squeeze=False)
+    tot_w = tot_e = 0.0
+    for k, item in enumerate(panels):
+        c, evn = getter(item)
+        ax = axes[k // ncol3][k % ncol3]
+        out = draw_cum(ax, c, evn, c if c != chan or len(panels) != len(events)
+                       else f"ev {evn}")
+        if out:
+            tot_w += out[0]
+            tot_e += out[1]
+        if k // ncol3 == nrow3 - 1:
+            ax.set_xlabel("Time from trigger (ms)", fontsize=7)
+        if k % ncol3 == 0:
+            ax.set_ylabel("cumulative $E$ (eV)", fontsize=7, color="#C0392B")
+    for k in range(len(panels), nrow3 * ncol3):
+        axes[k // ncol3][k % ncol3].set_axis_off()
+    extra = (f"\nsum over channels: {tot_w:.0f} eV in the official window "
+             f"({100 * tot_w / 10370:.1f}% of 10.37 keV), {tot_e:.0f} eV at "
+             f"16 ms ({100 * tot_e / 10370:.1f}%)"
+             if tag.startswith("allchan") else "")
+    fig.suptitle(f"Z{det} {'event ' + str(ev0) if tag.startswith('allchan') else chan}"
+                 f": integrated power = absorbed energy vs integration time"
+                 f"{extra}\n" + CUM_STAMP, fontsize=8.5, y=0.997)
+    fig.tight_layout(rect=(0, 0, 1, 0.93 if not extra else 0.925))
+    fc = os.path.join(OUT_DIR, f"zip{det}_{series}_cumulative_energy_{tag}.png")
+    fig.savefig(fc, dpi=160)
+    plt.close(fig)
+    print("saved", fc)
 
 # ---------------------------------------------------------------- text table
 f3 = os.path.join(OUT_DIR, f"zip{det}_{series}_current_power_energies.txt")
