@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>TES 事件能量的微分方程推导(纯符号)</title>
+<style>
+  @page { size: A4; margin: 18mm 17mm; }
+  body { font-family: "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+         font-size: 11.5pt; line-height: 1.75; color: #111; }
+  h1 { font-size: 17pt; text-align: center; margin: 0 0 2px; }
+  .subtitle { text-align: center; color: #555; font-size: 10.5pt; margin-bottom: 14px; }
+  h2 { font-size: 13.5pt; border-bottom: 2px solid #1F3864; color: #1F3864;
+       padding-bottom: 2px; margin: 20px 0 8px; }
+  h3 { font-size: 12pt; color: #1F3864; margin: 14px 0 4px; }
+  .eq { text-align: center; font-family: "STIX Two Math", "Cambria Math", serif;
+        font-size: 12.5pt; margin: 10px 0; page-break-inside: avoid; }
+  .eq .tag { float: right; color: #666; font-size: 10.5pt; }
+  var { font-style: italic; font-family: "STIX Two Math", "Cambria Math", serif; }
+  .boxed { border: 1.6px solid #1F3864; padding: 8px 14px; margin: 12px auto;
+           width: fit-content; max-width: 95%; background: #f7f9fc; page-break-inside: avoid;}
+  .note { background: #f4f7fa; border-left: 4px solid #8aa; padding: 6px 12px;
+          font-size: 10.5pt; margin: 8px 0; }
+  table { border-collapse: collapse; margin: 8px auto; font-size: 10.5pt; }
+  th, td { border: 1px solid #bbb; padding: 3px 10px; text-align: center; }
+  th { background: #eef2f7; }
+  .frac { display: inline-block; vertical-align: middle; text-align: center; }
+  .frac > span { display: block; padding: 0 4px; }
+  .frac > span:first-child { border-bottom: 1px solid #111; }
+  figure { text-align: center; margin: 10px 0; page-break-inside: avoid; }
+  figcaption { font-size: 10pt; color: #555; margin-top: 2px; }
+  sub, sup { font-size: 72%; }
+</style>
+</head>
+<body>
+
+<h1>TES 事件能量的微分方程推导</h1>
+<div class="subtitle">从零基础出发 · 纯符号推导,不代入任何数值 · 依据 Irwin &amp; Hilton, <i>Transition-Edge Sensors</i> (2005)</div>
+
+<h2>第 0 节 · 预备知识(只需要这五件事)</h2>
+<p><b>(1) 导数与积分。</b>d<var>f</var>/d<var>t</var> 表示 <var>f</var> 随时间的变化率;∫<var>f</var> d<var>t</var> 是曲线下的面积。本文用记号 <var>ḟ</var> ≡ d<var>f</var>/d<var>t</var>。</p>
+<p><b>(2) 两个积分恒等式。</b>对任意函数 δ<var>I</var>(<var>t</var>):</p>
+<div class="eq">∫<sub>0</sub><sup><var>t</var><sub>f</sub></sup> δ<var>İ</var> d<var>t</var> = δ<var>I</var>(<var>t</var><sub>f</sub>) − δ<var>I</var>(0) ,&emsp;&emsp;
+∫<sub>0</sub><sup><var>t</var><sub>f</sub></sup> δ<var>I</var>·δ<var>İ</var> d<var>t</var> = ½[δ<var>I</var>²(<var>t</var><sub>f</sub>) − δ<var>I</var>²(0)]</div>
+<p>第二条来自 δ<var>I</var>·δ<var>İ</var> = ½ d(δ<var>I</var>²)/d<var>t</var>。含义:<b>被积函数是"某个量的导数"时,积分只剩端点值(边界项)</b>。这是全文最常用的一招。</p>
+<p><b>(3) 一阶泰勒展开。</b>函数在工作点附近的小偏移可用切线近似:<var>f</var>(<var>x</var><sub>0</sub>+δ<var>x</var>) ≈ <var>f</var>(<var>x</var><sub>0</sub>) + <var>f</var>′(<var>x</var><sub>0</sub>)·δ<var>x</var>,误差是二阶小量 𝒪(δ<var>x</var>²)。</p>
+<p><b>(4) 电路两定律。</b>基尔霍夫电压定律(KVL):沿回路电压代数和为零。元件电压:电阻 <var>V</var><sub>R</sub> = <var>IR</var>;电感 <var>V</var><sub>L</sub> = <var>L</var> d<var>I</var>/d<var>t</var>。电阻上的耗散功率 <var>P</var> = <var>I</var>²<var>R</var>。</p>
+<p><b>(5) 热学两概念。</b>热容 <var>C</var>:温度变化需要的能量,<var>C</var> d<var>T</var>/d<var>t</var> = 净输入功率;热导:器件通过热连接向低温热库(bath)漏热,功率记 <var>P</var><sub>bath</sub>(<var>T</var>),其斜率 <var>G</var> ≡ d<var>P</var><sub>bath</sub>/d<var>T</var>。</p>
+
+<h2>第 1 节 · 物理装置与电路图</h2>
+<p>TES(Transition-Edge Sensor)是一片偏置在超导转变边缘的薄膜:温度略升,电阻 <var>R</var><sub>TES</sub> 陡增。事件沉积能量 → 薄膜升温 → 电阻升高 → 回路电流改变。我们测到的就是电流波形 <var>I</var>(<var>t</var>),要反推的是沉积能量 <var>E</var>。</p>
+
+<figure>
+<svg width="640" height="200" viewBox="0 0 640 200">
+  <g stroke="#111" stroke-width="1.6" fill="none">
+    <circle cx="60" cy="100" r="16"/>
+    <path d="M60 88 l0 10 M55 93 l10 0"/>
+    <path d="M60 84 L60 40 L300 40"/>
+    <path d="M60 116 L60 170 L300 170"/>
+    <path d="M140 40 L140 76 M140 124 L140 170"/>
+    <rect x="128" y="76" width="24" height="48"/>
+    <path d="M300 40 L300 55 M300 40 L300 40"/>
+    <rect x="288" y="55" width="24" height="34"/>
+    <path d="M300 89 L300 96"/>
+    <rect x="288" y="96" width="24" height="34" stroke-dasharray="4 3"/>
+    <path d="M300 130 L300 138"/>
+    <path d="M300 138 c 8 0 8 8 0 8 c 8 0 8 8 0 8 c 8 0 8 8 0 8"/>
+    <path d="M300 162 L300 170"/>
+  </g>
+  <g font-size="13" font-family="serif">
+    <text x="30" y="104"><tspan font-style="italic">I</tspan><tspan font-size="10" dy="3">b</tspan></text>
+    <text x="100" y="104"><tspan font-style="italic">R</tspan><tspan font-size="10" dy="3">sh</tspan></text>
+    <text x="322" y="76"><tspan font-style="italic">R</tspan><tspan font-size="10" dy="3">p</tspan></text>
+    <text x="322" y="117"><tspan font-style="italic">R</tspan><tspan font-size="10" dy="3">TES</tspan></text>
+    <text x="322" y="155"><tspan font-style="italic">L</tspan></text>
+    <text x="215" y="32" font-size="11" fill="#555">支路电流 = TES 电流 I(t)</text>
+  </g>
+</svg>
+<figcaption>图 1 · 实际偏置电路:恒流源 <var>I</var><sub>b</sub> 分流到并联的 <var>R</var><sub>sh</sub> 与 [<var>R</var><sub>p</sub> + <var>R</var><sub>TES</sub> + <var>L</var>] 支路(虚线框 = 变阻的 TES)</figcaption>
+</figure>
+
+<figure>
+<svg width="480" height="190" viewBox="0 0 480 190">
+  <g stroke="#111" stroke-width="1.6" fill="none">
+    <circle cx="70" cy="95" r="16"/>
+    <path d="M70 87 l0 16 M63 99 l0 -8 l14 0 l0 8" stroke-width="1.2"/>
+    <path d="M70 79 L70 35 L170 35"/>
+    <rect x="170" y="23" width="60" height="24"/>
+    <path d="M230 35 L300 35"/>
+    <path d="M300 35 c 0 8 8 8 8 0 c 8 0 8 8 0 8 c 8 0 8 8 0 8" transform="rotate(90 300 35)"/>
+    <path d="M300 59 L300 71"/>
+    <rect x="288" y="71" width="24" height="40" stroke-dasharray="4 3"/>
+    <path d="M300 111 L300 155 L70 155 L70 111"/>
+  </g>
+  <g font-size="13" font-family="serif">
+    <text x="38" y="99"><tspan font-style="italic">V</tspan></text>
+    <text x="183" y="17"><tspan font-style="italic">R</tspan><tspan font-size="10" dy="3">L</tspan></text>
+    <text x="330" y="52"><tspan font-style="italic">L</tspan></text>
+    <text x="322" y="95"><tspan font-style="italic">R</tspan><tspan font-size="10" dy="3">TES</tspan></text>
+    <text x="150" y="178" font-size="11" fill="#555">回路电流 I(t),方向沿箭头</text>
+  </g>
+</svg>
+<figcaption>图 2 · 戴维南等效电路:电压源 <var>V</var> 串联 <var>R</var><sub>L</sub>、<var>L</var> 与 <var>R</var><sub>TES</sub>(本文一切推导基于此图)</figcaption>
+</figure>
+
+<p>由电路等效变换(戴维南定理)得到本文的基本定义:</p>
+<div class="eq"><span class="tag">(1)</span>
+<var>V</var> = <var>I</var><sub>b</sub><var>R</var><sub>sh</sub> ,&emsp;
+<var>R</var><sub>L</sub> = <var>R</var><sub>p</sub> + <var>R</var><sub>sh</sub> ,&emsp;
+<var>I</var><sub>0</sub> = <span class="frac"><span><var>V</var></span><span><var>R</var><sub>L</sub> + <var>R</var><sub>0</sub></span></span> ,&emsp;
+<var>I</var>(<var>t</var>) = <var>I</var><sub>0</sub> + δ<var>I</var>(<var>t</var>)</div>
+<p>其中 <var>R</var><sub>0</sub> 为工作点的 TES 电阻,<var>I</var><sub>0</sub> 为静态电流,δ<var>I</var>(<var>t</var>) 为脉冲引起的偏移(即测量到的波形,已扣基线并换算为电流)。</p>
+
+<h2>第 2 节 · 两条微分方程从哪里来</h2>
+<h3>2.1 电学方程(对图 2 用 KVL)</h3>
+<p>沿回路:电源电压 = 三个元件电压之和:</p>
+<div class="eq"><span class="tag">(2)</span>
+<var>V</var> = <var>I R</var><sub>L</sub> + <var>L</var><var>İ</var> + <var>I R</var><sub>TES</sub>(<var>T</var>, <var>I</var>)
+&emsp;⇔&emsp;
+<var>L</var><span class="frac"><span>d<var>I</var></span><span>d<var>t</var></span></span> = <var>V</var> − <var>I R</var><sub>L</sub> − <var>I R</var><sub>TES</sub>(<var>T</var>, <var>I</var>)</div>
+<p>注意 <var>R</var><sub>TES</sub> 依赖温度与电流——这是电与热耦合的入口。</p>
+<h3>2.2 热学方程(对 TES 薄膜记能量账)</h3>
+<p>薄膜温度变化 = 流入功率减流出功率。流入:焦耳加热 <var>P</var><sub>J</sub> = <var>I</var>²<var>R</var><sub>TES</sub> 与事件信号功率 <var>P</var>(<var>t</var>);流出:漏向热库的 <var>P</var><sub>bath</sub>(<var>T</var>):</p>
+<div class="eq"><span class="tag">(3)</span>
+<var>C</var><span class="frac"><span>d<var>T</var></span><span>d<var>t</var></span></span> = −<var>P</var><sub>bath</sub>(<var>T</var>) + <var>P</var><sub>J</sub> + <var>P</var>(<var>t</var>)</div>
+<div class="note"><b>问题陈述:</b>已知测量波形 δ<var>I</var>(<var>t</var>) 与常数 <var>V</var>, <var>R</var><sub>L</sub>, <var>R</var><sub>0</sub>, <var>I</var><sub>0</sub>, <var>L</var>,求事件沉积进 TES 的总能量 <var>E</var> = ∫<var>P</var>(<var>t</var>)d<var>t</var>。</div>
+
+<h2>第 3 节 · 第一步:热方程积分(严格,无近似)</h2>
+<p>把 (3) 中的 <var>P</var> 解出来并对 [0, <var>t</var><sub>f</sub>] 积分。定义各量相对稳态的偏移(稳态满足 0 = −<var>P</var><sub>bath</sub>(<var>T</var><sub>0</sub>) + <var>P</var><sub>J0</sub>),相减后:</p>
+<div class="eq"><span class="tag">(4)</span>
+<var>E</var> = ∫<var>P</var> d<var>t</var> = <var>C</var>·δ<var>T</var> |<sub>0</sub><sup><var>t</var><sub>f</sub></sup> + ∫ Δ<var>P</var><sub>bath</sub> d<var>t</var> − ∫ δ<var>P</var><sub>J</sub> d<var>t</var></div>
+<p>三项含义:截止时刻还存在薄膜里的热(边界项);脉冲期间多漏给热库的能量;焦耳加热的减少量(负反馈:电阻升高 → 电流下降 → 焦耳热下降,"腾出"的加热正好补偿吸收的能量)。<b>若积到脉冲完全衰减,第一项为零。</b></p>
+
+<h2>第 4 节 · 第二步:焦耳项的精确展开(严格,无近似)</h2>
+<p>关键观察:焦耳功率 <var>P</var><sub>J</sub> = <var>I</var>²<var>R</var><sub>TES</sub> 中的未知量 <var>R</var><sub>TES</sub> 可以用电学方程 (2) 整体消去:</p>
+<div class="eq"><span class="tag">(5)</span>
+<var>I R</var><sub>TES</sub> = <var>V</var> − <var>I R</var><sub>L</sub> − <var>L İ</var>
+&emsp;⇒&emsp;
+<var>P</var><sub>J</sub> = <var>I</var>(<var>V</var> − <var>I R</var><sub>L</sub> − <var>L İ</var>)</div>
+<p>代入 <var>I</var> = <var>I</var><sub>0</sub> + δ<var>I</var> 并逐项展开(注意 <var>İ</var> = δ<var>İ</var>):</p>
+<div class="eq">
+<var>P</var><sub>J</sub> = <var>I</var><sub>0</sub><var>V</var> + <var>V</var>δ<var>I</var> − <var>R</var><sub>L</sub>(<var>I</var><sub>0</sub>² + 2<var>I</var><sub>0</sub>δ<var>I</var> + δ<var>I</var>²) − <var>L</var>(<var>I</var><sub>0</sub>+δ<var>I</var>)δ<var>İ</var></div>
+<p>稳态值为 <var>P</var><sub>J0</sub> = <var>I</var><sub>0</sub><var>V</var> − <var>I</var><sub>0</sub>²<var>R</var><sub>L</sub>,相减:</p>
+<div class="eq"><span class="tag">(6)</span>
+−δ<var>P</var><sub>J</sub> = (2<var>I</var><sub>0</sub><var>R</var><sub>L</sub> − <var>V</var>)·δ<var>I</var> + <var>R</var><sub>L</sub>·δ<var>I</var>² + <var>L</var>(<var>I</var><sub>0</sub>+δ<var>I</var>)δ<var>İ</var></div>
+<p>用定义 <var>V</var> = <var>I</var><sub>0</sub>(<var>R</var><sub>L</sub>+<var>R</var><sub>0</sub>) 化简线性系数:2<var>I</var><sub>0</sub><var>R</var><sub>L</sub> − <var>V</var> = <var>I</var><sub>0</sub>(<var>R</var><sub>L</sub> − <var>R</var><sub>0</sub>)。积分时,末项恰是"某量的导数"(预备知识 (2)),只剩端点值:</p>
+<div class="eq"><span class="tag">(7)</span>
+−∫<sub>0</sub><sup><var>t</var><sub>f</sub></sup> δ<var>P</var><sub>J</sub> d<var>t</var> =
+<var>I</var><sub>0</sub>(<var>R</var><sub>L</sub>−<var>R</var><sub>0</sub>)∫δ<var>I</var> d<var>t</var> + <var>R</var><sub>L</sub>∫δ<var>I</var>² d<var>t</var>
++ <var>L</var>[<var>I</var><sub>0</sub>δ<var>I</var> + ½δ<var>I</var>²]<sub>0</sub><sup><var>t</var><sub>f</sub></sup></div>
+<p>物理解释:电感边界项 = 电感储能 ½<var>L I</var>² 在窗口首尾的差;积到完全衰减(δ<var>I</var>→0)时它为零。<b>至此没有用过任何近似。</b></p>
+
+<h2>第 5 节 · 第三步:bath 项(全文唯一的线性化)</h2>
+<h3>5.1 三个标准无量纲参数(Irwin 的定义)</h3>
+<div class="eq"><span class="tag">(8)</span>
+α<sub>I</sub> ≡ <span class="frac"><span><var>T</var><sub>0</sub></span><span><var>R</var><sub>0</sub></span></span><span class="frac"><span>∂<var>R</var></span><span>∂<var>T</var></span></span> ,&emsp;
+β<sub>I</sub> ≡ <span class="frac"><span><var>I</var><sub>0</sub></span><span><var>R</var><sub>0</sub></span></span><span class="frac"><span>∂<var>R</var></span><span>∂<var>I</var></span></span> ,&emsp;
+ℒ ≡ <span class="frac"><span><var>P</var><sub>J0</sub> α<sub>I</sub></span><span><var>G T</var><sub>0</sub></span></span>&nbsp;(回路增益),&emsp;<var>P</var><sub>J0</sub> = <var>I</var><sub>0</sub>²<var>R</var><sub>0</sub></div>
+<h3>5.2 由电阻反推温度</h3>
+<p>对 <var>R</var>(<var>T</var>, <var>I</var>) 做一阶泰勒展开并用 (8) 改写偏导:</p>
+<div class="eq"><span class="tag">(9)</span>
+δ<var>R</var> = <span class="frac"><span><var>R</var><sub>0</sub>α<sub>I</sub></span><span><var>T</var><sub>0</sub></span></span>δ<var>T</var> + <span class="frac"><span><var>R</var><sub>0</sub>β<sub>I</sub></span><span><var>I</var><sub>0</sub></span></span>δ<var>I</var>
+&emsp;⇒&emsp;
+δ<var>T</var> = <span class="frac"><span><var>T</var><sub>0</sub></span><span><var>R</var><sub>0</sub>α<sub>I</sub></span></span>[ δ<var>R</var> − <span class="frac"><span><var>R</var><sub>0</sub>β<sub>I</sub></span><span><var>I</var><sub>0</sub></span></span>δ<var>I</var> ]</div>
+<p>而 δ<var>R</var>(<var>t</var>) 本身可以由电学方程从数据逐点重建(同样严格):</p>
+<div class="eq"><span class="tag">(10)</span>
+δ<var>R</var>(<var>t</var>) = <span class="frac"><span><var>V</var> − <var>I R</var><sub>L</sub> − <var>L İ</var></span><span><var>I</var></span></span> − <var>R</var><sub>0</sub></div>
+<h3>5.3 漏热的线性化与参数坍缩</h3>
+<p>Δ<var>P</var><sub>bath</sub> ≈ <var>G</var>δ<var>T</var>(一阶展开,误差 𝒪(δ<var>T</var>²))。妙处在于组合 <var>G T</var><sub>0</sub>/α<sub>I</sub> 可用回路增益整体表示:由 (8),<var>G T</var><sub>0</sub>/α<sub>I</sub> = <var>P</var><sub>J0</sub>/ℒ = <var>I</var><sub>0</sub>²<var>R</var><sub>0</sub>/ℒ,于是 <var>C</var>、<var>G</var>、α<sub>I</sub>、<var>T</var><sub>0</sub> 全部坍缩进一个 ℒ:</p>
+<div class="eq"><span class="tag">(11)</span>
+∫Δ<var>P</var><sub>bath</sub> d<var>t</var> = <span class="frac"><span><var>I</var><sub>0</sub>²</span><span>ℒ</span></span>∫δ<var>R</var> d<var>t</var> − <span class="frac"><span><var>I</var><sub>0</sub><var>R</var><sub>0</sub>β<sub>I</sub></span><span>ℒ</span></span>∫δ<var>I</var> d<var>t</var></div>
+<p>同理,(4) 中的热容边界项用 <var>C</var> = <var>G</var>τ(τ ≡ <var>C</var>/<var>G</var> 为自然热时间常数)化为:</p>
+<div class="eq"><span class="tag">(12)</span>
+<var>C</var>δ<var>T</var>(<var>t</var><sub>f</sub>) = τ<span class="frac"><span><var>I</var><sub>0</sub>²</span><span>ℒ</span></span>[ δ<var>R</var> − <span class="frac"><span><var>R</var><sub>0</sub>β<sub>I</sub></span><span><var>I</var><sub>0</sub></span></span>δ<var>I</var> ]<sub><var>t</var>=<var>t</var><sub>f</sub></sub></div>
+
+<h2>第 6 节 · 总公式</h2>
+<p>把 (7)(11)(12) 代回 (4):</p>
+<div class="boxed"><div class="eq" style="margin:4px 0">
+<var>E</var> = <var>I</var><sub>0</sub>(<var>R</var><sub>L</sub>−<var>R</var><sub>0</sub>)∫δ<var>I</var> d<var>t</var> + <var>R</var><sub>L</sub>∫δ<var>I</var>² d<var>t</var>
++ <var>L</var>[<var>I</var><sub>0</sub>δ<var>I</var> + ½δ<var>I</var>²]<sub>0</sub><sup><var>t</var><sub>f</sub></sup><br>
+&emsp;&emsp;+ <span class="frac"><span><var>I</var><sub>0</sub>²</span><span>ℒ</span></span>∫δ<var>R</var> d<var>t</var>
+− <span class="frac"><span><var>I</var><sub>0</sub><var>R</var><sub>0</sub>β<sub>I</sub></span><span>ℒ</span></span>∫δ<var>I</var> d<var>t</var>
++ τ<span class="frac"><span><var>I</var><sub>0</sub>²</span><span>ℒ</span></span>[ δ<var>R</var> − <span class="frac"><span><var>R</var><sub>0</sub>β<sub>I</sub></span><span><var>I</var><sub>0</sub></span></span>δ<var>I</var> ]<sub><var>t</var><sub>f</sub></sub>
+</div></div>
+<table>
+<tr><th>项</th><th>物理含义</th><th>需要的参数</th><th>性质</th></tr>
+<tr><td>第 1、2 项</td><td>焦耳加热减少量(ETF 主项)</td><td><var>I</var><sub>0</sub>, <var>R</var><sub>L</sub>, <var>R</var><sub>0</sub></td><td>严格</td></tr>
+<tr><td>第 3 项</td><td>电感储能的窗口边界差</td><td>+ <var>L</var></td><td>严格</td></tr>
+<tr><td>第 4、5 项</td><td>脉冲期间多漏给热库的能量</td><td>+ ℒ, β<sub>I</sub></td><td>一阶(误差 𝒪(δ<var>T</var>²))</td></tr>
+<tr><td>第 6 项</td><td>截止时刻还存在薄膜里的热</td><td>+ τ</td><td>一阶</td></tr>
+</table>
+
+<h2>第 7 节 · 准静态近似与单系数形式</h2>
+<p>电感很小(电学时标 ≪ 热学时标)时,可在 (2) 中取 <var>L</var>→0:<var>I</var> = <var>V</var>/(<var>R</var><sub>L</sub>+<var>R</var><sub>TES</sub>)。对 <var>R</var><sub>TES</sub> 求导:</p>
+<div class="eq"><span class="tag">(13)</span>
+δ<var>I</var> = −<span class="frac"><span><var>V</var></span><span>(<var>R</var><sub>L</sub>+<var>R</var><sub>0</sub>)²</span></span>δ<var>R</var>
+ = −<span class="frac"><span><var>I</var><sub>0</sub></span><span><var>R</var><sub>L</sub>+<var>R</var><sub>0</sub></span></span>δ<var>R</var>
+&emsp;⇒&emsp;
+δ<var>R</var> = −<span class="frac"><span><var>R</var><sub>L</sub>+<var>R</var><sub>0</sub></span><span><var>I</var><sub>0</sub></span></span>δ<var>I</var></div>
+<p>代入 (11) 的第一项并与总公式第 1 项相比(取 β<sub>I</sub>≈0),bath 项与主项之比为常数,于是:</p>
+<div class="boxed"><div class="eq" style="margin:4px 0">
+<var>E</var> ≈ [ 1 + <span class="frac"><span><var>R</var><sub>0</sub>+<var>R</var><sub>L</sub></span><span>ℒ(<var>R</var><sub>0</sub>−<var>R</var><sub>L</sub>)</span></span> ] × <var>E</var><sub>Joule</sub></div></div>
+<p>即:整套三级修正在小信号极限下坍缩为对焦耳项乘一个只含 ℒ 的系数。</p>
+
+<h2>第 8 节 · 极限自检(全部在符号层面)</h2>
+<table>
+<tr><th>取极限</th><th>结果</th><th>意义</th></tr>
+<tr><td>ℒ → ∞</td><td>bath 项与存热项 → 0</td><td>退回"纯 ETF"公式:强反馈时能量全部由焦耳减少量补偿</td></tr>
+<tr><td><var>t</var><sub>f</sub> → ∞</td><td>两个边界项 → 0</td><td>积到完全衰减时只剩四个积分项</td></tr>
+<tr><td>只取线性项</td><td>Δ<var>P</var><sub>ETF</sub> = −<var>I</var><sub>0</sub>(<var>R</var><sub>0</sub>−<var>R</var><sub>L</sub>)δ<var>I</var></td><td>与 Irwin 式 (54) 完全一致</td></tr>
+</table>
+
+<h2>附录 A · 双指数脉冲形状从哪里来</h2>
+<p>把 (2)(3) 在工作点线性化,得到关于 (δ<var>I</var>, δ<var>T</var>) 的 2×2 线性常微分方程组。二阶线性系统有两个特征值,记 −1/τ₊ 与 −1/τ₋,通解是两个指数的线性组合。对"瞬时能量注入"(δ 函数)的响应即:</p>
+<div class="eq">δ<var>I</var>(<var>t</var>) ∝ e<sup>−<var>t</var>/τ₊</sup> − e<sup>−<var>t</var>/τ₋</sup></div>
+<p>——这正是模板拟合所用的双指数形状:快时标 τ₊ 主导上升(电学,∼<var>L</var>/<var>R</var>),慢时标 τ₋ 主导下降(热学,∼<var>C</var>/<var>G</var> 经反馈缩短)。两条时间常数满足:</p>
+<div class="eq">
+<span class="frac"><span>1</span><span>τ₊</span></span> + <span class="frac"><span>1</span><span>τ₋</span></span> = <span class="frac"><span>1</span><span>τ<sub>el</sub></span></span> + <span class="frac"><span>1</span><span>τ<sub>I</sub></span></span> ,&emsp;
+<span class="frac"><span>1</span><span>τ₊τ₋</span></span> = <span class="frac"><span>1</span><span>τ<sub>el</sub>τ<sub>I</sub></span></span> + <span class="frac"><span><var>R</var><sub>0</sub>ℒ(2+β<sub>I</sub>)</span><span><var>L</var>τ</span></span></div>
+<p>其中 τ<sub>el</sub> = <var>L</var>/[<var>R</var><sub>L</sub>+<var>R</var><sub>0</sub>(1+β<sub>I</sub>)],τ<sub>I</sub> = τ/(1−ℒ)。<b>推论:测得每个通道的 τ₊、τ₋(来自脉冲拟合),在给定 <var>L</var>、β<sub>I</sub>≈0 的条件下,这两条方程即可反解出 ℒ 与 τ</b>——信号脉冲本身可以充当 dIdV 的替代探针。</p>
+
+<h2>附录 B · dIdV(复阻抗)如何给出全部参数</h2>
+<p>在偏置线上加小交流激励,按频率测电流响应,得复阻抗 <var>Z</var>(ω) = <var>V</var><sub>ω</sub>/<var>I</var><sub>ω</sub>。线性化系统给出解析形状:</p>
+<div class="eq">
+<var>Z</var>(ω) = <var>R</var><sub>L</sub> + iω<var>L</var> + <var>Z</var><sub>TES</sub>(ω) ,&emsp;
+<var>Z</var><sub>TES</sub>(ω) = <var>R</var><sub>0</sub>(1+β<sub>I</sub>) + <span class="frac"><span><var>R</var><sub>0</sub>ℒ</span><span>1−ℒ</span></span>·<span class="frac"><span>2+β<sub>I</sub></span><span>1+iωτ<sub>I</sub></span></span></div>
+<p>对实测 <var>Z</var>(ω) 曲线拟合 → 直接得到 β<sub>I</sub>, ℒ, τ<sub>I</sub>, <var>L</var>;再由 ℒ 的定义解出 α<sub>I</sub>,由 τ = τ<sub>I</sub>(1−ℒ) 与 <var>C</var> = <var>G</var>τ 得到 <var>C</var>、<var>G</var>。总公式所需的全部参数由此闭合。</p>
+
+<div class="note">来源:两条微分方程与参数定义见 Irwin &amp; Hilton 第 74–75、70–73 页;ETF 能量见其式 (54)–(58);复阻抗见其式 (40)–(42)。总公式、边界项、bath 项的 ℒ-坍缩与单系数形式为本笔记的整理与扩展。</div>
+
+</body>
+</html>
