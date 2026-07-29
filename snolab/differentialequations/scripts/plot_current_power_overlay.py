@@ -165,22 +165,28 @@ def draw(ax, chan, evn, label, t_lo_ms=-1.0, t_hi_ms=8.0):
     ax2.axvspan((INT_LO - TRIGGER_BIN) * dt * 1e3,
                 (INT_HI - TRIGGER_BIN) * dt * 1e3,
                 color="#FFE9A8", alpha=0.5, zorder=0)
-    ax2.plot(t, p[lo:hi] * 1e15, lw=3.4, color="#C0392B", alpha=0.55, zorder=1,
+    ax2.plot(t, p[lo:hi] * 1e15, lw=2.2, color="#E00000", zorder=1,
              solid_capstyle="round")
     ax2.plot(t, bias[chan]["quad"] * di_f[lo:hi] ** 2 * QUAD_MAG * 1e15,
-             lw=0.9, ls=(0, (4, 2)), color="#6C3483", zorder=2)
+             lw=1.0, ls=(0, (2, 1.5)), color="#6C3483", zorder=2)
     ax.plot(t, di[lo:hi] * 1e9, lw=0.45, color="#AAAAAA", alpha=0.7, zorder=1,
             label="current, unfiltered")
-    ax.plot(t, di_f[lo:hi] * 1e9, lw=1.2, color="#1F3864", zorder=3,
-            label="current $\\delta I$, filtered (left)")
+    ax.plot(t, di_f[lo:hi] * 1e9, lw=1.4, color="#0B1E4E", zorder=3,
+            ls=(0, (4, 2.5)), label="current $\\delta I$, filtered (left)")
     ax.axhline(0, color="gray", lw=0.5, ls=":", zorder=0)
     # tie the power axis to the current axis through the linear coefficient
     # I0*(R_L-R0): the two curves then coincide except for the quadratic term,
     # so every visible blue/red separation is the dI^2 contribution.
     ax2.set_ylim(*(np.asarray(ax.get_ylim()) * 1e-9 * bias[chan]["lin"] * 1e15))
     e_off, e_16, quad = energies(chan, p, di_f)
+    p_pk = p[lo:hi].max() * 1e15
+    q_pk = (bias[chan]["quad"] * di_f[lo:hi] ** 2).max() * 1e15
     ax.set_title(f"{label}   $E$ = {e_off:.0f} eV (win) / {e_16:.0f} eV (16 ms),"
                  f" quad {quad:+.2f}%", fontsize=7.5)
+    ax.text(0.975, 0.93,
+            f"$P$ peak {p_pk:.0f} fW,  $\\delta I^2$ peak {q_pk:.1f} fW",
+            transform=ax.transAxes, ha="right", va="top", fontsize=6.5,
+            color="#6C3483")
     ax.tick_params(labelsize=6.5)
     ax2.tick_params(labelsize=6.5, colors="#C0392B")
     ax.grid(alpha=0.2)
@@ -226,10 +232,11 @@ for k in range(len(events), nrow * ncol):
 h, l = axes[0][0].get_legend_handles_labels()
 fig.suptitle(f"Z{det} {chan}: measured current pulse (blue) and the power pulse "
              f"it implies (red), {args.formula}\n" + STAMP, fontsize=8.5, y=0.998)
-fig.legend(h + [plt.Line2D([], [], color="#C0392B", lw=3.4, alpha=0.55),
-                plt.Line2D([], [], color="#6C3483", lw=1.0, ls=(0, (4, 2)))],
+fig.legend(h + [plt.Line2D([], [], color="#E00000", lw=2.2),
+                plt.Line2D([], [], color="#6C3483", lw=1.0, ls=(0, (2, 1.5)))],
            l + ["power $P$ (right axis)",
-                f"$\\delta I^2$ term only, $\\times${QUAD_MAG}"],
+                f"$\\delta I^2$ term only, drawn $\\times${QUAD_MAG} "
+                f"(right axis $\\div$ {QUAD_MAG}; true peak printed in panel)"],
            loc="lower center", ncol=4, fontsize=8, frameon=False)
 fig.tight_layout(rect=(0, 0.026, 1, 0.935))
 f1 = os.path.join(OUT_DIR,
