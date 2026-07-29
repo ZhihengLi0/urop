@@ -235,6 +235,25 @@ I0(R_L−R0) 同源(互为倒数与符号),再次交叉验证 ★ 正确。
 另:收集效率分母若探测器加了偏压需含 Luke 项;Z7 本轮的 HV 偏压值尚未落实
 (infoDir/processingTree 或 ODB 中查,或问导师)——这是分母侧唯一悬而未决的量。
 
+## 6g. 电流脉冲 vs 功率脉冲叠加图(Method 1,已跑出)
+
+`scripts/plot_current_power_overlay.py` → `results/plots/current_power_overlay/`
+(series 24260617_063934,seed 0 随机选 15 个 K 线事件;PNG 不进 git,数值表进):
+
+- `..._current_power_PBS1_15events.png` — 15 事件 × PBS1,双纵轴:左 δI (nA)、
+  右 P (fW)。**功率轴按线性系数 I0(R_L−R0) 与电流轴绑定**,所以两条线本应重合,
+  肉眼可见的差就是二次项;另画一条放大 20 倍的 δI² 项(紫虚线)。
+- `..._current_power_allchan_ev30646.png` — 单事件 × 11 通道(PFS2 无数据)。
+- `..._current_power_energies.txt` — 逐事件/逐通道能量表 + 三种二次项系数对照。
+
+结论(官方积分窗):
+- PBS1 中位 **267.2 eV**(Method 1),与官方 Eabs 中位 ~268 eV 一致;
+- 事件 30646 全通道求和 **3397 eV = 32.8%**(16 ms 窗 4012 eV = 38.7%,含
+  PDS2/PAS2 低频漂移,不可信,见 §6f);
+- 二次项占官方窗能量的 **0.9–2.8%**(Method 1 的 +2R_L);三系数对照(15 事件中位):
+  method1 267.19 eV / **exact 265.66 eV (0.9943)** / method2 262.60 eV (0.9828)。
+  即 M1 比精确式高 **0.57%**,M2 低 **1.15%**,与 §5 的解析预期一致。
+
 ## 7. 缺失信息
 
 - **dIdV 拟合参数全部为空**:事件级 RQ `L`、`l`(loop gain)、`beta`、`tau0`、
