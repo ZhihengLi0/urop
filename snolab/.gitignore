@@ -33,3 +33,5 @@ speech_script.html
 !deliverables/**/*.png
 # K-line population figures are versioned (exception to *.png)
 !kline_population/results/plots/*.png
+# Energy histograms are versioned (exception to *.png)
+!differentialequations/results/plots/**/*.png

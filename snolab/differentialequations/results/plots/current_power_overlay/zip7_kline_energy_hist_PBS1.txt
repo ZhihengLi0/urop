@@ -1,7 +1,9 @@
-Z7 PBS1 K-line event energies | method1 | 1917 events over 30 series, 290 skipped (missing trace or NRMSE > 0.2)
-fitted-pulse closed form: mean 284.79 eV, sigma 42.44 eV (14.90%), median 295.46 eV
-official-window raw:      mean 284.20 eV, sigma 43.11 eV (15.17%), median 294.57 eV
+Z7 K-line event energies | method1 | 30 series | per event: 2-exp fit in current units, closed-form power integral | NRMSE <= 0.2
 
+  chan      n   skip   mu[eV]  sigma[eV]  sigma/mu  mu_raw[eV]  sigma_raw  mu/10.37keV
+  PBS1   1917    290    284.8       42.4    14.90%       284.2       43.1        2.75%
+
+--- PBS1 ---
           series    event  E_fit[eV]  E_rawwin[eV]   NRMSE  t_r[us]  t_f[us]
  24260617_063934    30646      305.2         300.5   0.049      136      213
  24260617_063934    30724      243.4         240.7   0.076       97      307
