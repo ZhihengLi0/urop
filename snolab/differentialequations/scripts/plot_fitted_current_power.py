@@ -227,6 +227,12 @@ def draw_pulse(ax, chan, f, e, label):
     ax.plot(t, e["fit"][lo:hi] * 1e6, lw=1.4, color="#0B1E4E", zorder=3,
             ls=(0, (5, 3.5)), label="fitted current $\\delta I$ (left)")
     ax.axhline(0, color="gray", lw=0.5, ls=":", zorder=0)
+    # the axis range has to come from the RAW trace, which is the widest curve
+    # here: autoscaling on the fitted pulse alone would clip the noise that goes
+    # below zero, and the raw sits on ax2 whose limits are tied to ax
+    span = np.concatenate([f["di"][lo:hi], e["fit"][lo:hi]]) * 1e6
+    pad = 0.08 * (span.max() - span.min())
+    ax.set_ylim(span.min() - pad, span.max() + pad)
     ax2.set_ylim(*(np.asarray(ax.get_ylim()) * 1e-6 * bias[chan]["lin"] * 1e15))
     ax.set_title(f"{label}   $E$ = {e['closed']:.0f} eV (closed form)   "
                  f"$\\tau_r$ = {f['t_rise'] * 1e6:.0f} $\\mu$s, "
