@@ -1,0 +1,69 @@
+=== Z10: 27 series, 1508776 triggers, 235711 with a valid PTOFamps ===
+the note's junk cut is quoted as SumPF/PT > 0.05; taking SumPF/PT with PF = the PF channels keeps 235418 events.
+It does not reproduce the note's suppression of the noise-trigger hump, so
+the note's cut must be something stricter than its wording implies. It
+barely matters here: the hump numbers below move by <0.1% under the cut.
+
+--- counts above threshold (PTOFamps, A) ---
+ threshold    valid  after cut
+     1e-06     6246       6070
+     2e-06     4969       4921
+     3e-06     4886       4861
+     5e-06     4701       4687
+     1e-05     4110       4108
+     2e-05     2261       2260
+     3e-05      978        978
+     5e-05       19         19
+
+--- the rightmost hump (PTOFamps > 3e-06, the valley) ---
+  events            : 4886
+  events > 1e-5     : 4110
+  median amplitude  : 1.896e-05 A
+  max amplitude     : 6.730e-05 A
+  in K-line units   : median hump / K line (8.7e-7 A) = 21.8x  -> of order 226 keV if the response were linear
+
+--- run time ---
+  ops Series Info table, all 27 series : 134050 s = 37.24 h
+  the 18 series provably in the note's list       : 23.49 h
+  max TriggerTime per series, summed              : 38.34 h
+  -> the note's 26 series are 37.2 h minus one series, i.e. about 35-37 h (~1.5 days)
+  rate in the hump: 131 events/hour above 3e-06 A, 110/hour above 1e-5 A
+
+          series   ops dur  processed   valid  >1e-5  in note
+ 24260616_222125   1:15:46      6872s   12540    230      yes
+ 24260616_235257   0:29:12      1748s    2802     86      yes
+ 24260617_063934   2:02:48      6872s    8113    398      yes
+ 24260617_175849   1:01:29      6872s    4801    162      yes
+ 24260617_190838   2:10:16      6872s   10693    385      yes
+ 24260617_234805   1:20:09      4806s    6505    197      yes
+ 24260618_013000   1:20:09      4806s    7794    206      yes
+ 24260618_062713   0:56:20      3377s    9289    145      yes
+ 24260618_073543   1:20:09      4806s   14357    213      yes
+ 24260618_202553   1:33:28      5740s    9253    243        ?
+ 24260619_023225   1:20:09      4806s    8439    164        ?
+ 24260619_061249   1:20:09      4806s    6887    180        ?
+ 24260619_075448   1:20:09      4806s   11263    162        ?
+ 24260619_093653   0:23:02      1378s    5188     15      yes
+ 24260619_144815   0:50:05      3002s   15217     72      yes
+ 24260619_174938   1:31:47      6871s   10741    192        ?
+ 24260619_210312   1:40:09      6007s   10224    203        ?
+ 24260619_230219   1:40:10      6006s   28536    171      yes
+ 24260620_032928   1:40:12      5800s    5074     34      yes
+ 24260621_021444   1:40:11      5800s    4925     23      yes
+ 24260621_041432   0:37:51      2160s    2694     10      yes
+ 24260621_075659   1:18:10      4586s    4551     17      yes
+ 24260621_111527   1:43:22      5504s    4561     29      yes
+ 24260621_145024   1:40:10      5798s    4809     27      yes
+ 24260622_022708   1:40:09      6006s    7797    204        ?
+ 24260622_042718   1:38:30      5907s   10336    172        ?
+ 24260622_073439   1:40:09      6006s    8322    170        ?
+
+--- cross-check: the published histogram, integrated from the PDF ---
+  bin width 7.0 px -> 34 bins/decade; 101 bars, total 7716 events
+ threshold  from PDF  from data
+     3e-06      4089       4886
+     1e-05      3395       4110
+     2e-05      1987       2261
+     3e-05       960        978
+     5e-05        37         19
+  right edge of the published data: 6.62e-05 A (data max 6.73e-05 A)
