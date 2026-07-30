@@ -31,3 +31,5 @@ speech_script.html
 # Deliverables are versioned
 !deliverables/**/*.root
 !deliverables/**/*.png
+# K-line population figures are versioned (exception to *.png)
+!kline_population/results/plots/*.png

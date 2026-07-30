@@ -1,66 +1,105 @@
-# Z10 high-amplitude hump: event count and run time
+# K-line population: event counts, rates, and the activation decay
 
-Slide 2 of the deck shows the 13 per-detector `Summed (N series) PTOFamps,
-rejecting SumPF/PT less than 0.05` histograms lifted from the Ge Activation ops
-note (`reference/Ge Activation Data - Ops Shift 2_*.pdf`). Z10 has three
-populations: noise triggers near 2e-7 A, the 10.37 keV K line at 8.7e-7 A (red
-marker), and a broad hump from ~4e-6 to ~7e-5 A. This answers two questions
-about that hump: how many events are in it, and how much run time it took.
+Two questions about the Ge activation run, both anchored on slide 2 of the deck
+(the 13 per-detector `Summed PTOFamps` histograms from the ops note,
+`reference/Ge Activation Data - Ops Shift 2_*.pdf`):
+
+1. how many events sit in the high-amplitude hump above the 10.37 keV K line, and
+   at what rate (`scripts/zip10_hump_counts.py`, Z10 in detail);
+2. the same counts for all 13 detectors, plus a histogram of the K-line events
+   against time (`scripts/all_detectors_and_kline_time.py`).
 
 ## Run
 
 ```bash
 singularity exec -B "$HOME,/projects/standard/yanliusp/shared/" $SIF \
     python3 scripts/zip10_hump_counts.py --figure
+singularity exec -B "$HOME,/projects/standard/yanliusp/shared/" $SIF \
+    python3 scripts/all_detectors_and_kline_time.py
 ```
 
-Output: `results/zip10_hump_counts.txt`.
+Outputs: `results/zip10_hump_counts.txt`, `results/all_detectors_counts.txt`,
+`results/plots/kline_counts_vs_time_13dets.png`,
+`results/plots/kline_rate_vs_time.png`.
 
-## Answer
+## Rate check
 
-| quantity | from MSI data (27 series) | from the published figure |
-|---|---|---|
-| PTOFamps > 3e-6 A (whole hump) | 4886 | 4089 |
-| PTOFamps > 1e-5 A | **4110** | 3395 |
-| PTOFamps > 2e-5 A | 2261 | 1987 |
-| PTOFamps > 3e-5 A | 978 | 960 |
-| PTOFamps > 5e-5 A | 19 | 37 |
-| right edge of the population | 6.73e-5 A | 6.62e-5 A |
+The quoted 4800 / 36 h = 0.037 Hz holds: Z10 has **4862 hump events in 37.2 h =
+0.0363 Hz** (0.0368 Hz over the 36.7 h the processed events actually cover).
 
-Run time: **37.2 h for the 27 series**, so about 35-37 h (~1.5 days) for the
-note's 26. Rate in the hump: 131 events/h above 3e-6 A, 110 events/h above
-1e-5 A.
+## All 13 detectors
 
-The hump's median amplitude is 1.90e-5 A = 22x the K line, i.e. of order
-200 keV if the response were linear (it is not, at the top end).
+`hump` is defined per detector as `PTOFamps` above 3x the top of that detector's
+K-line window, which is where the Z10 valley sits. Run time is the ops note's
+Duration column over the series that detector uses.
 
-## Two independent methods, and why they differ by 10-20%
+| det | series | run [h] | K-line events | K rate [mHz] | hump events | hump rate [Hz] |
+|---|---|---|---|---|---|---|
+| Z1 | 26 | 35.9 | 9582 | 75.1 | 4133 | 0.0319 |
+| Z4 | 27 | 37.2 | 23240 | 175.8 | 4148 | 0.0309 |
+| Z6 | 27 | 37.2 | 14689 | 111.1 | 5100 | 0.0380 |
+| Z7 | 27 | 37.2 | 1888 | 14.3 | 4520 | 0.0337 |
+| Z9 | 27 | 37.2 | 2273 | 17.2 | 4584 | 0.0342 |
+| Z10 | 27 | 37.2 | 6861 | 51.9 | 4862 | 0.0363 |
+| Z13 | 26 | 35.2 | 8235 | 66.0 | 3631 | 0.0287 |
+| Z15 | 22 | 32.6 | 2405 | 20.8 | 2572 | 0.0219 |
+| Z16 | 27 | 37.2 | 1363 | 10.3 | 4167 | 0.0311 |
+| Z18 | 18 | 25.3 | 16332 | 182.8 | 2571 | 0.0282 |
+| Z19 | 27 | 37.2 | 19948 | 150.9 | 4235 | 0.0316 |
+| Z22 | 21 | 28.6 | 21333 | 207.9 | 4627 | 0.0450 |
+| Z24 | 27 | 37.2 | 19763 | 149.5 | 5579 | 0.0416 |
 
-1. **Data**: `PTOFamps` for zip10 from the Prompt processing, one file per
-   series, sentinel `-999999` events dropped.
-2. **Figure**: the published histogram integrated out of the PDF pixel by pixel
-   (axis calibration from the visible gridlines, 34 bins/decade recovered from
-   the bar width). Needs no series list, so it is a true independent check.
+**The hump rate is the same in every detector to within a factor 2 (0.022 to
+0.045 Hz)** even though the detectors differ wildly in resolution and in K-line
+yield. A population that is this uniform across the tower is an external one,
+not a per-detector artifact.
 
-They agree to 2% at 3e-5 A and to 17% at 1e-5 A. The data numbers are the higher
-ones for two reasons: this set has 27 series against the note's 26, and the pixel
-method undercounts wherever adjacent equal-height bars merge into one run.
+**The K-line column is not uniform (10 to 208 mHz) and should not be read as a
+physical rate.** Where the window sits at a few times 1e-7 A it overlaps the
+noise-trigger population and the counts are inflated: only Z7, Z13, Z15, Z16 and
+Z18 have windows above 1e-6 A and therefore clean counts. Z7 gives 14 mHz.
+
+## The K-line versus time, and the 71Ge decay
+
+`kline_counts_vs_time_13dets.png` is the requested histogram: counts per 2 h bin
+per detector, with a red dashed curve showing the same total spread over each
+bin's exposure and decaying with the 71Ge half-life. `kline_rate_vs_time.png`
+divides by the exposure so the decay can be read directly, with the exposure per
+bin drawn underneath.
+
+The important scale fact: **the 27 series hold 37.2 h of live time but span 132 h
+(5.5 days) of wall clock**, so the 11.43 d half-life of 71Ge predicts a real drop
+of about 15% between the first and second half of the run, not a negligible one.
+
+Measured second-half / first-half rate ratio on the clean sample (windows above
+1e-6 A, and dropping the six noise-dominated series, all of which fall in the
+second half):
+
+| det | first | second | measured | 71Ge |
+|---|---|---|---|---|
+| Z7 | 1233 | 578 | 0.891 ± 0.045 | 0.846 |
+| Z13 | 4982 | 2511 | 0.853 ± 0.020 | 0.852 |
+| Z15 | 1414 | 809 | 1.102 ± 0.049 | 0.837 |
+| Z16 | 808 | 488 | 1.147 ± 0.065 | 0.846 |
+| Z18 | 5920 | 7511 | 0.873 ± 0.015 | 0.896 |
+
+Inverse-variance mean **0.889 ± 0.011 against 0.875 predicted**: the K-line
+population decays on a multi-day timescale consistent with 71Ge electron capture,
+which is the expected origin of the 10.37 keV line after the Cf activation.
 
 ## Caveats
 
-- **The note never prints its series list.** Its plots say "26 series"; 18 of
-  them are provable from its own per-detector `SERIES_LIST.remove()` calls, and
-  the 27 used here are those plus our analysis list over the same dates. So this
-  set contains the note's 26 with at most one extra series (worth 0.4-2.2 h).
-  The per-series table in the output lets any subset be re-summed.
-- **The quoted junk cut does not reproduce the note's plot.** Read literally,
-  `SumPF/PT > 0.05` (PF = the PF channels) keeps 235418 of 235711 valid events,
-  while the note's histogram holds only 7716. Their cut must be stricter than the
-  wording. It does not affect the hump: the numbers above move by less than 0.1%
-  when it is applied.
-- **`LiveTime` is not filled** in this processing (all zeros), so run time comes
-  from the note's Duration column, cross-checked against the largest
-  `TriggerTime` in each series (38.3 h summed, agreeing with 37.2 h to 3%).
-- **Prompt processing is truncated** for the high-rate series (e.g.
-  24260620_032928: 181849 of 1286120 triggers), which is why those series
-  contribute few hump events.
+- Combining detectors by summing counts is wrong here and was corrected: the
+  detectors have very different K-line rates and different exposure in each half
+  (Z18 drops the first nine series), so the sum-of-counts ratio came out at 1.33.
+  The per-detector ratios are combined by inverse variance instead.
+- Taking all 13 detectors and all 27 series gives 0.758, well below the 71Ge
+  expectation. Two contaminations pull it down: windows that overlap the noise
+  triggers, and the six noise-dominated series whose trigger rates cost live time
+  that the event-time coverage cannot see.
+- Exposure per bin is the span the processed events cover, not the ops Duration,
+  because Prompt truncates high-rate series (24260620_032928 keeps 181849 of
+  1286120 triggers). Both are reported in the table.
+- `PTOFamps` is already in amperes, so the ADC to amp factor (3.145728e9 ADC/A)
+  must not be applied to it. It belongs to raw traces only, as in
+  `differentialequations/`.

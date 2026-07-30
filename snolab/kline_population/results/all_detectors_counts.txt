@@ -1,0 +1,54 @@
+=== per-detector event counts over the Ge activation run ===
+K-line window from the template pipeline; hump := PTOFamps > 3x the window top
+
+ det  series   run[h]  cover[h]     valid  K-line       K[mHz]    hump    hmp/run     hmp/cov       thr[A]
+run[h] = ops Duration column; cover[h] = span the processed events cover (shorter where Prompt truncated a high-rate series)
+   1      26    35.93     35.46    239271    9582        75.07    4133     0.0319      0.0324     1.62e-06
+   4      27    37.24     36.73    235717   23240       175.77    4148     0.0309      0.0314     2.43e-06
+   6      27    37.24     36.73    232994   14689       111.10    5100     0.0380      0.0386     1.82e-06
+   7      27    37.24     36.73    236190    1888        14.28    4520     0.0337      0.0342     8.10e-06
+   9      27    37.24     36.73    235690    2273        17.19    4584     0.0342      0.0347     3.24e-06
+  10      27    37.24     36.73    235711    6861        51.89    4862     0.0363      0.0368     3.24e-06
+  13      26    35.19     34.68    228265    8235        65.95    3631     0.0287      0.0291     6.48e-06
+  15      22    32.60     32.11    171434    2405        20.81    2572     0.0219      0.0223     4.05e-05
+  16      27    37.24     36.73    244107    1363        10.31    4167     0.0311      0.0315     7.29e-06
+  18      18    25.30     24.82    159515   16332       182.81    2571     0.0282      0.0288     5.67e-06
+  19      27    37.24     36.73    232922   19948       150.87    4235     0.0316      0.0320     2.43e-06
+  22      21    28.57     28.50    206394   21333       207.89    4627     0.0450      0.0451     2.03e-06
+  24      27    37.24     36.73    233040   19763       149.47    5579     0.0416      0.0422     2.43e-06
+
+Z10 cross-check of the teacher's number: 4862 hump events / 37.24 h run = 0.0363 Hz (quoted 4800/36 h = 0.037 Hz); over the processed coverage 36.73 h it is 0.0368 Hz
+
+--- 71Ge decay test ---
+the 27 series hold 37.2 h of live time but span 132 h of wall clock (5.5 d), so the 11.43 d half-life predicts a real drop across the run, not a negligible one.
+
+ det  N first  N second  measured    71Ge  stat err  window above the noise triggers?
+   1     6282      3300     0.585   0.844      2.1%  NO - counts include noise triggers
+   4    14137      9103     0.666   0.843      1.3%  NO - counts include noise triggers
+   6     8256      6433     0.806   0.843      1.7%  NO - counts include noise triggers
+   7     1233       655     0.550   0.843      4.8%  yes
+   9     1529       744     0.503   0.843      4.5%  NO - counts include noise triggers
+  10     4288      2573     0.621   0.843      2.5%  NO - counts include noise triggers
+  13     4982      3253     0.602   0.849      2.3%  yes
+  15     1414       991     0.672   0.840      4.1%  yes
+  16      808       555     0.711   0.843      5.5%  yes
+  18     5920     10412     0.659   0.894      1.6%  yes
+  19    11547      8401     0.753   0.843      1.4%  NO - counts include noise triggers
+  22    13907      7426     1.014   0.846      1.4%  NO - counts include noise triggers
+  24    11058      8705     0.814   0.843      1.4%  NO - counts include noise triggers
+
+all detectors summed: measured 0.758 vs 71Ge 0.843 (+-0.5% stat)
+
+--- same test on a clean sample ---
+detectors whose K-line window sits above the noise triggers: Z7, Z13, Z15, Z16, Z18
+and dropping the 6 noise-dominated series (all in the second half), whose trigger rates cost live time the coverage cannot see
+
+ det  N first  N second  measured    71Ge  stat err
+   7     1233       578     0.891   0.846      5.0%
+  13     4982      2511     0.853   0.852      2.4%
+  15     1414       809     1.102   0.837      4.4%
+  16      808       488     1.147   0.846      5.7%
+  18     5920      7511     0.873   0.896      1.7%
+
+clean sample, inverse-variance mean of the per-detector ratios: 0.889 +- 0.011   71Ge predicts 0.875
+so the K-line population does decay on a multi-day timescale; the contaminated windows and the noise-dominated series are what dragged the all-detector number down to 0.76.
