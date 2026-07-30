@@ -1,0 +1,62 @@
+Z7 24260617_063934, K-line events | method1: P(t) = I0(R_L-R0)*dI(t) +2*R_L*(dI(t))^2 | bias point per channel from detectorConfig, ADC/A = 3.145728e+09
+the current is the two-exponential FIT, refitted directly in amperes (model A[exp(-t/tau_f)-exp(-t/tau_r)], 5 free params, pretrigger free in 16383+-3000); the raw trace is drawn only for reference
+integration runs over the whole trace, 0 to 52.43 ms; for the fitted pulse this equals the closed-form integral, so the energy no longer depends on the window
+
+[1] 15 events, channel PBS1   (energies in eV)
+    event   chan  E_closed     E_num  E_fitwin  E_rawwin  E_rawall  quad%  t_r[us]  t_f[us]   NRMSE
+    30646   PBS1     305.2     305.2     301.9     300.5     316.5   1.30      136      213   0.049
+    40040   PBS1     246.0     246.0     244.0     227.0     131.6   1.10      164      169   0.051
+    40560   PBS1     261.0     261.0     256.8     257.8     356.1   1.08      101      257   0.051
+    70013   PBS1     347.1     347.1     341.3     336.9     281.7   1.50       69      271   0.036
+    80730   PBS1     241.2     241.2     237.8     235.4     198.8   1.04      118      227   0.054
+   100231   PBS1     448.1     448.1     441.2     447.8     472.9   1.95       77      259   0.029
+   150023   PBS1     264.6     264.6     261.6     267.2     277.0   1.14      125      219   0.051
+   150324   PBS1     212.4     212.4     209.4     200.7     322.1   0.89      127      228   0.069
+   170529   PBS1     312.3     312.3     306.8     306.4     218.4   1.32       90      259   0.043
+   180392   PBS1     197.8     197.8     196.5     201.6     330.1   0.90      162      166   0.066
+   190030   PBS1     274.7     274.7     272.5     270.5      -7.6   1.23      163      169   0.051
+   210571   PBS1     277.3     277.3     272.6     258.8    -168.6   1.13      122      241   0.054
+   210732   PBS1     273.0     273.0     268.5     269.7     211.6   1.14      109      246   0.052
+   230585   PBS1     257.9     257.9     255.6     257.0     303.5   1.15      140      192   0.049
+   240632   PBS1     374.8     374.8     368.2     373.2     461.6   1.61       75      267   0.035
+median: closed 273.0 eV, numerical 273.0 eV, fit-in-window 268.5 eV, raw-in-window 267.2 eV, raw-full-trace 281.7 eV
+spread (std/median): fitted 0.228, raw-in-window 0.237
+
+[2] event 30646, all channels
+    event   chan  E_closed     E_num  E_fitwin  E_rawwin  E_rawall  quad%  t_r[us]  t_f[us]   NRMSE
+    30646   PAS1     302.7     302.7     299.6     300.9     419.0   1.01      164      192   0.119
+    30646   PBS1     305.2     305.2     301.9     300.5     316.5   1.30      136      213   0.049
+    30646   PCS1     227.1     227.1     225.6     230.2     290.1   1.01      158      161   0.063
+    30646   PDS1     378.0     378.0     372.3     375.1     367.3   1.90      104      253   0.043
+    30646   PES1     489.1     489.1     486.9     489.9     511.0   1.85       76      203   0.026
+    30646   PFS1     359.4     359.4     357.5     364.0     379.6   2.00       94      203   0.037
+    30646   PAS2     267.4     267.4     264.8     266.3     419.7   1.11      173      179   0.162
+    30646   PBS2     261.2     261.2     257.8     257.1     307.8   1.30      182      187   0.054
+    30646   PCS2     242.9     242.9     242.0     240.4     377.2   1.72      146      150   0.057
+    30646   PDS2     391.3     391.3     383.3     381.9     382.5   2.66      203      208   0.142
+    30646   PES2     194.6     194.6     191.6     190.9     199.0   1.20      184      189   0.088
+
+event 30646 all-channel sum from the fits: 3418.9 eV (32.97% of 10.37 keV)
+same event, official-window raw sum:      3397.1 eV (32.76%)
+
+[3] collection efficiency, all channels of all 15 events
+    event  nchan  E_fit[eV]  eta_fit  E_rawwin[eV]  eta_raw  in-window frac
+    30646     11     3418.9   32.97%        3397.1   32.76%          0.990
+    40040     11     3033.4   29.25%        2592.7   25.00%          0.994
+    40560     11     3135.4   30.23%        3030.0   29.22%          0.992
+    70013     11     3527.9   34.02%        3291.2   31.74%          0.993
+    80730     11     3081.2   29.71%        3176.4   30.63%          0.994
+   100231     11     3573.6   34.46%        3585.7   34.58%          0.986
+   150023     11     3268.5   31.52%        3272.2   31.55%          0.991
+   150324     11     2920.0   28.16%        2628.2   25.34%          0.959
+   170529     11     3738.9   36.05%        3470.8   33.47%          0.972
+   180392     11     3388.5   32.68%        3408.3   32.87%          0.988
+   190030     11     3697.6   35.66%        3668.6   35.38%          0.991
+   210571     11     3401.7   32.80%        3027.0   29.19%          0.987
+   210732     11     3597.6   34.69%        3522.1   33.96%          0.968
+   230585     11     3575.9   34.48%        3548.4   34.22%          0.988
+   240632     11     4698.4   45.31%        4064.6   39.20%          0.845
+
+median collection efficiency, fitted pulses : 32.97%  (spread 3.93 points)
+median collection efficiency, official window: 32.76%  (spread 3.59 points)
+the in-window fraction says how much of the fitted pulse energy falls inside the official window; the rest is the analytic tail.
