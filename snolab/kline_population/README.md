@@ -19,6 +19,7 @@ singularity exec -B "$HOME,/projects/standard/yanliusp/shared/" $SIF \
 ```
 
 Outputs: `results/zip10_hump_counts.txt`, `results/all_detectors_counts.txt`,
+`results/all_detectors_event_counts.csv` (the table below, bare, for download),
 `results/plots/kline_counts_vs_time_13dets.png`,
 `results/plots/kline_rate_vs_time.png`.
 
@@ -63,9 +64,18 @@ Z18 have windows above 1e-6 A and therefore clean counts. Z7 gives 14 mHz.
 
 `kline_counts_vs_time_13dets.png` is the requested histogram: counts per 2 h bin
 per detector, with a red dashed curve showing the same total spread over each
-bin's exposure and decaying with the 71Ge half-life. `kline_rate_vs_time.png`
-divides by the exposure so the decay can be read directly, with the exposure per
-bin drawn underneath.
+bin's exposure and decaying with the 71Ge half-life.
+
+`kline_rate_vs_time.png` divides by the exposure so the decay can be read
+directly. It is restricted to the five clean detectors, uses 6 h bins and drops
+bins with under 1 h of exposure: on 2 h bins the low-exposure bins produced 500
+mHz spikes that are not rate measurements, and the contaminated detectors swamped
+everything when the trigger threshold was lowered part way through the run. The
+lower panel normalises each detector to its own best-fit 71Ge level, and shows one
+clear instrumental feature: between 100 and 111 h every detector drops to 0.25-0.5
+of its level and then recovers. That stretch is the six noise-dominated series,
+where the trigger rate costs live time; it is deadtime, not decay, and it is why
+those series are dropped from the test below.
 
 The important scale fact: **the 27 series hold 37.2 h of live time but span 132 h
 (5.5 days) of wall clock**, so the 11.43 d half-life of 71Ge predicts a real drop

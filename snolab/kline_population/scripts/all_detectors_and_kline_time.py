@@ -156,6 +156,18 @@ for d in DETS:
         f"{a.size:>9} {n_k:>7} {1e3 * n_k / cover:>12.2f} {n_h:>7} "
         f"{n_h / live:>10.4f} {n_h / cover:>11.4f} {thr:>12.2e}")
 
+# a bare table file, no prose, for download
+with open(os.path.join(RES, "all_detectors_event_counts.csv"), "w") as fh:
+    fh.write("detector,series_used,run_time_h,coverage_h,valid_events,"
+             "kline_events,kline_rate_mHz,hump_events,hump_rate_Hz,"
+             "hump_threshold_A\n")
+    for d in DETS:
+        r = table[d]
+        fh.write(f"Z{d},{r['n_series']},{r['live'] / 3600:.2f},"
+                 f"{r['cover'] / 3600:.2f},{r['valid']},{r['kline']},"
+                 f"{1e3 * r['kline'] / r['cover']:.2f},{r['hump']},"
+                 f"{r['hump'] / r['live']:.4f},{r['thr']:.3e}\n")
+
 say()
 say("Z10 cross-check of the teacher's number: "
     f"{table[10]['hump']} hump events / {table[10]['live'] / 3600:.2f} h run = "
@@ -230,41 +242,74 @@ fig.savefig(f1, dpi=150)
 plt.close(fig)
 print("saved", f1)
 
-# ---------------------------------- figure 2: exposure-corrected rate, summed
+# ---------------------------------- figure 2: exposure-corrected rate over time
+# Only the detectors whose K-line window sits above the noise-trigger population
+# are shown: the others count noise triggers, whose rate jumps when the trigger
+# threshold is lowered part way through the run and swamps the decay. Bins with
+# little exposure are dropped as well, since dividing a handful of counts by 0.1 h
+# produces spikes that are not rate measurements.
+RATE_BIN_H = 6.0
+MIN_EXPOSURE_H = 1.0
+CLEAN = [d for d in DETS if PTOF_RANGES[d][0] > 1e-6]
+redges = np.arange(0, edges[-1] + RATE_BIN_H, RATE_BIN_H)
+rctr = 0.5 * (redges[1:] + redges[:-1])
+
+
+def exposure_on(det, ed):
+    e = np.zeros(len(ed) - 1)
+    for s_ in SERIES:
+        if s_ in EXCLUDE.get(det, ()) or s_ not in t0_series:
+            continue
+        a_ = (t0_series[s_] - T0) / 3600.0
+        b_ = a_ + span_series[s_] / 3600.0
+        e += np.clip(np.minimum(b_, ed[1:]) - np.maximum(a_, ed[:-1]), 0, None)
+    return e
+
+
 fig, (axa, axb) = plt.subplots(2, 1, figsize=(12, 8), sharex=True,
                                gridspec_kw=dict(height_ratios=(2, 1)))
-tot = np.zeros(len(ctr))
-for d in DETS:
+dec_r = np.exp(-np.log(2) * rctr / (GE71_HALFLIFE_D * 24))
+for d in CLEAN:
     lo, hi = PTOF_RANGES[d]
     a, t = data[d]["amp"], data[d]["t"]
-    n, _ = np.histogram(t[(a >= lo) & (a <= hi)], bins=edges)
-    e = exposure(d)
-    r = np.where(e > 0, 1e3 * n / np.maximum(e, 1e-9), np.nan)
-    axa.plot(ctr, r, lw=1.0, alpha=0.55, label=f"Z{d}")
-    tot += n
-exp_all = exposure(7)          # the common exposure (Z7 keeps every series)
-r_tot = np.where(exp_all > 0, 1e3 * tot / np.maximum(exp_all, 1e-9), np.nan)
-axa.plot(ctr, r_tot / len(DETS), lw=2.4, color="black",
-         label="mean over detectors")
-m = np.isfinite(r_tot) & (exp_all > 0)
-dec = np.exp(-np.log(2) * ctr / (GE71_HALFLIFE_D * 24))
-scale = np.sum(r_tot[m] / len(DETS) * dec[m]) / np.sum(dec[m] ** 2)
-axa.plot(ctr, scale * dec, lw=2.0, color="#C0392B", ls=(0, (6, 3)),
-         label=f"71Ge decay, half-life {GE71_HALFLIFE_D} d "
-               f"({100 * (1 - dec[m][-1]):.0f}% drop over the run)")
-axa.set_ylabel("K-line rate per detector (mHz)", fontsize=10)
-axa.legend(fontsize=8, ncol=5)
-axa.grid(alpha=0.25)
-axa.set_title("10.37 keV K-line rate versus time, exposure corrected", fontsize=12)
-axb.bar(ctr, exp_all / 3600.0, width=BIN_HOURS * 0.9, color="#8899AA")
-axb.set_ylabel("exposure per bin (h)", fontsize=10)
+    n, _ = np.histogram(t[(a >= lo) & (a <= hi)], bins=redges)
+    e = exposure_on(d, redges)
+    r = np.where(e >= MIN_EXPOSURE_H, 1e3 * n / np.maximum(e * 3600.0, 1e-9), np.nan)
+    axa.plot(rctr, r, lw=1.3, marker="o", ms=3.5, label=f"Z{d}")
+    # each detector normalised to its own mean, to show the shape together
+    ok = np.isfinite(r)
+    scale = np.sum(r[ok] * dec_r[ok]) / np.sum(dec_r[ok] ** 2)
+    axb.plot(rctr, r / scale, lw=1.0, marker="o", ms=3, alpha=0.7, label=f"Z{d}")
+axa.set_ylabel("K-line rate (mHz)", fontsize=10)
+axa.set_yscale("log")
+axa.legend(fontsize=9, ncol=5)
+axa.grid(alpha=0.25, which="both")
+axa.set_title(f"10.37 keV K-line rate versus time, exposure corrected, "
+              f"{RATE_BIN_H:.0f} h bins with at least {MIN_EXPOSURE_H:.0f} h of "
+              f"exposure\nonly detectors whose K-line window sits above the noise "
+              f"triggers ({', '.join('Z%d' % d for d in CLEAN)})", fontsize=11)
+axb.plot(rctr, dec_r, lw=2.4, color="#C0392B", ls=(0, (6, 3)), zorder=5,
+         label=f"71Ge decay, half-life {GE71_HALFLIFE_D} d")
+axb.set_ylabel("rate / own best-fit 71Ge level", fontsize=10)
 axb.set_xlabel("Time since the start of the run (h)", fontsize=10)
+axb.legend(fontsize=9, ncol=6)
 axb.grid(alpha=0.25)
 fig.tight_layout()
 f2 = os.path.join(PLOTS, "kline_rate_vs_time.png")
 fig.savefig(f2, dpi=150)
 plt.close(fig)
 print("saved", f2)
+
+# the all-detector totals still feed the decay test below
+tot = np.zeros(len(ctr))
+for d in DETS:
+    lo, hi = PTOF_RANGES[d]
+    a, t = data[d]["amp"], data[d]["t"]
+    n, _ = np.histogram(t[(a >= lo) & (a <= hi)], bins=edges)
+    tot += n
+exp_all = exposure(7)
+dec = np.exp(-np.log(2) * ctr / (GE71_HALFLIFE_D * 24))
+m = exp_all > 0
 
 say()
 say("--- 71Ge decay test ---")
