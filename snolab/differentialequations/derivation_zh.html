@@ -37,12 +37,19 @@
 <div class="subtitle">从零基础出发 · 纯符号推导,不代入任何数值 · 依据 Irwin &amp; Hilton, <i>Transition-Edge Sensors</i> (2005)</div>
 
 <h2>第 0 节 · 预备知识(只需要这五件事)</h2>
+<p><b>(0) 记号约定:(δ<var>I</var>)² 不是 δ(<var>I</var>²)。</b>本文一律把偏移量写成
+δ<var>I</var> ≡ <var>I</var> − <var>I</var><sub>0</sub>,并把"偏移量的平方"写成
+<b>(δ<var>I</var>)²</b>(始终加括号)。它与"平方的偏移量"是两个不同的量:</p>
+<div class="eq">(δ<var>I</var>)² = (<var>I</var> − <var>I</var><sub>0</sub>)² &emsp;&emsp;
+δ(<var>I</var>²) ≡ <var>I</var>² − <var>I</var><sub>0</sub>² = 2<var>I</var><sub>0</sub>δ<var>I</var> + (δ<var>I</var>)²</div>
+<p>两者差一整项 2<var>I</var><sub>0</sub>δ<var>I</var>,而这一项恰好是本文线性项的主要来源,
+所以绝不能混。下文所有平方都写成 (δ<var>I</var>)² 形式,凡出现 δ(<var>I</var>²) 都会显式写出括号内的展开。</p>
 <p><b>(1) 导数与积分。</b>d<var>f</var>/d<var>t</var> 表示 <var>f</var> 随时间的变化率;∫<var>f</var> d<var>t</var> 是曲线下的面积。本文用记号 <var>ḟ</var> ≡ d<var>f</var>/d<var>t</var>。</p>
 <p><b>(2) 两个积分恒等式。</b>对任意函数 δ<var>I</var>(<var>t</var>):</p>
 <div class="eq">∫<sub>0</sub><sup><var>t</var><sub>f</sub></sup> δ<var>İ</var> d<var>t</var> = δ<var>I</var>(<var>t</var><sub>f</sub>) − δ<var>I</var>(0) ,&emsp;&emsp;
-∫<sub>0</sub><sup><var>t</var><sub>f</sub></sup> δ<var>I</var>·δ<var>İ</var> d<var>t</var> = ½[δ<var>I</var>²(<var>t</var><sub>f</sub>) − δ<var>I</var>²(0)]</div>
-<p>第二条来自 δ<var>I</var>·δ<var>İ</var> = ½ d(δ<var>I</var>²)/d<var>t</var>。含义:<b>被积函数是"某个量的导数"时,积分只剩端点值(边界项)</b>。这是全文最常用的一招。</p>
-<p><b>(3) 一阶泰勒展开。</b>函数在工作点附近的小偏移可用切线近似:<var>f</var>(<var>x</var><sub>0</sub>+δ<var>x</var>) ≈ <var>f</var>(<var>x</var><sub>0</sub>) + <var>f</var>′(<var>x</var><sub>0</sub>)·δ<var>x</var>,误差是二阶小量 𝒪(δ<var>x</var>²)。</p>
+∫<sub>0</sub><sup><var>t</var><sub>f</sub></sup> δ<var>I</var>·δ<var>İ</var> d<var>t</var> = ½[(δ<var>I</var>)²(<var>t</var><sub>f</sub>) − (δ<var>I</var>)²(0)]</div>
+<p>第二条来自 δ<var>I</var>·δ<var>İ</var> = ½ d[(δ<var>I</var>)²]/d<var>t</var>。含义:<b>被积函数是"某个量的导数"时,积分只剩端点值(边界项)</b>。这是全文最常用的一招。</p>
+<p><b>(3) 一阶泰勒展开。</b>函数在工作点附近的小偏移可用切线近似:<var>f</var>(<var>x</var><sub>0</sub>+δ<var>x</var>) ≈ <var>f</var>(<var>x</var><sub>0</sub>) + <var>f</var>′(<var>x</var><sub>0</sub>)·δ<var>x</var>,误差是二阶小量 𝒪((δ<var>x</var>)²)。</p>
 <p><b>(4) 电路两定律。</b>基尔霍夫电压定律(KVL):沿回路电压代数和为零。元件电压:电阻 <var>V</var><sub>R</sub> = <var>IR</var>;电感 <var>V</var><sub>L</sub> = <var>L</var> d<var>I</var>/d<var>t</var>。电阻上的耗散功率 <var>P</var> = <var>I</var>²<var>R</var>。</p>
 <p><b>(5) 热学两概念。</b>热容 <var>C</var>:温度变化需要的能量,<var>C</var> d<var>T</var>/d<var>t</var> = 净输入功率;热导:器件通过热连接向低温热库(bath)漏热,功率记 <var>P</var><sub>bath</sub>(<var>T</var>),其斜率 <var>G</var> ≡ d<var>P</var><sub>bath</sub>/d<var>T</var>。</p>
 
@@ -138,15 +145,24 @@
 <var>P</var><sub>J</sub> = <var>I</var>(<var>V</var> − <var>I R</var><sub>L</sub> − <var>L İ</var>)</div>
 <p>代入 <var>I</var> = <var>I</var><sub>0</sub> + δ<var>I</var> 并逐项展开(注意 <var>İ</var> = δ<var>İ</var>):</p>
 <div class="eq">
-<var>P</var><sub>J</sub> = <var>I</var><sub>0</sub><var>V</var> + <var>V</var>δ<var>I</var> − <var>R</var><sub>L</sub>(<var>I</var><sub>0</sub>² + 2<var>I</var><sub>0</sub>δ<var>I</var> + δ<var>I</var>²) − <var>L</var>(<var>I</var><sub>0</sub>+δ<var>I</var>)δ<var>İ</var></div>
-<p>稳态值为 <var>P</var><sub>J0</sub> = <var>I</var><sub>0</sub><var>V</var> − <var>I</var><sub>0</sub>²<var>R</var><sub>L</sub>,相减:</p>
+<var>P</var><sub>J</sub> = <var>I</var><sub>0</sub><var>V</var> + <var>V</var>δ<var>I</var> − <var>R</var><sub>L</sub>(<var>I</var><sub>0</sub>² + 2<var>I</var><sub>0</sub>δ<var>I</var> + (δ<var>I</var>)²) − <var>L</var>(<var>I</var><sub>0</sub>+δ<var>I</var>)δ<var>İ</var></div>
+<p>稳态(事件未发生)时 δ<var>I</var> = 0、δ<var>İ</var> = 0,代入上式即得
+<var>P</var><sub>J0</sub> = <var>I</var><sub>0</sub><var>V</var> − <var>I</var><sub>0</sub>²<var>R</var><sub>L</sub>
+(电感项因 <var>İ</var> = 0 而消失)。按定义 δ<var>P</var><sub>J</sub> ≡ <var>P</var><sub>J</sub> − <var>P</var><sub>J0</sub>,
+常驻项 <var>I</var><sub>0</sub><var>V</var> 与 <var>I</var><sub>0</sub>²<var>R</var><sub>L</sub> 逐一抵消,只剩事件引起的变化:</p>
+<div class="eq">
+δ<var>P</var><sub>J</sub> = (<var>V</var> − 2<var>I</var><sub>0</sub><var>R</var><sub>L</sub>)·δ<var>I</var> − <var>R</var><sub>L</sub>·(δ<var>I</var>)² − <var>L</var>(<var>I</var><sub>0</sub>+δ<var>I</var>)δ<var>İ</var></div>
+<p>能量方程 (4) 里出现的是 −δ<var>P</var><sub>J</sub>(焦耳功率的<b>减少</b>量才是事件能量的来源),整式乘 −1:</p>
 <div class="eq"><span class="tag">(6)</span>
-−δ<var>P</var><sub>J</sub> = (2<var>I</var><sub>0</sub><var>R</var><sub>L</sub> − <var>V</var>)·δ<var>I</var> + <var>R</var><sub>L</sub>·δ<var>I</var>² + <var>L</var>(<var>I</var><sub>0</sub>+δ<var>I</var>)δ<var>İ</var></div>
+−δ<var>P</var><sub>J</sub> = (2<var>I</var><sub>0</sub><var>R</var><sub>L</sub> − <var>V</var>)·δ<var>I</var> + <var>R</var><sub>L</sub>·(δ<var>I</var>)² + <var>L</var>(<var>I</var><sub>0</sub>+δ<var>I</var>)δ<var>İ</var></div>
+<p>注意二次项来自 <var>R</var><sub>L</sub>δ(<var>I</var>²) = <var>R</var><sub>L</sub>[2<var>I</var><sub>0</sub>δ<var>I</var> + (δ<var>I</var>)²] 的<b>后一半</b>:
+前一半 2<var>I</var><sub>0</sub><var>R</var><sub>L</sub>δ<var>I</var> 已经并入线性系数。这正是记号必须写成 (δ<var>I</var>)² 的原因
+(见第 0 节 (0)),也是 Method 1 把二次系数写成 2<var>R</var><sub>L</sub> 的疑似来源。</p>
 <p>用定义 <var>V</var> = <var>I</var><sub>0</sub>(<var>R</var><sub>L</sub>+<var>R</var><sub>0</sub>) 化简线性系数:2<var>I</var><sub>0</sub><var>R</var><sub>L</sub> − <var>V</var> = <var>I</var><sub>0</sub>(<var>R</var><sub>L</sub> − <var>R</var><sub>0</sub>)。积分时,末项恰是"某量的导数"(预备知识 (2)),只剩端点值:</p>
 <div class="eq"><span class="tag">(7)</span>
 −∫<sub>0</sub><sup><var>t</var><sub>f</sub></sup> δ<var>P</var><sub>J</sub> d<var>t</var> =
-<var>I</var><sub>0</sub>(<var>R</var><sub>L</sub>−<var>R</var><sub>0</sub>)∫δ<var>I</var> d<var>t</var> + <var>R</var><sub>L</sub>∫δ<var>I</var>² d<var>t</var>
-+ <var>L</var>[<var>I</var><sub>0</sub>δ<var>I</var> + ½δ<var>I</var>²]<sub>0</sub><sup><var>t</var><sub>f</sub></sup></div>
+<var>I</var><sub>0</sub>(<var>R</var><sub>L</sub>−<var>R</var><sub>0</sub>)∫δ<var>I</var> d<var>t</var> + <var>R</var><sub>L</sub>∫(δ<var>I</var>)² d<var>t</var>
++ <var>L</var>[<var>I</var><sub>0</sub>δ<var>I</var> + ½(δ<var>I</var>)²]<sub>0</sub><sup><var>t</var><sub>f</sub></sup></div>
 <p>物理解释:电感边界项 = 电感储能 ½<var>L I</var>² 在窗口首尾的差;积到完全衰减(δ<var>I</var>→0)时它为零。<b>至此没有用过任何近似。</b></p>
 
 <h2>第 5 节 · 第三步:bath 项(全文唯一的线性化)</h2>
@@ -165,7 +181,7 @@
 <div class="eq"><span class="tag">(10)</span>
 δ<var>R</var>(<var>t</var>) = <span class="frac"><span><var>V</var> − <var>I R</var><sub>L</sub> − <var>L İ</var></span><span><var>I</var></span></span> − <var>R</var><sub>0</sub></div>
 <h3>5.3 漏热的线性化与参数坍缩</h3>
-<p>Δ<var>P</var><sub>bath</sub> ≈ <var>G</var>δ<var>T</var>(一阶展开,误差 𝒪(δ<var>T</var>²))。妙处在于组合 <var>G T</var><sub>0</sub>/α<sub>I</sub> 可用回路增益整体表示:由 (8),<var>G T</var><sub>0</sub>/α<sub>I</sub> = <var>P</var><sub>J0</sub>/ℒ = <var>I</var><sub>0</sub>²<var>R</var><sub>0</sub>/ℒ,于是 <var>C</var>、<var>G</var>、α<sub>I</sub>、<var>T</var><sub>0</sub> 全部坍缩进一个 ℒ:</p>
+<p>Δ<var>P</var><sub>bath</sub> ≈ <var>G</var>δ<var>T</var>(一阶展开,误差 𝒪((δ<var>T</var>)²))。妙处在于组合 <var>G T</var><sub>0</sub>/α<sub>I</sub> 可用回路增益整体表示:由 (8),<var>G T</var><sub>0</sub>/α<sub>I</sub> = <var>P</var><sub>J0</sub>/ℒ = <var>I</var><sub>0</sub>²<var>R</var><sub>0</sub>/ℒ,于是 <var>C</var>、<var>G</var>、α<sub>I</sub>、<var>T</var><sub>0</sub> 全部坍缩进一个 ℒ:</p>
 <div class="eq"><span class="tag">(11)</span>
 ∫Δ<var>P</var><sub>bath</sub> d<var>t</var> = <span class="frac"><span><var>I</var><sub>0</sub>²</span><span>ℒ</span></span>∫δ<var>R</var> d<var>t</var> − <span class="frac"><span><var>I</var><sub>0</sub><var>R</var><sub>0</sub>β<sub>I</sub></span><span>ℒ</span></span>∫δ<var>I</var> d<var>t</var></div>
 <p>同理,(4) 中的热容边界项用 <var>C</var> = <var>G</var>τ(τ ≡ <var>C</var>/<var>G</var> 为自然热时间常数)化为:</p>
@@ -175,8 +191,8 @@
 <h2>第 6 节 · 总公式</h2>
 <p>把 (7)(11)(12) 代回 (4):</p>
 <div class="boxed"><div class="eq" style="margin:4px 0">
-<var>E</var> = <var>I</var><sub>0</sub>(<var>R</var><sub>L</sub>−<var>R</var><sub>0</sub>)∫δ<var>I</var> d<var>t</var> + <var>R</var><sub>L</sub>∫δ<var>I</var>² d<var>t</var>
-+ <var>L</var>[<var>I</var><sub>0</sub>δ<var>I</var> + ½δ<var>I</var>²]<sub>0</sub><sup><var>t</var><sub>f</sub></sup><br>
+<var>E</var> = <var>I</var><sub>0</sub>(<var>R</var><sub>L</sub>−<var>R</var><sub>0</sub>)∫δ<var>I</var> d<var>t</var> + <var>R</var><sub>L</sub>∫(δ<var>I</var>)² d<var>t</var>
++ <var>L</var>[<var>I</var><sub>0</sub>δ<var>I</var> + ½(δ<var>I</var>)²]<sub>0</sub><sup><var>t</var><sub>f</sub></sup><br>
 &emsp;&emsp;+ <span class="frac"><span><var>I</var><sub>0</sub>²</span><span>ℒ</span></span>∫δ<var>R</var> d<var>t</var>
 − <span class="frac"><span><var>I</var><sub>0</sub><var>R</var><sub>0</sub>β<sub>I</sub></span><span>ℒ</span></span>∫δ<var>I</var> d<var>t</var>
 + τ<span class="frac"><span><var>I</var><sub>0</sub>²</span><span>ℒ</span></span>[ δ<var>R</var> − <span class="frac"><span><var>R</var><sub>0</sub>β<sub>I</sub></span><span><var>I</var><sub>0</sub></span></span>δ<var>I</var> ]<sub><var>t</var><sub>f</sub></sub>
@@ -185,7 +201,7 @@
 <tr><th>项</th><th>物理含义</th><th>需要的参数</th><th>性质</th></tr>
 <tr><td>第 1、2 项</td><td>焦耳加热减少量(ETF 主项)</td><td><var>I</var><sub>0</sub>, <var>R</var><sub>L</sub>, <var>R</var><sub>0</sub></td><td>严格</td></tr>
 <tr><td>第 3 项</td><td>电感储能的窗口边界差</td><td>+ <var>L</var></td><td>严格</td></tr>
-<tr><td>第 4、5 项</td><td>脉冲期间多漏给热库的能量</td><td>+ ℒ, β<sub>I</sub></td><td>一阶(误差 𝒪(δ<var>T</var>²))</td></tr>
+<tr><td>第 4、5 项</td><td>脉冲期间多漏给热库的能量</td><td>+ ℒ, β<sub>I</sub></td><td>一阶(误差 𝒪((δ<var>T</var>)²))</td></tr>
 <tr><td>第 6 项</td><td>截止时刻还存在薄膜里的热</td><td>+ τ</td><td>一阶</td></tr>
 </table>
 

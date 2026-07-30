@@ -15,17 +15,20 @@ so the energy no longer depends on where the integration stops.
 
 so  E = I0(R_L-R0)*A(tau_f-tau_r) + c2*R_L*A^2[...]  exactly, with no window.
 
-The fit is redone here directly in amperes (the lp_fit_align checkpoints hold
+The left axis of the pulse figures is in microamperes and the right axis in
+femtowatts, tied by the linear coefficient I0(R_L-R0).
+
+The fit is redone here directly in current units (the lp_fit_align checkpoints hold
 amplitudes in units of each trace's own global peak, which cannot be converted
 back to current without that peak), using the same model and the same free
 pretrigger as the template pipeline.
 
 Outputs (results/plots/current_power_overlay/):
-    zip{det}_{series}_fitted_current_power_{chan}_{N}events.png
-    zip{det}_{series}_fitted_cumulative_energy_{chan}_{N}events.png
-    zip{det}_{series}_fitted_current_power_allchan_ev{N}.png
-    zip{det}_{series}_fitted_cumulative_energy_allchan_ev{N}.png
-    zip{det}_{series}_fitted_energies.txt
+    zip{det}_{series}_current_power_{chan}_{N}events.png
+    zip{det}_{series}_cumulative_energy_{chan}_{N}events.png
+    zip{det}_{series}_current_power_allchan_ev{N}.png
+    zip{det}_{series}_cumulative_energy_allchan_ev{N}.png
+    zip{det}_{series}_energies.txt
 
 Usage (inside the CDMS singularity image):
     python3 scripts/plot_fitted_current_power.py --det 7 --series 24260617_063934
@@ -126,16 +129,16 @@ def two_exp(x, amp, t_rise, t_fall, baseline, pretrigger):
     return np.where(x <= pretrigger, baseline, pulse + baseline)
 
 
-def _two_exp_scaled(t_ms, amp_nA, tr_ms, tf_ms, base_nA, t0_ms):
+def _two_exp_scaled(t_ms, amp_uA, tr_ms, tf_ms, base_uA, t0_ms):
     """The same model in units that make every parameter O(1), which is what the
-    fitter needs: currents in nA, times in ms, t0 relative to the trigger.
+    fitter needs: currents in uA, times in ms, t0 relative to the trigger.
     Fitting in A/s/bins leaves amp ~1e-7 next to pretrigger ~1.6e4 and curve_fit
-    converges on the first step without moving the time constants."""
+    converges on the first step without moving the time constants at all."""
     dt = t_ms - t0_ms
     with np.errstate(over="ignore", invalid="ignore"):
-        pulse = amp_nA * (np.exp(-np.clip(dt, 0.0, None) / tf_ms)
+        pulse = amp_uA * (np.exp(-np.clip(dt, 0.0, None) / tf_ms)
                           - np.exp(-np.clip(dt, 0.0, None) / tr_ms))
-    return np.where(t_ms <= t0_ms, base_nA, pulse + base_nA)
+    return np.where(t_ms <= t0_ms, base_uA, pulse + base_uA)
 
 
 def fit_current(chan, evn):
@@ -152,21 +155,21 @@ def fit_current(chan, evn):
     x = np.arange(lo, hi, 4, dtype=np.float64)
     yy = y[lo:hi:4]
     t_ms = (x - TRIGGER_BIN) * DT * 1e3
-    y_nA = yy * 1e9
-    pk = float(np.max(y_nA))
+    y_uA = yy * 1e6
+    pk = float(np.max(y_uA))
     free_ms = PT_FREEDOM * DT * 1e3
     p0 = (pk / 0.4, 0.1, 0.5, 0.0, 0.0)
     bounds = ((0.0, 1e-3, 1e-3, -abs(pk), -free_ms),
-              (100 * pk + 1e-9, 10.0, 50.0, abs(pk), free_ms))
+              (100 * pk + 1e-6, 10.0, 50.0, abs(pk), free_ms))
     try:
-        p, _ = curve_fit(_two_exp_scaled, t_ms, y_nA, p0=p0, bounds=bounds,
+        p, _ = curve_fit(_two_exp_scaled, t_ms, y_uA, p0=p0, bounds=bounds,
                          maxfev=20000, x_scale="jac")
     except Exception as exc:
         print(f"  fit failed {chan} ev{evn}: {exc}")
         return None
-    amp = p[0] * 1e-9
+    amp = p[0] * 1e-6
     t_r, t_f = p[1] * 1e-3, p[2] * 1e-3
-    base = p[3] * 1e-9
+    base = p[3] * 1e-6
     pt0 = TRIGGER_BIN + p[4] * 1e-3 / DT
     if not (amp > 0 and 0 < t_r < t_f):
         print(f"  fit rejected {chan} ev{evn}: amp={amp:.3e} "
@@ -215,16 +218,16 @@ def draw_pulse(ax, chan, f, e, label):
                 color="#FFE9A8", alpha=0.5, zorder=0)
     # the raw trace goes on the lower axes so the power curve stays visible; the
     # two axes are tied by the linear coefficient, so nA * lin * 1e6 = fW
-    to_fw = bias[chan]["lin"] * 1e6
-    ax2.plot(t, f["di"][lo:hi] * 1e9 * to_fw, lw=0.4, color="#CDCDCD", zorder=1)
-    ax2.plot(t, f["di20"][lo:hi] * 1e9 * to_fw, lw=0.7, color="#93A3B5", zorder=2)
+    to_fw = bias[chan]["lin"] * 1e9          # uA on the left -> fW on the right
+    ax2.plot(t, f["di"][lo:hi] * 1e6 * to_fw, lw=0.4, color="#CDCDCD", zorder=1)
+    ax2.plot(t, f["di20"][lo:hi] * 1e6 * to_fw, lw=0.7, color="#93A3B5", zorder=2)
     ax2.plot(t, e["p_fit"][lo:hi] * 1e15, lw=2.6, color="#E00000", zorder=3)
     ax.plot([], [], lw=0.4, color="#CDCDCD", label="raw current (not used)")
     ax.plot([], [], lw=0.7, color="#93A3B5", label="filtered raw current (not used)")
-    ax.plot(t, e["fit"][lo:hi] * 1e9, lw=1.4, color="#0B1E4E", zorder=3,
+    ax.plot(t, e["fit"][lo:hi] * 1e6, lw=1.4, color="#0B1E4E", zorder=3,
             ls=(0, (5, 3.5)), label="fitted current $\\delta I$ (left)")
     ax.axhline(0, color="gray", lw=0.5, ls=":", zorder=0)
-    ax2.set_ylim(*(np.asarray(ax.get_ylim()) * 1e-9 * bias[chan]["lin"] * 1e15))
+    ax2.set_ylim(*(np.asarray(ax.get_ylim()) * 1e-6 * bias[chan]["lin"] * 1e15))
     ax.set_title(f"{label}   $E$ = {e['closed']:.0f} eV (closed form)   "
                  f"$\\tau_r$ = {f['t_rise'] * 1e6:.0f} $\\mu$s, "
                  f"$\\tau_f$ = {f['t_fall'] * 1e6:.0f} $\\mu$s, "
@@ -294,7 +297,7 @@ for kind in ("pulse", "cum"):
             if k % ncol == ncol - 1:
                 ax2.set_ylabel("$P$ (fW)", fontsize=7, color="#C0392B")
             if k % ncol == 0:
-                ax.set_ylabel("$\\delta I$ (nA)", fontsize=7, color="#1F3864")
+                ax.set_ylabel("$\\delta I$ ($\\mu$A)", fontsize=7, color="#1F3864")
         else:
             draw_cum(ax, chan, f, e, f"ev {evn}")
             if k % ncol == 0:
@@ -314,7 +317,7 @@ for kind in ("pulse", "cum"):
             "integrated power = absorbed energy, fitted pulse vs raw trace")
     fig.suptitle(f"Z{det} {chan}: {head}\n" + STAMP, fontsize=8.5, y=0.998)
     fig.tight_layout(rect=(0, 0.028, 1, 0.932))
-    fn = os.path.join(OUT_DIR, f"zip{det}_{series}_fitted_"
+    fn = os.path.join(OUT_DIR, f"zip{det}_{series}_"
                       f"{'current_power' if kind == 'pulse' else 'cumulative_energy'}"
                       f"_{chan}_{len(good)}events.png")
     fig.savefig(fn, dpi=160)
@@ -352,7 +355,7 @@ for kind in ("pulse", "cum"):
         else:
             draw_cum(ax, c, f, e, c)
         if k % ncol2 == 0:
-            ax.set_ylabel("$\\delta I$ (nA)" if kind == "pulse"
+            ax.set_ylabel("$\\delta I$ ($\\mu$A)" if kind == "pulse"
                           else "cumulative $E$ (eV)", fontsize=7)
         if k // ncol2 == nrow2 - 1:
             ax.set_xlabel("Time from trigger (ms)" if kind == "pulse"
@@ -366,7 +369,7 @@ for kind in ("pulse", "cum"):
                  f"(official-window raw sum {tot_rawwin:.0f} eV = "
                  f"{100 * tot_rawwin / 10370:.1f}%)\n" + STAMP, fontsize=8.5, y=0.997)
     fig.tight_layout(rect=(0, 0, 1, 0.925))
-    fn = os.path.join(OUT_DIR, f"zip{det}_{series}_fitted_"
+    fn = os.path.join(OUT_DIR, f"zip{det}_{series}_"
                       f"{'current_power' if kind == 'pulse' else 'cumulative_energy'}"
                       f"_allchan_ev{ev0}.png")
     fig.savefig(fn, dpi=160)
@@ -374,7 +377,7 @@ for kind in ("pulse", "cum"):
     print("saved", fn)
 
 # ---------------------------------------------------------------- text table
-fn = os.path.join(OUT_DIR, f"zip{det}_{series}_fitted_energies.txt")
+fn = os.path.join(OUT_DIR, f"zip{det}_{series}_energies.txt")
 with open(fn, "w") as fh:
     fh.write(STAMP + "\n\n")
     hdr = (f"{'event':>9} {'chan':>6} {'E_closed':>9} {'E_num':>9} {'E_fitwin':>9} "
