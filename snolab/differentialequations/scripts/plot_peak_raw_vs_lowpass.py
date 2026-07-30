@@ -133,7 +133,9 @@ top_lo = t_ms[np.argmax(fit_adc > TOP_FRAC * pk_fit)]
 top_hi = t_ms[N_BINS - 1 - np.argmax((fit_adc > TOP_FRAC * pk_fit)[::-1])]
 
 # ------------------------------------------------------------------- figure
-fig, ax = plt.subplots(figsize=(13.5, 7.2))
+fig, (ax, axp) = plt.subplots(2, 1, figsize=(13.5, 10.4), sharex=True,
+                              gridspec_kw=dict(height_ratios=(2.05, 1.0),
+                                               hspace=0.07))
 
 # background: the baseline noise band, and the flat top of the pulse
 ax.axhspan(-sigma, sigma, color="#E8E8E8", zorder=0)
@@ -192,10 +194,49 @@ ax.annotate(f"flat top:\n{n_top} samples within\n{100 * (1 - TOP_FRAC):.0f}% of 
             color="#8A6D00",
             arrowprops=dict(arrowstyle="->", color="#8A6D00", lw=1.0))
 
+# ---------------- lower panel: the power pulse, term by term
+p_fit = power_fW(fit_adc)
+p_lin = LIN * (fit_adc / ADC_PER_AMP) * 1e15
+p_quad = QUAD * (fit_adc / ADC_PER_AMP) ** 2 * 1e15
+p_lp20 = power_fW(lp20)
+p_raw = power_fW(raw)
+QMAG = 20
+_trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
+e_win = float(_trapz(p_fit[sl] * 1e-15, tt * 1e-3) / 1.602176634e-19)
+
+axp.axhline(0, color="#777777", lw=0.8, zorder=1)
+axp.fill_between(tt, 0, p_fit[sl], color="#C0392B", alpha=0.13, lw=0, zorder=1,
+                 label=f"area under $P$ = energy: {E_EV:.1f} eV in total, "
+                       f"{e_win:.1f} eV ({100 * e_win / E_EV:.0f}%) in this window")
+axp.plot(tt, p_raw[sl], ls="none", marker="o", ms=1.5, color="#B0B7BC",
+         alpha=0.7, zorder=2, label="$P$ from the raw samples")
+axp.plot(tt, p_lp20[sl], lw=0.9, color="#2E8B57", zorder=3,
+         label=f"$P$ from the {LP_OFF_KHZ:.0f} kHz trace")
+axp.plot(tt, p_lin[sl], lw=1.0, ls=(0, (6, 3)), color="#1F77B4", zorder=4,
+         label="linear term $I_0(R_L-R_0)\\,\\delta I$ alone")
+axp.plot(tt, p_quad[sl] * QMAG, lw=1.0, ls=(0, (2, 2)), color="#6C3483", zorder=4,
+         label=f"quadratic term $c_2R_L\\,\\delta I^2$ alone, $\\times${QMAG}")
+axp.plot(tt, p_fit[sl], lw=1.7, color="#C0392B", zorder=5,
+         label="$P$ from the fit = the two terms added")
+i_pk = int(np.argmax(p_fit))
+axp.annotate(f"peak {p_fit[i_pk]:.1f} fW = {p_lin[i_pk]:.1f} (linear) + "
+             f"{p_quad[i_pk]:.2f} (quadratic)\nquadratic is "
+             f"{100 * p_quad[i_pk] / p_fit[i_pk]:.2f}% of the peak power and "
+             f"{100 * QUAD * i2 / (LIN * i1 + QUAD * i2):.2f}% of the energy",
+             xy=(t_ms[i_pk], p_fit[i_pk]), xytext=(0.46, 0.60),
+             textcoords="axes fraction", fontsize=9.5, color="#7B241C",
+             arrowprops=dict(arrowstyle="->", color="#7B241C", lw=1.0))
+axp.set_ylabel("absorbed power $P$ (fW)", fontsize=12, color="#7B241C")
+axp.tick_params(axis="y", colors="#7B241C")
+axp.grid(alpha=0.22)
+axp.legend(fontsize=8.8, loc="upper right", ncol=2, framealpha=0.93)
+axp.set_ylim(-2.6 * sigma * LIN / ADC_PER_AMP * 1e15, 1.55 * p_fit[i_pk])
+axp.set_xlabel("Time from trigger (ms)", fontsize=12)
+
 ax.set_xlim(args.lo_ms, args.hi_ms)
 ax.set_ylim(-2.6 * sigma, 1.32 * pk_raw)
-ax.set_xlabel("Time from trigger (ms)", fontsize=12)
 ax.set_ylabel("pulse height above baseline (ADC)", fontsize=12)
+ax.tick_params(labelbottom=False)
 sec = ax.secondary_yaxis("right",
                          functions=(lambda a: a / ADC_PER_AMP * 1e6,
                                     lambda u: u * 1e-6 * ADC_PER_AMP))
@@ -209,7 +250,7 @@ ax.grid(alpha=0.22)
 ax.legend(fontsize=9.5, loc="lower left", ncol=2, framealpha=0.93)
 ax.set_title(f"Z{det} {chan}, event {evn} ({series}): one pulse read three ways, "
              f"as ADC, as current and as power", fontsize=12.5)
-ax.text(0.5, -0.105,
+axp.text(0.5, -0.185,
         f"baseline = mean of bins {BASE_LO}-{BASE_HI} = {base:.1f} ADC, "
         f"subtracted   |   1 ADC = {1e9 / ADC_PER_AMP:.4f} nA   |   "
         f"power axis is exact, so its ticks are not evenly spaced\n"
@@ -218,9 +259,9 @@ ax.text(0.5, -0.105,
         f"$I_0$={I0 * 1e6:.3f} $\\mu$A,  $R_0$={R0 * 1e3:.3f} m$\\Omega$,  "
         f"$R_L$={RL * 1e3:.3f} m$\\Omega$   "
         f"$\\Rightarrow$  {LIN:.4e} V  and  {QUAD:.5f} $\\Omega$",
-        transform=ax.transAxes, ha="center", va="top", fontsize=9.5,
+        transform=axp.transAxes, ha="center", va="top", fontsize=9.5,
         color="#444444")
-fig.tight_layout(rect=(0, 0.075, 1, 1))
+fig.tight_layout(rect=(0, 0.05, 1, 1))
 os.makedirs(OUT_DIR, exist_ok=True)
 fn = os.path.join(OUT_DIR,
                   f"zip{det}_{series}_peak_raw_vs_lp_{chan}_ev{evn}.png")
