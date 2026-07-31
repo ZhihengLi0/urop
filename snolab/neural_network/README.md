@@ -2,8 +2,10 @@
 
 Neural-network project for the CDMS SNOLAB Run 4 phonon data.
 
-Specification pending: this README, the scripts and the results are filled in as
-the goal, the inputs and the training target are defined.
+Per-event energy regressed from the NxM amplitudes: a linear least-squares fit
+over the 55 amplitudes first, then a neural network on the same inputs and the
+same loss. The purpose is to assign an energy to pulses the direct
+fit-and-integrate method cannot handle. Full specification in `NOTES.md`.
 
 ## Layout
 
