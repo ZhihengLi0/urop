@@ -35,3 +35,5 @@ speech_script.html
 !kline_population/results/plots/*.png
 # Energy histograms are versioned (exception to *.png)
 !differentialequations/results/plots/**/*.png
+# derived from the MSI-only handoff doc, never commit
+CONTEXT_FOR_NEXT_AI.html
