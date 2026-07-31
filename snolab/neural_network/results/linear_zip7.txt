@@ -1,0 +1,28 @@
+Z7: 1613 events, 55 amplitudes (11 channels x 5 templates)
+target = summed absorbed energy over 10 channels (method1), mean 3164.2 eV, std 392.2 eV (12.39%)
+split: 806 train, 807 test (seed 0); the test half never enters the fit
+
+model                                  train RMS / core sigma          test RMS / core sigma
+55 amplitudes                    train  107.2 /  73.1 eV (2.31%)   test  120.7 /  72.2 eV (2.28%)
+baseline: sum of template-0 amps train  352.7 / 236.9 eV (7.48%)   test  363.0 / 234.8 eV (7.43%)
+baseline: sum of all 55 amps     train  616.3 / 485.2 eV (15.32%)   test  611.1 / 442.8 eV (14.01%)
+
+the 55 coefficients cut the test core width by 69% against the best single scaling of the template-0 sum
+train / test core width 1.012 (1.00 would mean no overfitting at all; 55 parameters on 806 events predict 0.934)
+the target itself has a core width of 218.6 eV (6.92%), so the 55 amplitudes explain 89% of its variance
+condition number of the training matrix: 209
+
+coefficients, by channel (template 0..4), in eV per unit amplitude:
+   PAS1:   1.9077e+09   4.0519e+09   4.8957e+08   6.5467e+08   3.1125e+08
+   PBS1:   8.7328e+08   2.7263e+08  -9.1491e+07   1.7016e+09   3.2981e+08
+   PCS1:   1.1291e+09   1.4252e+09  -4.1852e+08   4.4189e+08  -2.0814e+08
+   PDS1:   1.5552e+09   8.0749e+08  -1.9120e+09   1.4953e+09  -3.5311e+08
+   PES1:   1.4051e+09   5.6026e+08   2.4004e+09   2.7383e+08   6.9787e+08
+   PFS1:   5.9570e+08  -5.4982e+08   1.9416e+09  -3.6039e+09  -4.1012e+08
+   PAS2:   1.5735e+09   5.3171e+09   1.5934e+09   1.5048e+09   4.8096e+08
+   PBS2:   1.3230e+09   9.2269e+08  -3.5287e+09   3.6690e+08   1.2011e+09
+   PCS2:   1.2238e+09   2.0580e+09   4.2294e+08  -4.9196e+08   6.6571e+08
+   PDS2:   5.1353e+08   1.6076e+09   2.0884e+09   2.7341e+08   3.2067e+08
+   PES2:   6.9983e+08  -4.1861e+08  -1.2894e+08   1.2382e+09   4.3165e+08
+
+saved /users/9/li004628/urop/snolab/neural_network/results/plots/linear_zip7.png
