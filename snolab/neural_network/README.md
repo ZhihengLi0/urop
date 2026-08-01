@@ -79,10 +79,33 @@ exactly once at the end. The whiteboard's hidden layer of order 1000 is 56000
 weights for 806 training events, so the scan also includes smaller networks and
 several regularisation strengths and lets the validation score decide.
 
-Three models are compared on the same test half: the linear one, a network on the
-amplitudes, and a network that learns only the residual the linear model leaves
-behind. The last cannot do worse than linear by construction, which separates
-what the network adds from what it has to relearn.
+Three models are compared on the same test half:
+
+| model | test core width |
+|---|---|
+| linear, 55 coefficients | 72.2 eV = 2.28% |
+| network on the amplitudes | 72.4 eV = 2.29% |
+| linear + network on the residual | 69.4 eV = 2.20% |
+
+**The network does not beat the linear model.** The hybrid is 3.9% narrower, and
+the linear model itself moves by about 3.5% between random splits, so that is not
+a result.
+
+The first attempt left early stopping off and the network memorised the training
+half: train core 3.5 eV against test 97 eV, worse than linear. With early
+stopping it is 44.9 against 72.4, healthy but no better.
+
+The reason is measured, not guessed. **The target is itself a measurement.** The
+fit-based and official-window energies of the same events disagree by a core
+width of 62.0 eV, 1.96%, so each carries at least about 1.4% of noise. A residual
+of 2.28% is therefore already close to what the target can resolve, and that caps
+what any model can gain. Going further needs a better target or more events, not
+a bigger network:
+
+- more events, by adding the other twelve detectors or the control events at
+  other energies;
+- a better target, by making PDS2 fittable so the sum uses all eleven channels;
+- the 66-input version with the delays, which would also readmit the late pulses.
 
 ## Layout
 
