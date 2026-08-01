@@ -177,10 +177,12 @@ ax.grid(alpha=0.25)
 ax = axes[1]
 bins = np.linspace(-4 * res55.std(), 4 * res55.std(), 61)
 ax.hist(res55[tr], bins=bins, histtype="step", lw=1.3, color="#8899AA",
-        label=f"train: {m55['train']['rms']:.1f} eV ({m55['train']['rel']:.2f}%)")
+        label=f"train: RMS {m55['train']['rms']:.1f} eV, core "
+              f"{m55['train']['core']:.1f} eV ({m55['train']['core_rel']:.2f}%)")
 ax.hist(res55[te], bins=bins, histtype="stepfilled", color="#C0392B", alpha=0.35,
         edgecolor="#C0392B", lw=1.3,
-        label=f"test: {m55['test']['rms']:.1f} eV ({m55['test']['rel']:.2f}%)")
+        label=f"test: RMS {m55['test']['rms']:.1f} eV, core "
+              f"{m55['test']['core']:.1f} eV ({m55['test']['core_rel']:.2f}%)")
 ax.axvline(0, color="black", lw=1.0, ls=":")
 ax.set_xlabel("predicted - true (eV)", fontsize=11)
 ax.set_ylabel("events", fontsize=11)
@@ -202,10 +204,13 @@ ax.legend(fontsize=8, ncol=5)
 ax.grid(alpha=0.25, axis="y")
 
 fig.suptitle(
-    f"Z{det}: energy from the {p} NxM amplitudes, linear least squares. "
-    f"Test residual {m55['test']['rms']:.1f} eV = {m55['test']['rel']:.2f}%, "
-    f"against {m_sum0['test']['rel']:.2f}% for the best single scaling of the "
-    f"template-0 sum\n"
+    f"Z{det}: energy from the {p} NxM amplitudes, linear least squares, "
+    f"{len(tr)} events fitted and {len(te)} held back\n"
+    f"test residual: core width {m55['test']['core']:.1f} eV = "
+    f"{m55['test']['core_rel']:.2f}% (RMS {m55['test']['rms']:.1f} eV = "
+    f"{m55['test']['rel']:.2f}%), against {m_sum0['test']['core_rel']:.2f}% core "
+    f"for the best single scaling of the template-0 sum; the target's own core "
+    f"width is {cy:.1f} eV ({100 * cy / y[te].mean():.2f}%)\n"
     f"target = summed absorbed energy of the event over {len(core)} channels "
     f"(two-exponential fit, closed-form power integral, {d['formula']}), "
     f"each event with its own energy rather than the nominal line value",
