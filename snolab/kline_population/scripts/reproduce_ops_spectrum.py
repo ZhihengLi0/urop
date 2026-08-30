@@ -142,16 +142,17 @@ pub = published(det)
 fig, ax = plt.subplots(figsize=(12.5, 6.4))
 ax.stairs(h, edges, fill=True, color="#8E7CC3", alpha=0.55, lw=1.0,
           edgecolor="#5B4A8A",
-          label=f"our data, no cut: {amps.size} events, {used} series")
+          label=f"our data, NO cut: {amps.size} events, {used} series")
 if pub is not None:
     xs, ys, p, DX = pub
-    ax.step(xs, ys, where="mid", lw=1.4, color="#C0392B",
-            label=f"the note's own histogram, after rejecting "
-                  f"SumPF/PT < {PANEL[det][1]}: {int(ys.sum())} events")
+    ax.step(xs, ys, where="mid", lw=1.5, color="#111111",
+            label=f"the note's histogram, after rejecting SumPF/PT < "
+                  f"{PANEL[det][1]}: {int(ys.sum())} events")
 for name, x, col in [("10.37 keV K line", LINES.get(det, {}).get("kline"), "#C0392B"),
                      ("1.3 keV L line", LINES.get(det, {}).get("lline"), "#B7950B")]:
     if x:
-        ax.axvline(x, color=col, lw=1.6, alpha=0.85)
+        ax.axvline(x, color=col, lw=2.0, alpha=0.9,
+                   label=f"{name} (the note's marker)")
         ax.text(x, 1.5, f" {name}", rotation=90, va="bottom", ha="left",
                 fontsize=9, color=col)
 ax.set_xscale("log")
