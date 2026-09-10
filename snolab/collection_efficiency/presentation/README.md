@@ -8,6 +8,7 @@ logic per slide; the figure does the talking.
 |---|---|
 | `SNOLAB_R4_collection_efficiency_20260910.pptx` | 17 slides, 16:9, English, speaker notes on every slide: 11 main + 6 backup |
 | `SNOLAB_R4_collection_efficiency_20260910.pdf` | PDF export of the deck (LibreOffice, `module load libreoffice`) |
+| `..._zh.pptx` / `..._zh.pdf` | the same deck slide for slide in Chinese, for reading (`build_pptx_zh.py`); figures unchanged |
 | `speech_script.md` / `.pdf` | speaker script: per slide a Chinese paragraph and the matching English one, timing per slide, backup notes, likely questions with answers, a private glossary |
 | `figures/` | slide-sized crops of the result figures in `../results/plots/current_power_overlay/`, the Z7 spectrum from `../../kline_population/`, and two drawn cards (the formula, the chain) |
 | `make_figures.py` | regenerates `figures/` (run inside the CDMS singularity image) |
