@@ -77,7 +77,7 @@ project is meant to model.
 - collection efficiency = summed energy over all channels of a detector divided
   by the event energy; for Z7 it is 32 +- 1%;
 - the per-event energies come from the two-exponential fit and the closed-form
-  power integral, cached in `differentialequations/run/fit_cache`;
+  power integral, cached in `collection_efficiency/run/fit_cache`;
 - the single-channel energy spread is 15 to 27% and falls to 7.5% once the
   channels are summed, because most of the single-channel spread is event
   position rather than noise.

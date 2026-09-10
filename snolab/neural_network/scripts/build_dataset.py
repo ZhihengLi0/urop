@@ -12,7 +12,7 @@ Target per event
     the absorbed energy from the physics: each channel's trace is fitted with the
     two-exponential and its power integrated in closed form (method 1), and the
     channel energies are summed. The fits are read from the cache built by
-    differentialequations/scripts/kline_energy_hist.py, so nothing is refitted
+    collection_efficiency/scripts/kline_energy_hist.py, so nothing is refitted
     here. The target is the energy of that individual event, not the nominal
     10.37 keV of the line.
 
@@ -51,7 +51,7 @@ PROMPT_DIR = ("/projects/standard/yanliusp/shared/data/CDMS/SNOLAB/R4/Processed"
 RAW_CACHE = ("/projects/standard/yanliusp/shared/zhiheng/snolab"
              "/raw_without_filter/run/cache")
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FIT_CACHE = os.path.join(HERE, "..", "differentialequations", "run", "fit_cache")
+FIT_CACHE = os.path.join(HERE, "..", "collection_efficiency", "run", "fit_cache")
 OUT_DIR = os.path.join(HERE, "results")
 
 ap = argparse.ArgumentParser()

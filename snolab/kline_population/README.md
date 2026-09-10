@@ -112,4 +112,4 @@ which is the expected origin of the 10.37 keV line after the Cf activation.
   1286120 triggers). Both are reported in the table.
 - `PTOFamps` is already in amperes, so the ADC to amp factor (3.145728e9 ADC/A)
   must not be applied to it. It belongs to raw traces only, as in
-  `differentialequations/`.
+  `collection_efficiency/`.
