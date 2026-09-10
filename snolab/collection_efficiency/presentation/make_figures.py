@@ -77,7 +77,7 @@ ax.text(0.5, 0.50, r"$E \;=\; \int P(t)\,dt \;=\; I_0(R_L-R_0)\,A(\tau_f-\tau_r)
         r"\;+\;2R_L\,A^2\left(\frac{\tau_f+\tau_r}{2}-\frac{2\tau_f\tau_r}{\tau_f+\tau_r}\right)$",
         ha="center", va="center", fontsize=21, color=NAVY)
 ax.text(0.5, 0.33, r"for the fitted pulse $\delta I(t) = A\,[\,e^{-t/\tau_f} - e^{-t/\tau_r}\,]$"
-        "  the integral is exact, no window needed",
+        "  integrated from $-\\infty$ to $+\\infty$: zero before it starts, decays to zero after",
         ha="center", va="center", fontsize=15, color=GRAY)
 ax.text(0.5, 0.19, "Z7 PBS1 bias point (measured, from detectorConfig):  $I_0$ = -18.07 $\\mu$A,  "
         "$R_0$ = 44.16 m$\\Omega$,  $R_L$ = $R_p$ + $R_{sh}$ = 19.24 m$\\Omega$",

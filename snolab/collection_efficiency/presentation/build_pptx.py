@@ -114,12 +114,12 @@ lines(s, [
 s = new("From current to power, from power to energy",
         notes="TES small-signal result (Irwin & Hilton), Method 1 of the CDMS note. Coefficients "
               "from the measured bias point of each channel. For a two-exponential pulse the "
-              "integral is a formula in A, tau_f, tau_r: no window.")
+              "integral from -inf to +inf is a formula in A, tau_f, tau_r.")
 pic(s, "formula.png", L, T, W, Inches(4.3))
 lines(s, [
     "Power = the change of Joule heating when the current moves by δI: a linear term and a small quadratic term.",
     "Both coefficients are the measured bias point of the channel — nothing is fitted or tuned.",
-    "!If the pulse is a two-exponential, the energy is a formula in A, τ_f, τ_r — no integration window.",
+    "!Fit the two-exponential, integrate it from −∞ to +∞: the energy is a formula in A, τ_f, τ_r.",
 ], L, Inches(5.65), W, Inches(1.5), size=16)
 
 # ------------------------------------------------------------------ 4 the figure
@@ -218,7 +218,7 @@ s = new("Summary, and what is still open",
               "of events fit nowhere.")
 lines(s, [
     "A current pulse becomes a power pulse through the TES equations; the area under the power is the energy. The quadratic term is 2 %.",
-    "The energy comes from the fitted pulse: no bias from the noisy maximum, no drift, no integration window.",
+    "The energy comes from the fitted pulse, integrated from −∞ to +∞: no bias from the noisy maximum, no drift.",
     "One channel: 15 % wide and lopsided (position). Ten channels summed: 7.5 % and symmetric.",
     "!Z7 absorbs 32 ± 1 % of a 10.37 keV event in its TESs. The CDMS note on the R37 CUTE tower reports 26–41 %.",
     "Open: Z7 only · the HV bias of Z7 is not established (0 V assumed) · no dI/dV, so the inductor term is dropped · PDS2 is the ± 1 % · 12.5 % of events fit in no channel and are not in the histograms.",
