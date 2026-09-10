@@ -87,20 +87,43 @@ Three models are compared on the same test half:
 | network on the amplitudes | 72.4 eV = 2.29% |
 | linear + network on the residual | 69.4 eV = 2.20% |
 
-**The network does not beat the linear model.** The hybrid is 3.9% narrower, and
-the linear model itself moves by about 3.5% between random splits, so that is not
-a result.
+The hybrid, a network fitted to what the linear model leaves behind and added to
+it, is the narrowest. **One split cannot say whether that is real**: a paired
+bootstrap of this test half puts the difference at or below zero 28% of the time.
+
+### Many splits: the hybrid does beat linear
+
+`scripts/mlp_splits.py` repeats the comparison on 20 random halvings, fitting
+every model on the training half and scoring all three on the same test half:
+
+| model | mean test core width over 20 splits | narrower than linear |
+|---|---|---|
+| linear, 55 coefficients | 2.366% | – |
+| network on the amplitudes | 2.177% | 17 of 20 splits |
+| **linear + network on the residual** | **2.090%** | **20 of 20 splits** |
+
+**The hybrid is narrower than linear on every split, by 11.5% of the width on
+average.** The split used above happens to be one where its advantage is small.
+
+An earlier version of this README called stage 2 a null result, reasoning that
+the linear model itself moves by about 3.5% between splits. That was wrong: the
+split-to-split movement shifts every model together, because it comes from which
+events land in the test half, and it does not blur a difference measured on the
+same events. The paired test is the right one. One small leak remains: the
+architecture was chosen inside the training half of the first split, which
+overlaps the other splits' test halves.
 
 The first attempt left early stopping off and the network memorised the training
 half: train core 3.5 eV against test 97 eV, worse than linear. With early
-stopping it is 44.9 against 72.4, healthy but no better.
+stopping it is 44.9 against 72.4.
 
-The reason is measured, not guessed. **The target is itself a measurement.** The
-fit-based and official-window energies of the same events disagree by a core
-width of 62.0 eV, 1.96%, so each carries at least about 1.4% of noise. A residual
-of 2.28% is therefore already close to what the target can resolve, and that caps
-what any model can gain. Going further needs a better target or more events, not
-a bigger network:
+### How far this can go
+
+**The target is itself a measurement.** The fit-based and official-window
+energies of the same events disagree by a core width of 62.0 eV, 1.96%, so each
+carries at least about 1.4% of noise. The hybrid's 2.09% is above that floor, so
+there is no contradiction, but the floor caps what any model can gain. Going
+further needs a better target or more events as much as a bigger network:
 
 - more events, by adding the other twelve detectors or the control events at
   other energies;

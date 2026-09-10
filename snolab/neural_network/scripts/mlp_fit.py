@@ -16,8 +16,12 @@ Method, and why it is set up this way:
   lets the validation score decide;
 - the winner is evaluated on the untouched test half exactly once;
 - a residual variant is also fitted, where the network learns only what the
-  linear model leaves behind. It cannot do worse than linear by construction and
-  separates "what the network adds" from "what it has to relearn".
+  linear model leaves behind. It starts from the linear answer, so it separates
+  "what the network adds" from "what it has to relearn" (it can still do worse
+  on the test half if it fits noise).
+
+Whether a difference seen here is real is decided by scripts/mlp_splits.py, which
+repeats the comparison on many splits: one split cannot decide it.
 
 Outputs (results/):
     mlp_zip{det}.txt              the scan and the final numbers
@@ -170,10 +174,9 @@ gain = 100 * (1 - core(best_res[te]) / core(res_lin[te]))
 say()
 say(f"best on the test half: {best_name}, core {core(best_res[te]):.1f} eV = "
     f"{100 * core(best_res[te]) / y[te].mean():.2f}%")
-say(f"against the linear model that is {gain:+.1f}% of the width. The linear "
-    f"model itself moves by about 3.5% between random splits (2.18 to 2.34% over "
-    f"five seeds), so a gain has to exceed that to mean anything: "
-    f"{'it does' if gain > 7 else 'it does NOT'}.")
+say(f"against the linear model that is {gain:+.1f}% of the width, on this one "
+    f"split. A single split cannot tell whether that is real; "
+    f"scripts/mlp_splits.py repeats the paired comparison on many splits.")
 say(f"iterations run: {mlp.n_iter_}, final training loss {mlp.loss_:.5f}")
 
 # ------------------------------------------------------------------ figures
