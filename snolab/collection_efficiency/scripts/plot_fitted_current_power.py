@@ -28,6 +28,8 @@ Outputs (results/plots/current_power_overlay/):
     zip{det}_{series}_cumulative_energy_{chan}_{N}events.png
     zip{det}_{series}_current_power_allchan_ev{N}.png
     zip{det}_{series}_cumulative_energy_allchan_ev{N}.png
+    zip{det}_{series}_cumulative_energy_{chan}_slide.png      (--slide-events)
+    zip{det}_{series}_current_power_allchan_ev{N}_slide.png   (--slide-chans)
     zip{det}_{series}_energies.txt
 
 Usage (inside the CDMS singularity image):
@@ -74,6 +76,10 @@ ap.add_argument("--n-events", type=int, default=15)
 ap.add_argument("--events", type=int, nargs="+", default=None)
 ap.add_argument("--formula", default="method1", choices=sorted(QUAD_COEF))
 ap.add_argument("--seed", type=int, default=0)
+ap.add_argument("--slide-events", type=int, nargs="*", default=[30646, 210571],
+                help="events of --chan redrawn with full axes for a slide")
+ap.add_argument("--slide-chans", nargs="*", default=["PBS1", "PES1", "PES2", "PDS2"],
+                help="channels of the all-channel event redrawn with full axes")
 args = ap.parse_args()
 det, series = args.det, args.series
 c2_fac = QUAD_COEF[args.formula]
@@ -378,6 +384,59 @@ for kind in ("pulse", "cum"):
     fn = os.path.join(OUT_DIR, f"zip{det}_{series}_"
                       f"{'current_power' if kind == 'pulse' else 'cumulative_energy'}"
                       f"_allchan_ev{ev0}.png")
+    fig.savefig(fn, dpi=160)
+    plt.close(fig)
+    print("saved", fn)
+
+# ------------------------------------------ slide versions: few panels, full axes
+# The grids above label only their outer rows and columns, so any single panel cut
+# out of them lacks axis labels. These figures redraw the panels a slide needs,
+# each with both axis labels, readable ticks and one shared legend.
+def finish(ax, xlabel, ylabel, ax2=None):
+    ax.set_xlabel(xlabel, fontsize=12)
+    ax.set_ylabel(ylabel, fontsize=12)
+    ax.tick_params(labelsize=11)
+    ax.title.set_fontsize(12)
+    if ax2 is not None:
+        ax2.set_ylabel("power $P$ (fW)", fontsize=12, color="#C0392B")
+        ax2.tick_params(labelsize=11, colors="#C0392B")
+
+
+slide_ev = [e for e in args.slide_events if e in fits]
+if slide_ev:
+    fig, axes = plt.subplots(1, len(slide_ev), figsize=(7.2 * len(slide_ev), 4.4),
+                             squeeze=False)
+    for ax, evn in zip(axes[0], slide_ev):
+        f, e = fits[evn]
+        draw_cum(ax, chan, f, e, f"{chan} event {evn}")
+        finish(ax, "time from trace start (ms)", "cumulative energy (eV)")
+    h, l = axes[0][0].get_legend_handles_labels()
+    fig.legend(h, l, loc="lower center", ncol=3, fontsize=12, frameon=False)
+    fig.tight_layout(rect=(0, 0.08, 1, 1))
+    fn = os.path.join(OUT_DIR, f"zip{det}_{series}_cumulative_energy_{chan}_slide.png")
+    fig.savefig(fn, dpi=160)
+    plt.close(fig)
+    print("saved", fn)
+
+slide_ch = [c for c in args.slide_chans if c in ch_fits]
+if slide_ch:
+    ncol3 = 2
+    nrow3 = int(np.ceil(len(slide_ch) / ncol3))
+    fig, axes = plt.subplots(nrow3, ncol3, figsize=(7.2 * ncol3, 3.5 * nrow3),
+                             squeeze=False)
+    for k, c in enumerate(slide_ch):
+        ax = axes[k // ncol3][k % ncol3]
+        f, e = ch_fits[c]
+        ax2 = draw_pulse(ax, c, f, e, c)
+        finish(ax, "time from trigger (ms)", "current $\\delta I$ ($\\mu$A)", ax2)
+    for k in range(len(slide_ch), nrow3 * ncol3):
+        axes[k // ncol3][k % ncol3].set_axis_off()
+    h, l = axes[0][0].get_legend_handles_labels()
+    h.append(plt.Line2D([], [], color="#E00000", lw=2.2))
+    l.append("power $P$ from the fit (right axis)")
+    fig.legend(h, l, loc="lower center", ncol=4, fontsize=12, frameon=False)
+    fig.tight_layout(rect=(0, 0.06, 1, 1))
+    fn = os.path.join(OUT_DIR, f"zip{det}_{series}_current_power_allchan_ev{ev0}_slide.png")
     fig.savefig(fn, dpi=160)
     plt.close(fig)
     print("saved", fn)

@@ -142,20 +142,15 @@ lines(s, [
 
 # ------------------------------------------------------------------ 7 积拟合不积 raw
 s = new("为什么积分的是拟合脉冲，不是原始数据", "从 52 ms 波形的开头一路累计的能量；触发在点线处")
-pic(s, "cum_ev30646.png", L, T, Inches(6.05), Inches(2.4))
-pic(s, "cum_ev210571.png", Inches(6.8), T, Inches(6.05), Inches(2.4))
-pic(s, "cum_legend.png", Inches(3.3), Inches(3.7), Inches(6.7), Inches(0.4))
+pic(s, "cum_slide.png", L, T, W, Inches(4.35))
 lines(s, [
     "红线，来自拟合：脉冲之前是 0，1 ms 之内升上去，之后保持水平 —— 终点正好等于公式算出的值。",
     "!灰线，来自原始波形：一直在漂。基线偏 1 nA，15 ms 积下来就是 42 eV。右图：拟合 277 eV，原始波形 −169 eV。",
-], L, Inches(4.4), W, Inches(2.4), size=16)
+], L, Inches(5.75), W, Inches(1.35), size=15)
 
 # ------------------------------------------------------------------ 8 其他通道
 s = new("同一个事件的其他通道：加起来是 33%", "Z7 事件 30646；11 个通道里的 4 个")
-pic(s, "allchan_PBS1.png", L, T, Inches(6.05), Inches(2.1))
-pic(s, "allchan_PES1.png", Inches(6.8), T, Inches(6.05), Inches(2.1))
-pic(s, "allchan_PES2.png", L, Inches(3.45), Inches(6.05), Inches(2.1))
-pic(s, "allchan_PDS2.png", Inches(6.8), Inches(3.45), Inches(6.05), Inches(2.1))
+pic(s, "allchan_slide.png", L, T, W, Inches(4.45))
 lines(s, [
     "各通道分到的能量很不均匀（PES1 489 eV，PES2 195 eV）：事件发生的位置更靠近一侧。",
     "!11 个通道加起来：3419 eV = 10.37 keV 的 33.0%。   PDS2（右下）有一个缓慢的大起伏 —— 记住它。",

@@ -31,13 +31,6 @@ CROPS = {
     "pulse_ev30646.png": (f"{S}_current_power_PBS1_15events.png", (15, 248, 745, 492)),
     "pulse_ev100231.png": (f"{S}_current_power_PBS1_15events.png", (1430, 520, 2200, 778)),
     "pulse_legend.png": (f"{S}_current_power_PBS1_15events.png", (440, 1630, 1780, 1680)),
-    "cum_ev30646.png": (f"{S}_cumulative_energy_PBS1_15events.png", (15, 245, 745, 492)),
-    "cum_ev210571.png": (f"{S}_cumulative_energy_PBS1_15events.png", (1500, 1055, 2200, 1322)),
-    "cum_legend.png": (f"{S}_cumulative_energy_PBS1_15events.png", (640, 1630, 1600, 1680)),
-    "allchan_PBS1.png": (f"{S}_current_power_allchan_ev30646.png", (700, 228, 1400, 468)),
-    "allchan_PES1.png": (f"{S}_current_power_allchan_ev30646.png", (0, 478, 700, 718)),
-    "allchan_PES2.png": (f"{S}_current_power_allchan_ev30646.png", (1410, 728, 2110, 968)),
-    "allchan_PDS2.png": (f"{S}_current_power_allchan_ev30646.png", (700, 728, 1400, 968)),
     "hist_PBS1_panel.png": ("zip7_kline_energy_hist_allchan.png", (718, 200, 1305, 545)),
     "hist_PFS1_panel.png": ("zip7_kline_energy_hist_allchan.png", (718, 575, 1305, 920)),
     "hist_PES1_panel.png": ("zip7_kline_energy_hist_allchan.png", (0, 575, 665, 920)),
@@ -58,6 +51,9 @@ COPY = {
     "allchan_pulses.png": os.path.join(SRC, f"{S}_current_power_allchan_ev30646.png"),
     "allchan_cum.png": os.path.join(SRC, f"{S}_cumulative_energy_allchan_ev30646.png"),
     "spectrum_zip7.png": os.path.join(SPEC, "ops_spectrum_zip7.png"),
+    # redrawn with full axes by plot_fitted_current_power.py, not cropped
+    "cum_slide.png": os.path.join(SRC, f"{S}_cumulative_energy_PBS1_slide.png"),
+    "allchan_slide.png": os.path.join(SRC, f"{S}_current_power_allchan_ev30646_slide.png"),
 }
 for name, src in COPY.items():
     shutil.copyfile(src, os.path.join(OUT, name))

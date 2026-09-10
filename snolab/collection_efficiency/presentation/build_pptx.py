@@ -159,13 +159,11 @@ s = new("Why the fitted pulse is integrated, and not the data",
         "energy accumulated from the start of the 52 ms trace; trigger at the dotted line",
         notes="Red from the fit: zero, up within 1 ms, flat; the end equals the formula (green). "
               "Grey from the raw trace: drifts, 1 nA over 15 ms is 42 eV. Right: fit 277 eV, raw -169.")
-pic(s, "cum_ev30646.png", L, T, Inches(6.05), Inches(2.4))
-pic(s, "cum_ev210571.png", Inches(6.8), T, Inches(6.05), Inches(2.4))
-pic(s, "cum_legend.png", Inches(3.3), Inches(3.7), Inches(6.7), Inches(0.4))
+pic(s, "cum_slide.png", L, T, W, Inches(4.35))
 lines(s, [
     "Red, from the fit: nothing before the pulse, up within 1 ms, then flat — and the end value is exactly the formula.",
     "!Grey, from the raw trace: it drifts. A 1 nA baseline offset over 15 ms is already 42 eV. Right: fit 277 eV, raw −169 eV.",
-], L, Inches(4.4), W, Inches(2.4), size=16)
+], L, Inches(5.75), W, Inches(1.35), size=15)
 
 # ------------------------------------------------------------------ 8 all channels
 s = new("The same event in its other channels: they add up to 33 %",
@@ -173,10 +171,7 @@ s = new("The same event in its other channels: they add up to 33 %",
         notes="PES1 489 eV, PES2 195 eV: position. Sum over 11 channels 3419 eV = 33.0%. Official "
               "window on the raw traces: 3397 eV = 32.8%. PDS2: slow swing after 5 ms, a "
               "low-frequency artefact; residual 0.14, three times the others.")
-pic(s, "allchan_PBS1.png", L, T, Inches(6.05), Inches(2.1))
-pic(s, "allchan_PES1.png", Inches(6.8), T, Inches(6.05), Inches(2.1))
-pic(s, "allchan_PES2.png", L, Inches(3.45), Inches(6.05), Inches(2.1))
-pic(s, "allchan_PDS2.png", Inches(6.8), Inches(3.45), Inches(6.05), Inches(2.1))
+pic(s, "allchan_slide.png", L, T, W, Inches(4.45))
 lines(s, [
     "The channels share the energy unevenly (PES1 489 eV, PES2 195 eV): the event sat closer to one side.",
     "!Summed over the eleven channels: 3419 eV = 33.0 % of 10.37 keV.   PDS2 (bottom right) carries a slow swing — remember it.",
