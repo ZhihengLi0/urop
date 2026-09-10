@@ -1,8 +1,12 @@
 # presentation/ — 13-min talk on the Z7 collection efficiency (September 2026)
 
+The deck is built around one figure — a single pulse read as ADC, as current
+and as power — and then follows that pulse to the whole detector. One line of
+logic per slide; the figure does the talking.
+
 | file | what |
 |---|---|
-| `SNOLAB_R4_collection_efficiency_20260910.pptx` | 22 slides, 16:9, English, speaker notes on every slide: 14 main + 8 backup |
+| `SNOLAB_R4_collection_efficiency_20260910.pptx` | 17 slides, 16:9, English, speaker notes on every slide: 11 main + 6 backup |
 | `SNOLAB_R4_collection_efficiency_20260910.pdf` | PDF export of the deck (LibreOffice, `module load libreoffice`) |
 | `speech_script.md` / `.pdf` | speaker script: per slide a Chinese paragraph and the matching English one, timing per slide, backup notes, likely questions with answers, a private glossary |
 | `figures/` | slide-sized crops of the result figures in `../results/plots/current_power_overlay/`, the Z7 spectrum from `../../kline_population/`, and two drawn cards (the formula, the chain) |
@@ -10,21 +14,18 @@
 | `build_pptx.py` | regenerates the .pptx (python-pptx, host python) |
 | `build_speech_pdf.py` | speech_script.md → HTML; then headless Chromium prints the PDF |
 
-Slide flow (14 main): title → the question and why the trace alone does not
-answer it (chain) → the events (Z7 spectrum, 2207 K-line events, 30 series) →
-from current to power (the formula, closed-form integral, PBS1 bias point) →
-**one pulse read three ways, the height** (raw max 885 vs fit 717 ADC, +23 %) →
-the power and its area (quadratic term 1.9 % of peak, 305 eV) → every event:
-fit the current, convert to power → why the fit is integrated and not the raw
-trace (drift, −169 vs 277 eV) → one event, all channels (3419 eV = 33.0 %) →
-every event, one channel (PBS1: peak 285 eV, 15 % wide, right-skewed) → every
-channel (peaks must not be added; PDS2 fits 42 %) → summed over channels
-(30.5 % core, bracket 31.5–32.9 %, **32 ± 1 %**) → where 32 % sits (R37 CUTE
-26–41 %) and what is not nailed down (Z7 only, HV bias, no dI/dV, PDS2, the
-12.5 % of events that fit nowhere) → summary.
+Slide flow (11 main): title → the question (chain; area under a current is a
+charge) → from current to power, from power to energy (the formula, closed form)
+→ **one pulse, read three ways** (the full figure) → the height: take it from the
+fit (raw max 885 vs fit 717 ADC, +23 %) → the power pulse and its area
+(quadratic 1.9 %, 305 eV) → why the fit is integrated and not the data (drift,
+−169 vs 277 eV) → the same event in its other channels (3419 eV = 33 %) → every
+event, one channel (PBS1: 285 eV, 15 % wide, lopsided = position) → summed over
+the channels (30.5 % core, 7.5 % wide, PDS2 bracket, **32 ± 1 %**) → summary and
+what is open (Z7 only, HV bias, no dI/dV, PDS2, 12.5 % of events fit nowhere).
 
-Backup (8): the three formula versions (c₂ = 2 / 1 / −1, ±1 %), the official
-Eabs reproduced to 0.2 %, and the six full result figures.
+Backup (6): the Z7 spectrum, the three formula versions and the official Eabs,
+and four full result figures.
 
 Every number on the slides is copied from `../results/plots/current_power_overlay/*.txt`
 and `../NOTES.md`; nothing is recomputed in this directory.
