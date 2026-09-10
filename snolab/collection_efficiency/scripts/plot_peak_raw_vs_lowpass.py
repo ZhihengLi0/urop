@@ -243,7 +243,7 @@ sec = ax.secondary_yaxis("right",
 sec.set_ylabel("current $\\delta I$ ($\\mu$A)", fontsize=12, color="#1F3864")
 sec.tick_params(colors="#1F3864")
 pw = ax.secondary_yaxis(1.075, functions=(power_fW, fW_to_adc))
-pw.set_ylabel(f"absorbed power $P$ (fW), {args.formula}", fontsize=12,
+pw.set_ylabel("absorbed power $P$ (fW)", fontsize=12,
               color="#7B241C")
 pw.tick_params(colors="#7B241C")
 ax.grid(alpha=0.22)

@@ -299,10 +299,9 @@ if len(chans) == 1:
     ax.set_ylabel("K-line events per 10 eV", fontsize=12)
     ax.set_title(f"Z{det} {c}: energy of every K-line event "
                  f"({st['n']} events, {len(series_list)} series)\n"
-                 f"two-exponential fit per event in current units, closed-form "
-                 f"power integral, {args.formula} quadratic; "
-                 f"NRMSE $\\leq$ {NRMSE_MAX} ({st['skip']} events dropped)",
-                 fontsize=11)
+                 f"two-exponential fit per event, closed-form power integral "
+                 f"({args.formula}); fits with NRMSE > {NRMSE_MAX} dropped "
+                 f"({st['skip']} events)", fontsize=11)
     ax.legend(fontsize=10)
     ax.grid(alpha=0.25)
     fig.tight_layout()
@@ -437,9 +436,8 @@ if len(stats) > 1:
         f"{100 * sig_s / mu_s:.1f}%"
         + (f"\nleft out: {', '.join(left_out)} (fit acceptance "
            f"{', '.join(f'{100 * accept[c]:.0f}%' for c in left_out)}); "
-           f"the full efficiency lies between {100 * mu_a / E_TRUE:.1f}% and "
-           f"{100 * (mu_s + mu_a - mu_sub) / E_TRUE:.1f}% "
-           f"(see the text file for why it is a bracket, not one number)"
+           f"with it the efficiency lies between {100 * mu_a / E_TRUE:.1f}% and "
+           f"{100 * (mu_s + mu_a - mu_sub) / E_TRUE:.1f}% (a bracket, see the text file)"
            if left_out and Es_all.size > 10 else ""), fontsize=11)
     top = ax.secondary_xaxis("top", functions=(lambda e: 100 * e / E_TRUE,
                                                lambda p: p * E_TRUE / 100))

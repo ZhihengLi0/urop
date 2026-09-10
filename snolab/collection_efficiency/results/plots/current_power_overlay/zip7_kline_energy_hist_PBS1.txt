@@ -1,7 +1,9 @@
 Z7 K-line event energies | method1 | 30 series | per event: 2-exp fit in current units, closed-form power integral | NRMSE <= 0.2
 
-  chan      n   skip   mu[eV]  sigma[eV]  sigma/mu  mu_raw[eV]  sigma_raw  mu/10.37keV
-  PBS1   1917    290    284.8       42.4    14.90%       284.2       43.1        2.75%
+mu is the Gaussian PEAK of that channel's distribution. The single-channel distributions are right skewed (an event close to a channel gives it a large share), so mu sits below the plain mean and the peaks must NOT be added up: only the plain means add.
+
+  chan      n   skip   mu[eV]  sigma[eV]  sigma/mu  mean[eV]  median[eV]  mu_raw[eV]  sigma_raw  mean/10.37keV
+  PBS1   1917    290    284.8       42.4    14.90%     311.3       295.5       284.2       43.1          3.00%
 
 --- PBS1 ---
           series    event  E_fit[eV]  E_rawwin[eV]   NRMSE  t_r[us]  t_f[us]

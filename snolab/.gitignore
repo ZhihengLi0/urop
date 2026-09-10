@@ -35,6 +35,9 @@ speech_script.html
 !kline_population/results/plots/*.png
 # Energy histograms are versioned (exception to *.png)
 !collection_efficiency/results/plots/**/*.png
+# Collection-efficiency talk: slide figures, deck PDF, speech PDF
+!collection_efficiency/presentation/figures/*.png
+!collection_efficiency/presentation/*.pdf
 # Energy-regression figures are versioned (exception to *.png)
 !neural_network/results/plots/*.png
 # derived from the MSI-only handoff doc, never commit
