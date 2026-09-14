@@ -116,7 +116,6 @@ s = new("From current to power, from power to energy",
 pic(s, "formula.png", L, T, W, Inches(4.3))
 lines(s, [
     "Power = the change of Joule heating when the current moves by δI: a linear term and a small quadratic term.",
-    "Both coefficients are the measured bias point of the channel — nothing is fitted or tuned.",
     "!Fit the two-exponential, integrate it from −∞ to +∞: the energy is a formula in A, τ_f, τ_r.",
 ], L, Inches(5.65), W, Inches(1.5), size=16)
 
