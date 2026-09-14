@@ -106,3 +106,84 @@ ax.text(0.335, 0.90, "fit a two-exponential", ha="center", va="center", fontsize
 fig.savefig(os.path.join(OUT, "chain.png"), dpi=150)
 plt.close(fig)
 print("chain.png              drawn")
+
+# ------------------------------------------------------- circuit card (slide 3)
+fig = plt.figure(figsize=(5.6, 4.4), dpi=150)
+fig.patch.set_facecolor("white")
+ax = fig.add_axes([0, 0, 1, 1])
+ax.set_xlim(0, 1)
+ax.set_ylim(0, 1)
+ax.set_axis_off()
+LW = 1.8
+# the loop
+for x0, y0, x1, y1 in [(0.16, 0.22, 0.16, 0.78), (0.16, 0.78, 0.84, 0.78),
+                       (0.84, 0.78, 0.84, 0.22), (0.16, 0.22, 0.84, 0.22)]:
+    ax.plot([x0, x1], [y0, y1], color=NAVY, lw=LW, zorder=1, solid_capstyle="round")
+# voltage source
+ax.add_patch(plt.Circle((0.16, 0.50), 0.075, fc="white", ec=NAVY, lw=LW, zorder=3))
+ax.plot([0.16, 0.16], [0.425, 0.575], color="white", lw=LW + 2, zorder=2)
+ax.text(0.16, 0.50, "$V$", ha="center", va="center", fontsize=17, color=NAVY, zorder=4)
+ax.text(0.16, 0.375, "$V = I_b R_{sh}$", ha="center", va="center", fontsize=12,
+        color=GRAY, zorder=4)
+# R_L on the top wire
+ax.add_patch(plt.Rectangle((0.34, 0.735), 0.16, 0.09, fc="white", ec=NAVY, lw=LW, zorder=3))
+ax.text(0.42, 0.78, "$R_L$", ha="center", va="center", fontsize=16, color=NAVY, zorder=4)
+ax.text(0.44, 0.90, "$R_L = R_p + R_{sh}$   fixed", ha="center", va="center",
+        fontsize=12, color=GRAY)
+# inductor on the top wire, right of R_L
+import numpy as np
+for k in range(3):
+    th = np.linspace(np.pi, 0, 40)
+    ax.plot(0.60 + 0.026 * k + 0.013 + 0.013 * np.cos(th), 0.78 + 0.026 * np.sin(th),
+            color=NAVY, lw=LW, zorder=3)
+ax.plot([0.585, 0.60], [0.78, 0.78], color=NAVY, lw=LW, zorder=3)
+ax.text(0.64, 0.70, "$L$", ha="center", va="center", fontsize=16, color=NAVY)
+# R_TES on the right wire
+ax.add_patch(plt.Rectangle((0.795, 0.42), 0.09, 0.16, fc="#FDF3F2", ec=RED,
+                           lw=LW, ls=(0, (4, 2)), zorder=3))
+ax.text(0.84, 0.50, "$R_{TES}$", ha="center", va="center", fontsize=15, color=RED, zorder=4)
+ax.text(0.84, 0.345, "rises when the film\nis heated by phonons", ha="center",
+        va="center", fontsize=12, color=RED)
+# current arrow
+ax.annotate("", xy=(0.30, 0.78), xytext=(0.22, 0.78),
+            arrowprops=dict(arrowstyle="-|>", lw=2.0, color="#1B7A3D"))
+ax.text(0.255, 0.66, "$I(t) = I_0 + \\delta I(t)$", ha="center", va="center",
+        fontsize=13.5, color="#1B7A3D")
+ax.text(0.5, 0.10, "one loop: the voltage source, the fixed load, the coil,\n"
+        "and the TES whose resistance carries the signal",
+        ha="center", va="center", fontsize=12.5, color=GRAY)
+fig.savefig(os.path.join(OUT, "circuit.png"), dpi=150)
+plt.close(fig)
+print("circuit.png            drawn")
+
+# ---------------------------------------------------- derivation card (slide 3)
+fig = plt.figure(figsize=(8.6, 5.6), dpi=150)
+fig.patch.set_facecolor("white")
+ax = fig.add_axes([0, 0, 1, 1])
+ax.set_xlim(0, 1)
+ax.set_ylim(0, 1)
+ax.set_axis_off()
+STEPS = [
+    ("1.  heat flow in the film",
+     r"$C\,\dot T \;=\; P(t) \;+\; P_J \;-\; P_{bath}$"),
+    ("2.  the film ends where it started, so $\int C\,\dot T\,dt = 0$",
+     r"$E \;=\; \int P\,dt \;=\; -\int \delta P_J\,dt$"),
+    ("3.  the loop gives the voltage on the TES, and its Joule power",
+     r"$V_{TES} = V - I R_L - L\,\dot I$ ,      $P_J = I\,V_{TES}$"),
+    ("4.  put $I = I_0 + \delta I$ and expand",
+     r"$\delta P_J = V\,\delta I - R_L\,(2 I_0 \delta I + (\delta I)^2) - L\,I\,\dot{\delta I}$"),
+    ("5.  integrate over the pulse: the $L$ piece cancels at the two ends, and $V = I_0(R_L + R_0)$",
+     r"$E \;=\; I_0 (R_L - R_0) \int \delta I\,dt \;+\; R_L \int (\delta I)^2 dt$"),
+]
+y = 0.93
+for lab, eq in STEPS:
+    ax.text(0.035, y, lab, ha="left", va="center", fontsize=13.5, color=GRAY)
+    ax.text(0.5, y - 0.083, eq, ha="center", va="center", fontsize=19, color=NAVY)
+    y -= 0.185
+ax.plot([0.03, 0.97], [0.085, 0.085], color="#CCCCCC", lw=1.2)
+ax.text(0.5, 0.042, "the note's Method 1 carries $2R_L$ in the second term instead of $R_L$: "
+        "+0.58 % in energy, and that is the version used here",
+        ha="center", va="center", fontsize=12.5, color=RED)
+fig.savefig(os.path.join(OUT, "derivation.png"), dpi=150)
+plt.close(fig)
+print("derivation.png         drawn")
