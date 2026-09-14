@@ -123,12 +123,12 @@ for x0, y0, x1, y1 in [(0.16, 0.22, 0.16, 0.78), (0.16, 0.78, 0.84, 0.78),
 ax.add_patch(plt.Circle((0.16, 0.50), 0.075, fc="white", ec=NAVY, lw=LW, zorder=3))
 ax.plot([0.16, 0.16], [0.425, 0.575], color="white", lw=LW + 2, zorder=2)
 ax.text(0.16, 0.50, "$V$", ha="center", va="center", fontsize=17, color=NAVY, zorder=4)
-ax.text(0.16, 0.375, "$V = I_b R_{sh}$", ha="center", va="center", fontsize=12,
+ax.text(0.31, 0.50, "$V = I_b R_{sh}$", ha="left", va="center", fontsize=12.5,
         color=GRAY, zorder=4)
 # R_L on the top wire
 ax.add_patch(plt.Rectangle((0.34, 0.735), 0.16, 0.09, fc="white", ec=NAVY, lw=LW, zorder=3))
 ax.text(0.42, 0.78, "$R_L$", ha="center", va="center", fontsize=16, color=NAVY, zorder=4)
-ax.text(0.44, 0.90, "$R_L = R_p + R_{sh}$   fixed", ha="center", va="center",
+ax.text(0.63, 0.90, "$R_L = R_p + R_{sh}$   fixed", ha="center", va="center",
         fontsize=12, color=GRAY)
 # inductor on the top wire, right of R_L
 import numpy as np
@@ -142,12 +142,12 @@ ax.text(0.64, 0.70, "$L$", ha="center", va="center", fontsize=16, color=NAVY)
 ax.add_patch(plt.Rectangle((0.795, 0.42), 0.09, 0.16, fc="#FDF3F2", ec=RED,
                            lw=LW, ls=(0, (4, 2)), zorder=3))
 ax.text(0.84, 0.50, "$R_{TES}$", ha="center", va="center", fontsize=15, color=RED, zorder=4)
-ax.text(0.84, 0.345, "rises when the film\nis heated by phonons", ha="center",
-        va="center", fontsize=12, color=RED)
+ax.text(0.60, 0.33, "rises when the film\nis heated by phonons", ha="center",
+        va="center", fontsize=12.5, color=RED)
 # current arrow
 ax.annotate("", xy=(0.30, 0.78), xytext=(0.22, 0.78),
             arrowprops=dict(arrowstyle="-|>", lw=2.0, color="#1B7A3D"))
-ax.text(0.255, 0.66, "$I(t) = I_0 + \\delta I(t)$", ha="center", va="center",
+ax.text(0.245, 0.855, "$I(t) = I_0 + \\delta I(t)$", ha="center", va="center",
         fontsize=13.5, color="#1B7A3D")
 ax.text(0.5, 0.10, "one loop: the voltage source, the fixed load, the coil,\n"
         "and the TES whose resistance carries the signal",
@@ -175,15 +175,14 @@ STEPS = [
     ("5.  integrate over the pulse: the $L$ piece cancels at the two ends, and $V = I_0(R_L + R_0)$",
      r"$E \;=\; I_0 (R_L - R_0) \int \delta I\,dt \;+\; R_L \int (\delta I)^2 dt$"),
 ]
-y = 0.93
+y = 0.955
 for lab, eq in STEPS:
-    ax.text(0.035, y, lab, ha="left", va="center", fontsize=13.5, color=GRAY)
-    ax.text(0.5, y - 0.083, eq, ha="center", va="center", fontsize=19, color=NAVY)
-    y -= 0.185
-ax.plot([0.03, 0.97], [0.085, 0.085], color="#CCCCCC", lw=1.2)
-ax.text(0.5, 0.042, "the note's Method 1 carries $2R_L$ in the second term instead of $R_L$: "
-        "+0.58 % in energy, and that is the version used here",
-        ha="center", va="center", fontsize=12.5, color=RED)
+    ax.text(0.035, y, lab, ha="left", va="center", fontsize=13, color=GRAY)
+    ax.text(0.5, y - 0.080, eq, ha="center", va="center", fontsize=18, color=NAVY)
+    y -= 0.180
+ax.plot([0.03, 0.97], [0.062, 0.062], color="#CCCCCC", lw=1.2)
+ax.text(0.5, 0.028, "the note's Method 1 puts $2R_L$ in the second term, not $R_L$: "
+        "+0.58 % in energy", ha="center", va="center", fontsize=12.5, color=RED)
 fig.savefig(os.path.join(OUT, "derivation.png"), dpi=150)
 plt.close(fig)
 print("derivation.png         drawn")

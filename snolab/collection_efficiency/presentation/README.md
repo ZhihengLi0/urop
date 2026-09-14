@@ -6,7 +6,7 @@ logic per slide; the figure does the talking.
 
 | file | what |
 |---|---|
-| `SNOLAB_R4_collection_efficiency_20260910.pptx` | 17 slides, 16:9, English, speaker notes on every slide: 11 main + 6 backup |
+| `SNOLAB_R4_collection_efficiency_20260910.pptx` | 18 slides, 16:9, English, speaker notes on every slide: 12 main + 6 backup |
 | `SNOLAB_R4_collection_efficiency_20260910.pdf` | PDF export of the deck (LibreOffice, `module load libreoffice`) |
 | `..._zh.pptx` / `..._zh.pdf` | the same deck slide for slide in Chinese, for reading (`build_pptx_zh.py`); figures unchanged |
 | `speech_script.md` / `.pdf` | speaker script: per slide a Chinese paragraph and the matching English one, timing per slide, backup notes, likely questions with answers, a private glossary |
@@ -15,8 +15,10 @@ logic per slide; the figure does the talking.
 | `build_pptx.py` | regenerates the .pptx (python-pptx, host python) |
 | `build_speech_pdf.py` | speech_script.md → HTML; then headless Chromium prints the PDF |
 
-Slide flow (11 main): title → the question (chain; area under a current is a
-charge) → from current to power, from power to energy (the formula, closed form)
+Slide flow (12 main): title → the question (chain; the area under a current is
+not an energy) → where the formula comes from (the circuit and the five steps
+from the heat-flow equation, per Prof. Saab's request that the formula be
+explained) → the formula and the two numbers it needs (closed form, bias point)
 → **one pulse, read three ways** (the full figure) → the height: take it from the
 fit (raw max 885 vs fit 717 ADC, +23 %) → the power pulse and its area
 (quadratic 1.9 %, 305 eV) → why the fit is integrated and not the data (drift,

@@ -108,8 +108,25 @@ lines(s, [
     "Sample: Z7, the K-line events of the Ge activation run (2207 events, 30 series, all 11 channels saved raw).",
 ], L, Inches(4.3), W, Inches(2.7))
 
-# ------------------------------------------------------------------ 3 formula
-s = new("From current to power, from power to energy",
+# --------------------------------------------------- 3 where the formula comes from
+s = new("Where the formula comes from",
+        "the film pays for the absorbed energy out of its own Joule heating",
+        notes="An event heats the film, R_TES rises, the current falls, and the Joule heating "
+              "I*V_TES falls by what the event delivered: negative electro-thermal feedback. "
+              "Integrating the heat equation over the whole pulse kills the C dT term, so the "
+              "absorbed energy is minus the integrated change of Joule power, which the circuit "
+              "turns into an expression in dI alone. Not included: the bath leak G*int dT and the "
+              "inductor end terms, both of which need G and L from dI/dV.")
+pic(s, "circuit.png", L, T, Inches(4.85), Inches(4.8))
+pic(s, "derivation.png", Inches(5.6), T, Inches(7.25), Inches(4.8))
+lines(s, [
+    "An event heats the film, its resistance rises, the current falls — and the Joule heating falls by exactly what the event delivered (negative electro-thermal feedback).",
+    "!So the absorbed energy can be read from the current alone: E = −∫δP_J dt, which is the formula on the next slide.",
+    "Left out: the bath leak and the inductor end terms. Both need G and L from dI/dV, which these series do not have.",
+], L, Inches(6.2), W, Inches(1.2), size=13)
+
+# ------------------------------------------------------------- 4 the formula itself
+s = new("The formula, and the two numbers it needs",
         notes="TES small-signal result (Irwin & Hilton), Method 1 of the CDMS note. Coefficients "
               "from the measured bias point of each channel. For a two-exponential pulse the "
               "integral from -inf to +inf is a formula in A, tau_f, tau_r.")
@@ -153,7 +170,6 @@ lines(s, [
 
 # ------------------------------------------------------------------ 7 fit vs raw
 s = new("Why the fitted pulse is integrated, and not the data",
-        "energy accumulated from the start of the 52 ms trace; trigger at the dotted line",
         notes="Red from the fit: zero, up within 1 ms, flat; the end equals the formula (green). "
               "Grey from the raw trace: drifts, 1 nA over 15 ms is 42 eV. Right: fit 277 eV, raw -169.")
 pic(s, "cum_slide.png", L, T, W, Inches(4.35))
