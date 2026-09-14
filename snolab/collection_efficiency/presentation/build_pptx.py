@@ -92,8 +92,6 @@ def new(ttl, sub=None, notes=""):
 s = new(None, notes="Title.")
 tb = textbox(s, Inches(0.9), Inches(2.3), Inches(11.5), Inches(1.8))
 run(tb.text_frame.paragraphs[0], "Phonon collection efficiency of Z7", 40, NAVY, bold=True)
-run(tb.text_frame.add_paragraph(), "how much of a 10.37 keV K-line event ends up in the TESs  —  "
-    "read off one pulse, then followed to the whole detector", 18, GRAY)
 tb = textbox(s, Inches(0.9), Inches(4.7), Inches(11.5), Inches(1.2))
 run(tb.text_frame.paragraphs[0], "Zhiheng Li  ·  University of Minnesota  ·  SuperCDMS SNOLAB Run 4  ·  September 2026", 16)
 run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab/collection_efficiency/", 13, GRAY)
@@ -106,7 +104,7 @@ pic(s, "chain.png", L, Inches(1.4), W, Inches(2.6))
 lines(s, [
     "Collection efficiency  =  energy that reaches the TES films  ÷  the 10.37 keV of the event",
     "What we record is a current pulse.",
-    "!The area under a current is a charge, not an energy — so the pulse must be turned into power first.",
+    "!The area under a current is not an energy — so the pulse must be turned into power first.",
     "Sample: Z7, the K-line events of the Ge activation run (2207 events, 30 series, all 11 channels saved raw).",
 ], L, Inches(4.3), W, Inches(2.7))
 

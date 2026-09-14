@@ -95,7 +95,6 @@ def new(ttl, sub=None, notes=""):
 s = new(None)
 tb = textbox(s, Inches(0.9), Inches(2.3), Inches(11.5), Inches(1.8))
 run(tb.text_frame.paragraphs[0], "Z7 的声子收集效率", 40, NAVY, bold=True)
-run(tb.text_frame.add_paragraph(), "一个 10.37 keV 的 K 线事件，有多少能量最后到了 TES 里 —— 先从一个脉冲读出来，再推到整个探测器", 18, GRAY)
 tb = textbox(s, Inches(0.9), Inches(4.7), Inches(11.5), Inches(1.2))
 run(tb.text_frame.paragraphs[0], "李知恒  ·  明尼苏达大学  ·  SuperCDMS SNOLAB Run 4  ·  2026 年 9 月", 16)
 run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab/collection_efficiency/", 13, GRAY)
@@ -106,7 +105,7 @@ pic(s, "chain.png", L, Inches(1.4), W, Inches(2.6))
 lines(s, [
     "收集效率  =  到达 TES 薄膜的能量  ÷  事件放进晶体的 10.37 keV",
     "我们记录下来的是一条电流脉冲。",
-    "!电流曲线下面的面积是电荷，不是能量 —— 所以必须先把脉冲换成功率。",
+    "!电流曲线下面的面积不是能量 —— 所以必须先把脉冲换成功率。",
     "样本：Z7，Ge 活化的 K 线事件（2207 个事件，30 个 series，11 个通道的原始波形全部保存）。",
 ], L, Inches(4.3), W, Inches(2.7))
 
