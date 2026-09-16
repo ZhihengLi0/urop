@@ -51,7 +51,13 @@ def title(s, text, sub=None):
     tb = textbox(s, L, Inches(0.25), W, Inches(0.8))
     run(tb.text_frame.paragraphs[0], text, 27, NAVY, bold=True)
     if sub:
-        run(tb.text_frame.add_paragraph(), sub, 14, GRAY)
+        # a (plain, bold) pair puts the second half of the subtitle in bold
+        para = tb.text_frame.add_paragraph()
+        if isinstance(sub, tuple):
+            run(para, sub[0], 14, GRAY)
+            run(para, sub[1], 14, DARK, bold=True)
+        else:
+            run(para, sub, 14, GRAY)
     ln = s.shapes.add_shape(1, L, Inches(1.06), W, Emu(18000))
     ln.fill.solid(); ln.fill.fore_color.rgb = NAVY; ln.line.fill.background()
 
@@ -97,15 +103,14 @@ run(tb.text_frame.paragraphs[0], "Zhiheng Li  ·  University of Minnesota  ·  S
 run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab/collection_efficiency/", 13, GRAY)
 
 # ------------------------------------------------------------------ 2 question
-s = new("The question", notes="Efficiency = energy in the TES films / 10.37 keV. The trace is a "
-        "current; its area is a charge, not an energy. Z7, K-line events of the Ge activation, "
-        "2207 events over 30 series, raw traces of all 11 channels saved.")
+s = new("The question", notes="Efficiency = energy absorbed by the TESs, summed over all "
+        "channels, / 10.37 keV, for a detector operated at 0 V (no NTL amplification). Z7, "
+        "K-line events of the Ge activation, SNOLAB R4, 2207 events over 30 series.")
 pic(s, "chain.png", L, Inches(1.4), W, Inches(2.6))
 lines(s, [
-    "Collection efficiency  =  energy that reaches the TES films  ÷  the 10.37 keV of the event",
-    "What we record is a current pulse.",
-    "!The area under a current is not an energy — so the pulse must be turned into power first.",
-    "Sample: Z7, the K-line events of the Ge activation run (2207 events, 30 series, all 11 channels saved raw).",
+    "!For detectors operated at 0 V (no NTL effect):",
+    "Collection efficiency  =  energy absorbed by the TESs, summed over all channels  ÷  the 10.37 keV of the event",
+    "Sample: Z7, the K-line events of the Ge activation run, from SNOLAB R4 (2207 events, 30 series, all 11 channels).",
 ], L, Inches(4.3), W, Inches(2.7))
 
 # --------------------------------------------------- 3 where the formula comes from
@@ -128,20 +133,22 @@ lines(s, [
 # ------------------------------------------------------------- 4 the formula itself
 s = new("The formula, and the two numbers it needs",
         notes="TES small-signal result (Irwin & Hilton), Method 1 of the CDMS note. Coefficients "
-              "from the measured bias point of each channel. For a two-exponential pulse the "
-              "integral from -inf to +inf is a formula in A, tau_f, tau_r.")
+              "from the measured bias point of each channel: I0(R_L-R0) = 0.45 uV, 2R_L = 0.0385 Ohm "
+              "for PBS1. For a two-exponential pulse the integral is a formula in A, tau_f, tau_r.")
 pic(s, "formula.png", L, T, W, Inches(4.3))
 lines(s, [
-    "Power = the change of Joule heating when the current moves by δI: a linear term and a small quadratic term.",
-    "!Fit the two-exponential, integrate it from −∞ to +∞: the energy is a formula in A, τ_f, τ_r.",
+    "δP = the change of Joule heating when the current moves by δI: a linear term and a small quadratic term.",
 ], L, Inches(5.65), W, Inches(1.5), size=16)
 
 # ------------------------------------------------------------------ 4 the figure
-s = new("One pulse, read three ways",
-        "Z7 PBS1, event 30646: the same trace as ADC counts, as current, as power",
+s = new("Example: one pulse",
+        ("Z7 PBS1, event 30646:  ", "the same trace as ADC counts, as current, as power"),
         notes="Top: the pulse zoomed on its peak, three axes. Bottom: the power and its area. "
               "1 ADC = 0.318 nA. The next two slides walk through the two panels.")
-pic(s, "peak_full.png", L, T, W, Inches(5.75))
+pic(s, "peak_full.png", L, T, W, Inches(5.3))
+lines(s, [
+    "!The two-exponential is fitted to the 100 kHz low-passed trace (blue), not to the raw samples; the raw samples are only drawn.",
+], L, Inches(6.62), W, Inches(0.5), size=14)
 
 # ------------------------------------------------------------------ 5 height
 s = new("The height: take it from the fit, not from the largest sample",
@@ -170,13 +177,14 @@ lines(s, [
 
 # ------------------------------------------------------------------ 7 fit vs raw
 s = new("Why the fitted pulse is integrated, and not the data",
-        notes="Red from the fit: zero, up within 1 ms, flat; the end equals the formula (green). "
-              "Grey from the raw trace: drifts, 1 nA over 15 ms is 42 eV. Right: fit 277 eV, raw -169.")
-pic(s, "cum_slide.png", L, T, W, Inches(4.35))
+        notes="Top: raw current of events 30646 and 210571, y zoomed to +-60 nA; dashed green is the "
+              "mean after the pulse. Bottom: accumulated energy. Left: after-pulse mean +0.1 nA, raw "
+              "316 vs fit 305 eV. Right: -6.2 nA, i.e. -2.8 fW over 24 ms = -420 eV, raw -169 vs fit 277.")
+pic(s, "raw_cum_slide.png", L, T, W, Inches(5.05))
 lines(s, [
-    "Red, from the fit: nothing before the pulse, up within 1 ms, then flat — and the end value is exactly the formula.",
-    "!Grey, from the raw trace: it drifts. A 1 nA baseline offset over 15 ms is already 42 eV. Right: fit 277 eV, raw −169 eV.",
-], L, Inches(5.75), W, Inches(1.35), size=15)
+    "Top: the raw current of the same two events, zoomed on the baseline. Bottom: the energy accumulated from it (grey) and from the fit (red).",
+    "!Right: after the pulse the current sits 6 nA below its baseline — hidden in 28 nA of noise, yet over 24 ms it is −420 eV: raw −169 eV, fit 277 eV.",
+], L, Inches(6.33), W, Inches(0.9), size=13)
 
 # ------------------------------------------------------------------ 8 all channels
 s = new("The same event in its other channels: they add up to 33 %",
@@ -187,7 +195,7 @@ s = new("The same event in its other channels: they add up to 33 %",
 pic(s, "allchan_slide.png", L, T, W, Inches(4.45))
 lines(s, [
     "The channels share the energy unevenly (PES1 489 eV, PES2 195 eV): the event sat closer to one side.",
-    "!Summed over the eleven channels: 3419 eV = 33.0 % of 10.37 keV.   PDS2 (bottom right) carries a slow swing — remember it.",
+    "!Summed over the eleven channels: 3419 eV = 33.0 % of 10.37 keV.   PDS2 (bottom right) carries a slow swing.",
 ], L, Inches(5.75), W, Inches(1.3), size=15)
 
 # ------------------------------------------------------------------ 9 all events
@@ -239,7 +247,7 @@ pic(s, "spectrum_zip7.png", L, T, W, Inches(5.75))
 s = new("Backup — the three versions of the power formula",
         notes="c2 = 2 Method 1 (used), 1 exact, -1 Method 2. Relative to exact: +0.58%, -1.15%.")
 lines(s, [
-    "P = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²     with c₂ = 2 (Method 1, used here), 1 (exact small-signal), −1 (Method 2)",
+    "δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²     with c₂ = 2 (Method 1, used here), 1 (exact small-signal), −1 (Method 2)",
     "Relative to the exact form: Method 1 +0.58 %, Method 2 −1.15 % in energy — far below the 15 % single-channel width and the PDS2 bracket.",
     "The inductor term of the full equations needs L and the loop gain from dI/dV, which do not exist for these series on MSI; it is neglected.",
     "The official Eabs (trigger bin 16383, baseline bins 93..15758, 5-pole 20 kHz prefilter, window −0.5/+1 ms, same formula) is reproduced to 0.2 %; the grey outlines on the histogram slides are it.",

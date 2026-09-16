@@ -52,7 +52,7 @@ COPY = {
     "allchan_cum.png": os.path.join(SRC, f"{S}_cumulative_energy_allchan_ev30646.png"),
     "spectrum_zip7.png": os.path.join(SPEC, "ops_spectrum_zip7.png"),
     # redrawn with full axes by plot_fitted_current_power.py, not cropped
-    "cum_slide.png": os.path.join(SRC, f"{S}_cumulative_energy_PBS1_slide.png"),
+    "raw_cum_slide.png": os.path.join(SRC, f"{S}_raw_and_cumulative_PBS1_slide.png"),
     "allchan_slide.png": os.path.join(SRC, f"{S}_current_power_allchan_ev30646_slide.png"),
 }
 for name, src in COPY.items():
@@ -65,11 +65,11 @@ fig.patch.set_facecolor("white")
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set_axis_off()
 NAVY, RED, GRAY = "#1F3864", "#C0392B", "#555555"
-ax.text(0.5, 0.86, r"$P(t) \;=\; I_0\,(R_L - R_0)\;\delta I(t) \;+\; 2\,R_L\;(\delta I(t))^2$",
+ax.text(0.5, 0.86, r"$\delta P(t) \;=\; I_0\,(R_L - R_0)\;\delta I(t) \;+\; 2\,R_L\;(\delta I(t))^2$",
         ha="center", va="center", fontsize=30, color=NAVY)
 ax.text(0.30, 0.66, "linear term", ha="center", fontsize=15, color=NAVY)
 ax.text(0.71, 0.66, "quadratic term", ha="center", fontsize=15, color=NAVY)
-ax.text(0.5, 0.50, r"$E \;=\; \int P(t)\,dt \;=\; I_0(R_L-R_0)\,A(\tau_f-\tau_r)"
+ax.text(0.5, 0.50, r"$E \;=\; \int \delta P(t)\,dt \;=\; I_0(R_L-R_0)\,A(\tau_f-\tau_r)"
         r"\;+\;2R_L\,A^2\left(\frac{\tau_f+\tau_r}{2}-\frac{2\tau_f\tau_r}{\tau_f+\tau_r}\right)$",
         ha="center", va="center", fontsize=21, color=NAVY)
 ax.text(0.5, 0.33, r"for the fitted pulse $\delta I(t) = A\,[\,e^{-t/\tau_f} - e^{-t/\tau_r}\,]$"
@@ -78,7 +78,7 @@ ax.text(0.5, 0.33, r"for the fitted pulse $\delta I(t) = A\,[\,e^{-t/\tau_f} - e
 ax.text(0.5, 0.19, "Z7 PBS1 bias point (measured, from detectorConfig):  $I_0$ = -18.07 $\\mu$A,  "
         "$R_0$ = 44.16 m$\\Omega$,  $R_L$ = $R_p$ + $R_{sh}$ = 19.24 m$\\Omega$",
         ha="center", va="center", fontsize=14.5, color=RED)
-ax.text(0.5, 0.07, "$\\Rightarrow$  $I_0(R_L-R_0)$ = 4.50$\\times$10$^{-7}$ V   and   $2R_L$ = 0.0385 $\\Omega$",
+ax.text(0.5, 0.07, "$\\Rightarrow$  $I_0(R_L-R_0)$ = 0.45 $\\mu$V   and   $2R_L$ = 0.0385 $\\Omega$",
         ha="center", va="center", fontsize=14.5, color=RED)
 fig.savefig(os.path.join(OUT, "formula.png"), dpi=150)
 plt.close(fig)
@@ -90,8 +90,8 @@ fig.patch.set_facecolor("white")
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set_axis_off()
 steps = ["10.37 keV\nin the crystal", "phonons reach\nthe TES films",
-         "current pulse\n$\\delta I(t)$  [ADC]", "power pulse\n$P(t)$  [fW]",
-         "energy\n$E=\\int P\\,dt$  [eV]", "efficiency\n$E$ / 10.37 keV"]
+         "current pulse\n$\\delta I(t)$  [ADC]", "power pulse\n$\\delta P(t)$  [fW]",
+         "energy\n$E=\\int \\delta P\\,dt$  [eV]", "efficiency\n$E$ / 10.37 keV"]
 xs = [0.08, 0.25, 0.42, 0.59, 0.76, 0.93]
 for i, (x, s) in enumerate(zip(xs, steps)):
     col = RED if i == 5 else NAVY
@@ -101,6 +101,7 @@ for i, (x, s) in enumerate(zip(xs, steps)):
         ax.annotate("", xy=(xs[i + 1] - 0.072, 0.55), xytext=(x + 0.072, 0.55),
                     arrowprops=dict(arrowstyle="->", lw=1.6, color=GRAY))
 ax.text(0.505, 0.12, "the TES equations\n(Irwin & Hilton)", ha="center", va="center", fontsize=11.5, color=GRAY)
+ax.text(0.76, 0.12, "summed over\nall channels", ha="center", va="center", fontsize=11.5, color=NAVY)
 ax.text(0.675, 0.90, "closed-form integral\nof the fitted pulse", ha="center", va="center", fontsize=11.5, color=GRAY)
 ax.text(0.335, 0.90, "fit a two-exponential", ha="center", va="center", fontsize=11.5, color=GRAY)
 fig.savefig(os.path.join(OUT, "chain.png"), dpi=150)
@@ -173,7 +174,7 @@ STEPS = [
     ("4.  put $I = I_0 + \delta I$ and expand",
      r"$\delta P_J = V\,\delta I - R_L\,(2 I_0 \delta I + (\delta I)^2) - L\,I\,\dot{\delta I}$"),
     ("5.  integrate over the pulse: the $L$ piece cancels at the two ends, and $V = I_0(R_L + R_0)$",
-     r"$E \;=\; I_0 (R_L - R_0) \int \delta I\,dt \;+\; R_L \int (\delta I)^2 dt$"),
+     r"$E = \int \delta P\,dt ,\quad \delta P = I_0 (R_L - R_0)\,\delta I + R_L\,(\delta I)^2$"),
 ]
 y = 0.955
 for lab, eq in STEPS:

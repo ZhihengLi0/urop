@@ -28,7 +28,7 @@ Outputs (results/plots/current_power_overlay/):
     zip{det}_{series}_cumulative_energy_{chan}_{N}events.png
     zip{det}_{series}_current_power_allchan_ev{N}.png
     zip{det}_{series}_cumulative_energy_allchan_ev{N}.png
-    zip{det}_{series}_cumulative_energy_{chan}_slide.png      (--slide-events)
+    zip{det}_{series}_raw_and_cumulative_{chan}_slide.png     (--slide-events)
     zip{det}_{series}_current_power_allchan_ev{N}_slide.png   (--slide-chans)
     zip{det}_{series}_energies.txt
 
@@ -404,19 +404,56 @@ def finish(ax, xlabel, ylabel, ax2=None):
 
 slide_ev = [e for e in args.slide_events if e in fits]
 if slide_ev:
-    fig, axes = plt.subplots(1, len(slide_ev), figsize=(7.2 * len(slide_ev), 4.4),
-                             squeeze=False)
-    for ax, evn in zip(axes[0], slide_ev):
+    # top row: the current itself over the whole trace; bottom row: its running
+    # integral. Same time axis, so the drift seen on top explains the bottom.
+    fig, axes = plt.subplots(2, len(slide_ev), figsize=(7.2 * len(slide_ev), 7.6),
+                             squeeze=False, sharex="col",
+                             gridspec_kw=dict(height_ratios=(1.0, 1.15)))
+    t_full = np.arange(N_BINS) * DT * 1e3
+    post = (t_full > TRIGGER_BIN * DT * 1e3 + 2.0)          # 2 ms after the trigger on
+    for k, evn in enumerate(slide_ev):
         f, e = fits[evn]
-        draw_cum(ax, chan, f, e, f"{chan} event {evn}")
-        finish(ax, "time from trace start (ms)", "cumulative energy (eV)")
-    h, l = axes[0][0].get_legend_handles_labels()
-    fig.legend(h, l, loc="lower center", ncol=3, fontsize=12, frameon=False)
-    fig.tight_layout(rect=(0, 0.08, 1, 1))
-    fn = os.path.join(OUT_DIR, f"zip{det}_{series}_cumulative_energy_{chan}_slide.png")
+        ax = axes[0][k]
+        ax.plot(t_full, f["di"] * 1e9, lw=0.4, color="#DADADA", zorder=1)
+        ax.plot(t_full, f["di20"] * 1e9, lw=0.9, color="#5B7FA6", zorder=2)
+        ax.plot(t_full, e["fit"] * 1e9, lw=1.6, color="#E00000", zorder=3)
+        ax.axhline(0, color="black", lw=0.8, zorder=4)
+        m_post = float(f["di20"][post].mean())
+        ax.hlines(m_post * 1e9, t_full[post][0], t_full[-1], color="#1B7A3D", lw=2.0,
+                  ls=(0, (5, 3)), zorder=5)
+        ax.text(t_full[-1], m_post * 1e9, f"  {m_post * 1e9:+.1f} nA", color="#1B7A3D",
+                fontsize=11, va="center", ha="left", clip_on=False)
+        ax.axvspan(BASE_LO * DT * 1e3, BASE_HI * DT * 1e3, color="#F2F2F2", zorder=0)
+        ax.axvline(TRIGGER_BIN * DT * 1e3, color="gray", lw=0.6, ls=":", zorder=1)
+        # the pulse is ~230 nA tall; zoom on the baseline so a few nA are visible
+        ax.set_ylim(-60, 60)
+        ax.set_title(f"{chan} event {evn}: the current (pulse runs off the top)",
+                     fontsize=12)
+        finish(ax, "", "current $\\delta I$ (nA)")
+        draw_cum(axes[1][k], chan, f, e, f"{chan} event {evn}")
+        finish(axes[1][k], "time from trace start (ms)", "cumulative energy (eV)")
+    L2D = plt.Line2D
+    handles = [
+        L2D([], [], lw=3.0, color="#CDCDCD"), L2D([], [], lw=1.2, color="#5B7FA6"),
+        L2D([], [], lw=1.0, color="black"),
+        L2D([], [], lw=2.0, color="#1B7A3D", ls=(0, (5, 3))),
+        L2D([], [], lw=1.8, color="#E00000"), L2D([], [], lw=1.2, color="#8899AA"),
+        L2D([], [], lw=1.0, color="#1B7A3D", ls=(0, (5, 3))),
+    ]
+    labels = ["top: raw current", "top: raw current, 20 kHz low pass",
+              "top: baseline (mean of 0.15-25.2 ms)", "top: mean current after the pulse",
+              "fitted pulse (top) and its energy (bottom)",
+              "bottom: energy from the raw current", "bottom: closed-form energy"]
+    fig.legend(handles, labels, loc="lower center", ncol=4, fontsize=11.5, frameon=False)
+    fig.tight_layout(rect=(0, 0.085, 0.97, 1))
+    fn = os.path.join(OUT_DIR, f"zip{det}_{series}_raw_and_cumulative_{chan}_slide.png")
     fig.savefig(fn, dpi=160)
     plt.close(fig)
     print("saved", fn)
+    for evn in slide_ev:
+        f, _ = fits[evn]
+        print(f"  event {evn}: mean current after the pulse "
+              f"{f['di20'][post].mean() * 1e9:+.2f} nA")
 
 slide_ch = [c for c in args.slide_chans if c in ch_fits]
 if slide_ch:

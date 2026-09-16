@@ -53,7 +53,13 @@ def title(s, text, sub=None):
     tb = textbox(s, L, Inches(0.25), W, Inches(0.8))
     run(tb.text_frame.paragraphs[0], text, 27, NAVY, bold=True)
     if sub:
-        run(tb.text_frame.add_paragraph(), sub, 14, GRAY)
+        # a (plain, bold) pair puts the second half of the subtitle in bold
+        para = tb.text_frame.add_paragraph()
+        if isinstance(sub, tuple):
+            run(para, sub[0], 14, GRAY)
+            run(para, sub[1], 14, DARK, bold=True)
+        else:
+            run(para, sub, 14, GRAY)
     ln = s.shapes.add_shape(1, L, Inches(1.06), W, Emu(18000))
     ln.fill.solid(); ln.fill.fore_color.rgb = NAVY; ln.line.fill.background()
 
@@ -103,10 +109,9 @@ run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab/coll
 s = new("问题是什么")
 pic(s, "chain.png", L, Inches(1.4), W, Inches(2.6))
 lines(s, [
-    "收集效率  =  到达 TES 薄膜的能量  ÷  事件放进晶体的 10.37 keV",
-    "我们记录下来的是一条电流脉冲。",
-    "!电流曲线下面的面积不是能量 —— 所以必须先把脉冲换成功率。",
-    "样本：Z7，Ge 活化的 K 线事件（2207 个事件，30 个 series，11 个通道的原始波形全部保存）。",
+    "!对于在 0 V 下工作的探测器（没有 NTL 效应）：",
+    "收集效率  =  TES 吸收的能量（所有通道求和）  ÷  事件放进晶体的 10.37 keV",
+    "样本：Z7，Ge 活化的 K 线事件，来自 SNOLAB R4（2207 个事件，30 个 series，11 个通道）。",
 ], L, Inches(4.3), W, Inches(2.7))
 
 # --------------------------------------------------- 3 公式是怎么来的
@@ -123,13 +128,15 @@ lines(s, [
 s = new("公式和它需要的两个数")
 pic(s, "formula.png", L, T, W, Inches(4.3))
 lines(s, [
-    "功率 = 电流变化 δI 之后焦耳热的变化量：一个线性项，加一个很小的二次项。",
-    "!拟合出双指数，从 −∞ 积到 +∞：能量就是 A、τ_f、τ_r 的一个公式。",
+    "δP = 电流变化 δI 之后焦耳热的变化量：一个线性项，加一个很小的二次项。",
 ], L, Inches(5.65), W, Inches(1.5), size=16)
 
 # ------------------------------------------------------------------ 4 主图
-s = new("一个脉冲，三种读法", "Z7 PBS1，事件 30646：同一条波形，读成 ADC 计数、读成电流、读成功率")
-pic(s, "peak_full.png", L, T, W, Inches(5.75))
+s = new("例子：一个脉冲", ("Z7 PBS1，事件 30646：  ", "同一条波形，读成 ADC 计数、读成电流、读成功率"))
+pic(s, "peak_full.png", L, T, W, Inches(5.3))
+lines(s, [
+    "!双指数拟合用的是 100 kHz 低通之后的波形（蓝线），不是原始采样点；原始采样点只是画出来对照。",
+], L, Inches(6.62), W, Inches(0.5), size=14)
 
 # ------------------------------------------------------------------ 5 峰高
 s = new("脉冲高度：从拟合取，不从最大的采样点取")
@@ -150,18 +157,18 @@ lines(s, [
 
 # ------------------------------------------------------------------ 7 积拟合不积 raw
 s = new("为什么积分的是拟合脉冲，不是原始数据")
-pic(s, "cum_slide.png", L, T, W, Inches(4.35))
+pic(s, "raw_cum_slide.png", L, T, W, Inches(5.05))
 lines(s, [
-    "红线，来自拟合：脉冲之前是 0，1 ms 之内升上去，之后保持水平 —— 终点正好等于公式算出的值。",
-    "!灰线，来自原始波形：一直在漂。基线偏 1 nA，15 ms 积下来就是 42 eV。右图：拟合 277 eV，原始波形 −169 eV。",
-], L, Inches(5.75), W, Inches(1.35), size=15)
+    "上：这两个事件的原始电流，纵轴放大到基线附近。下：由它累计的能量（灰）和由拟合累计的能量（红）。",
+    "!右：脉冲过后电流比基线低 6 nA —— 埋在 28 nA 的噪声里看不出来，但 24 ms 积下来就是 −420 eV：原始 −169 eV，拟合 277 eV。",
+], L, Inches(6.33), W, Inches(0.9), size=13)
 
 # ------------------------------------------------------------------ 8 其他通道
 s = new("同一个事件的其他通道：加起来是 33%", "Z7 事件 30646；11 个通道里的 4 个")
 pic(s, "allchan_slide.png", L, T, W, Inches(4.45))
 lines(s, [
     "各通道分到的能量很不均匀（PES1 489 eV，PES2 195 eV）：事件发生的位置更靠近一侧。",
-    "!11 个通道加起来：3419 eV = 10.37 keV 的 33.0%。   PDS2（右下）有一个缓慢的大起伏 —— 记住它。",
+    "!11 个通道加起来：3419 eV = 10.37 keV 的 33.0%。   PDS2（右下）有一个缓慢的大起伏。",
 ], L, Inches(5.75), W, Inches(1.3), size=15)
 
 # ------------------------------------------------------------------ 9 所有事件
@@ -200,7 +207,7 @@ pic(s, "spectrum_zip7.png", L, T, W, Inches(5.75))
 
 s = new("Backup — 功率公式的三个版本")
 lines(s, [
-    "P = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²     c₂ = 2（method 1，本报告用的）、1（精确的小信号解）、−1（method 2）",
+    "δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²     c₂ = 2（method 1，本报告用的）、1（精确的小信号解）、−1（method 2）",
     "相对精确解：method 1 高 0.58%，method 2 低 1.15% —— 远小于单通道 15% 的宽度和 PDS2 的范围。",
     "完整方程里的电感项需要 L 和 loop gain，要从 dI/dV 来，MSI 上这些 series 没有这个数据；这一项被忽略。",
     "官方 Eabs（触发在第 16383 点，基线是 93..15758 点的平均，5 阶 20 kHz 预滤波，窗口 −0.5/+1 ms，同一个公式）复现到 0.2%；直方图页上的灰色轮廓就是它。",

@@ -4,7 +4,7 @@
 稿子是说的话，不是幻灯片的复读：数字都在屏幕上，嘴里讲思路。斜体是给自己的提示，不用念。**加粗的英文**是指着屏幕说的那几句。
 
 整条逻辑就一句话：**一个脉冲怎么读成能量，然后把这个读法用到所有通道、所有事件。**
-时间分配（秒）：1 题目 20 · 2 问题 55 · 3 公式来历 75 · 4 公式 45 · 5 主图总览 45 · 6 峰高 100 · 7 功率和面积 85 · 8 拟合不积 raw 65 · 9 其他通道 55 · 10 所有事件 65 · 11 求和 95 · 12 总结 45 → 约 750 秒。
+时间分配（秒）：1 题目 20 · 2 问题 55 · 3 公式来历 75 · 4 公式 45 · 5 主图总览 50 · 6 峰高 95 · 7 功率和面积 85 · 8 拟合不积 raw 80 · 9 其他通道 55 · 10 所有事件 65 · 11 求和 95 · 12 总结 45 → 约 765 秒。
 
 ---
 
@@ -18,9 +18,9 @@
 
 ## Slide 2 — The question（约 55 秒）
 
-**中文**：先把问题定义好。收集效率就是到达 TES 薄膜的能量，除以事件放进晶体的 10.37 keV。我们手里有的是一条电流脉冲：声子把薄膜加热，TES 的电流变了一点，这个变化叫 δI。这里有个坑：电流曲线下面的面积是电荷，不是能量，它跟 10.37 keV 根本比不了。所以第一步一定是把电流换成功率。屏幕上这条链就是全部流程：晶体里的能量，声子到薄膜，电流脉冲，功率脉冲，功率的积分是能量，最后除以 10.37 keV。样本是 Z7 上 Ge 活化的 K 线事件，30 个 series，2207 个事件，每个事件 11 个通道的原始波形都存了。Z7 是最安静的探测器，K 线峰和噪声分得很开，所以这批事件能量完全一样、又干净。
+**中文**：先把问题定义好。对于在 0 伏下工作的探测器，也就是没有 NTL 放大的情况，收集效率就是 TES 吸收的能量除以事件放进晶体的 10.37 keV。这里的能量是所有通道加起来的总和。强调 0 伏，是因为加了偏压以后，电子空穴在电场里漂移会额外产生声子，这就是 NTL 效应，那时候晶体里的总能量就不止 10.37 keV 了。屏幕上这条链就是全部流程：晶体里的能量，声子到达 TES 薄膜，我们记录到电流脉冲 δI，把它换算成功率的变化 δP，δP 积分得到一个通道的能量，所有通道加起来，最后除以 10.37 keV。样本是 SNOLAB R4 里 Z7 的 Ge 活化 K 线事件，30 个 series，2207 个事件，每个事件 11 个通道。Z7 是最安静的探测器，K 线峰和噪声分得很开，所以这批事件能量完全一样、又干净。
 
-**English**: First the definition. Collection efficiency is the energy that reaches the TES films, divided by the 10.37 keV the event put into the crystal. What we have is a current pulse: phonons heat the film, the TES current changes a little, and that change is delta I. And here is the trap: **the area under a current is a charge, not an energy.** It simply cannot be compared with 10.37 keV. So the first step is always to turn the current into power. **The chain on the screen is the whole procedure:** energy in the crystal, phonons to the film, current pulse, power pulse, the integral of the power is the energy, and then divide by 10.37 keV. The sample is the K-line events of the germanium activation on Z7: thirty series, 2207 events, with the raw trace of all eleven channels saved for each one. Z7 is the quietest detector, the K line is well separated from the noise, so these events are clean and all have the same energy.
+**English**: First the definition. **For a detector operated at zero volts, so with no NTL amplification, the collection efficiency is the energy absorbed by the TESs divided by the 10.37 keV the event put into the crystal,** where the energy is summed over all channels. The zero volts matters: with a bias, the electrons and holes drifting in the field make extra phonons, that is the NTL effect, and then the crystal holds more than 10.37 keV. **The chain on the screen is the whole procedure:** energy in the crystal, phonons reach the TES films, we record a current pulse delta I, we convert it into a change of power, delta P, the integral of delta P is the energy in one channel, we add up all the channels, and divide by 10.37 keV. The sample is the germanium-activation K-line events on Z7 from SNOLAB R4: thirty series, 2207 events, eleven channels each. Z7 is the quietest detector and its K line is well separated from the noise, so these events are clean and all have the same energy.
 
 ---
 
@@ -36,17 +36,17 @@
 
 ## Slide 4 — The formula, and the two numbers it needs（约 45 秒）
 
-**中文**：换算公式就这一行。薄膜吸收的功率，是电流变了 δI 之后焦耳热的变化量，写出来是一个线性项加一个二次项。这是 TES 的小信号结果，也是 CDMS 收集效率文档里的 method 1。两个系数都是这个通道实测的偏置点：I0、R0、还有负载电阻，全从处理文件里读出来，没有任何拟合和调参。以 PBS1 为例，线性项系数是 4.5 乘 10 的负 7 伏，二次项是 0.0385 欧姆。第二行更重要：拟合出双指数以后，直接从负无穷积到正无穷，脉冲开始之前是 0，之后指数衰减到 0，所以能量就是幅度 A 和两个时间常数的一个公式，代进去就行。这一点后面会反复用到。
+**中文**：换算公式就这一行。δP 是电流变了 δI 之后焦耳热的变化量，写出来是一个线性项加一个二次项，这就是上一页推导的结果，也是 CDMS 收集效率文档里的 method 1。两个系数都来自这个通道的偏置点：I0、R0 和负载电阻。以 PBS1 为例，线性项系数是 0.45 微伏，二次项系数是 0.0385 欧姆。第二行是能量：拟合出双指数以后，δP 的积分有解析式，能量就是幅度 A 和两个时间常数的一个公式，代进去就行。这一点后面会反复用到。
 
-**English**: The conversion is this one line. **The power the film absorbs is the change in Joule heating when the current moves by delta I, and it comes out as a linear term plus a quadratic term.** This is the small-signal result for a TES, and it is Method 1 of the CDMS collection-efficiency note. Both coefficients are the measured bias point of that channel: I zero, R zero and the load resistance, all read from the processing files, nothing fitted, nothing tuned. For PBS1 the linear coefficient is 4.5 times ten to the minus seven volts and the quadratic one is 0.0385 ohms. **The second line matters more: once the two-exponential is fitted, you integrate it from minus infinity to plus infinity.** It is zero before the pulse starts and decays to zero after, so the energy is just a formula in the fitted amplitude A and the two time constants. We will lean on that repeatedly.
+**English**: The conversion is this one line. **Delta P is the change in Joule heating when the current moves by delta I, and it comes out as a linear term plus a quadratic term** — the result of the previous slide, and Method 1 of the CDMS collection-efficiency note. Both coefficients come from the bias point of that channel: I zero, R zero and the load resistance. **For PBS1 the linear coefficient is 0.45 microvolts and the quadratic one is 0.0385 ohms.** The second line is the energy: once the two-exponential is fitted, the integral of delta P has a closed form, so the energy is just a formula in the amplitude A and the two time constants. We will lean on that repeatedly.
 
 ---
 
-## Slide 5 — One pulse, read three ways（约 45 秒）
+## Slide 5 — Example: one pulse（约 50 秒）
 
-**中文**：这就是今天的主图。一个通道，PBS1，一个事件，只放大脉冲附近 1.3 毫秒。上半部分是脉冲本身，下半部分是它对应的功率。上半部分有三条纵轴：左边是减掉基线的 ADC 计数，也就是仪器直接记下来的数；右边第一条是微安，1 个 ADC 等于 0.318 纳安；右边第二条是飞瓦，用刚才的公式换算的。三条轴对应的是同一条曲线。意思是，同一个脉冲可以同时读成 ADC、电流和功率，中间只是乘了已知的系数，没有别的手脚。下面两页分别把这两个部分讲清楚。
+**中文**：下面用一个例子。一个通道 PBS1，一个事件 30646，只放大脉冲附近 1.3 毫秒。副标题加粗的那句就是这页的意思：同一条波形，可以读成 ADC 计数，读成电流，读成功率。上半部分是脉冲本身，有三条纵轴：左边是减掉基线的 ADC 计数，也就是仪器直接记下来的数；右边第一条是微安，1 个 ADC 等于 0.318 纳安；右边第二条是飞瓦，用刚才的公式换算的。下半部分是对应的功率。先回答一个问题：双指数拟合是在哪条曲线上做的？是在 100 kHz 低通之后的波形上，也就是蓝线，不是原始采样点。原始采样点只是画出来对照。下面两页分别把上下两部分讲清楚。
 
-**English**: This is the main figure of the talk. One channel, PBS1, one event, zoomed in on 1.3 milliseconds around the pulse. **The top panel is the pulse itself; the bottom panel is the power it implies. The top panel has three vertical axes: on the left ADC counts above the baseline, which is what the instrument records; on the first right axis microamps, one ADC being 0.318 nanoamps; on the second right axis femtowatts, converted with the formula from the last slide.** All three axes belong to the same curve. So one pulse can be read as ADC, as current and as power at the same time, and in between there are only known factors, nothing else. The next two slides go through the two panels one at a time.
+**English**: Now an example. One channel, PBS1, one event, 30646, zoomed in on 1.3 milliseconds around the pulse. **The bold part of the subtitle is the point of this slide: the same trace, read as ADC counts, as current, and as power.** The top panel is the pulse itself, with three vertical axes: on the left ADC counts above the baseline, which is what the instrument records; on the first right axis microamps, one ADC being 0.318 nanoamps; on the second right axis femtowatts, from the formula. The bottom panel is the power. **One question first: which curve is the two-exponential fitted to? The 100 kilohertz low-passed trace, the blue one, not the raw samples.** The raw samples are only drawn for comparison. The next two slides go through the two panels.
 
 ---
 
@@ -68,19 +68,19 @@
 
 ---
 
-## Slide 8 — Why the fitted pulse is integrated, and not the data（约 65 秒）
+## Slide 8 — Why the fitted pulse is integrated, and not the data（约 80 秒）
 
-**中文**：有人会问，既然公式对任何电流都能用，为什么不直接对原始数据积分。这页就是答案。纵轴是累计能量，从波形开头一路积到时间 t；横轴是整条 52 毫秒的波形，触发在 26 毫秒那条点线。红线是积分拟合脉冲：触发前是 0，脉冲一来 1 毫秒之内升上去，之后保持水平，终点正好等于绿色虚线，就是公式算出来的解析值。这就是从负无穷积到正无穷的那个值。灰线是积分原始波形，它一直在漂。原因很简单：基线只要偏 1 纳安，15 毫秒积下来就是 42 电子伏。右边这个事件，拟合给 277 电子伏，原始波形积到最后是负 169。所以能量必须从拟合来：没有最大值的噪声偏差，没有漂移。
+**中文**：有人会问，既然公式对任何电流都能用，为什么不直接对原始数据积分。这页就是答案。上面一排是这两个事件的原始电流本身：灰色是原始采样，蓝色是 20 kHz 低通，红色是拟合的脉冲，纵轴放大到基线附近正负 60 纳安，所以脉冲本身冲出了图的上边。黑线是基线，绿色虚线是脉冲之后电流的平均值。左边这个事件，脉冲之后电流基本回到基线，只偏了 0.1 纳安；右边这个事件，脉冲之后电流整体比基线低了 6 纳安。下面一排是对应的累计能量，横轴对齐。红线是积分拟合脉冲：触发前是 0，1 毫秒之内升上去，之后保持水平，终点正好等于绿色虚线的公式值。灰线是积分原始波形。左边原始和拟合只差 11 电子伏；右边那 6 纳安的偏移，单个点看完全埋在 28 纳安的噪声里，但换成功率是负 2.8 飞瓦，24 毫秒积下来就是负 420 电子伏，所以原始积分最后掉到负 169，而拟合给的是 277。所以能量必须从拟合来：没有最大值的噪声偏差，也不受基线漂移影响。
 
-**English**: One might ask: the formula works for any current, so why not integrate the raw data directly? This slide is the answer. **The vertical axis is the accumulated energy, integrated from the start of the trace up to time t; the horizontal axis is the whole 52 millisecond trace, with the trigger at the dotted line at 26 milliseconds. The red curve is the integral of the fitted pulse: zero before the pulse, up within one millisecond, then flat, and its end value is exactly the green dashed line,** the closed-form value from the formula. That is the minus-infinity-to-plus-infinity value. **The grey curve is the integral of the raw trace, and it drifts.** The reason is simple: a baseline offset of just one nanoamp, over 15 milliseconds, is already 42 electron volts. **For the event on the right the fit gives 277 electron volts, and the raw integral ends at minus 169.** So the energy has to come from the fit: no noise bias from the maximum, and no drift.
+**English**: One might ask: the formula works for any current, so why not integrate the raw data directly? This slide is the answer. **The top row is the raw current of these two events: grey the raw samples, blue a 20 kilohertz low pass, red the fitted pulse, zoomed to plus or minus 60 nanoamps around the baseline, so the pulse itself runs off the top. The black line is the baseline, and the dashed green line is the mean current after the pulse.** On the left, after the pulse the current comes back to its baseline, off by only 0.1 nanoamps. **On the right, after the pulse the current sits 6 nanoamps below its baseline.** **The bottom row is the accumulated energy, on the same time axis.** Red is the integral of the fitted pulse: zero before, up within one millisecond, then flat, and it ends exactly on the formula value in green. Grey is the integral of the raw trace. On the left the two differ by 11 electron volts. On the right, that 6 nanoamp offset is buried in 28 nanoamps of noise on any single sample, but as power it is minus 2.8 femtowatts, and over 24 milliseconds that is minus 420 electron volts. **So the raw integral ends at minus 169, while the fit gives 277.** The energy has to come from the fit: no noise bias from the maximum, and no baseline drift.
 
 ---
 
 ## Slide 9 — The same event in its other channels（约 55 秒）
 
-**中文**：一个通道讲完了，现在把同一个事件的 11 个通道都这样算，这里放四个。各通道拿到的份额差别很大：PES1 是 489 电子伏，PES2 只有 195，说明这个事件发生的位置更靠近 PES1 那一边。11 个通道加起来是 3419 电子伏，占 10.37 keV 的 33%。作为核对，把官方窗口直接用在原始波形上，加起来是 3397，两者只差 0.6%。右下角的 PDS2 要记住：5 毫秒之后波形有一个缓慢的大起伏，这是这个通道的低频伪影，它的拟合残差是别的通道的三倍，后面它会出问题。
+**中文**：一个通道讲完了，现在把同一个事件的 11 个通道都这样算，这里放四个。各通道拿到的份额差别很大：PES1 是 489 电子伏，PES2 只有 195，说明这个事件发生的位置更靠近 PES1 那一边。11 个通道加起来是 3419 电子伏，占 10.37 keV 的 33%。作为核对，把官方窗口直接用在原始波形上，加起来是 3397，两者只差 0.6%。右下角的 PDS2：5 毫秒之后波形有一个缓慢的大起伏，这是这个通道的低频伪影，它的拟合残差是别的通道的三倍，后面求和的时候它会是误差的来源。
 
-**English**: One channel is done; now the same reading for all eleven channels of the same event, four of them shown here. **The shares differ a lot: PES1 gets 489 electron volts, PES2 only 195,** so this event happened closer to the PES1 side. **Summed over the eleven channels: 3419 electron volts, 33 percent of 10.37 keV.** As a check, the official window applied to the raw traces gives 3397; the two agree to 0.6 percent. **And remember PDS2 in the bottom right: after 5 milliseconds there is a slow, large swing.** That is a low-frequency artefact of that channel, its fit residual is three times the others, and it will cause trouble later.
+**English**: One channel is done; now the same reading for all eleven channels of the same event, four of them shown here. **The shares differ a lot: PES1 gets 489 electron volts, PES2 only 195,** so this event happened closer to the PES1 side. **Summed over the eleven channels: 3419 electron volts, 33 percent of 10.37 keV.** As a check, the official window applied to the raw traces gives 3397; the two agree to 0.6 percent. **PDS2 in the bottom right: after 5 milliseconds there is a slow, large swing.** That is a low-frequency artefact of that channel; its fit residual is three times the others, and in the sum it becomes the source of the uncertainty.
 
 ---
 
@@ -113,8 +113,8 @@
 **B1 事件谱**：Z7 的 PTOFamps 谱，紫色是我们自己从 Prompt 处理重做的、没加 cut，黑色是运行记录里的图，红线是 K 线，2 乘 10 的负 6 安。
 **B1 The events**: the PTOFamps spectrum of Z7; purple is our own rebuild from the Prompt processing with no cut, black the ops-note histogram, the red line the K line at 2 times ten to the minus six amps.
 
-**B2 公式的三个版本和官方 Eabs**：二次项系数 2 是 method 1，1 是精确小信号解，负 1 是 method 2；相对精确解，method 1 高 0.58%，method 2 低 1.15%。官方 Eabs 我们复现到 0.2%：触发在第 16383 点，基线是 93 到 15758 点的平均，20 kHz 五阶 Butterworth，窗口触发前 0.5 毫秒到后 1 毫秒。
-**B2 Formula versions and the official Eabs**: 2 is Method 1, 1 the exact small-signal result, minus 1 Method 2; relative to exact, Method 1 is 0.58 percent high and Method 2 1.15 percent low. The official Eabs is reproduced to 0.2 percent: trigger at bin 16383, baseline the mean of bins 93 to 15758, a 5-pole 20 kilohertz Butterworth, window minus 0.5 to plus 1 millisecond.
+**B2 公式的三个版本和官方 Eabs**：δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²，二次项系数 2 是 method 1，1 是精确小信号解，负 1 是 method 2；相对精确解，method 1 高 0.58%，method 2 低 1.15%。官方 Eabs 我们复现到 0.2%：触发在第 16383 点，基线是 93 到 15758 点的平均，20 kHz 五阶 Butterworth，窗口触发前 0.5 毫秒到后 1 毫秒。
+**B2 Formula versions and the official Eabs**: in delta P = I zero (R L minus R zero) delta I plus c two R L delta I squared, 2 is Method 1, 1 the exact small-signal result, minus 1 Method 2; relative to exact, Method 1 is 0.58 percent high and Method 2 1.15 percent low. The official Eabs is reproduced to 0.2 percent: trigger at bin 16383, baseline the mean of bins 93 to 15758, a 5-pole 20 kilohertz Butterworth, window minus 0.5 to plus 1 millisecond.
 
 **B3–B6**：完整原图：15 个事件的电流功率图和累计能量图，全通道图，11 个通道的能量分布（每个都右偏，PDS2 标了不进求和）。
 **B3–B6**: the full figures: the 15-event current-and-power and cumulative-energy grids, the all-channel grid, and the energy distribution of all eleven channels (every one right-skewed; PDS2 marked as left out).

@@ -19,7 +19,7 @@ Slide flow (12 main): title → the question (chain; the area under a current is
 not an energy) → where the formula comes from (the circuit and the five steps
 from the heat-flow equation, per Prof. Saab's request that the formula be
 explained) → the formula and the two numbers it needs (closed form, bias point)
-→ **one pulse, read three ways** (the full figure) → the height: take it from the
+→ **example: one pulse** (the full figure; the fit is on the 100 kHz low-passed trace) → the height: take it from the
 fit (raw max 885 vs fit 717 ADC, +23 %) → the power pulse and its area
 (quadratic 1.9 %, 305 eV) → why the fit is integrated and not the data (drift,
 −169 vs 277 eV) → the same event in its other channels (3419 eV = 33 %) → every
@@ -43,3 +43,18 @@ module load libreoffice && libreoffice --headless --convert-to pdf SNOLAB_R4_col
 python3 build_speech_pdf.py speech_script.md speech_script.html
 chromium-browser --headless --no-sandbox --print-to-pdf=speech_script.pdf --no-pdf-header-footer speech_script.html
 ```
+
+## Revision after Prof. Liu's annotations (September 2026)
+
+The annotated copy is `纠正意见.pdf` (it marks the 17-slide version, so its page
+numbers from 3 on are one lower than the current deck). Applied:
+
+- slide 2: "for detectors operated at 0 V (no NTL effect)" on the definition;
+  energy summed over all channels; the chain uses δP; the two lines about the
+  current pulse and its area removed; the sample is "from SNOLAB R4";
+- slide 4: δP throughout; I₀(R_L−R₀) written as 0.45 µV; the −∞..+∞ line removed;
+- slide 5: titled "Example: one pulse", the subtitle's description in bold, and a
+  line stating the fit is done on the 100 kHz low-passed trace, not on raw;
+- slide 8: the raw current of the two events added above their cumulative
+  energy (`zip7_24260617_063934_raw_and_cumulative_PBS1_slide.png`);
+- slide 9: "remember it" removed.
