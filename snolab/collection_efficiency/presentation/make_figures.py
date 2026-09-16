@@ -26,8 +26,6 @@ os.makedirs(OUT, exist_ok=True)
 S = "zip7_24260617_063934"
 CROPS = {
     # (source, box in source pixels)
-    "peak_top.png": (f"{S}_peak_raw_vs_lp_PBS1_ev30646.png", (0, 150, 2160, 1040)),
-    "peak_bottom.png": (f"{S}_peak_raw_vs_lp_PBS1_ev30646.png", (0, 1060, 2160, 1630)),
     "pulse_ev30646.png": (f"{S}_current_power_PBS1_15events.png", (15, 248, 745, 492)),
     "pulse_ev100231.png": (f"{S}_current_power_PBS1_15events.png", (1430, 520, 2200, 778)),
     "pulse_legend.png": (f"{S}_current_power_PBS1_15events.png", (440, 1630, 1780, 1680)),
@@ -46,6 +44,8 @@ COPY = {
     "hist_allchan.png": os.path.join(SRC, "zip7_kline_energy_hist_allchan.png"),
     "hist_sum.png": os.path.join(SRC, "zip7_kline_energy_sum_hist.png"),
     "peak_full.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646.png"),
+    "peak_top.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646_top.png"),
+    "peak_bottom.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646_bottom.png"),
     "pulse_15events.png": os.path.join(SRC, f"{S}_current_power_PBS1_15events.png"),
     "cum_15events.png": os.path.join(SRC, f"{S}_cumulative_energy_PBS1_15events.png"),
     "allchan_pulses.png": os.path.join(SRC, f"{S}_current_power_allchan_ev30646.png"),

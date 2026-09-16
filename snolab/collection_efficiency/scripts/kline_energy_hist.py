@@ -281,7 +281,7 @@ def gauss_curve(x, mu, sig, n, width):
 if len(chans) == 1:
     c = chans[0]
     st = stats[c]
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(11, 7.6))
     ax.hist(st["Er"], bins=st["bins"], histtype="step", lw=1.4, color="#8899AA",
             label=(f"official-window raw energy: $\\mu$ = {st['mur']:.1f} eV, "
                    f"$\\sigma$ = {st['sigr']:.1f} eV "
@@ -295,18 +295,22 @@ if len(chans) == 1:
     ax.plot(xg, gauss_curve(xg, st["mu"], st["sig"], st["nc"], BIN_W), lw=1.6,
             color="#7B241C", ls=(0, (5, 3)), label="Gaussian fit to the core")
     ax.axvline(st["mu"], color="#7B241C", lw=1.0, ls=":")
-    ax.set_xlabel(f"absorbed energy per event, {c} (eV)", fontsize=12)
-    ax.set_ylabel("K-line events per 10 eV", fontsize=12)
+    ax.set_xlabel(f"absorbed energy per event, {c} (eV)", fontsize=16)
+    ax.set_ylabel("K-line events per 10 eV", fontsize=16)
+    ax.tick_params(labelsize=14)
     ax.set_title(f"Z{det} {c}: energy of every K-line event "
                  f"({st['n']} events, {len(series_list)} series)\n"
                  f"two-exponential fit per event, closed-form power integral "
-                 f"({args.formula}); fits with NRMSE > {NRMSE_MAX} dropped "
-                 f"({st['skip']} events)", fontsize=11)
-    ax.legend(fontsize=10)
+                 f"({args.formula})\n"
+                 f"fits with NRMSE > {NRMSE_MAX} dropped ({st['skip']} events)",
+                 fontsize=14)
+    # below the axes: the labels are long and would sit on the distribution
+    ax.legend(fontsize=13.5, loc="upper center", bbox_to_anchor=(0.5, -0.13),
+              frameon=False)
     ax.grid(alpha=0.25)
     fig.tight_layout()
     fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_hist_{c}.png")
-    fig.savefig(fn, dpi=150)
+    fig.savefig(fn, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print("saved", fn)
 
@@ -406,7 +410,7 @@ if len(stats) > 1:
               f"{mu_sub:.1f} eV on the all-channel subsample "
               f"({100 * (mu_sub / mu_s - 1):+.1f}%)")
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(11, 7.6))
     sbins = np.arange(0, 8000, 100.0)
     ax.hist(Es, bins=sbins, histtype="stepfilled", color="#1F3864", alpha=0.35,
             edgecolor="#1F3864", lw=1.6,
@@ -426,8 +430,9 @@ if len(stats) > 1:
     ax.axvline(E_TRUE, color="#C0392B", lw=1.8,
                label=f"true event energy {E_TRUE / 1e3:.2f} keV "
                      f"(all of it, before collection losses)")
-    ax.set_xlabel("summed absorbed energy per event (eV)", fontsize=12)
-    ax.set_ylabel("K-line events per 100 eV", fontsize=12)
+    ax.set_xlabel("summed absorbed energy per event (eV)", fontsize=16)
+    ax.set_ylabel("K-line events per 100 eV", fontsize=16)
+    ax.tick_params(labelsize=14)
     ax.set_title(
         f"Z{det}: total energy absorbed by the TESs per K-line event\n"
         f"core sum ({len(core)} channels, fit acceptance $\\geq$ "
@@ -435,18 +440,20 @@ if len(stats) > 1:
         f"{E_TRUE:.0f} = {100 * mu_s / E_TRUE:.1f}%, spread "
         f"{100 * sig_s / mu_s:.1f}%"
         + (f"\nleft out: {', '.join(left_out)} (fit acceptance "
-           f"{', '.join(f'{100 * accept[c]:.0f}%' for c in left_out)}); "
-           f"with it the efficiency lies between {100 * mu_a / E_TRUE:.1f}% and "
+           f"{', '.join(f'{100 * accept[c]:.0f}%' for c in left_out)}); with it the "
+           f"efficiency lies\nbetween {100 * mu_a / E_TRUE:.1f}% and "
            f"{100 * (mu_s + mu_a - mu_sub) / E_TRUE:.1f}% (a bracket, see the text file)"
-           if left_out and Es_all.size > 10 else ""), fontsize=11)
+           if left_out and Es_all.size > 10 else ""), fontsize=14)
     top = ax.secondary_xaxis("top", functions=(lambda e: 100 * e / E_TRUE,
                                                lambda p: p * E_TRUE / 100))
-    top.set_xlabel("collection efficiency (% of 10.37 keV)", fontsize=11)
-    ax.legend(fontsize=10, loc="upper right")
+    top.set_xlabel("collection efficiency (% of 10.37 keV)", fontsize=15)
+    top.tick_params(labelsize=14)
+    ax.legend(fontsize=13.5, loc="upper center", bbox_to_anchor=(0.5, -0.13),
+              frameon=False)
     ax.grid(alpha=0.25)
     fig.tight_layout()
     fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_sum_hist.png")
-    fig.savefig(fn, dpi=150)
+    fig.savefig(fn, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print("saved", fn)
 

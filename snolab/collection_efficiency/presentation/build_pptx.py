@@ -140,11 +140,11 @@ s = new("The height: take it from the fit, not from the largest sample",
               "prefilter), red the two-exponential fit, pink band fit ± 1 sigma (89 ADC). Yellow: 98 "
               "samples within 10% of the peak. Raw max 885 ADC vs fit 717: +23%. The maximum of 98 "
               "equal samples is the biggest upward noise. The fit averages every sample.")
-pic(s, "peak_top.png", L, T, W, Inches(4.55))
+pic(s, "peak_top.png", L, T, W, Inches(4.95))
 lines(s, [
     "Yellow band: 98 samples sit within 10 % of the peak. The largest of them is the largest noise excursion.",
     "!Largest raw sample 885 ADC, fit 717 ADC: the maximum reads 23 % high. Filtering helps; the fit removes it.",
-], L, Inches(5.9), W, Inches(1.2), size=16)
+], L, Inches(6.3), W, Inches(1.0), size=15)
 
 # ------------------------------------------------------------------ 6 power & area
 s = new("The power pulse, and its area is the energy",
@@ -152,12 +152,12 @@ s = new("The power pulse, and its area is the energy",
               "Purple dotted: quadratic term x20. Peak 104.6 fW = 102.6 + 2.0: quadratic 1.9% of "
               "peak, 1.3% of energy. Shaded area 305.2 eV, 99% inside this window. Bottom line: "
               "the bias point that fixes the coefficients.")
-pic(s, "peak_bottom.png", L, T, W, Inches(3.4))
+pic(s, "peak_bottom.png", L, T, W, Inches(4.0))
 lines(s, [
     "Red: the fitted current put through the formula. Blue dashed: the linear term alone. Purple: the quadratic term, ×20.",
     "!The quadratic term is 1.9 % of the peak — the power pulse has the shape of the current pulse.",
     "!The shaded area is the energy this channel absorbed: 305 eV.",
-], L, Inches(4.8), W, Inches(2.2), size=16)
+], L, Inches(5.4), W, Inches(1.8), size=15)
 
 # ------------------------------------------------------------------ 7 fit vs raw
 s = new("Why the fitted pulse is integrated, and not the data",
@@ -176,11 +176,11 @@ s = new("The same event in its other channels: they add up to 33 %",
         notes="PES1 489 eV, PES2 195 eV: position. Sum over 11 channels 3419 eV = 33.0%. Official "
               "window on the raw traces: 3397 eV = 32.8%. PDS2: slow swing after 5 ms, a "
               "low-frequency artefact; residual 0.14, three times the others.")
-pic(s, "allchan_slide.png", L, T, W, Inches(4.45))
+pic(s, "allchan_slide.png", L, T, W, Inches(4.65))
 lines(s, [
     "The channels share the energy unevenly (PES1 489 eV, PES2 195 eV): the event sat closer to one side.",
     "!Summed over the eleven channels: 3419 eV = 33.0 % of 10.37 keV.   PDS2 (bottom right) carries a slow swing.",
-], L, Inches(5.75), W, Inches(1.3), size=15)
+], L, Inches(6.0), W, Inches(1.1), size=15)
 
 # ------------------------------------------------------------------ 9 all events
 s = new("Now every event: one channel gives a wide, lopsided distribution",
@@ -188,7 +188,7 @@ s = new("Now every event: one channel gives a wide, lopsided distribution",
         notes="Red: fit. Grey outline: official window on the raw trace; same peak to 0.2%. Peak 285 "
               "eV, width 42 eV = 15%, for a fixed-energy line. Right tail to 600 eV: events near "
               "PBS1. The width is position, not noise.")
-pic(s, "hist_PBS1.png", L, T, Inches(8.6), Inches(5.75))
+pic(s, "hist_PBS1.png", L, T, Inches(8.8), Inches(5.9))
 lines(s, [
     "Red: from the fit. Grey: the official window on the raw trace. Same peak to 0.2 %.",
     "!Peak 285 eV, width 15 % — for a line whose energy is fixed.",
@@ -203,7 +203,7 @@ s = new("Summed over the channels: 32 ± 1 %",
               "7.5% — the position dependence cancels in the sum. PDS2 fits only 42% (the swing) "
               "and on those events the other ten channels are 4.8% low, so its share is a bracket: "
               "31.5 to 32.9%. Red line 10.37 keV.")
-pic(s, "hist_sum.png", L, T, Inches(8.6), Inches(5.75))
+pic(s, "hist_sum.png", L, T, Inches(8.8), Inches(5.9))
 lines(s, [
     "!Ten channels summed, 1827 events: 3162 eV = 30.5 %, and the width drops to 7.5 % — the position effect cancels.",
     "PDS2 fits only 42 % of the events (that slow swing), and those events are not typical; its share can only be bracketed.",

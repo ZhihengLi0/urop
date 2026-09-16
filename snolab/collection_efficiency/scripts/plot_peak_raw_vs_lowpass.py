@@ -133,7 +133,9 @@ top_lo = t_ms[np.argmax(fit_adc > TOP_FRAC * pk_fit)]
 top_hi = t_ms[N_BINS - 1 - np.argmax((fit_adc > TOP_FRAC * pk_fit)[::-1])]
 
 # ------------------------------------------------------------------- figure
-fig, (ax, axp) = plt.subplots(2, 1, figsize=(13.5, 10.4), sharex=True,
+FS = 1.45          # font scale: the figure is shown on a slide, keep the text readable there
+plt.rcParams.update({"xtick.labelsize": 10 * FS, "ytick.labelsize": 10 * FS})
+fig, (ax, axp) = plt.subplots(2, 1, figsize=(14.5, 11.6), sharex=True,
                               gridspec_kw=dict(height_ratios=(2.05, 1.0),
                                                hspace=0.07))
 
@@ -145,13 +147,13 @@ ax.fill_between(tt, fit_adc[sl] - sigma, fit_adc[sl] + sigma, color="#C0392B",
                 alpha=0.13, lw=0, zorder=1)
 
 # the four curves, thin and visually distinct
-ax.plot(tt, raw[sl], ls="none", marker="o", ms=1.9, color="#7F8C8D",
+ax.plot(tt, raw[sl], ls="none", marker="o", ms=2.6, color="#7F8C8D",
         alpha=0.85, zorder=2, label="raw samples, one per 1.6 $\\mu$s")
-ax.plot(tt, lp100[sl], lw=0.9, color="#1F77B4", zorder=3,
+ax.plot(tt, lp100[sl], lw=1.2, color="#1F77B4", zorder=3,
         label=f"low pass {LP_FIT_KHZ:.0f} kHz (what the fit sees)")
-ax.plot(tt, lp20[sl], lw=1.1, color="#2E8B57", zorder=4,
+ax.plot(tt, lp20[sl], lw=1.5, color="#2E8B57", zorder=4,
         label=f"low pass {LP_OFF_KHZ:.0f} kHz (official Eabs prefilter)")
-ax.plot(tt, fit_adc[sl], lw=1.7, color="#C0392B", zorder=5,
+ax.plot(tt, fit_adc[sl], lw=2.4, color="#C0392B", zorder=5,
         label="two-exponential fit")
 ax.plot([], [], color="#C0392B", alpha=0.25, lw=8,
         label=f"fit $\\pm$ 1$\\sigma$ noise ($\\sigma$ = {sigma:.0f} ADC)")
@@ -166,10 +168,10 @@ rows = [("raw max", pk_raw, "#7F8C8D"),
         (f"LP {LP_FIT_KHZ:.0f} kHz", pk_100, "#1F77B4"),
         (f"LP {LP_OFF_KHZ:.0f} kHz", pk_20, "#2E8B57"),
         ("fit peak", pk_fit, "#C0392B")]
-box_x, box_y, dy = 0.985, 0.975, 0.052
+box_x, box_y, dy = 0.985, 0.975, 0.066
 ax.text(box_x, box_y, f"{'pulse height':<12}{'ADC':>8}{'uA':>10}{'fW':>9}"
         f"{'vs fit':>9}", transform=ax.transAxes, ha="right", va="top",
-        family="monospace", fontsize=10, weight="bold", zorder=8, bbox=dict(facecolor="white", alpha=0.88, edgecolor="none", pad=1.5), )
+        family="monospace", fontsize=10 * FS, weight="bold", zorder=8, bbox=dict(facecolor="white", alpha=0.88, edgecolor="none", pad=1.5), )
 for k, (lab, y, c) in enumerate(rows):
     ax.text(box_x, box_y - (k + 1) * dy,
             f"{lab:<12}{y:8.1f}{y / ADC_PER_AMP * 1e6:10.4f}"
@@ -177,20 +179,20 @@ for k, (lab, y, c) in enumerate(rows):
             + (f"{(y - pk_fit) / sigma:+8.2f}$\\sigma$" if y != pk_fit else
                f"{'-':>9}"),
             transform=ax.transAxes, ha="right", va="top", color=c,
-            family="monospace", fontsize=10, zorder=8, bbox=dict(facecolor="white", alpha=0.88, edgecolor="none", pad=1.5), )
+            family="monospace", fontsize=10 * FS, zorder=8, bbox=dict(facecolor="white", alpha=0.88, edgecolor="none", pad=1.5), )
 ax.text(box_x, box_y - 5.2 * dy,
         f"{'energy (closed form)':<20}{E_EV:8.1f} eV", transform=ax.transAxes,
-        ha="right", va="top", color="#C0392B", family="monospace", fontsize=10,
+        ha="right", va="top", color="#C0392B", family="monospace", fontsize=10 * FS,
         weight="bold", zorder=8, bbox=dict(facecolor="white", alpha=0.88, edgecolor="none", pad=1.5), )
 
-ax.annotate(f"largest single sample, {pk_raw - pk_fit:.0f} ADC "
-            f"({(pk_raw - pk_fit) / sigma:.2f}$\\sigma$) above the fit",
+ax.annotate(f"largest sample: +{pk_raw - pk_fit:.0f} ADC "
+            f"({(pk_raw - pk_fit) / sigma:.2f}$\\sigma$)",
             xy=(t_ms[i_raw], pk_raw), xytext=(0.015, 0.965),
-            textcoords="axes fraction", fontsize=10, color="#34495E",
+            textcoords="axes fraction", fontsize=10 * FS, color="#34495E",
             arrowprops=dict(arrowstyle="->", color="#34495E", lw=1.0))
 ax.annotate(f"flat top:\n{n_top} samples within\n{100 * (1 - TOP_FRAC):.0f}% of the peak",
             xy=(top_lo, 0.62 * pk_fit),
-            xytext=(0.015, 0.50), textcoords="axes fraction", fontsize=10,
+            xytext=(0.015, 0.50), textcoords="axes fraction", fontsize=10 * FS,
             color="#8A6D00",
             arrowprops=dict(arrowstyle="->", color="#8A6D00", lw=1.0))
 
@@ -206,66 +208,73 @@ e_win = float(_trapz(p_fit[sl] * 1e-15, tt * 1e-3) / 1.602176634e-19)
 
 axp.axhline(0, color="#777777", lw=0.8, zorder=1)
 axp.fill_between(tt, 0, p_fit[sl], color="#C0392B", alpha=0.13, lw=0, zorder=1,
-                 label=f"area under $P$ = energy: {E_EV:.1f} eV in total, "
-                       f"{e_win:.1f} eV ({100 * e_win / E_EV:.0f}%) in this window")
+                 label=f"area under $P$ = energy: {E_EV:.1f} eV "
+                       f"({100 * e_win / E_EV:.0f}% in this window)")
 axp.plot(tt, p_raw[sl], ls="none", marker="o", ms=1.5, color="#B0B7BC",
          alpha=0.7, zorder=2, label="$P$ from the raw samples")
 axp.plot(tt, p_lp20[sl], lw=0.9, color="#2E8B57", zorder=3,
          label=f"$P$ from the {LP_OFF_KHZ:.0f} kHz trace")
 axp.plot(tt, p_lin[sl], lw=1.0, ls=(0, (6, 3)), color="#1F77B4", zorder=4,
-         label="linear term $I_0(R_L-R_0)\\,\\delta I$ alone")
+         label="linear term alone")
 axp.plot(tt, p_quad[sl] * QMAG, lw=1.0, ls=(0, (2, 2)), color="#6C3483", zorder=4,
-         label=f"quadratic term $c_2R_L\\,\\delta I^2$ alone, $\\times${QMAG}")
-axp.plot(tt, p_fit[sl], lw=1.7, color="#C0392B", zorder=5,
-         label="$P$ from the fit = the two terms added")
+         label=f"quadratic term alone, $\\times${QMAG}")
+axp.plot(tt, p_fit[sl], lw=2.4, color="#C0392B", zorder=5,
+         label="$P$ from the fit (both terms)")
 i_pk = int(np.argmax(p_fit))
-axp.annotate(f"peak {p_fit[i_pk]:.1f} fW = {p_lin[i_pk]:.1f} (linear) + "
-             f"{p_quad[i_pk]:.2f} (quadratic)\nquadratic is "
-             f"{100 * p_quad[i_pk] / p_fit[i_pk]:.2f}% of the peak power and "
-             f"{100 * QUAD * i2 / (LIN * i1 + QUAD * i2):.2f}% of the energy",
-             xy=(t_ms[i_pk], p_fit[i_pk]), xytext=(0.46, 0.60),
-             textcoords="axes fraction", fontsize=9.5, color="#7B241C",
+axp.annotate(f"peak {p_fit[i_pk]:.1f} fW = {p_lin[i_pk]:.1f} linear + "
+             f"{p_quad[i_pk]:.1f} quadratic\n(quadratic: "
+             f"{100 * p_quad[i_pk] / p_fit[i_pk]:.1f}% of the peak, "
+             f"{100 * QUAD * i2 / (LIN * i1 + QUAD * i2):.1f}% of the energy)",
+             xy=(t_ms[i_pk], p_fit[i_pk]), xytext=(0.015, 0.93), va="top",
+             textcoords="axes fraction", fontsize=9.5 * FS, color="#7B241C",
              arrowprops=dict(arrowstyle="->", color="#7B241C", lw=1.0))
-axp.set_ylabel("absorbed power $P$ (fW)", fontsize=12, color="#7B241C")
+axp.set_ylabel("absorbed power $P$ (fW)", fontsize=12 * FS, color="#7B241C")
 axp.tick_params(axis="y", colors="#7B241C")
 axp.grid(alpha=0.22)
-axp.legend(fontsize=8.8, loc="upper right", ncol=2, framealpha=0.93)
-axp.set_ylim(-2.6 * sigma * LIN / ADC_PER_AMP * 1e15, 1.55 * p_fit[i_pk])
-axp.set_xlabel("Time from trigger (ms)", fontsize=12)
+axp.legend(fontsize=8.8 * FS, loc="upper right", ncol=1, framealpha=0.93)
+axp.set_ylim(-2.6 * sigma * LIN / ADC_PER_AMP * 1e15, 2.3 * p_fit[i_pk])
+axp.set_xlabel("Time from trigger (ms)", fontsize=12 * FS)
 
 ax.set_xlim(args.lo_ms, args.hi_ms)
 ax.set_ylim(-2.6 * sigma, 1.32 * pk_raw)
-ax.set_ylabel("pulse height above baseline (ADC)", fontsize=12)
+ax.set_ylabel("pulse height above baseline (ADC)", fontsize=12 * FS)
 ax.tick_params(labelbottom=False)
 sec = ax.secondary_yaxis("right",
                          functions=(lambda a: a / ADC_PER_AMP * 1e6,
                                     lambda u: u * 1e-6 * ADC_PER_AMP))
-sec.set_ylabel("current $\\delta I$ ($\\mu$A)", fontsize=12, color="#1F3864")
+sec.set_ylabel("current $\\delta I$ ($\\mu$A)", fontsize=12 * FS, color="#1F3864")
 sec.tick_params(colors="#1F3864")
-pw = ax.secondary_yaxis(1.075, functions=(power_fW, fW_to_adc))
-pw.set_ylabel("absorbed power $P$ (fW)", fontsize=12,
+pw = ax.secondary_yaxis(1.115, functions=(power_fW, fW_to_adc))
+pw.set_ylabel("absorbed power $P$ (fW)", fontsize=12 * FS,
               color="#7B241C")
 pw.tick_params(colors="#7B241C")
 ax.grid(alpha=0.22)
-ax.legend(fontsize=9.5, loc="lower left", ncol=2, framealpha=0.93)
-ax.set_title(f"Z{det} {chan}, event {evn} ({series}): one pulse read three ways, "
-             f"as ADC, as current and as power", fontsize=12.5)
-axp.text(0.5, -0.185,
+ax.legend(fontsize=9.5 * FS, loc="lower left", ncol=2, framealpha=0.93)
+ax.set_title(f"Z{det} {chan}, event {evn}: one pulse as ADC, as current and as power",
+             fontsize=12.5 * FS)
+foot = fig.text(0.5, 0.012,
         f"baseline = mean of bins {BASE_LO}-{BASE_HI} = {base:.1f} ADC, "
-        f"subtracted   |   1 ADC = {1e9 / ADC_PER_AMP:.4f} nA   |   "
-        f"power axis is exact, so its ticks are not evenly spaced\n"
+        f"subtracted   |   1 ADC = {1e9 / ADC_PER_AMP:.4f} nA\n"
         f"$P = I_0(R_L-R_0)\\,\\delta I + c_2R_L\\,\\delta I^2$   "
         f"({args.formula}, $c_2$={C2:.0f}):   "
         f"$I_0$={I0 * 1e6:.3f} $\\mu$A,  $R_0$={R0 * 1e3:.3f} m$\\Omega$,  "
-        f"$R_L$={RL * 1e3:.3f} m$\\Omega$   "
-        f"$\\Rightarrow$  {LIN:.4e} V  and  {QUAD:.5f} $\\Omega$",
-        transform=axp.transAxes, ha="center", va="top", fontsize=9.5,
+        f"$R_L$={RL * 1e3:.3f} m$\\Omega$\n"
+        f"$\\Rightarrow$  {LIN * 1e6:.2f} $\\mu$V  and  {QUAD:.4f} $\\Omega$",
+        ha="center", va="bottom", fontsize=9.5 * FS,
         color="#444444")
-fig.tight_layout(rect=(0, 0.05, 1, 1))
+fig.subplots_adjust(left=0.085, right=0.845, top=0.955, bottom=0.16, hspace=0.07)
 os.makedirs(OUT_DIR, exist_ok=True)
 fn = os.path.join(OUT_DIR,
                   f"zip{det}_{series}_peak_raw_vs_lp_{chan}_ev{evn}.png")
 fig.savefig(fn, dpi=160)
+from matplotlib.transforms import Bbox
+_rend = fig.canvas.get_renderer()
+for part, artists in (("top", [ax, sec, pw]), ("bottom", [axp, foot])):
+    bb = Bbox.union([a_.get_tightbbox(_rend) for a_ in artists])
+    bb = bb.transformed(fig.dpi_scale_trans.inverted()).padded(0.08)
+    fp = fn.replace(".png", f"_{part}.png")
+    fig.savefig(fp, dpi=160, bbox_inches=bb)
+    print("saved", fp)
 plt.close(fig)
 print("saved", fn)
 print(f"baseline {base:.2f} ADC, sigma {sigma:.2f} ADC")
