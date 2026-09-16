@@ -42,3 +42,5 @@ speech_script.html
 !neural_network/results/plots/*.png
 # derived from the MSI-only handoff doc, never commit
 CONTEXT_FOR_NEXT_AI.html
+# annotated review copies are large; keep them on MSI only
+collection_efficiency/presentation/纠正意见.pdf
