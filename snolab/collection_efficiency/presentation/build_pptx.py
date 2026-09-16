@@ -113,32 +113,16 @@ lines(s, [
     "Sample: Z7, the K-line events of the Ge activation run, from SNOLAB R4 (2207 events, 30 series, all 11 channels).",
 ], L, Inches(4.3), W, Inches(2.7))
 
-# --------------------------------------------------- 3 where the formula comes from
-s = new("Where the formula comes from",
-        "the film pays for the absorbed energy out of its own Joule heating",
-        notes="An event heats the film, R_TES rises, the current falls, and the Joule heating "
-              "I*V_TES falls by what the event delivered: negative electro-thermal feedback. "
-              "Integrating the heat equation over the whole pulse kills the C dT term, so the "
-              "absorbed energy is minus the integrated change of Joule power, which the circuit "
-              "turns into an expression in dI alone. Not included: the bath leak G*int dT and the "
-              "inductor end terms, both of which need G and L from dI/dV.")
-pic(s, "circuit.png", L, T, Inches(4.85), Inches(4.8))
-pic(s, "derivation.png", Inches(5.6), T, Inches(7.25), Inches(4.8))
-lines(s, [
-    "An event heats the film, its resistance rises, the current falls — and the Joule heating falls by exactly what the event delivered (negative electro-thermal feedback).",
-    "!So the absorbed energy can be read from the current alone: E = −∫δP_J dt, which is the formula on the next slide.",
-    "Left out: the bath leak and the inductor end terms. Both need G and L from dI/dV, which these series do not have.",
-], L, Inches(6.2), W, Inches(1.2), size=13)
-
-# ------------------------------------------------------------- 4 the formula itself
-s = new("The formula, and the two numbers it needs",
+# ------------------------------------------------------------------ 3 the formula
+s = new("The formula, and the two numbers it needs", "Method 1 of the CDMS collection-efficiency note",
         notes="TES small-signal result (Irwin & Hilton), Method 1 of the CDMS note. Coefficients "
               "from the measured bias point of each channel: I0(R_L-R0) = 0.45 uV, 2R_L = 0.0385 Ohm "
               "for PBS1. For a two-exponential pulse the integral is a formula in A, tau_f, tau_r.")
 pic(s, "formula.png", L, T, W, Inches(4.3))
 lines(s, [
     "δP = the change of Joule heating when the current moves by δI: a linear term and a small quadratic term.",
-], L, Inches(5.65), W, Inches(1.5), size=16)
+    "The note also gives Method 2. In our sign convention it reads δP = I₀(R_L − R₀)·δI − R_L·(δI)²: the same linear term, only the quadratic term differs, and it gives 1.7 % less energy (PBS1, median of 15 events).",
+], L, Inches(5.6), W, Inches(1.6), size=15)
 
 # ------------------------------------------------------------------ 4 the figure
 s = new("Example: one pulse",

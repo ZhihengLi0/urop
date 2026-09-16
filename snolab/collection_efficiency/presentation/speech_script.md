@@ -1,10 +1,10 @@
 # Speaker Script / 演讲稿 — Z7 Phonon Collection Efficiency
 
-约 13 分钟，12 页正片 + 6 页 backup。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
+约 13 分钟，11 页正片 + 6 页 backup。每页先中文、后英文，内容一一对应，**英文可以直接照读**。
 稿子是说的话，不是幻灯片的复读：数字都在屏幕上，嘴里讲思路。斜体是给自己的提示，不用念。**加粗的英文**是指着屏幕说的那几句。
 
 整条逻辑就一句话：**一个脉冲怎么读成能量，然后把这个读法用到所有通道、所有事件。**
-时间分配（秒）：1 题目 20 · 2 问题 55 · 3 公式来历 75 · 4 公式 45 · 5 主图总览 50 · 6 峰高 95 · 7 功率和面积 85 · 8 拟合不积 raw 80 · 9 其他通道 55 · 10 所有事件 65 · 11 求和 95 · 12 总结 45 → 约 765 秒。
+时间分配（秒）：1 题目 20 · 2 问题 60 · 3 公式 70 · 4 主图总览 60 · 5 峰高 110 · 6 功率和面积 90 · 7 拟合不积 raw 80 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 100 · 11 总结 50 → 约 765 秒。
 
 ---
 
@@ -24,25 +24,15 @@
 
 ---
 
-## Slide 3 — Where the formula comes from（约 75 秒）
+## Slide 3 — The formula, and the two numbers it needs（约 70 秒）
 
-*老师要求把公式讲明白，这一页慢慢讲，左边电路右边五步。*
+**中文**：换算公式就这一行，我们用的是 CDMS 收集效率文档里的 Method 1。它从哪来，一句话讲：事件把薄膜加热，TES 电阻升高，电流下降，TES 上的焦耳热也跟着下降；整个脉冲结束后薄膜回到原来的温度，所以事件送进来的能量，正好等于焦耳热少掉的那部分。把电路方程代进去展开，就得到这个式子：δP 是一个线性项加一个二次项。两个系数都来自这个通道的偏置点：I0、R0 和负载电阻 R_L。以 PBS1 为例，线性项系数是 0.45 微伏，二次项系数是 0.0385 欧姆。二次项很小，只占能量的 1% 多一点。第二行是能量：拟合出双指数以后，δP 的积分有解析式，能量就是幅度 A 和两个时间常数的一个公式，代进去就行。另外说明一下，文档里还给了一个 Method 2。换成我们的符号约定，它和 Method 1 的线性项完全一样，只是二次项从加 2R_L 变成减 R_L，所以能量低 1.7% 左右。我们严格推出来的二次项系数是加 R_L，正好在两者中间：Method 1 比它高 0.57%，Method 2 比它低 1.15%。
 
-**中文**：先说这个公式是怎么来的。左边是电路：一个电压源、固定的负载电阻 R_L、线圈 L，和 TES 串成一个回路。R_L 是 Rp 加 Rsh，是定值；唯一会变的是 TES 的电阻，事件一来薄膜被加热，它就升高。电阻升高，回路里的电流就下降，这个下降量就是我们记录的 δI。关键在于：电流下降以后，TES 上的焦耳热 I 乘 V_TES 也跟着下降，而下降掉的这部分，正好就是事件送进来的功率。这叫负电热反馈 —— 薄膜是用自己的焦耳热给事件"付账"的。右边是五步。第一步，薄膜的热流方程：热容乘温度变化率，等于事件功率加焦耳热减去流向热浴的功率。第二步，脉冲结束以后薄膜回到原来的工作点，所以热容那一项整脉冲积下来是零，于是事件能量就等于负的焦耳功率变化的积分。第三步，用回路写出 TES 上的电压和它的焦耳功率。第四步，把电流写成 I₀ 加 δI 代进去展开，得到三项。第五步，整脉冲积分：电感那一项在两个端点上相互抵消，电压源用工作点表示成 I₀ 乘 R_L 加 R₀，剩下的就是那个公式 —— 一个线性项加一个二次项，系数只含 I₀、R₀、R_L。有两项我们没有算进去：流向热浴的泄漏和电感的边界项，它们需要 dI/dV 给出的 G 和 L，这些 series 上没有 dI/dV 数据。
-
-**English**: Let me show where the formula comes from. **On the left is the circuit:** a voltage source, the fixed load resistance R_L, the coil, and the TES, all in one loop. R_L is R p plus R shunt and it is a constant; the only thing that changes is the resistance of the TES, which rises when an event heats the film. **When the resistance rises, the current in the loop falls, and that fall is the delta I we record.** And here is the key point: once the current falls, the Joule heating on the TES, I times V TES, falls as well — and the part that disappears is exactly the power the event delivered. That is negative electro-thermal feedback: the film pays for the event out of its own Joule heating. **On the right are the five steps.** One, the heat flow in the film: heat capacity times the rate of temperature change equals the event power plus the Joule heating minus the power flowing to the bath. Two, after the pulse the film comes back to the same operating point, so the heat capacity term integrates to zero over the whole pulse, and the event energy is then minus the integrated change of the Joule power. Three, the loop gives the voltage on the TES and its Joule power. Four, write the current as I zero plus delta I and expand; you get three terms. Five, integrate over the pulse: the inductor term cancels between the two ends, the source voltage is I zero times R L plus R zero, and what is left is the formula — one linear term and one quadratic term, with coefficients made only of I zero, R zero and R L. Two things are not included: the leak to the bath and the inductor end terms. Both need G and L from a dI/dV measurement, and these series have none.
+**English**: The conversion is this one line, and **we use Method 1 of the CDMS collection-efficiency note.** Where it comes from, in one breath: an event heats the film, the TES resistance rises, the current falls, and the Joule heating on the TES falls with it; when the pulse is over the film is back at its old temperature, so the energy the event brought in is exactly the Joule heating that went missing. Put the circuit equation into that and expand, and you get this: **delta P is a linear term plus a quadratic term.** Both coefficients come from the bias point of the channel: I zero, R zero and the load resistance R L. **For PBS1 the linear coefficient is 0.45 microvolts and the quadratic one is 0.0385 ohms.** The quadratic term is small, a little over 1 percent of the energy. The second line is the energy: once the two-exponential is fitted, the integral of delta P has a closed form, so the energy is just a formula in the amplitude A and the two time constants. **The note also gives a Method 2.** In our sign convention it has exactly the same linear term; only the quadratic term changes, from plus 2 R L to minus R L, so it gives about 1.7 percent less energy. Done exactly, the quadratic coefficient is plus R L, right between the two: Method 1 is 0.57 percent above it and Method 2 is 1.15 percent below.
 
 ---
 
-## Slide 4 — The formula, and the two numbers it needs（约 45 秒）
-
-**中文**：换算公式就这一行。δP 是电流变了 δI 之后焦耳热的变化量，写出来是一个线性项加一个二次项，这就是上一页推导的结果，也是 CDMS 收集效率文档里的 method 1。两个系数都来自这个通道的偏置点：I0、R0 和负载电阻。以 PBS1 为例，线性项系数是 0.45 微伏，二次项系数是 0.0385 欧姆。第二行是能量：拟合出双指数以后，δP 的积分有解析式，能量就是幅度 A 和两个时间常数的一个公式，代进去就行。这一点后面会反复用到。
-
-**English**: The conversion is this one line. **Delta P is the change in Joule heating when the current moves by delta I, and it comes out as a linear term plus a quadratic term** — the result of the previous slide, and Method 1 of the CDMS collection-efficiency note. Both coefficients come from the bias point of that channel: I zero, R zero and the load resistance. **For PBS1 the linear coefficient is 0.45 microvolts and the quadratic one is 0.0385 ohms.** The second line is the energy: once the two-exponential is fitted, the integral of delta P has a closed form, so the energy is just a formula in the amplitude A and the two time constants. We will lean on that repeatedly.
-
----
-
-## Slide 5 — Example: one pulse（约 50 秒）
+## Slide 4 — Example: one pulse（约 60 秒）
 
 **中文**：下面用一个例子。一个通道 PBS1，一个事件 30646，只放大脉冲附近 1.3 毫秒。副标题加粗的那句就是这页的意思：同一条波形，可以读成 ADC 计数，读成电流，读成功率。上半部分是脉冲本身，有三条纵轴：左边是减掉基线的 ADC 计数，也就是仪器直接记下来的数；右边第一条是微安，1 个 ADC 等于 0.318 纳安；右边第二条是飞瓦，用刚才的公式换算的。下半部分是对应的功率。先回答一个问题：双指数拟合是在哪条曲线上做的？是在 100 kHz 低通之后的波形上，也就是蓝线，不是原始采样点。原始采样点只是画出来对照。下面两页分别把上下两部分讲清楚。
 
@@ -50,7 +40,7 @@
 
 ---
 
-## Slide 6 — The height（约 100 秒）
+## Slide 5 — The height（约 110 秒）
 
 *主图，讲慢一点。*
 
@@ -60,7 +50,7 @@
 
 ---
 
-## Slide 7 — The power pulse, and its area（约 85 秒）
+## Slide 6 — The power pulse, and its area（约 90 秒）
 
 **中文**：下半部分。红线是把拟合出来的电流代进公式得到的功率，两项加在一起。蓝色虚线只画线性项，几乎就是整条红线。紫色点线只画二次项，放大了 20 倍才看得见。峰值 104.6 飞瓦，其中 102.6 是线性项，2.0 是二次项，二次项占峰值的 1.9%，占能量的 1.3%。所以功率脉冲的形状和电流脉冲基本一样，只是换了单位，这就是为什么上一页的三条轴能这样并排。粉色的面积就是这个通道吸收的能量，305 电子伏，其中 99% 落在这 1.3 毫秒里。灰点和绿线是把同样的公式用在原始点和 20 kHz 波形上，只做对照，可以看到它们围着红线上下乱跳，那是噪声。最下面一行是这个通道的偏置点参数，就是定出两个系数的那些数。
 
@@ -68,7 +58,7 @@
 
 ---
 
-## Slide 8 — Why the fitted pulse is integrated, and not the data（约 80 秒）
+## Slide 7 — Why the fitted pulse is integrated, and not the data（约 80 秒）
 
 **中文**：有人会问，既然公式对任何电流都能用，为什么不直接对原始数据积分。这页就是答案。上面一排是这两个事件的原始电流本身：灰色是原始采样，蓝色是 20 kHz 低通，红色是拟合的脉冲，纵轴放大到基线附近正负 60 纳安，所以脉冲本身冲出了图的上边。黑线是基线，绿色虚线是脉冲之后电流的平均值。左边这个事件，脉冲之后电流基本回到基线，只偏了 0.1 纳安；右边这个事件，脉冲之后电流整体比基线低了 6 纳安。下面一排是对应的累计能量，横轴对齐。红线是积分拟合脉冲：触发前是 0，1 毫秒之内升上去，之后保持水平，终点正好等于绿色虚线的公式值。灰线是积分原始波形。左边原始和拟合只差 11 电子伏；右边那 6 纳安的偏移，单个点看完全埋在 28 纳安的噪声里，但换成功率是负 2.8 飞瓦，24 毫秒积下来就是负 420 电子伏，所以原始积分最后掉到负 169，而拟合给的是 277。所以能量必须从拟合来：没有最大值的噪声偏差，也不受基线漂移影响。
 
@@ -76,7 +66,7 @@
 
 ---
 
-## Slide 9 — The same event in its other channels（约 55 秒）
+## Slide 8 — The same event in its other channels（约 55 秒）
 
 **中文**：一个通道讲完了，现在把同一个事件的 11 个通道都这样算，这里放四个。各通道拿到的份额差别很大：PES1 是 489 电子伏，PES2 只有 195，说明这个事件发生的位置更靠近 PES1 那一边。11 个通道加起来是 3419 电子伏，占 10.37 keV 的 33%。作为核对，把官方窗口直接用在原始波形上，加起来是 3397，两者只差 0.6%。右下角的 PDS2：5 毫秒之后波形有一个缓慢的大起伏，这是这个通道的低频伪影，它的拟合残差是别的通道的三倍，后面求和的时候它会是误差的来源。
 
@@ -84,7 +74,7 @@
 
 ---
 
-## Slide 10 — Now every event: one channel（约 65 秒）
+## Slide 9 — Now every event: one channel（约 70 秒）
 
 **中文**：从一个事件走到所有事件。还是 PBS1，1917 个事件，每个事件一个拟合、一个积分、一个能量。横轴是能量，每格 10 电子伏，纵轴是事件数。红色是从拟合来的，灰色轮廓是官方窗口在原始波形上算的，两者峰位只差 0.2%。峰在 285 电子伏，宽度 42，也就是 15%。注意，这是一条能量固定的谱线，但分布有 15% 宽。而且分布明显往右拖，一直到 600 电子伏，那些是发生在 PBS1 附近的事件。所以单通道的宽度主要是事件位置，不是噪声，单次拟合的噪声只有几个百分点。虚线是只对中间主体做的高斯拟合，所以 μ 是峰的位置，不是平均值，这一点下一页要用。
 
@@ -92,7 +82,7 @@
 
 ---
 
-## Slide 11 — Summed over the channels: 32 ± 1 %（约 95 秒）
+## Slide 10 — Summed over the channels: 32 ± 1 %（约 100 秒）
 
 **中文**：结果。每个事件把通道加起来，下横轴是加起来的能量，上横轴是同一个数换算成 10.37 keV 的百分比。灰色是 10 个通道的和，1827 个事件，峰在 3162 电子伏，也就是 30.5%，宽度 7.5%。注意宽度：单通道是 15% 而且右偏，加起来以后变成对称的 7.5%，因为位置效应在求和时抵消掉了。顺便说一句，这里必须逐事件相加，不能把各通道的峰相加，右偏分布的峰在平均值左边，加峰会低 21%。为什么是 10 个通道不是 11 个？就是 PDS2，那个低频起伏让它只有 42% 的事件能拟合上。绿色是 11 个通道全加、但只用 PDS2 也拟合成功的那 797 个事件，峰在 3263。问题是这个子样本有偏：这些事件在另外 10 个通道里的和比全体低 4.8%，所以 PDS2 的份额只能给一个范围。算下来完整的效率在 31.5% 到 32.9% 之间，写成 32 正负 1。要把这个范围收窄，办法是把 PDS2 修到能拟合，不是加统计量。最右边的红线是 10.37 keV，大约三分之二的能量根本没有到 TES。
 
@@ -100,7 +90,7 @@
 
 ---
 
-## Slide 12 — Summary, and what is still open（约 45 秒）
+## Slide 11 — Summary, and what is still open（约 50 秒）
 
 **中文**：总结。电流脉冲用 TES 方程换成功率，功率的面积是能量，二次项只有 2%。能量从拟合脉冲来、从负无穷积到正无穷：没有最大值的噪声偏差，没有漂移。单通道 15% 宽、右偏，是位置效应；10 个通道加起来是对称的 7.5%。Z7 吸收了 10.37 keV 事件的 32 正负 1%。CDMS 的文档在 R37 的 CUTE tower 上报的是 26% 到 41%，我们落在里面。还没落实的：目前只有 Z7；Z7 这些 series 的 HV 偏压还没确认，全按 0 伏算；没有 dI/dV，方程里的电感项是丢掉的；PDS2 就是那正负 1；还有 12.5% 的事件在任何通道都拟合不上，没进直方图。谢谢大家。
 
@@ -158,6 +148,14 @@ English: With a bias, the total energy in the crystal is 10.37 keV plus the Luke
 **Q9. 公式里的电感项呢？/ What about the inductor term?**
 中文：完整方程里有一项和电感、loop gain 有关，是个快而小的修正。MSI 上没有这些 series 的 dI/dV 数据，所以拿不到 L 和 loop gain，这一项是丢掉的，没法检查。
 English: The full equations have a term with the inductance and the loop gain, a fast and small correction. There is no dI-dV data for these series on MSI, so L and the loop gain are not available; that term is dropped and could not be checked.
+
+**Q10. 这个公式是怎么推出来的？为什么用 Method 1？/ Where does the formula come from, and why Method 1?**
+中文：薄膜的热平衡方程对整个脉冲积分，热容那一项为零，所以事件能量等于焦耳热减少量的积分；用回路方程 V_TES = V − I·R_L − L·dI/dt 代入、把 I 写成 I₀ + δI 展开、电感项在两端抵消，就得到线性项 I₀(R_L − R₀)·δI 加二次项。严格推出来二次项系数是 R_L，Method 1 写的是 2R_L，能量上差 0.58%；我们用 Method 1 是为了和合作组的文档一致，这个差别比单通道 15% 的宽度和 PDS2 的 ±1% 都小得多。
+English: Integrate the heat balance of the film over the whole pulse and the heat-capacity term drops out, so the event energy is the integrated drop in Joule heating. Put in the loop equation, V TES equals V minus I R L minus L dI/dt, write I as I zero plus delta I, let the inductor term cancel between the two ends, and you get the linear term I zero (R L minus R zero) delta I plus a quadratic term. Done exactly, the quadratic coefficient is R L; Method 1 writes 2 R L, which moves the energy by 0.58 percent. We use Method 1 to stay consistent with the collaboration note, and the difference is far below the 15 percent single-channel width and the PDS2 bracket.
+
+**Q11. CDMS 文档说 Method 2 更准一点，为什么我们用 Method 1？/ The note calls Method 2 a bit more accurate; why Method 1?**
+中文：两者只差二次项，能量上差 1.7%。按我们自己严格推导，二次项系数是加 R_L：Method 1 只比它高 0.57%，Method 2 比它低 1.15%，所以对这组数据 Method 1 反而更接近严格结果。选 Method 1 也是老师定的。这个差别比单通道 15% 的宽度和 PDS2 的 ±1% 都小。
+English: The two differ only in the quadratic term, by 1.7 percent in energy. Done exactly, the quadratic coefficient is plus R L: Method 1 is only 0.57 percent above that and Method 2 is 1.15 percent below, so on these data Method 1 is actually the closer one. It is also the choice my supervisor made. The difference is smaller than the 15 percent single-channel width and the plus-or-minus one percent from PDS2.
 
 ---
 

@@ -6,7 +6,7 @@ logic per slide; the figure does the talking.
 
 | file | what |
 |---|---|
-| `SNOLAB_R4_collection_efficiency_20260910.pptx` | 18 slides, 16:9, English, speaker notes on every slide: 12 main + 6 backup |
+| `SNOLAB_R4_collection_efficiency_20260910.pptx` | 17 slides, 16:9, English, speaker notes on every slide: 11 main + 6 backup |
 | `SNOLAB_R4_collection_efficiency_20260910.pdf` | PDF export of the deck (LibreOffice, `module load libreoffice`) |
 | `..._zh.pptx` / `..._zh.pdf` | the same deck slide for slide in Chinese, for reading (`build_pptx_zh.py`); figures unchanged |
 | `speech_script.md` / `.pdf` | speaker script: per slide a Chinese paragraph and the matching English one, timing per slide, backup notes, likely questions with answers, a private glossary |
@@ -16,9 +16,8 @@ logic per slide; the figure does the talking.
 | `build_speech_pdf.py` | speech_script.md → HTML; then headless Chromium prints the PDF |
 
 Slide flow (12 main): title → the question (chain; the area under a current is
-not an energy) → where the formula comes from (the circuit and the five steps
-from the heat-flow equation, per Prof. Saab's request that the formula be
-explained) → the formula and the two numbers it needs (closed form, bias point)
+not an energy) → the formula and the two numbers it needs (Method 1 of the CDMS note, with
+Method 2 mentioned; closed form, bias point)
 → **example: one pulse** (the full figure; the fit is on the 100 kHz low-passed trace) → the height: take it from the
 fit (raw max 885 vs fit 717 ADC, +23 %) → the power pulse and its area
 (quadratic 1.9 %, 305 eV) → why the fit is integrated and not the data (drift,
@@ -58,3 +57,8 @@ numbers from 3 on are one lower than the current deck). Applied:
 - slide 8: the raw current of the two events added above their cumulative
   energy (`zip7_24260617_063934_raw_and_cumulative_PBS1_slide.png`);
 - slide 9: "remember it" removed.
+
+The derivation slide (circuit plus five steps) was taken out again on request:
+the derivation is for the speaker to know, not to present. `figures/circuit.png`
+and `figures/derivation.png` are still generated as a reference, and the
+speaker script answers it under Likely questions (Q10, Q11).
