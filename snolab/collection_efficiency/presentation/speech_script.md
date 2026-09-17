@@ -94,7 +94,7 @@
 
 **中文**：总结三句话。第一，把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，而且能量用拟合来算，不受噪声和基线漂移的影响。第二，结果是 Z7 的 TES 吸收了一个 10.37 keV 事件能量的 32%，误差正负 1%；CDMS 文档在 R37 的 CUTE tower 上得到 26% 到 41%，我们落在这个范围里。第三，还没解决的：只做了 Z7，其他探测器还没做；Z7 的偏压还没确认；没有 dI/dV 数据；PDS2 的噪声就是那正负 1%；还有 12.5% 的事件拟合不上。谢谢大家。
 
-**English**: Three sentences. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 32 plus or minus 1 percent of the energy of a 10.37 keV event, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, the noise in PDS2 is the plus or minus 1 percent, and 12.5 percent of the events could not be fitted. Thank you.
+**English**: In summary. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 32 plus or minus 1 percent of the energy of a 10.37 keV event, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, the noise in PDS2 is the plus or minus 1 percent, and 12.5 percent of the events could not be fitted. Thank you.
 
 ---
 
