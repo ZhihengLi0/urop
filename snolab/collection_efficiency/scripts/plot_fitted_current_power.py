@@ -403,6 +403,7 @@ def finish(ax, xlabel, ylabel, ax2=None):
 
 
 slide_ev = [e for e in args.slide_events if e in fits]
+MEAN_C = "#E8590C"            # orange: stands out against the blue trace
 if slide_ev:
     # top row: the current itself over the whole trace; bottom row: its running
     # integral. Same time axis, so the drift seen on top explains the bottom.
@@ -429,19 +430,26 @@ if slide_ev:
         tp = t_full[post]
         axi.plot(tp, f["di20"][post] * 1e9, lw=0.7, color="#5B7FA6", zorder=2)
         axi.axhline(0, color="black", lw=0.8, zorder=3)
-        axi.axhline(m_post * 1e9, color="#1B7A3D", lw=2.0, ls=(0, (5, 3)), zorder=4)
+        from matplotlib import patheffects as pe
+        halo = [pe.withStroke(linewidth=4.5, foreground="white")]
+        axi.axhline(m_post * 1e9, color=MEAN_C, lw=2.6, ls=(0, (6, 3)), zorder=5,
+                    path_effects=halo)
         axi.set_xlim(tp[0], tp[-1])
         axi.set_ylim(-25, 32)
         axi.tick_params(labelsize=11)
         # the label sits in the free space top left, with an arrow to the mean line,
         # passing above the pulse peak
-        ax.annotate(f"mean current after the pulse:\n{m_post * 1e9:+.1f} nA",
-                    xy=(tp[0] + 0.12 * (tp[-1] - tp[0]), m_post * 1e9),
-                    xycoords=axi.transData, xytext=(0.03, 0.93),
-                    textcoords=ax.transAxes, ha="left", va="top", fontsize=14,
-                    color="#1B7A3D", annotation_clip=False, zorder=7,
-                    arrowprops=dict(arrowstyle="-|>", color="#1B7A3D", lw=1.8,
-                                    shrinkA=4, shrinkB=2))
+        # drawn by the inset, so the arrow head is not hidden under the inset background
+        ann = axi.annotate(f"mean current after the pulse:\n{m_post * 1e9:+.1f} nA",
+                           xy=(tp[0] + 0.12 * (tp[-1] - tp[0]), m_post * 1e9),
+                           xycoords="data", xytext=(0.03, 0.93),
+                           textcoords=ax.transAxes, ha="left", va="top", fontsize=14,
+                           color=MEAN_C, weight="bold", annotation_clip=False, zorder=8,
+                           arrowprops=dict(arrowstyle="-|>", color=MEAN_C, lw=2.2,
+                                           mutation_scale=18, shrinkA=4, shrinkB=0,
+                                           path_effects=halo))
+        ann.set_clip_on(False)
+        ann.arrow_patch.set_clip_on(False)
         axi.set_facecolor("white")
         finish(ax, "time from trace start (ms)", "current $\\delta I$ (nA)")
         ax.tick_params(labelbottom=True)
@@ -453,7 +461,7 @@ if slide_ev:
     L2D = plt.Line2D
     top_h = [L2D([], [], lw=3.0, color="#CDCDCD"), L2D([], [], lw=1.2, color="#5B7FA6"),
              L2D([], [], lw=1.8, color="#E00000"), L2D([], [], lw=1.0, color="black"),
-             L2D([], [], lw=2.0, color="#1B7A3D", ls=(0, (5, 3)))]
+             L2D([], [], lw=2.6, color=MEAN_C, ls=(0, (6, 3)))]
     top_l = ["raw current", "raw current, 20 kHz low pass", "fitted pulse",
              "baseline (mean of 0.15-25.2 ms)", "mean current after the pulse (small panel)"]
     bot_h = [L2D([], [], lw=1.2, color="#8899AA"), L2D([], [], lw=1.8, color="#E00000"),
