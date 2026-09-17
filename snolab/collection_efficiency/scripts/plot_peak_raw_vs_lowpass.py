@@ -252,17 +252,20 @@ ax.grid(alpha=0.22)
 ax.legend(fontsize=9.5 * FS, loc="lower left", ncol=2, framealpha=0.93)
 ax.set_title(f"Z{det} {chan}, event {evn}: one pulse as ADC, as current and as power",
              fontsize=12.5 * FS)
-foot = fig.text(0.5, 0.012,
+foot = fig.text(0.5, 0.010,
         f"baseline = mean of bins {BASE_LO}-{BASE_HI} = {base:.1f} ADC, "
         f"subtracted   |   1 ADC = {1e9 / ADC_PER_AMP:.4f} nA\n"
-        f"$P = I_0(R_L-R_0)\\,\\delta I + c_2R_L\\,\\delta I^2$   "
-        f"({args.formula}, $c_2$={C2:.0f}):   "
-        f"$I_0$={I0 * 1e6:.3f} $\\mu$A,  $R_0$={R0 * 1e3:.3f} m$\\Omega$,  "
-        f"$R_L$={RL * 1e3:.3f} m$\\Omega$\n"
-        f"$\\Rightarrow$  {LIN * 1e6:.2f} $\\mu$V  and  {QUAD:.4f} $\\Omega$",
-        ha="center", va="bottom", fontsize=9.5 * FS,
+        f"$\\delta P = I_0(R_L-R_0)\\,\\delta I + c_2\\,R_L\\,(\\delta I)^2$   "
+        f"({args.formula}, $c_2$ = {C2:.0f}),   with   "
+        f"$I_0$ = {I0 * 1e6:.3f} $\\mu$A,   $R_0$ = {R0 * 1e3:.3f} m$\\Omega$,   "
+        f"$R_L$ = {RL * 1e3:.3f} m$\\Omega$\n"
+        f"linear coefficient:   $I_0(R_L-R_0)$ = ({I0 * 1e6:.3f} $\\mu$A) $\\times$ "
+        f"({RL * 1e3:.3f} m$\\Omega$ $-$ {R0 * 1e3:.3f} m$\\Omega$) = {LIN * 1e6:.3f} $\\mu$V\n"
+        f"quadratic coefficient:   $c_2 R_L$ = {C2:.0f} $\\times$ {RL * 1e3:.3f} m$\\Omega$ "
+        f"= {QUAD * 1e3:.2f} m$\\Omega$ = {QUAD:.4f} $\\Omega$",
+        ha="center", va="bottom", fontsize=9.5 * FS, linespacing=1.45,
         color="#444444")
-fig.subplots_adjust(left=0.085, right=0.845, top=0.955, bottom=0.16, hspace=0.07)
+fig.subplots_adjust(left=0.085, right=0.845, top=0.955, bottom=0.2, hspace=0.07)
 os.makedirs(OUT_DIR, exist_ok=True)
 fn = os.path.join(OUT_DIR,
                   f"zip{det}_{series}_peak_raw_vs_lp_{chan}_ev{evn}.png")

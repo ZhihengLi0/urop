@@ -72,13 +72,16 @@ ax.text(0.71, 0.66, "quadratic term", ha="center", fontsize=15, color=NAVY)
 ax.text(0.5, 0.50, r"$E \;=\; \int \delta P(t)\,dt \;=\; I_0(R_L-R_0)\,A(\tau_f-\tau_r)"
         r"\;+\;2R_L\,A^2\left(\frac{\tau_f+\tau_r}{2}-\frac{2\tau_f\tau_r}{\tau_f+\tau_r}\right)$",
         ha="center", va="center", fontsize=21, color=NAVY)
-ax.text(0.5, 0.33, r"for the fitted pulse $\delta I(t) = A\,[\,e^{-t/\tau_f} - e^{-t/\tau_r}\,]$"
+ax.text(0.5, 0.325, r"for the fitted pulse $\delta I(t) = A\,[\,e^{-t/\tau_f} - e^{-t/\tau_r}\,]$"
         "  integrated from $-\\infty$ to $+\\infty$: zero before it starts, decays to zero after",
         ha="center", va="center", fontsize=15, color=GRAY)
-ax.text(0.5, 0.19, "Z7 PBS1 bias point (measured, from detectorConfig):  $I_0$ = -18.07 $\\mu$A,  "
-        "$R_0$ = 44.16 m$\\Omega$,  $R_L$ = $R_p$ + $R_{sh}$ = 19.24 m$\\Omega$",
+ax.text(0.5, 0.215, "Z7 PBS1:   $I_0$ = $-$18.07 $\\mu$A,   $R_0$ = 44.16 m$\\Omega$,   "
+        "$R_L$ = $R_p$ + $R_{sh}$ = 14.24 m$\\Omega$ + 5.00 m$\\Omega$ = 19.24 m$\\Omega$",
         ha="center", va="center", fontsize=14.5, color=RED)
-ax.text(0.5, 0.07, "$\\Rightarrow$  $I_0(R_L-R_0)$ = 0.45 $\\mu$V   and   $2R_L$ = 0.0385 $\\Omega$",
+ax.text(0.5, 0.125, "linear coefficient:   $I_0(R_L-R_0)$ = ($-$18.07 $\\mu$A) $\\times$ "
+        "(19.24 m$\\Omega$ $-$ 44.16 m$\\Omega$) = 0.45 $\\mu$V",
+        ha="center", va="center", fontsize=14.5, color=RED)
+ax.text(0.5, 0.04, "quadratic coefficient:   $2R_L$ = 2 $\\times$ 19.24 m$\\Omega$ = 38.5 m$\\Omega$ = 0.0385 $\\Omega$",
         ha="center", va="center", fontsize=14.5, color=RED)
 fig.savefig(os.path.join(OUT, "formula.png"), dpi=150)
 plt.close(fig)
