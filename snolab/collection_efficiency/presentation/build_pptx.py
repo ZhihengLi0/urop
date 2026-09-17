@@ -130,11 +130,7 @@ lines(s, [
     "I₀: TES current at the bias point · R₀: TES resistance at the bias point · R_L = R_p + R_sh: load resistance (R_p parasitic, R_sh shunt) · δI: change in current, from the trace",
     "The note also gives Method 2: δP = I₀(R_L − R₀)·δI − R_L·(δI)² in our sign convention — same linear term, only the quadratic term differs, 1.7 % less energy (PBS1, median of 15 events).",
 ], L, Inches(4.95), W, Inches(1.4), size=13)
-caption(s, "Sources — CDMS wiki, \"Collection Efficiency Analysis\" (both Methods and the procedure);  Method 1 derived in N. Kurinsky, PhD thesis, appendix D "
-           "(slac.stanford.edu/exp/cdms/ScienceResults/Theses/kurinsky.pdf);  Method 2 in S. Watkins, \"energy_absorbed_deriv_v3.pdf\" on the SLAC confluence page "
-           "\"Internal Documentation: PD2 DM Search v2\";  the difference between the two is discussed in \"Power_derivation.pdf\" on confluence;  "
-           "the TES equations: Irwin & Hilton, Transition-Edge Sensors, Topics in Applied Physics 99 (2005), pp. 74-75 and 87-88.",
-        L, Inches(6.3), W, size=9.5)
+caption(s, "Source:  CDMS wiki, Collection Efficiency Analysis   —   confluence.slac.stanford.edu/spaces/CDMS/pages/542577254", L, Inches(6.35), W, size=11)
 
 # ------------------------------------------------------------------ 4 the figure
 s = new("Example: one pulse",
