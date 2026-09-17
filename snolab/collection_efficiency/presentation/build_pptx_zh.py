@@ -128,7 +128,7 @@ lines(s, [
     "I₀：工作点上流过 TES 的电流 · R₀：工作点上 TES 的电阻 · R_L = R_p + R_sh：负载电阻（R_p 寄生电阻，R_sh 分流电阻）· δI：电流的变化，来自波形",
     "文档里还有一个 Method 2：换成我们的符号是 δP = I₀(R_L − R₀)·δI − R_L·(δI)² —— 线性项相同，只有二次项不同，能量低 1.7%（PBS1，15 个事件的中位数）。",
 ], L, Inches(4.95), W, Inches(1.4), size=13)
-caption(s, "来源：CDMS wiki 的 Collection Efficiency Analysis 页   —   confluence.slac.stanford.edu/spaces/CDMS/pages/542577254", L, Inches(6.35), W, size=11)
+caption(s, "来源：Antoine Rehberg 的 CDMS wiki 页面 Collection Efficiency Analysis   —   confluence.slac.stanford.edu/spaces/CDMS/pages/542577254", L, Inches(6.35), W, size=11)
 
 # ------------------------------------------------------------------ 4 主图
 s = new("例子：一个脉冲", ("Z7 PBS1，事件 30646：  ", "同一条波形，读成 ADC 计数、读成电流、读成功率"))

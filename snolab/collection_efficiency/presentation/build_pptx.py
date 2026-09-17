@@ -130,7 +130,7 @@ lines(s, [
     "I₀: TES current at the bias point · R₀: TES resistance at the bias point · R_L = R_p + R_sh: load resistance (R_p parasitic, R_sh shunt) · δI: change in current, from the trace",
     "The note also gives Method 2: δP = I₀(R_L − R₀)·δI − R_L·(δI)² in our sign convention — same linear term, only the quadratic term differs, 1.7 % less energy (PBS1, median of 15 events).",
 ], L, Inches(4.95), W, Inches(1.4), size=13)
-caption(s, "Source:  CDMS wiki, Collection Efficiency Analysis   —   confluence.slac.stanford.edu/spaces/CDMS/pages/542577254", L, Inches(6.35), W, size=11)
+caption(s, "Source:  Antoine Rehberg, CDMS wiki, Collection Efficiency Analysis   —   confluence.slac.stanford.edu/spaces/CDMS/pages/542577254", L, Inches(6.35), W, size=11)
 
 # ------------------------------------------------------------------ 4 the figure
 s = new("Example: one pulse",
