@@ -222,12 +222,11 @@ s = new("Summary, and what is still open",
               "Z7 only; HV bias unknown (0 V assumed); no dIdV, inductor term dropped; PDS2; 12.5% "
               "of events fit nowhere.")
 lines(s, [
-    "A current pulse becomes a power pulse through the TES equations; the area under the power is the energy. The quadratic term is 2 %.",
-    "The energy comes from the fitted pulse, integrated from −∞ to +∞: no bias from the noisy maximum, no drift.",
-    "One channel: 15 % wide and lopsided (position). Ten channels summed: 7.5 % and symmetric.",
-    "!Z7 absorbs 32 ± 1 % of a 10.37 keV event in its TESs. The CDMS note on the R37 CUTE tower reports 26–41 %.",
-    "Open: Z7 only · the HV bias of Z7 is not established (0 V assumed) · no dI/dV, so the inductor term is dropped · PDS2 is the ± 1 % · 12.5 % of events fit in no channel and are not in the histograms.",
-], L, Inches(1.45), W, Inches(5.5), size=17)
+    "The current pulse becomes a power pulse through the TES equations; the area under the power is the energy.",
+    "The energy is taken from the fitted pulse, so the noise at the peak and the baseline drift do not enter.",
+    "!Z7 absorbs 32 ± 1 % of a 10.37 keV event in its TESs.   The CDMS note reports 26–41 % on the R37 CUTE tower.",
+    "Open: Z7 only · the bias of Z7 is not established (0 V assumed) · no dI/dV · PDS2 is the ± 1 % · 12.5 % of events fit in no channel.",
+], L, Inches(1.6), W, Inches(4.6), size=19)
 
 # ================================================================== backup
 s = new("Backup — the events", notes="Z7 summed PTOFamps, our rebuild with no cut; K line at 2e-6 A.")

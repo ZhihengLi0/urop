@@ -4,7 +4,7 @@
 用词尽量简单；专业词保持原样。斜体是给自己的提示，不用念。**加粗的英文**是看着屏幕说的句子。
 
 整个报告只讲一件事：**先说明一个脉冲怎么算出能量，再把同样的算法用到所有通道和所有事件。**
-时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 70 · 4 主图 35 · 5 峰高 110 · 6 功率和面积 90 · 7 为什么用拟合 80 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 100 · 11 总结 50 → 约 740 秒。
+时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 70 · 4 主图 35 · 5 峰高 110 · 6 功率和面积 90 · 7 为什么用拟合 80 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 100 · 11 总结 35 → 约 725 秒。
 
 ---
 
@@ -90,11 +90,11 @@
 
 ---
 
-## Slide 11 — Summary, and what is still open（约 50 秒）
+## Slide 11 — Summary, and what is still open（约 35 秒）
 
-**中文**：总结一下。第一，用 TES 的公式把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，公式里的二次项只占 2% 左右。第二，能量用拟合的脉冲来算，这样不受峰值噪声和基线漂移的影响。第三，一个通道的能量分布宽 15%，而且不对称，主要是事件位置的影响；10 个通道加起来以后宽 7.5%，而且对称。结果是：Z7 的 TES 吸收了 10.37 keV 事件能量的 32% 加减 1%。CDMS 文档在 R37 的 CUTE tower 上得到的是 26% 到 41%，我们的结果在这个范围内。还没有解决的问题有：目前只做了 Z7；Z7 在这些 series 里是否是 0 伏还没有确认，我们是按 0 伏算的；没有 dI/dV 数据，公式里的电感项没有包括；PDS2 的噪声带来了正负 1% 的误差；还有 12.5% 的事件在所有通道都拟合失败，没有进入统计。谢谢大家。
+**中文**：总结三句话。第一，把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，而且能量用拟合来算，不受噪声和基线漂移的影响。第二，结果是 Z7 的 TES 吸收了一个 10.37 keV 事件能量的 32%，误差正负 1%；CDMS 文档在 R37 的 CUTE tower 上得到 26% 到 41%，我们落在这个范围里。第三，还没解决的：只做了 Z7，其他探测器还没做；Z7 的偏压还没确认；没有 dI/dV 数据；PDS2 的噪声就是那正负 1%；还有 12.5% 的事件拟合不上。谢谢大家。
 
-**English**: To summarize. First, we use the TES formula to convert the current pulse into a power pulse, and the area under the power curve is the energy; the quadratic term is only about 2 percent. Second, we calculate the energy from the fitted pulse, so it is not affected by the noise at the peak or by baseline drift. Third, in one channel the energy distribution is 15 percent wide and not symmetric, mainly because of the event position; after adding 10 channels it is 7.5 percent wide and symmetric. **The result is that the TESs of Z7 absorb 32 plus or minus 1 percent of the energy of a 10.37 keV event. The CDMS note found 26 to 41 percent on the R37 CUTE tower, and our result is within this range.** Open issues: so far we have only done Z7; we have not confirmed that Z7 was at zero volts in these series, and we assume zero volts; there is no dI/dV data, so the inductor term in the formula is not included; the noise in PDS2 gives the plus or minus 1 percent; and 12.5 percent of the events could not be fitted in any channel and are not included. Thank you.
+**English**: Three sentences. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 32 plus or minus 1 percent of the energy of a 10.37 keV event, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, the noise in PDS2 is the plus or minus 1 percent, and 12.5 percent of the events could not be fitted. Thank you.
 
 ---
 
