@@ -204,6 +204,9 @@ lines(s, [
     "官方 Eabs（触发在第 16383 点，基线是 93..15758 点的平均，5 阶 20 kHz 预滤波，窗口 −0.5/+1 ms，同一个公式）复现到 0.2%；直方图页上的灰色轮廓就是它。",
 ], L, Inches(1.45), W, Inches(5.5), size=17)
 
+s = new("Backup — 公式推导和逻辑")
+pic(s, "derivation_backup_zh.png", L, T, W, Inches(5.85))
+
 for ttl, name in [
     ("Backup — 15 个事件，拟合电流和功率（PBS1）", "pulse_15events.png"),
     ("Backup — 15 个事件，累计能量（PBS1）", "cum_15events.png"),

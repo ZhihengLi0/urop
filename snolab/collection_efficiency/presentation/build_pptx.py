@@ -237,6 +237,9 @@ lines(s, [
     "The official Eabs (trigger bin 16383, baseline bins 93..15758, 5-pole 20 kHz prefilter, window −0.5/+1 ms, same formula) is reproduced to 0.2 %; the grey outlines on the histogram slides are it.",
 ], L, Inches(1.45), W, Inches(5.5), size=17)
 
+s = new("Backup — how the formulas are derived")
+pic(s, "derivation_backup_en.png", L, T, W, Inches(5.85))
+
 for ttl, name, note in [
     ("Backup — 15 events, fitted current and power (PBS1)", "pulse_15events.png", "All 15 example events."),
     ("Backup — 15 events, cumulative energy (PBS1)", "cum_15events.png", "Fit vs raw, 15 events."),

@@ -187,3 +187,115 @@ ax.text(0.5, 0.028, "the note's Method 1 puts $2R_L$ in the second term, not $R_
 fig.savefig(os.path.join(OUT, "derivation.png"), dpi=150)
 plt.close(fig)
 print("derivation.png         drawn")
+
+# ---------------------------------------------- derivation backup (en and zh)
+from matplotlib import font_manager
+font_manager.fontManager.addfont("/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf")
+ZH_FAMILY = ["DejaVu Sans", "Droid Sans Fallback"]
+
+DERIV_TEXT = {
+    "en": dict(
+        h1="1.  From the current to the absorbed power",
+        h2="2.  Energy of the fitted pulse",
+        h3="3.  Symbols (Z7 PBS1 values) and assumptions",
+        left=[
+            ("heat balance of the TES", r"$C\,\dot T = P(t) + P_J - P_{bath}$"),
+            (r"over the whole pulse $\int C\,\dot T\,dt = 0$; the change in bath heat flow is not included",
+             r"$E = \int P\,dt = -\int \delta P_J\,dt$"),
+            (r"the circuit; at the bias point $V = I_0(R_L + R_0)$",
+             r"$V_{TES} = V - I R_L - L\,\dot I, \quad P_J = I\,V_{TES}$"),
+            (r"put $I = I_0 + \delta I$ and subtract the value at the bias point",
+             r"$\delta P_J = V\,\delta I - R_L\,(2I_0\,\delta I + (\delta I)^2) - L\,I\,\dot{\delta I}$"),
+            (r"integrate: the $L$ term gives $L\,[I_0\,\delta I + (\delta I)^2/2]$, which is 0 at both ends",
+             r"$E = \int \delta P\,dt, \quad \delta P = I_0(R_L - R_0)\,\delta I + c_2\,R_L\,(\delta I)^2$"),
+            (r"$c_2$ = 1 from this derivation,  2 in Method 1 (used here),  $-1$ in Method 2", ""),
+        ],
+        right=[
+            (r"the fit, with $t$ counted from the pulse start $t_0$",
+             r"$\delta I(t) = A\,[\,e^{-t/\tau_f} - e^{-t/\tau_r}\,]$"),
+            ("the only integral needed", r"$\int_0^{\infty} e^{-t/\tau}\,dt = \tau$"),
+            ("linear term", r"$\int \delta I\,dt = A\,(\tau_f - \tau_r)$"),
+            ("quadratic term: expand the square, integrate each exponential",
+             r"$\int (\delta I)^2 dt = A^2\left[\frac{\tau_f+\tau_r}{2} - \frac{2\tau_f\tau_r}{\tau_f+\tau_r}\right]$"),
+            (r"so, with $c_2 = 2$",
+             r"$E = I_0(R_L-R_0)\,A(\tau_f-\tau_r) + 2R_L\,A^2\left[\frac{\tau_f+\tau_r}{2} - \frac{2\tau_f\tau_r}{\tau_f+\tau_r}\right]$"),
+            (r"PBS1, event 30646: $A$ = 1.39 $\mu$A, $\tau_r$ = 136 $\mu$s, $\tau_f$ = 213 $\mu$s $\Rightarrow$ $E$ = 305.2 eV", ""),
+        ],
+        symbols=[
+            r"$I_b$: bias current    $R_{sh}$: shunt resistor, 5.00 m$\Omega$    $V = I_b R_{sh}$: bias voltage, $-1.146$ $\mu$V    $R_p$: parasitic resistance, 14.24 m$\Omega$",
+            r"$R_L = R_p + R_{sh}$: load resistance, 19.24 m$\Omega$    $R_0$: TES resistance at the bias point, 44.16 m$\Omega$    $I_0 = V/(R_L+R_0)$: TES current, $-18.07$ $\mu$A",
+            r"$L$: inductance (unknown)    $\delta I$: current change    $A$: amplitude    $\tau_r$, $\tau_f$: rise and fall time constants    $t_0$: pulse start",
+            r"Assumptions: detector at 0 V (no NTL effect);  the heat flow to the bath is not included;",
+            r"the $L$ term cancels only after integration, so $\delta P(t)$ is not the exact power at each moment; only its integral is used",
+        ],
+    ),
+    "zh": dict(
+        h1="1.  从电流到吸收的功率",
+        h2="2.  拟合脉冲的能量",
+        h3="3.  符号（Z7 PBS1 的数值）和假设",
+        left=[
+            ("TES 的热平衡", r"$C\,\dot T = P(t) + P_J - P_{bath}$"),
+            ("对整个脉冲积分，∫C·dT/dt dt = 0；不考虑流到热浴的热量的变化",
+             r"$E = \int P\,dt = -\int \delta P_J\,dt$"),
+            ("电路方程；在工作点 V = I₀(R_L + R₀)",
+             r"$V_{TES} = V - I R_L - L\,\dot I, \quad P_J = I\,V_{TES}$"),
+            ("代入 I = I₀ + δI，减去工作点的值",
+             r"$\delta P_J = V\,\delta I - R_L\,(2I_0\,\delta I + (\delta I)^2) - L\,I\,\dot{\delta I}$"),
+            ("积分：电感项积出来是 L·[I₀·δI + (δI)²/2]，脉冲两端都是 0",
+             r"$E = \int \delta P\,dt, \quad \delta P = I_0(R_L - R_0)\,\delta I + c_2\,R_L\,(\delta I)^2$"),
+            ("c₂ = 1 是这个推导的结果，2 是 Method 1（本报告用），−1 是 Method 2", ""),
+        ],
+        right=[
+            ("拟合函数，t 从脉冲开始的时刻 t₀ 算起",
+             r"$\delta I(t) = A\,[\,e^{-t/\tau_f} - e^{-t/\tau_r}\,]$"),
+            ("只需要这一个积分", r"$\int_0^{\infty} e^{-t/\tau}\,dt = \tau$"),
+            ("线性项", r"$\int \delta I\,dt = A\,(\tau_f - \tau_r)$"),
+            ("二次项：把平方展开，每个指数分别积分",
+             r"$\int (\delta I)^2 dt = A^2\left[\frac{\tau_f+\tau_r}{2} - \frac{2\tau_f\tau_r}{\tau_f+\tau_r}\right]$"),
+            ("所以，取 c₂ = 2",
+             r"$E = I_0(R_L-R_0)\,A(\tau_f-\tau_r) + 2R_L\,A^2\left[\frac{\tau_f+\tau_r}{2} - \frac{2\tau_f\tau_r}{\tau_f+\tau_r}\right]$"),
+            ("PBS1，事件 30646：A = 1.39 μA，τr = 136 μs，τf = 213 μs  ⇒  E = 305.2 eV", ""),
+        ],
+        symbols=[
+            "I_b：偏置电流    R_sh：分流电阻，5.00 mΩ    V = I_b·R_sh：偏置电压，−1.146 μV    R_p：寄生电阻，14.24 mΩ",
+            "R_L = R_p + R_sh：负载电阻，19.24 mΩ    R₀：工作点的 TES 电阻，44.16 mΩ    I₀ = V / (R_L + R₀)：工作点的 TES 电流，−18.07 μA",
+            "L：电感（未知）    δI：电流变化    A：幅度    τr、τf：上升和下降时间常数    t₀：脉冲开始的时刻",
+            "假设：探测器在 0 V（没有 NTL 效应）；不包括流到热浴的热量；",
+            "电感项只有积分以后才为 0，所以 δP(t) 不是每一时刻的精确功率，我们只用它的积分",
+        ],
+    ),
+}
+
+for lang, D in DERIV_TEXT.items():
+    fp = dict(family=ZH_FAMILY) if lang == "zh" else {}
+    fig = plt.figure(figsize=(14.0, 7.3), dpi=150)
+    fig.patch.set_facecolor("white")
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_axis_off()
+    for x, head in ((0.015, D["h1"]), (0.515, D["h2"])):
+        ax.text(x, 0.965, head, ha="left", va="center", fontsize=16.5, color=NAVY,
+                weight="bold", **fp)
+    ax.plot([0.5, 0.5], [0.30, 0.94], color="#CCCCCC", lw=1.2)
+    for x0, items in ((0.015, D["left"]), (0.515, D["right"])):
+        y = 0.91
+        for lab, eq in items:
+            ax.text(x0, y, lab, ha="left", va="center", fontsize=12.5, color=GRAY, **fp)
+            if eq:
+                ax.text(x0 + 0.235, y - 0.048, eq, ha="center", va="center",
+                        fontsize=14.5, color=NAVY)
+                y -= 0.108
+            else:
+                y -= 0.06
+    ax.plot([0.015, 0.985], [0.285, 0.285], color="#CCCCCC", lw=1.2)
+    ax.text(0.015, 0.255, D["h3"], ha="left", va="center", fontsize=15, color=NAVY,
+            weight="bold", **fp)
+    y = 0.205
+    for k, line in enumerate(D["symbols"]):
+        ax.text(0.015, y, line, ha="left", va="center", fontsize=12.2,
+                color=RED if k >= 3 else "#333333", **fp)
+        y -= 0.046
+    fig.savefig(os.path.join(OUT, f"derivation_backup_{lang}.png"), dpi=150)
+    plt.close(fig)
+    print(f"derivation_backup_{lang}.png drawn")
