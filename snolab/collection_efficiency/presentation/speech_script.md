@@ -68,9 +68,9 @@
 
 ## Slide 8 — The same event in its other channels（约 55 秒）
 
-**中文**：一个通道讲完了，下面对同一个事件的 11 个通道都做同样的计算，这里显示其中 4 个。右边的表格列出了这个事件 11 个通道各自的能量，差别很大，最多的那个通道是最少的两倍多。按面来看，第 1 面占 60%，第 2 面占 40%，说明这个事件可能发生在靠近第 1 面的位置。要注意 Z7 的 PFS2 没有读出，所以第 2 面只有 5 个通道。11 个通道加起来是 10.37 keV 的 33%。作为检查，用官方的做法对同一个事件算一遍，两者差 0.6%。右下角的 PDS2 波形上有一个很慢的大起伏，第 10 页会说它带来的影响。
+**中文**：一个通道讲完了，下面对同一个事件的 11 个通道都做同样的计算，这里显示其中 4 个。右边的表格列出了这个事件 11 个通道各自的能量，差别很大，最多的那个通道是最少的两倍多。按面来看，第 1 面占 60%，第 2 面占 40%，说明这个事件可能发生在靠近第 1 面的位置。要注意 Z7 的 PFS2 没有读出，所以第 2 面只有 5 个通道。11 个通道加起来是 10.37 keV 的 33%。作为检查，用官方的做法对同一个事件算一遍，两者差 0.6%。
 
-**English**: That is one channel. Next, we do the same calculation for all 11 channels of the same event; 4 of them are shown here. **The table on the right lists the energy of each of the 11 channels for this event. They are very different: the largest channel has more than twice the smallest. By face, side 1 takes 60 percent and side 2 takes 40 percent,** so this event probably happened closer to side 1. Note that PFS2 is not read out on Z7, so side 2 has only 5 channels. **Summed over the 11 channels, the event gives 33 percent of 10.37 keV.** As a check, the official recipe on the same event agrees to 0.6 percent. **Bottom right, the PDS2 trace has a slow, large swing;** what it costs us comes on slide 10.
+**English**: That is one channel. Next, we do the same calculation for all 11 channels of the same event; 4 of them are shown here. **The table on the right lists the energy of each of the 11 channels for this event. They are very different: the largest channel has more than twice the smallest. By face, side 1 takes 60 percent and side 2 takes 40 percent,** so this event probably happened closer to side 1. Note that PFS2 is not read out on Z7, so side 2 has only 5 channels. **Summed over the 11 channels, the event gives 33 percent of 10.37 keV.** As a check, the official recipe on the same event agrees to 0.6 percent.
 
 ---
 
