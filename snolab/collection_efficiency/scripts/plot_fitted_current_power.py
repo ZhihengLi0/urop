@@ -406,7 +406,7 @@ slide_ev = [e for e in args.slide_events if e in fits]
 if slide_ev:
     # top row: the current itself over the whole trace; bottom row: its running
     # integral. Same time axis, so the drift seen on top explains the bottom.
-    fig, axes = plt.subplots(2, len(slide_ev), figsize=(8.0 * len(slide_ev), 8.8),
+    fig, axes = plt.subplots(2, len(slide_ev), figsize=(8.0 * len(slide_ev), 10.2),
                              squeeze=False, sharex="col",
                              gridspec_kw=dict(height_ratios=(1.0, 1.15)))
     t_full = np.arange(N_BINS) * DT * 1e3
@@ -422,10 +422,10 @@ if slide_ev:
         ax.axvline(TRIGGER_BIN * DT * 1e3, color="gray", lw=0.6, ls=":", zorder=1)
         # the whole pulse, peak included
         pk = float(e["fit"].max() * 1e9)
-        ax.set_ylim(-70, 1.3 * pk + 40)
+        ax.set_ylim(-70, 2.0 * pk)          # headroom above the peak for the label
         ax.set_title(f"{chan} event {evn}: the current", fontsize=15)
         # inset: the baseline after the pulse, where a few nA of offset hide in the noise
-        axi = ax.inset_axes([0.585, 0.40, 0.40, 0.56])
+        axi = ax.inset_axes([0.60, 0.42, 0.385, 0.54])
         tp = t_full[post]
         axi.plot(tp, f["di20"][post] * 1e9, lw=0.7, color="#5B7FA6", zorder=2)
         axi.axhline(0, color="black", lw=0.8, zorder=3)
@@ -433,28 +433,39 @@ if slide_ev:
         axi.set_xlim(tp[0], tp[-1])
         axi.set_ylim(-25, 32)
         axi.tick_params(labelsize=11)
-        axi.text(0.03, 0.96, f"zoomed, after the pulse: mean {m_post * 1e9:+.1f} nA",
-                 transform=axi.transAxes, ha="left", va="top", fontsize=11,
-                 color="#1B7A3D", bbox=dict(facecolor="white", edgecolor="none", pad=1.0),
-                 zorder=6)
+        # the label sits in the free space top left, with an arrow to the mean line,
+        # passing above the pulse peak
+        ax.annotate(f"mean current after the pulse:\n{m_post * 1e9:+.1f} nA",
+                    xy=(tp[0] + 0.12 * (tp[-1] - tp[0]), m_post * 1e9),
+                    xycoords=axi.transData, xytext=(0.03, 0.93),
+                    textcoords=ax.transAxes, ha="left", va="top", fontsize=14,
+                    color="#1B7A3D", annotation_clip=False, zorder=7,
+                    arrowprops=dict(arrowstyle="-|>", color="#1B7A3D", lw=1.8,
+                                    shrinkA=4, shrinkB=2))
         axi.set_facecolor("white")
-        finish(ax, "", "current $\\delta I$ (nA)")
+        finish(ax, "time from trace start (ms)", "current $\\delta I$ (nA)")
+        ax.tick_params(labelbottom=True)
         draw_cum(axes[1][k], chan, f, e, f"{chan} event {evn}")
         finish(axes[1][k], "time from trace start (ms)", "cumulative energy (eV)")
+    # one legend under each row, so each legend only names what is in that row
+    fig.subplots_adjust(left=0.07, right=0.965, top=0.955, bottom=0.115, hspace=0.62,
+                        wspace=0.2)
     L2D = plt.Line2D
-    handles = [
-        L2D([], [], lw=3.0, color="#CDCDCD"), L2D([], [], lw=1.2, color="#5B7FA6"),
-        L2D([], [], lw=1.0, color="black"),
-        L2D([], [], lw=2.0, color="#1B7A3D", ls=(0, (5, 3))),
-        L2D([], [], lw=1.8, color="#E00000"), L2D([], [], lw=1.2, color="#8899AA"),
-        L2D([], [], lw=1.0, color="#1B7A3D", ls=(0, (5, 3))),
-    ]
-    labels = ["top: raw current", "top: raw current, 20 kHz low pass",
-              "top: baseline (mean of 0.15-25.2 ms)", "top: mean current after the pulse",
-              "fitted pulse (top) and its energy (bottom)",
-              "bottom: energy from the raw current", "bottom: closed-form energy"]
-    fig.legend(handles, labels, loc="lower center", ncol=3, fontsize=14, frameon=False)
-    fig.tight_layout(rect=(0, 0.13, 0.96, 1))
+    top_h = [L2D([], [], lw=3.0, color="#CDCDCD"), L2D([], [], lw=1.2, color="#5B7FA6"),
+             L2D([], [], lw=1.8, color="#E00000"), L2D([], [], lw=1.0, color="black"),
+             L2D([], [], lw=2.0, color="#1B7A3D", ls=(0, (5, 3)))]
+    top_l = ["raw current", "raw current, 20 kHz low pass", "fitted pulse",
+             "baseline (mean of 0.15-25.2 ms)", "mean current after the pulse (small panel)"]
+    bot_h = [L2D([], [], lw=1.2, color="#8899AA"), L2D([], [], lw=1.8, color="#E00000"),
+             L2D([], [], lw=1.0, color="#1B7A3D", ls=(0, (5, 3)))]
+    bot_l = ["energy from the raw current", "energy from the fitted pulse",
+             "closed-form energy (the formula)"]
+    y_top = axes[0][0].get_position().y0
+    y_bot = axes[1][0].get_position().y0
+    fig.legend(top_h, top_l, loc="upper center", bbox_to_anchor=(0.52, y_top - 0.055),
+               ncol=3, fontsize=14, frameon=False)
+    fig.legend(bot_h, bot_l, loc="upper center", bbox_to_anchor=(0.52, y_bot - 0.055),
+               ncol=3, fontsize=14, frameon=False)
     fn = os.path.join(OUT_DIR, f"zip{det}_{series}_raw_and_cumulative_{chan}_slide.png")
     fig.savefig(fn, dpi=160)
     plt.close(fig)

@@ -164,7 +164,7 @@ s = new("Why the fitted pulse is integrated, and not the data",
         notes="Top: raw current of events 30646 and 210571, y zoomed to +-60 nA; dashed green is the "
               "mean after the pulse. Bottom: accumulated energy. Left: after-pulse mean +0.1 nA, raw "
               "316 vs fit 305 eV. Right: -6.2 nA, i.e. -2.8 fW over 24 ms = -420 eV, raw -169 vs fit 277.")
-pic(s, "raw_cum_slide.png", L, T, W, Inches(5.05))
+pic(s, "raw_cum_slide.png", L, T, W, Inches(5.1))
 lines(s, [
     "Top: the raw current of the two events; the small panel zooms in on the baseline after the pulse. Bottom: the energy accumulated from the raw current (grey) and from the fit (red).",
     "!Right: after the pulse the current sits 6 nA below its baseline — hidden in 28 nA of noise, yet over 24 ms it is −420 eV: raw −169 eV, fit 277 eV.",
