@@ -140,11 +140,7 @@ s = new("The height: take it from the fit, not from the largest sample",
               "prefilter), red the two-exponential fit, pink band fit ± 1 sigma (89 ADC). Yellow: 98 "
               "samples within 10% of the peak. Raw max 885 ADC vs fit 717: +23%. The maximum of 98 "
               "equal samples is the biggest upward noise. The fit averages every sample.")
-pic(s, "peak_top.png", L, T, W, Inches(4.95))
-lines(s, [
-    "Yellow band: 98 samples sit within 10 % of the peak. The largest of them is the largest noise excursion.",
-    "!Largest raw sample 885 ADC, fit 717 ADC: the maximum reads 23 % high. Filtering helps; the fit removes it.",
-], L, Inches(6.3), W, Inches(1.0), size=15)
+pic(s, "peak_top.png", L, T, W, Inches(5.9))
 
 # ------------------------------------------------------------------ 6 power & area
 s = new("The power pulse, and its area is the energy",
@@ -228,11 +224,11 @@ lines(s, [
 s = new("Backup — the events", notes="Z7 summed PTOFamps, our rebuild with no cut; K line at 2e-6 A.")
 pic(s, "spectrum_zip7.png", L, T, W, Inches(5.75))
 
-s = new("Backup — the three versions of the power formula",
-        notes="c2 = 2 Method 1 (used), 1 exact, -1 Method 2. Relative to exact: +0.58%, -1.15%.")
+s = new("Backup — the two Methods of the CDMS note",
+        notes="c2 = 2 is Method 1 (used here), c2 = -1 is Method 2; 1.7% apart in energy.")
 lines(s, [
-    "δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²     with c₂ = 2 (Method 1, used here), 1 (exact small-signal), −1 (Method 2)",
-    "Relative to the exact form: Method 1 +0.58 %, Method 2 −1.15 % in energy — far below the 15 % single-channel width and the PDS2 bracket.",
+    "δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²     with c₂ = 2 (Method 1, used here) and c₂ = −1 (Method 2)",
+    "The two differ only in the quadratic term: 1.7 % in energy (PBS1, median of 15 events) — far below the 15 % single-channel width and the PDS2 bracket.",
     "The inductor term of the full equations needs L and the loop gain from dI/dV, which do not exist for these series on MSI; it is neglected.",
     "The official Eabs (trigger bin 16383, baseline bins 93..15758, 5-pole 20 kHz prefilter, window −0.5/+1 ms, same formula) is reproduced to 0.2 %; the grey outlines on the histogram slides are it.",
 ], L, Inches(1.45), W, Inches(5.5), size=17)
