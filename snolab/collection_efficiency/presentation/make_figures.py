@@ -325,11 +325,11 @@ TABLE_TEXT = {
     "en": dict(h="energy per channel, event 30646",
                side1="side 1", side2="side 2", total="total",
                note=f"PFS2 is not read out on Z7, so side 2 has {len(S2)} channels",
-               note2="channels also differ from each other by a fixed amount (backup)"),
+               note2="the channels also differ from each other; see the backup slide"),
     "zh": dict(h="事件 30646 各通道的能量",
                side1="第 1 面", side2="第 2 面", total="合计",
                note=f"Z7 的 PFS2 没有读出，所以第 2 面只有 {len(S2)} 个通道",
-               note2="通道之间本身也有固定差别（见 backup）"),
+               note2="通道之间本身也有固定差别，见 backup 那一页"),
 }
 for lang, D in TABLE_TEXT.items():
     fp = dict(family=ZH_FAMILY) if lang == "zh" else {}

@@ -75,6 +75,12 @@ def lines(s, items, l, t, w, h, size=18):
         run(p, txt.lstrip("!"), size, RED if red else DARK, bold=red)
 
 
+def caption(s, text, l, t, w, size=11):
+    """Small grey note, e.g. the sources of a formula."""
+    tb = textbox(s, l, t, w, Inches(0.9))
+    run(tb.text_frame.paragraphs[0], text, size, GRAY, italic=True)
+
+
 def pic(s, name, l, t, max_w, max_h):
     path = os.path.join(FIG, name)
     w0, h0 = Image.open(path).size
@@ -116,11 +122,17 @@ lines(s, [
 
 # ------------------------------------------------------------------ 3 公式
 s = new("公式和它需要的两个数", "采用 CDMS 收集效率文档里的 Method 1")
-pic(s, "formula.png", L, T, W, Inches(4.3))
+pic(s, "formula.png", L, T, W, Inches(3.55))
 lines(s, [
     "δP = 电流变化 δI 之后焦耳热的变化量：一个线性项，加一个很小的二次项。",
-    "文档里还有一个 Method 2。换成我们的符号约定是 δP = I₀(R_L − R₀)·δI − R_L·(δI)²：线性项相同，只有二次项不同，能量低 1.7%（PBS1，15 个事件的中位数）。",
-], L, Inches(5.6), W, Inches(1.6), size=15)
+    "I₀：工作点上流过 TES 的电流 · R₀：工作点上 TES 的电阻 · R_L = R_p + R_sh：负载电阻（R_p 寄生电阻，R_sh 分流电阻）· δI：电流的变化，来自波形",
+    "文档里还有一个 Method 2：换成我们的符号是 δP = I₀(R_L − R₀)·δI − R_L·(δI)² —— 线性项相同，只有二次项不同，能量低 1.7%（PBS1，15 个事件的中位数）。",
+], L, Inches(4.95), W, Inches(1.4), size=13)
+caption(s, "来源 —— CDMS wiki 的 \"Collection Efficiency Analysis\" 页（两个 Method 和整套流程）；Method 1 的推导见 N. Kurinsky 博士论文附录 D "
+           "(slac.stanford.edu/exp/cdms/ScienceResults/Theses/kurinsky.pdf)；Method 2 见 S. Watkins 的 \"energy_absorbed_deriv_v3.pdf\"，在 SLAC confluence 的 "
+           "\"Internal Documentation: PD2 DM Search v2\" 页；两者差别的讨论见 confluence 上的 \"Power_derivation.pdf\"；"
+           "TES 方程见 Irwin & Hilton, Transition-Edge Sensors, Topics in Applied Physics 99 (2005)，第 74-75 和 87-88 页。",
+        L, Inches(6.3), W, size=9.5)
 
 # ------------------------------------------------------------------ 4 主图
 s = new("例子：一个脉冲", ("Z7 PBS1，事件 30646：  ", "同一条波形，读成 ADC 计数、读成电流、读成功率"))

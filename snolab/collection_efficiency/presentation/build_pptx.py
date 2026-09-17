@@ -73,6 +73,12 @@ def lines(s, items, l, t, w, h, size=18):
         run(p, txt.lstrip("!"), size, RED if red else DARK, bold=red)
 
 
+def caption(s, text, l, t, w, size=11):
+    """Small grey note, e.g. where a formula comes from."""
+    tb = textbox(s, l, t, w, Inches(0.9))
+    run(tb.text_frame.paragraphs[0], text, size, GRAY, italic=True)
+
+
 def pic(s, name, l, t, max_w, max_h):
     path = os.path.join(FIG, name)
     w0, h0 = Image.open(path).size
@@ -118,11 +124,17 @@ s = new("The formula, and the two numbers it needs", "Method 1 of the CDMS colle
         notes="TES small-signal result (Irwin & Hilton), Method 1 of the CDMS note. Coefficients "
               "from the measured bias point of each channel: I0(R_L-R0) = 0.45 uV, 2R_L = 0.0385 Ohm "
               "for PBS1. For a two-exponential pulse the integral is a formula in A, tau_f, tau_r.")
-pic(s, "formula.png", L, T, W, Inches(4.3))
+pic(s, "formula.png", L, T, W, Inches(3.55))
 lines(s, [
     "δP = the change of Joule heating when the current moves by δI: a linear term and a small quadratic term.",
-    "The note also gives Method 2. In our sign convention it reads δP = I₀(R_L − R₀)·δI − R_L·(δI)²: the same linear term, only the quadratic term differs, and it gives 1.7 % less energy (PBS1, median of 15 events).",
-], L, Inches(5.6), W, Inches(1.6), size=15)
+    "I₀: TES current at the bias point · R₀: TES resistance at the bias point · R_L = R_p + R_sh: load resistance (R_p parasitic, R_sh shunt) · δI: change in current, from the trace",
+    "The note also gives Method 2: δP = I₀(R_L − R₀)·δI − R_L·(δI)² in our sign convention — same linear term, only the quadratic term differs, 1.7 % less energy (PBS1, median of 15 events).",
+], L, Inches(4.95), W, Inches(1.4), size=13)
+caption(s, "Sources — CDMS wiki, \"Collection Efficiency Analysis\" (both Methods and the procedure);  Method 1 derived in N. Kurinsky, PhD thesis, appendix D "
+           "(slac.stanford.edu/exp/cdms/ScienceResults/Theses/kurinsky.pdf);  Method 2 in S. Watkins, \"energy_absorbed_deriv_v3.pdf\" on the SLAC confluence page "
+           "\"Internal Documentation: PD2 DM Search v2\";  the difference between the two is discussed in \"Power_derivation.pdf\" on confluence;  "
+           "the TES equations: Irwin & Hilton, Transition-Edge Sensors, Topics in Applied Physics 99 (2005), pp. 74-75 and 87-88.",
+        L, Inches(6.3), W, size=9.5)
 
 # ------------------------------------------------------------------ 4 the figure
 s = new("Example: one pulse",
