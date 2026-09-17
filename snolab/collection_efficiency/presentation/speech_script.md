@@ -34,9 +34,9 @@
 
 ## Slide 4 — Example: one pulse（约 60 秒）
 
-**中文**：下面看一个例子：通道 PBS1，事件 30646，只画出脉冲附近这 1.3 毫秒，横轴从触发前 0.35 毫秒到触发后 0.95 毫秒。同一条波形，可以用 ADC 计数、电流和功率三种单位来读。上半部分是脉冲，下半部分是功率，细节下两页再说。这里先说明一点：双指数拟合用的是 100 kHz 低通滤波以后的波形，也就是蓝线，不是原始采样点。原始采样点只是画出来做对比。接下来两页分别讲上半部分和下半部分。
+**中文**：下面看一个例子：通道 PBS1，事件 30646，只画出脉冲附近这 1.3 毫秒，横轴从触发前 0.35 毫秒到触发后 0.95 毫秒。同一条波形，可以用 ADC 计数、电流和功率三种单位来读。上半部分是脉冲，下半部分是功率，细节下两页再说。这里先说明一点：双指数拟合用的是 100 kHz 低通滤波以后的波形，也就是蓝线，不是原始采样点。原始采样点只是画出来做对比。
 
-**English**: Now an example: channel PBS1, event 30646, showing only 1.3 milliseconds around the pulse, from 0.35 milliseconds before the trigger to 0.95 after. **The same trace can be read in three units: as ADC counts, as current, and as power.** The top panel is the pulse and the bottom panel is the power; the details come on the next two slides. **One note first: the two-exponential fit is done on the trace after a 100 kilohertz low-pass filter, which is the blue line, not on the raw samples.** The raw samples are drawn only for comparison. The next two slides explain the top panel and the bottom panel.
+**English**: Now an example: channel PBS1, event 30646, showing only 1.3 milliseconds around the pulse, from 0.35 milliseconds before the trigger to 0.95 after. **The same trace can be read in three units: as ADC counts, as current, and as power.** The top panel is the pulse and the bottom panel is the power; the details come on the next two slides. **One note first: the two-exponential fit is done on the trace after a 100 kilohertz low-pass filter, which is the blue line, not on the raw samples.** The raw samples are drawn only for comparison.
 
 ---
 
