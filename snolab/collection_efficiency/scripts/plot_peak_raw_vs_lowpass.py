@@ -169,7 +169,7 @@ rows = [("raw max", pk_raw, "#7F8C8D"),
         (f"LP {LP_OFF_KHZ:.0f} kHz", pk_20, "#2E8B57"),
         ("fit peak", pk_fit, "#C0392B")]
 box_x, box_y, dy = 0.985, 0.975, 0.066
-ax.text(box_x, box_y, f"{'pulse height':<12}{'ADC':>8}{'uA':>10}{'fW':>9}"
+ax.text(box_x, box_y, f"{'height from':<12}{'ADC':>8}{'uA':>10}{'fW':>9}"
         f"{'vs fit':>9}", transform=ax.transAxes, ha="right", va="top",
         family="monospace", fontsize=10 * FS, weight="bold", zorder=8, bbox=dict(facecolor="white", alpha=0.88, edgecolor="none", pad=1.5), )
 for k, (lab, y, c) in enumerate(rows):
@@ -249,9 +249,10 @@ pw.set_ylabel("absorbed power $P$ (fW)", fontsize=12 * FS,
               color="#7B241C")
 pw.tick_params(colors="#7B241C")
 ax.grid(alpha=0.22)
-ax.legend(fontsize=9.5 * FS, loc="lower left", ncol=2, framealpha=0.93)
+ax.legend(fontsize=9.0 * FS, loc="lower left", bbox_to_anchor=(0.0, 1.01),
+          ncol=3, frameon=False)
 ax.set_title(f"Z{det} {chan}, event {evn}: one pulse as ADC, as current and as power",
-             fontsize=12.5 * FS)
+             fontsize=12.5 * FS, pad=74)
 foot = fig.text(0.5, 0.010,
         f"baseline = mean of bins {BASE_LO}-{BASE_HI} = {base:.1f} ADC, "
         f"subtracted   |   1 ADC = {1e9 / ADC_PER_AMP:.4f} nA\n"
@@ -265,7 +266,7 @@ foot = fig.text(0.5, 0.010,
         f"= {QUAD * 1e3:.2f} m$\\Omega$ = {QUAD:.4f} $\\Omega$",
         ha="center", va="bottom", fontsize=9.5 * FS, linespacing=1.45,
         color="#444444")
-fig.subplots_adjust(left=0.085, right=0.845, top=0.955, bottom=0.2, hspace=0.07)
+fig.subplots_adjust(left=0.085, right=0.845, top=0.875, bottom=0.2, hspace=0.07)
 os.makedirs(OUT_DIR, exist_ok=True)
 fn = os.path.join(OUT_DIR,
                   f"zip{det}_{series}_peak_raw_vs_lp_{chan}_ev{evn}.png")

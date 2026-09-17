@@ -156,7 +156,7 @@ lines(s, [
 ], L, Inches(5.4), W, Inches(1.8), size=15)
 
 # ------------------------------------------------------------------ 7 fit vs raw
-s = new("Why the fitted pulse is integrated, and not the data",
+s = new("Why we integrate the fit, not the raw data",
         notes="Top: raw current of events 30646 and 210571, y zoomed to +-60 nA; dashed green is the "
               "mean after the pulse. Bottom: accumulated energy. Left: after-pulse mean +0.1 nA, raw "
               "316 vs fit 305 eV. Right: -6.2 nA, i.e. -2.8 fW over 24 ms = -420 eV, raw -169 vs fit 277.")
@@ -172,11 +172,12 @@ s = new("The same event in its other channels: they add up to 33 %",
         notes="PES1 489 eV, PES2 195 eV: position. Sum over 11 channels 3419 eV = 33.0%. Official "
               "window on the raw traces: 3397 eV = 32.8%. PDS2: slow swing after 5 ms, a "
               "low-frequency artefact; residual 0.14, three times the others.")
-pic(s, "allchan_slide.png", L, T, W, Inches(4.65))
+pic(s, "allchan_slide.png", L, T, Inches(8.5), Inches(4.75))
+pic(s, "chan_table_en.png", Inches(9.25), Inches(1.15), Inches(3.6), Inches(5.6))
 lines(s, [
-    "The channels share the energy unevenly (PES1 489 eV, PES2 195 eV): the event sat closer to one side.",
+    "The channels do not share the energy equally: 60 % of it lands on side 1, and PES1 alone has 489 eV against 195 eV in PES2.",
     "!Summed over the eleven channels: 3419 eV = 33.0 % of 10.37 keV.   PDS2 (bottom right) carries a slow swing.",
-], L, Inches(6.0), W, Inches(1.1), size=15)
+], L, Inches(6.1), Inches(8.6), Inches(1.1), size=14)
 
 # ------------------------------------------------------------------ 9 all events
 s = new("Now every event: one channel gives a wide, lopsided distribution",

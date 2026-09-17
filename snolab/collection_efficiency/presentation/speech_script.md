@@ -58,7 +58,7 @@
 
 ---
 
-## Slide 7 — Why the fitted pulse is integrated, and not the data（约 80 秒）
+## Slide 7 — Why we integrate the fit, not the raw data（约 80 秒）
 
 **中文**：有人可能会问：公式对任何电流都能用，为什么不直接对原始数据积分？这一页回答这个问题。上面一排是两个事件的原始电流。灰色是原始采样点，蓝色是 20 kHz 低通以后的波形，红色是拟合的脉冲，黑线是基线。每张图右上角的小图，把脉冲之后的部分放大，纵轴只有正负 25 纳安，橙色虚线是脉冲之后电流的平均值，左上方的橙色箭头指着它。左边的事件，脉冲之后电流回到了基线，只差 0.1 纳安。右边的事件，脉冲之后电流比基线低了 6 纳安。下面一排是累计能量，横轴和上面一样。红线是对拟合脉冲积分：触发前是 0，1 毫秒内升上去，然后保持不变，最后的值和绿色虚线的公式值相同。灰线是对原始数据积分。左边的事件，两者只差 11 电子伏。右边的事件，6 纳安的偏移比每个采样点上 28 纳安的噪声小很多，所以用眼睛看不出来。但是换算成功率是负 2.8 飞瓦，在 24 毫秒里积分就是负 420 电子伏。所以原始数据的积分最后是负 169 电子伏，而拟合给出 277 电子伏。结论是：能量要用拟合来算，这样不受峰值噪声和基线漂移的影响。
 
@@ -68,9 +68,9 @@
 
 ## Slide 8 — The same event in its other channels（约 55 秒）
 
-**中文**：一个通道讲完了，下面对同一个事件的 11 个通道都做同样的计算，这里显示其中 4 个。不同通道的能量差别很大：PES1 是 489 电子伏，PES2 只有 195 电子伏，说明这个事件可能发生在靠近 PES1 的一侧。11 个通道加起来是 3419 电子伏，是 10.37 keV 的 33%。作为检查，用官方的积分窗口直接对原始波形积分，加起来是 3397 电子伏，两者差 0.6%。右下角是 PDS2：5 毫秒以后波形有一个很慢的大起伏，这是这个通道的低频噪声。它的拟合残差是其他通道的三倍左右。后面把通道加起来的时候，误差主要就来自这个通道。
+**中文**：一个通道讲完了，下面对同一个事件的 11 个通道都做同样的计算，这里显示其中 4 个。右边的表格列出了这个事件 11 个通道各自的能量。差别很大：PES1 是 489 电子伏，PES2 只有 195 电子伏。按面来看，第 1 面一共 2062 电子伏，占 60%；第 2 面 1357 电子伏，占 40%，说明这个事件可能发生在靠近第 1 面的位置。要注意 Z7 的 PFS2 没有读出，所以第 2 面只有 5 个通道。11 个通道加起来是 3419 电子伏，是 10.37 keV 的 33%。作为检查，用官方的积分窗口直接对原始波形积分，加起来是 3397 电子伏，两者差 0.6%。右下角是 PDS2：5 毫秒以后波形有一个很慢的大起伏，这是这个通道的低频噪声。它的拟合残差是其他通道的三倍左右。后面把通道加起来的时候，误差主要就来自这个通道。
 
-**English**: That is one channel. Next, we do the same calculation for all 11 channels of the same event; 4 of them are shown here. **The energies are very different between channels: PES1 has 489 electron volts, and PES2 has only 195,** so this event probably happened closer to the PES1 side. **The sum over the 11 channels is 3419 electron volts, which is 33 percent of 10.37 keV.** As a check, if we use the official integration window directly on the raw traces, the sum is 3397 electron volts, and the two differ by 0.6 percent. **Bottom right is PDS2: after 5 milliseconds, the trace has a slow, large swing.** This is low-frequency noise in this channel. Its fit residual is about three times that of the other channels. When we add up the channels later, most of the uncertainty comes from this channel.
+**English**: That is one channel. Next, we do the same calculation for all 11 channels of the same event; 4 of them are shown here. **The table on the right lists the energy of each of the 11 channels for this event. They are very different: PES1 has 489 electron volts and PES2 only 195. By face, side 1 has 2062 electron volts, 60 percent of the total, and side 2 has 1357, 40 percent,** so this event probably happened closer to side 1. Note that PFS2 is not read out on Z7, so side 2 has only 5 channels. **The sum over the 11 channels is 3419 electron volts, which is 33 percent of 10.37 keV.** As a check, if we use the official integration window directly on the raw traces, the sum is 3397 electron volts, and the two differ by 0.6 percent. **Bottom right is PDS2: after 5 milliseconds, the trace has a slow, large swing.** This is low-frequency noise in this channel. Its fit residual is about three times that of the other channels. When we add up the channels later, most of the uncertainty comes from this channel.
 
 ---
 

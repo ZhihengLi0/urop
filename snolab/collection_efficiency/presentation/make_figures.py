@@ -302,3 +302,68 @@ for lang, D in DERIV_TEXT.items():
     fig.savefig(os.path.join(OUT, f"derivation_backup_{lang}.png"), dpi=150)
     plt.close(fig)
     print(f"derivation_backup_{lang}.png drawn")
+
+# ------------------------------------ per-channel table for the all-channel slide
+# numbers parsed from the result text file, never typed in by hand
+TXT = os.path.join(SRC, f"{S}_energies.txt")
+rows, in_sec = {}, False
+for line in open(TXT):
+    if line.startswith("[2] event"):
+        in_sec = True
+        continue
+    if in_sec:
+        f = line.split()
+        if len(f) > 3 and f[1].startswith("P"):
+            rows[f[1]] = float(f[2])
+        elif line.startswith("event") and "all-channel sum" in line:
+            break
+S1 = [c for c in ["PAS1", "PBS1", "PCS1", "PDS1", "PES1", "PFS1"] if c in rows]
+S2 = [c for c in ["PAS2", "PBS2", "PCS2", "PDS2", "PES2", "PFS2"] if c in rows]
+s1, s2 = sum(rows[c] for c in S1), sum(rows[c] for c in S2)
+tot = s1 + s2
+TABLE_TEXT = {
+    "en": dict(h="energy per channel, event 30646",
+               side1="side 1", side2="side 2", total="total",
+               note=f"PFS2 is not read out on Z7, so side 2 has {len(S2)} channels",
+               note2="channels also differ from each other by a fixed amount (backup)"),
+    "zh": dict(h="事件 30646 各通道的能量",
+               side1="第 1 面", side2="第 2 面", total="合计",
+               note=f"Z7 的 PFS2 没有读出，所以第 2 面只有 {len(S2)} 个通道",
+               note2="通道之间本身也有固定差别（见 backup）"),
+}
+for lang, D in TABLE_TEXT.items():
+    fp = dict(family=ZH_FAMILY) if lang == "zh" else {}
+    fig = plt.figure(figsize=(4.6, 5.6), dpi=150)
+    fig.patch.set_facecolor("white")
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_axis_off()
+    ax.text(0.5, 0.965, D["h"], ha="center", va="center", fontsize=14, color=NAVY,
+            weight="bold", **fp)
+    y = 0.895
+    for side, chans, ssum in ((D["side1"], S1, s1), (D["side2"], S2, s2)):
+        ax.text(0.06, y, side, ha="left", va="center", fontsize=13.5, color=NAVY,
+                weight="bold", **fp)
+        ax.text(0.94, y, f"{ssum:.0f} eV   ({100 * ssum / tot:.0f} %)", ha="right",
+                va="center", fontsize=13.5, color=NAVY, weight="bold", **fp)
+        y -= 0.050
+        for c in chans:
+            ax.text(0.12, y, c, ha="left", va="center", fontsize=13, color="#333333")
+            ax.text(0.88, y, f"{rows[c]:.0f} eV", ha="right", va="center", fontsize=13,
+                    color="#333333")
+            y -= 0.046
+        y -= 0.020
+    ax.plot([0.06, 0.94], [y + 0.01, y + 0.01], color="#BBBBBB", lw=1.2)
+    y -= 0.05
+    ax.text(0.06, y, D["total"], ha="left", va="center", fontsize=14, color=RED,
+            weight="bold", **fp)
+    ax.text(0.94, y, f"{tot:.0f} eV = {100 * tot / 10370:.1f} % of 10.37 keV",
+            ha="right", va="center", fontsize=13.5, color=RED, weight="bold", **fp)
+    y -= 0.065
+    for note in (D["note"], D["note2"]):
+        ax.text(0.06, y, note, ha="left", va="center", fontsize=11, color=GRAY, **fp)
+        y -= 0.040
+    fig.savefig(os.path.join(OUT, f"chan_table_{lang}.png"), dpi=150)
+    plt.close(fig)
+    print(f"chan_table_{lang}.png    drawn  (side1 {s1:.0f}, side2 {s2:.0f}, total {tot:.0f})")
