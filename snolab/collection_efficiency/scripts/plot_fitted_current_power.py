@@ -419,16 +419,25 @@ if slide_ev:
         ax.plot(t_full, e["fit"] * 1e9, lw=1.6, color="#E00000", zorder=3)
         ax.axhline(0, color="black", lw=0.8, zorder=4)
         m_post = float(f["di20"][post].mean())
-        ax.hlines(m_post * 1e9, t_full[post][0], t_full[-1], color="#1B7A3D", lw=2.0,
-                  ls=(0, (5, 3)), zorder=5)
-        ax.text(t_full[-1], m_post * 1e9, f"  {m_post * 1e9:+.1f} nA", color="#1B7A3D",
-                fontsize=14, va="center", ha="left", clip_on=False)
-        ax.axvspan(BASE_LO * DT * 1e3, BASE_HI * DT * 1e3, color="#F2F2F2", zorder=0)
         ax.axvline(TRIGGER_BIN * DT * 1e3, color="gray", lw=0.6, ls=":", zorder=1)
-        # the pulse is ~230 nA tall; zoom on the baseline so a few nA are visible
-        ax.set_ylim(-60, 60)
-        ax.set_title(f"{chan} event {evn}: the current (pulse runs off the top)",
-                     fontsize=15)
+        # the whole pulse, peak included
+        pk = float(e["fit"].max() * 1e9)
+        ax.set_ylim(-70, 1.3 * pk + 40)
+        ax.set_title(f"{chan} event {evn}: the current", fontsize=15)
+        # inset: the baseline after the pulse, where a few nA of offset hide in the noise
+        axi = ax.inset_axes([0.585, 0.40, 0.40, 0.56])
+        tp = t_full[post]
+        axi.plot(tp, f["di20"][post] * 1e9, lw=0.7, color="#5B7FA6", zorder=2)
+        axi.axhline(0, color="black", lw=0.8, zorder=3)
+        axi.axhline(m_post * 1e9, color="#1B7A3D", lw=2.0, ls=(0, (5, 3)), zorder=4)
+        axi.set_xlim(tp[0], tp[-1])
+        axi.set_ylim(-25, 32)
+        axi.tick_params(labelsize=11)
+        axi.text(0.03, 0.96, f"zoomed, after the pulse: mean {m_post * 1e9:+.1f} nA",
+                 transform=axi.transAxes, ha="left", va="top", fontsize=11,
+                 color="#1B7A3D", bbox=dict(facecolor="white", edgecolor="none", pad=1.0),
+                 zorder=6)
+        axi.set_facecolor("white")
         finish(ax, "", "current $\\delta I$ (nA)")
         draw_cum(axes[1][k], chan, f, e, f"{chan} event {evn}")
         finish(axes[1][k], "time from trace start (ms)", "cumulative energy (eV)")

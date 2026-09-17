@@ -166,7 +166,7 @@ s = new("Why the fitted pulse is integrated, and not the data",
               "316 vs fit 305 eV. Right: -6.2 nA, i.e. -2.8 fW over 24 ms = -420 eV, raw -169 vs fit 277.")
 pic(s, "raw_cum_slide.png", L, T, W, Inches(5.05))
 lines(s, [
-    "Top: the raw current of the same two events, zoomed on the baseline. Bottom: the energy accumulated from it (grey) and from the fit (red).",
+    "Top: the raw current of the two events; the small panel zooms in on the baseline after the pulse. Bottom: the energy accumulated from the raw current (grey) and from the fit (red).",
     "!Right: after the pulse the current sits 6 nA below its baseline — hidden in 28 nA of noise, yet over 24 ms it is −420 eV: raw −169 eV, fit 277 eV.",
 ], L, Inches(6.33), W, Inches(0.9), size=13)
 
