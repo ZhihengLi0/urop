@@ -103,7 +103,7 @@ run(tb.text_frame.paragraphs[0], "Zhiheng Li  ·  University of Minnesota  ·  S
 run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab/collection_efficiency/", 13, GRAY)
 
 # ------------------------------------------------------------------ 2 question
-s = new("The question", notes="Efficiency = energy absorbed by the TESs, summed over all "
+s = new("The Main Idea", notes="Efficiency = energy absorbed by the TESs, summed over all "
         "channels, / 10.37 keV, for a detector operated at 0 V (no NTL amplification). Z7, "
         "K-line events of the Ge activation, SNOLAB R4, 2207 events over 30 series.")
 pic(s, "chain.png", L, Inches(1.4), W, Inches(2.6))

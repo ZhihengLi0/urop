@@ -106,7 +106,7 @@ run(tb.text_frame.paragraphs[0], "李知恒  ·  明尼苏达大学  ·  SuperCD
 run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab/collection_efficiency/", 13, GRAY)
 
 # ------------------------------------------------------------------ 2 问题
-s = new("问题是什么")
+s = new("主要思路")
 pic(s, "chain.png", L, Inches(1.4), W, Inches(2.6))
 lines(s, [
     "!对于在 0 V 下工作的探测器（没有 NTL 效应）：",

@@ -16,8 +16,7 @@ logic per slide; the figure does the talking.
 | `build_pptx.py` | regenerates the .pptx (python-pptx, host python) |
 | `build_speech_pdf.py` | speech_script.md → HTML; then headless Chromium prints the PDF |
 
-Slide flow (12 main): title → the question (chain; the area under a current is
-not an energy) → the formula and the two numbers it needs (Method 1 of the CDMS note, with
+Slide flow (12 main): title → the main idea (the chain of steps) → the formula and the two numbers it needs (Method 1 of the CDMS note, with
 Method 2 mentioned; closed form, bias point)
 → **example: one pulse** (the full figure; the fit is on the 100 kHz low-passed trace) → the height: take it from the
 fit (raw max 885 vs fit 717 ADC, +23 %) → the power pulse and its area
