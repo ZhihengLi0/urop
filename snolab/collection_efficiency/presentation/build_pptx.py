@@ -153,15 +153,11 @@ pic(s, "peak_top.png", L, T, W, Inches(5.9))
 # ------------------------------------------------------------------ 6 power & area
 s = new("The power pulse, and its area is the energy",
         notes="Red: power from the fitted current, two terms added. Blue dashed: linear term alone. "
-              "Purple dotted: quadratic term x20. Peak 104.6 fW = 102.6 + 2.0: quadratic 1.9% of "
-              "peak, 1.3% of energy. Shaded area 305.2 eV, 99% inside this window. Bottom line: "
+              "Purple dotted: quadratic term x20. Peak 104.6 fW = 102.6 + 2.0: the quadratic term "
+              "is 1.3% of the energy. Shaded area 305.2 eV, 99% inside this window. Bottom line: "
               "the bias point that fixes the coefficients.")
-pic(s, "peak_bottom.png", L, T, W, Inches(4.0))
-lines(s, [
-    "Red: the fitted current put through the formula. Blue dashed: the linear term alone. Purple: the quadratic term, ×20.",
-    "!The quadratic term is 1.9 % of the peak — the power pulse has the shape of the current pulse.",
-    "!The shaded area is the energy this channel absorbed: 305 eV.",
-], L, Inches(5.4), W, Inches(1.8), size=15)
+pic(s, "power_panel.png", L, T, Inches(7.5), Inches(5.75))
+pic(s, "power_legend_en.png", Inches(8.15), Inches(2.1), Inches(4.7), Inches(4.1))
 
 # ------------------------------------------------------------------ 7 fit vs raw
 s = new("Why we integrate the fit, not the raw data",

@@ -4,7 +4,7 @@
 用词尽量简单；专业词保持原样。斜体是给自己的提示，不用念。**加粗的英文**是看着屏幕说的句子。
 
 整个报告只讲一件事：**先说明一个脉冲怎么算出能量，再把同样的算法用到所有通道和所有事件。**
-时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 70 · 4 主图 35 · 5 峰高 110 · 6 功率和面积 90 · 7 为什么用拟合 80 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 100 · 11 总结 35 → 约 725 秒。
+时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 70 · 4 主图 35 · 5 峰高 70 · 6 功率和面积 55 · 7 为什么用拟合 80 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 80 · 11 总结 35 → 约 630 秒（约 10.5 分钟；讲的时候留出停顿和指图的时间，大约 13 分钟）。
 
 ---
 
@@ -40,21 +40,21 @@
 
 ---
 
-## Slide 5 — The height（约 110 秒）
+## Slide 5 — The height（约 70 秒）
 
-*这页是重点，讲慢一点。*
+*这页指着图讲。*
 
-**中文**：先说清楚一件事：这张图里红色的拟合曲线，是在 100 kHz 低通滤波之后的波形上拟合出来的，也就是蓝线，不是在灰色的原始采样点上。原始采样点只是画出来对照。下面看上半部分，问题是脉冲高度应该怎么取。图里各部分是：灰点是原始采样点，每 1.6 微秒一个；蓝线是 100 kHz 低通以后的波形；绿线是 20 kHz 低通以后的波形，官方的 Eabs 用这个滤波；红线是双指数拟合，上升时间 136 微秒，下降时间 213 微秒。红线两边的粉色带表示拟合加减一个 σ 的噪声，σ 等于 89 个 ADC，是在触发之前的基线上测的。黄色竖条标出脉冲的顶部，那里有 98 个采样点，都在峰高的 10% 以内。右上角的表列出四种取高度的方法，具体数值在表里。**关键是：原始采样点的最大值比拟合高 23%。**原因是：顶部这 98 个点的真实高度差不多，每个点上都加了随机噪声。取最大值，得到的是噪声刚好最偏高的那个点，所以最大值会系统性地偏高。滤波可以减小这个偏差，但滤波太强也会把峰本身压低。拟合用的是上升、顶部和下降所有的点，噪声有正有负，会互相抵消，所以拟合的峰值没有这种偏高。后面所有的能量都用拟合结果来算。
+**中文**：这是同一个脉冲的顶部放大。红色的拟合曲线是在 100 kHz 低通之后的波形上做的，也就是蓝线，不是灰色的原始采样点。绿线是 20 kHz 低通，官方的 Eabs 用它。黄色竖条是脉冲的顶部，那里有近百个采样点，高度差不多。右上角的表是四种取高度的方法。**取原始采样点的最大值会偏高 23%**，因为挑到的是噪声刚好最高的那个点；拟合用了上升、顶部和下降所有的点，噪声互相抵消。所以后面所有的能量都用拟合来算。
 
-**English**: One thing first: **the red fit in this figure is fitted to the trace after a 100 kilohertz low-pass filter, the blue line, not to the grey raw samples.** The raw samples are only drawn for comparison. Now the top panel, and the question is how to measure the pulse height. Here is what is in the plot. **The grey dots are the raw samples, one every 1.6 microseconds. The blue line is the trace after the 100 kilohertz low-pass filter. The green line is the trace after a 20 kilohertz low-pass filter, which is the filter used for the official Eabs. The red line is the two-exponential fit,** with a rise time of 136 microseconds and a fall time of 213 microseconds. **The pink band shows the fit plus or minus one sigma of noise;** sigma is 89 ADC, measured on the baseline before the trigger. **The yellow band marks the top of the pulse: it contains 98 samples, all within 10 percent of the peak height.** The table in the top right corner lists four ways to take the height, with the numbers. **The point is that the largest raw sample is 23 percent higher than the fit.** The reason is this: the 98 samples at the top have almost the same true height, and each one has random noise added to it. If we take the maximum, we get the sample where the noise happened to be the most positive, so the maximum is biased high. Filtering reduces this bias, but a strong filter also lowers the peak itself. The fit uses all the samples on the rise, the top, and the fall. The noise is sometimes positive and sometimes negative, so it averages out, and the fit peak does not have this bias. All energies from here on are calculated from the fit.
+**English**: This is the top of the same pulse, zoomed in. **The red fit is made on the 100 kilohertz low-passed trace, the blue line, not on the grey raw samples.** The green line is the 20 kilohertz low pass, which the official Eabs uses. The yellow band is the top of the pulse, where about a hundred samples have almost the same height. The table lists four ways to take the height. **Taking the largest raw sample is 23 percent too high,** because it picks the sample where the noise happened to be highest; the fit uses all the samples on the rise, the top and the fall, so the noise averages out. That is why every energy from here on comes from the fit.
 
 ---
 
-## Slide 6 — The power pulse, and its area（约 90 秒）
+## Slide 6 — The power pulse, and its area（约 55 秒）
 
-**中文**：再看下半部分。红线是把拟合得到的电流代入公式算出的功率，包括线性项和二次项。蓝色虚线只有线性项，和红线几乎重合。紫色点线只有二次项，因为太小，放大了 20 倍才画出来。功率峰值是 104.6 飞瓦，其中线性项 102.6，二次项 2.0。二次项占峰值功率的 1.9%，占能量的 1.3%。所以功率脉冲和电流脉冲的形状基本一样，只是单位不同，这也是上一页三条纵轴可以画在一起的原因。粉色面积就是这个通道吸收的能量，其中 99% 落在图里画出的这段时间以内。灰点和绿线是用同一个公式算的原始采样点和 20 kHz 波形的功率，只做对比，它们在红线周围上下波动，这是噪声。最下面一行列出了这个通道的工作点参数，两个系数就是用这些数算的。
+**中文**：这是同一个脉冲的功率。红线是把拟合出的电流代进公式算出来的，两项都算；蓝色虚线只有线性项，和红线几乎重合；紫色点线只有二次项，放大 20 倍才看得见。灰点和绿线是把同一个公式用在原始采样点和 20 kHz 波形上，只作对照。**粉色面积就是这个通道吸收的能量**，二次项只占其中 1.3%。
 
-**English**: Now the bottom panel. **The red line is the power calculated by putting the fitted current into the formula, with both the linear term and the quadratic term. The blue dashed line is the linear term only, and it almost overlaps the red line. The purple dotted line is the quadratic term only; it is very small, so it is drawn 20 times larger.** The peak power is 104.6 femtowatts: 102.6 from the linear term and 2.0 from the quadratic term. The quadratic term is 1.9 percent of the peak power and 1.3 percent of the energy. So the power pulse has almost the same shape as the current pulse, only in different units, and this is why the three axes on the last slide can be drawn together. **The shaded area is the energy absorbed in this channel, and 99 percent of it is inside the time range drawn here.** The grey dots and the green line are the power from the raw samples and from the 20 kilohertz trace, using the same formula. They are only for comparison; they go up and down around the red line because of noise. The bottom line lists the operating point of this channel, which is used to calculate the two coefficients.
+**English**: This is the power of the same pulse. Red is the fitted current put through the formula, with both terms; the blue dashed line is the linear term alone and almost overlaps it; the purple dotted line is the quadratic term alone, drawn twenty times larger. The grey dots and the green line are the same formula on the raw samples and on the 20 kilohertz trace, for comparison. **The shaded area is the energy absorbed in this channel,** and the quadratic term is only 1.3 percent of it.
 
 ---
 
@@ -82,11 +82,11 @@
 
 ---
 
-## Slide 10 — Summed over the channels: 32 ± 1 %（约 100 秒）
+## Slide 10 — Summed over the channels: 32 ± 1 %（约 80 秒）
 
-**中文**：这是结果。对每一个事件，把各通道的能量加起来，再看这些总能量的分布。灰色是 10 个通道的和。和上一页比有两个变化：宽度从 15% 降到 7.5%，而且分布变对称了。这说明事件位置造成的差别，在求和以后大部分互相抵消了。峰的位置在 10.37 keV 的 30.5%，这就是这 10 个通道收到的能量。为什么是 10 个通道？因为 PDS2 有低频起伏，只有一部分事件能拟合成功，所以先把它单独放在一边。绿色是把 PDS2 也加进来的结果，但它只包括 PDS2 拟合成功的那些事件，这批事件不能代表全部事件，所以 PDS2 的贡献只能给一个范围。算下来完整的效率在 31.5% 到 32.9% 之间，写成 32% 加减 1%。要缩小这个范围，需要解决 PDS2 的噪声问题，增加事件数没有帮助。最右边的红线是 10.37 keV，可以看到大约三分之二的能量没有被 TES 吸收。
+**中文**：这是结果。对每个事件把各通道的能量加起来，再看这些总能量的分布。和上一页比，宽度从 15% 降到 7.5%，而且变对称了，说明事件位置造成的差别在求和后大部分抵消了。灰色是 10 个通道的和，峰在 10.37 keV 的 30.5%。这里没算 PDS2——它有低频起伏，只有一部分事件能拟合上。绿色把 PDS2 也加进来，但只用了它能拟合的那些事件，所以它的贡献只能给一个范围：完整效率在 31.5% 到 32.9% 之间，写成 32% 加减 1%。要收窄这个范围，得先解决 PDS2 的噪声。最右边的红线是 10.37 keV，可以看到大约三分之二的能量没有被 TES 吸收。
 
-**English**: This is the result. For each event we add up the energies of the channels, and then look at the distribution of these totals. **Grey is the sum over 10 channels.** Two things change compared with the last slide: **the width drops from 15 percent to 7.5 percent, and the distribution becomes symmetric.** So most of the difference caused by the event position cancels when we add the channels. **The peak sits at 30.5 percent of 10.37 keV,** which is the energy these 10 channels collect. Why 10 channels? Because PDS2 has the low-frequency swing and only part of its events can be fitted, so we keep it aside for a moment. Green is the sum including PDS2, but only for the events where PDS2 is fitted, and those events are not representative of all events, so we can only give a range for its contribution. **That puts the full efficiency between 31.5 and 32.9 percent, which we write as 32 plus or minus 1 percent.** To make the range smaller we need to fix the noise in PDS2; more events would not help. **The red line on the far right is 10.37 keV:** about two thirds of the energy is not absorbed by the TESs.
+**English**: This is the result. For each event we add up the energies of the channels and look at the distribution of these totals. **Compared with the last slide, the width drops from 15 percent to 7.5 percent and the distribution becomes symmetric,** so most of the difference from the event position cancels in the sum. **Grey is the sum over 10 channels, and its peak sits at 30.5 percent of 10.37 keV.** PDS2 is not in it: it has the low-frequency swing, and only part of its events can be fitted. Green adds PDS2, but only for the events where it can be fitted, so its contribution can only be given as a range: **the full efficiency is between 31.5 and 32.9 percent, which we write as 32 plus or minus 1 percent.** To narrow that range we have to fix the noise in PDS2. **The red line on the far right is 10.37 keV:** about two thirds of the energy is not absorbed by the TESs.
 
 ---
 

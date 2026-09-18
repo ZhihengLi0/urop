@@ -46,6 +46,7 @@ COPY = {
     "peak_full.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646.png"),
     "peak_top.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646_top.png"),
     "peak_bottom.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646_bottom.png"),
+    "power_panel.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646_power_panel.png"),
     "pulse_15events.png": os.path.join(SRC, f"{S}_current_power_PBS1_15events.png"),
     "cum_15events.png": os.path.join(SRC, f"{S}_cumulative_energy_PBS1_15events.png"),
     "allchan_pulses.png": os.path.join(SRC, f"{S}_current_power_allchan_ev30646.png"),
@@ -367,3 +368,55 @@ for lang, D in TABLE_TEXT.items():
     fig.savefig(os.path.join(OUT, f"chan_table_{lang}.png"), dpi=150)
     plt.close(fig)
     print(f"chan_table_{lang}.png    drawn  (side1 {s1:.0f}, side2 {s2:.0f}, total {tot:.0f})")
+
+# --------------------------------- legend table for the power-pulse slide (6)
+LEG = {
+    "en": dict(h="what is in the figure",
+               rows=[("line", "#C0392B", 3.0, "-", "power from the fit, both terms"),
+                     ("line", "#1F77B4", 2.0, (0, (6, 3)), "the linear term alone"),
+                     ("line", "#6C3483", 2.0, (0, (2, 2)), "the quadratic term alone, ×20"),
+                     ("dots", "#B0B7BC", 2.0, "-", "from the raw samples, for comparison"),
+                     ("line", "#2E8B57", 1.6, "-", "from the 20 kHz trace, for comparison"),
+                     ("band", "#C0392B", 0, "-", "area = the energy absorbed here")],
+               notes=["the quadratic term is 1.3 % of the energy,",
+                      "so the power pulse has the shape of the current pulse"]),
+    "zh": dict(h="图里各是什么",
+               rows=[("line", "#C0392B", 3.0, "-", "拟合算出的功率，两项都算"),
+                     ("line", "#1F77B4", 2.0, (0, (6, 3)), "只有线性项"),
+                     ("line", "#6C3483", 2.0, (0, (2, 2)), "只有二次项，放大 20 倍"),
+                     ("dots", "#B0B7BC", 2.0, "-", "用原始采样点算的，只作对照"),
+                     ("line", "#2E8B57", 1.6, "-", "用 20 kHz 波形算的，只作对照"),
+                     ("band", "#C0392B", 0, "-", "面积就是这个通道吸收的能量")],
+               notes=["二次项只占能量的 1.3%，", "所以功率脉冲的形状和电流脉冲一样"]),
+}
+for lang, D in LEG.items():
+    fp = dict(family=ZH_FAMILY) if lang == "zh" else {}
+    fig = plt.figure(figsize=(4.8, 4.2), dpi=150)
+    fig.patch.set_facecolor("white")
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_axis_off()
+    ax.text(0.04, 0.955, D["h"], ha="left", va="center", fontsize=15, color=NAVY,
+            weight="bold", **fp)
+    y = 0.85
+    for kind, col, lw, ls, label in D["rows"]:
+        if kind == "line":
+            ax.plot([0.05, 0.20], [y, y], color=col, lw=lw, ls=ls, solid_capstyle="round")
+        elif kind == "dots":
+            ax.plot(np.linspace(0.06, 0.19, 6), [y] * 6, ls="none", marker="o",
+                    ms=3.0, color=col)
+        else:
+            ax.add_patch(plt.Rectangle((0.05, y - 0.028), 0.15, 0.056, fc=col,
+                                       alpha=0.18, ec="none"))
+        ax.text(0.24, y, label, ha="left", va="center", fontsize=13.5, color="#333333", **fp)
+        y -= 0.115
+    ax.plot([0.04, 0.96], [y + 0.03, y + 0.03], color="#CCCCCC", lw=1.2)
+    y -= 0.04
+    for note in D["notes"]:
+        ax.text(0.04, y, note, ha="left", va="center", fontsize=13.5, color=RED,
+                weight="bold", **fp)
+        y -= 0.075
+    fig.savefig(os.path.join(OUT, f"power_legend_{lang}.png"), dpi=150)
+    plt.close(fig)
+    print(f"power_legend_{lang}.png  drawn")

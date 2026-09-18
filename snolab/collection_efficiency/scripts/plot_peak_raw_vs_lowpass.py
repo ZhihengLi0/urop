@@ -222,8 +222,7 @@ axp.plot(tt, p_fit[sl], lw=2.4, color="#C0392B", zorder=5,
          label="$P$ from the fit (both terms)")
 i_pk = int(np.argmax(p_fit))
 axp.annotate(f"peak {p_fit[i_pk]:.1f} fW = {p_lin[i_pk]:.1f} linear + "
-             f"{p_quad[i_pk]:.1f} quadratic\n(quadratic: "
-             f"{100 * p_quad[i_pk] / p_fit[i_pk]:.1f}% of the peak, "
+             f"{p_quad[i_pk]:.1f} quadratic\n(the quadratic term is "
              f"{100 * QUAD * i2 / (LIN * i1 + QUAD * i2):.1f}% of the energy)",
              xy=(t_ms[i_pk], p_fit[i_pk]), xytext=(0.015, 0.93), va="top",
              textcoords="axes fraction", fontsize=9.5 * FS, color="#7B241C",
@@ -270,6 +269,28 @@ fig.subplots_adjust(left=0.085, right=0.845, top=0.875, bottom=0.2, hspace=0.07)
 os.makedirs(OUT_DIR, exist_ok=True)
 fn = os.path.join(OUT_DIR,
                   f"zip{det}_{series}_peak_raw_vs_lp_{chan}_ev{evn}.png")
+# ---- the power panel on its own, taller, for the slide (legend lives on the slide)
+figp, axs = plt.subplots(figsize=(7.8, 6.8))
+axs.axhline(0, color="#777777", lw=0.9, zorder=1)
+axs.fill_between(tt, 0, p_fit[sl], color="#C0392B", alpha=0.13, lw=0, zorder=1)
+axs.plot(tt, p_raw[sl], ls="none", marker="o", ms=2.0, color="#B0B7BC", alpha=0.7, zorder=2)
+axs.plot(tt, p_lp20[sl], lw=1.3, color="#2E8B57", zorder=3)
+axs.plot(tt, p_lin[sl], lw=1.8, ls=(0, (6, 3)), color="#1F77B4", zorder=4)
+axs.plot(tt, p_quad[sl] * QMAG, lw=1.8, ls=(0, (2, 2)), color="#6C3483", zorder=4)
+axs.plot(tt, p_fit[sl], lw=3.0, color="#C0392B", zorder=5)
+axs.set_xlim(args.lo_ms, args.hi_ms)
+axs.set_ylim(-2.6 * sigma * LIN / ADC_PER_AMP * 1e15, 1.22 * p_fit[i_pk])
+axs.set_xlabel("time from trigger (ms)", fontsize=10 * FS)
+axs.set_ylabel("absorbed power $P$ (fW)", fontsize=10 * FS, color="#7B241C")
+axs.tick_params(labelsize=9.5 * FS)
+axs.tick_params(axis="y", colors="#7B241C")
+axs.grid(alpha=0.22)
+axs.set_title(f"Z{det} {chan}, event {evn}: the power pulse", fontsize=11 * FS)
+figp.tight_layout()
+fpp = fn.replace(".png", "_power_panel.png")
+figp.savefig(fpp, dpi=160)
+plt.close(figp)
+print("saved", fpp)
 fig.savefig(fn, dpi=160)
 from matplotlib.transforms import Bbox
 _rend = fig.canvas.get_renderer()
