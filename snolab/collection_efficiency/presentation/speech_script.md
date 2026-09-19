@@ -52,9 +52,9 @@
 
 ## Slide 6 — The power pulse, and its area（约 55 秒）
 
-**中文**：这是同一个脉冲的功率。红线是把拟合出的电流代进公式算出来的，两项都算；蓝色虚线只有线性项，和红线几乎重合；紫色点线只有二次项，放大 20 倍才看得见。灰点和绿线是把同一个公式用在原始采样点和 20 kHz 波形上，只作对照。**粉色面积就是这个通道吸收的能量**，二次项只占其中 1.3%。
+**中文**：这是同一个脉冲的功率。红线是把拟合出的电流代进公式算出来的，两项都算。蓝色虚线只有线性项，和红线几乎重合。橙色点线只有二次项，放大 20 倍才看得见。灰点是原始采样点算出的功率。绿线是 20 kHz 波形算出的功率。**粉色面积就是这个通道吸收的能量**，二次项只占其中 1.3%。
 
-**English**: This is the power of the same pulse. Red is the fitted current put through the formula, with both terms; the blue dashed line is the linear term alone and almost overlaps it; the purple dotted line is the quadratic term alone, drawn twenty times larger. The grey dots and the green line are the same formula on the raw samples and on the 20 kilohertz trace, for comparison. **The shaded area is the energy absorbed in this channel,** and the quadratic term is only 1.3 percent of it.
+**English**: This is the power of the same pulse. Red is the fitted current put through the formula, with both terms. The blue dashed line is the linear term alone, and it almost overlaps the red. The orange dotted line is the quadratic term alone, drawn twenty times larger. The grey dots are the power from the raw samples. The green line is the power from the 20 kilohertz trace. **The shaded area is the energy absorbed in this channel,** and the quadratic term is only 1.3 percent of it.
 
 ---
 

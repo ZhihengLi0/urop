@@ -153,7 +153,7 @@ pic(s, "peak_top.png", L, T, W, Inches(5.9))
 # ------------------------------------------------------------------ 6 power & area
 s = new("The power pulse, and its area is the energy",
         notes="Red: power from the fitted current, two terms added. Blue dashed: linear term alone. "
-              "Purple dotted: quadratic term x20. Peak 104.6 fW = 102.6 + 2.0: the quadratic term "
+              "Orange dotted: quadratic term x20. Peak 104.6 fW = 102.6 + 2.0: the quadratic term "
               "is 1.3% of the energy. Shaded area 305.2 eV, 99% inside this window. Bottom line: "
               "the bias point that fixes the coefficients.")
 pic(s, "power_panel.png", L, T, Inches(7.5), Inches(5.75))

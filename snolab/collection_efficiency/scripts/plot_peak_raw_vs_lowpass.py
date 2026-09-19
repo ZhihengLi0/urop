@@ -216,7 +216,7 @@ axp.plot(tt, p_lp20[sl], lw=0.9, color="#2E8B57", zorder=3,
          label=f"$P$ from the {LP_OFF_KHZ:.0f} kHz trace")
 axp.plot(tt, p_lin[sl], lw=1.0, ls=(0, (6, 3)), color="#1F77B4", zorder=4,
          label="linear term alone")
-axp.plot(tt, p_quad[sl] * QMAG, lw=1.0, ls=(0, (2, 2)), color="#6C3483", zorder=4,
+axp.plot(tt, p_quad[sl] * QMAG, lw=1.0, ls=(0, (2, 2)), color="#FF7F0E", zorder=4,
          label=f"quadratic term alone, $\\times${QMAG}")
 axp.plot(tt, p_fit[sl], lw=2.4, color="#C0392B", zorder=5,
          label="$P$ from the fit (both terms)")
@@ -276,7 +276,7 @@ axs.fill_between(tt, 0, p_fit[sl], color="#C0392B", alpha=0.13, lw=0, zorder=1)
 axs.plot(tt, p_raw[sl], ls="none", marker="o", ms=2.0, color="#B0B7BC", alpha=0.7, zorder=2)
 axs.plot(tt, p_lp20[sl], lw=1.3, color="#2E8B57", zorder=3)
 axs.plot(tt, p_lin[sl], lw=1.8, ls=(0, (6, 3)), color="#1F77B4", zorder=4)
-axs.plot(tt, p_quad[sl] * QMAG, lw=1.8, ls=(0, (2, 2)), color="#6C3483", zorder=4)
+axs.plot(tt, p_quad[sl] * QMAG, lw=1.8, ls=(0, (2, 2)), color="#FF7F0E", zorder=4)
 axs.plot(tt, p_fit[sl], lw=3.0, color="#C0392B", zorder=5)
 axs.set_xlim(args.lo_ms, args.hi_ms)
 axs.set_ylim(-2.6 * sigma * LIN / ADC_PER_AMP * 1e15, 1.22 * p_fit[i_pk])
