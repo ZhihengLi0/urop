@@ -44,9 +44,9 @@
 
 *这页指着图讲。*
 
-**中文**：这是同一个脉冲的顶部放大。红色的拟合曲线是在 100 kHz 低通之后的波形上做的，也就是蓝线，不是灰色的原始采样点。绿线是 20 kHz 低通，官方的 Eabs 用它。黄色竖条是脉冲的顶部，那里有近百个采样点，高度差不多。右上角的表是四种取高度的方法。**取原始采样点的最大值会偏高 23%**，因为挑到的是噪声刚好最高的那个点；拟合用了上升、顶部和下降所有的点，噪声互相抵消。所以后面所有的能量都用拟合来算。
+**中文**：这是同一个脉冲的顶部放大。灰点是原始采样点。蓝线是同一条波形过了 100 kHz 低通之后的结果。红线是双指数拟合，拟合是在蓝线上做的，不是在灰点上做的。绿线是 20 kHz 低通，官方的 Eabs 用它。黄色竖条是脉冲的顶部，那里有近百个采样点，高度差不多。右上角的表是四种取高度的方法。**取原始采样点的最大值会偏高 23%**，因为挑到的是噪声刚好最高的那个点；拟合用了上升、顶部和下降所有的点，噪声互相抵消。所以后面所有的能量都用拟合来算。
 
-**English**: This is the top of the same pulse, zoomed in. **The red fit is made on the 100 kilohertz low-passed trace, the blue line, not on the grey raw samples.** The green line is the 20 kilohertz low pass, which the official Eabs uses. The yellow band is the top of the pulse, where about a hundred samples have almost the same height. The table lists four ways to take the height. **Taking the largest raw sample is 23 percent too high,** because it picks the sample where the noise happened to be highest; the fit uses all the samples on the rise, the top and the fall, so the noise averages out. That is why every energy from here on comes from the fit.
+**English**: This is the top of the same pulse, zoomed in. **Grey is the raw samples. Blue is the same trace after a 100 kilohertz low pass. Red is the two-exponential fit, and it is fitted on the blue line, not on the grey samples. Green is a 20 kilohertz low pass, which the official Eabs uses. The yellow band is the top of the pulse, where about a hundred samples have almost the same height.** The table lists four ways to take the height. **Taking the largest raw sample is 23 percent too high,** because it picks the sample where the noise happened to be highest; the fit uses all the samples on the rise, the top and the fall, so the noise averages out. That is why every energy from here on comes from the fit.
 
 ---
 
