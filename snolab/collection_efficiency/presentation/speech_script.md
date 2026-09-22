@@ -10,9 +10,9 @@
 
 ## Slide 1 — Title（约 20 秒）
 
-**中文**：大家好，我叫李知恒，来自明尼苏达大学。今天讲 Z7 的声子收集效率。问题是：一个 10.37 keV 的事件发生在晶体里，有多少能量被 TES 吸收。我们得到的结果是 30.5%，相对误差 7.5%。我先用一个脉冲说明能量是怎么算的，再把同样的方法用到整个探测器。
+**中文**：大家好，我叫李知恒，来自明尼苏达大学。今天讲 Z7 的声子收集效率。问题是：一个 10.37 keV 的事件发生在晶体里，有多少能量被 TES 吸收。我们得到的结果是 30.5%，用的是 10 个通道；另外两个排除了，一个没有读出，一个噪声太大。我先用一个脉冲说明能量是怎么算的，再把同样的方法用到整个探测器。
 
-**English**: Hi everyone, my name is Zhiheng Li, from the University of Minnesota. Today I will talk about the phonon collection efficiency of Z7. The question is: when a 10.37 keV event happens in the crystal, how much of the energy is absorbed by the TESs. Our result is 30.5 percent, with a relative uncertainty of 7.5 percent. I will first use one pulse to show how the energy is calculated, and then apply the same method to the whole detector.
+**English**: Hi everyone, my name is Zhiheng Li, from the University of Minnesota. Today I will talk about the phonon collection efficiency of Z7. The question is: when a 10.37 keV event happens in the crystal, how much of the energy is absorbed by the TESs. Our result is 30.5 percent, from 10 channels. We leave out two: one is not read out, and one is too noisy. I will first use one pulse to show how the energy is calculated, and then apply the same method to the whole detector.
 
 ---
 
@@ -92,9 +92,9 @@
 
 ## Slide 11 — Summary, and what is still open（约 35 秒）
 
-**中文**：总结三句话。第一，把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，而且能量用拟合来算，不受噪声和基线漂移的影响。第二，结果是 Z7 的 TES 吸收了一个 10.37 keV 事件能量的 30.5%，相对误差 7.5%；CDMS 文档在 R37 的 CUTE tower 上得到 26% 到 41%，我们落在这个范围里。第三，还没解决的：只做了 Z7，其他探测器还没做；Z7 的偏压还没确认；没有 dI/dV 数据；PDS2 因为噪声没有算进去；还有 12.5% 的事件拟合不上。谢谢大家。
+**中文**：总结三句话。第一，把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，而且能量用拟合来算，不受噪声和基线漂移的影响。第二，结果是 Z7 的 TES 吸收了一个 10.37 keV 事件能量的 30.5%，用 10 个通道，排除了没有读出的和噪声大的那两个；CDMS 文档在 R37 的 CUTE tower 上得到 26% 到 41%，我们落在这个范围里。第三，还没解决的：只做了 Z7，其他探测器还没做；Z7 的偏压还没确认；没有 dI/dV 数据；PDS2 因为噪声没有算进去；还有 12.5% 的事件拟合不上。谢谢大家。
 
-**English**: In summary. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 30.5 percent of the energy of a 10.37 keV event, with a relative uncertainty of 7.5 percent, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, PDS2 is not included because of its noise, and 12.5 percent of the events could not be fitted. Thank you.
+**English**: In summary. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 30.5 percent of the energy of a 10.37 keV event, from 10 channels, with the unread and the noisy one left out, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, PDS2 is not included because of its noise, and 12.5 percent of the events could not be fitted. Thank you.
 
 ---
 
