@@ -23,16 +23,13 @@ fit acceptance per channel: PAS1 99%, PBS1 99%, PCS1 99%, PDS1 99%, PES1 99%, PF
 core sum over the 10 channels with acceptance >= 90% (PAS1 PBS1 PCS1 PDS1 PES1 PFS1 PAS2 PBS2 PCS2 PES2):
   1827 events (95% of all), mu 3161.6 eV, sigma 237.2 eV (7.50%)
   collection efficiency over the core = 3161.6 / 10370 = 30.49%
+  => adopted result: collection efficiency = 30.49% with a relative uncertainty of sigma/mu = 7.50% (= +- 2.29 percentage points), from the 10 channels alone.
 
 left out: PDS2 (acceptance 42%)
   all 11 channels, 797 events (41%): mu 3262.6 eV, sigma 261.4 eV (8.01%), = 31.46%
   bias: on that subsample the core sum is 3008.3 eV against 3161.6 eV over all events (-4.8%), so requiring those channels to fit selects events that put less energy in the core.
   their share on that subsample is 3262.6 - 3008.3 = 254.2 eV.
-
-The full efficiency is therefore a bracket, not a single number:
-  lower  31.46%  (3262.6 eV): the all-channel sum taken as it stands. Reads low if that subsample is not representative, and it is not: its core sum is -4.8% off.
-  upper  32.94%  (3415.8 eV): the unbiased core sum plus that share. Reads high because a subsample whose core is low has its energy sitting closer to the left-out channel, so 254.2 eV overstates the typical share.
-  => collection efficiency = 32 +- 1 %, and the way to collapse the bracket is to make PDS2 fittable (its low-frequency artefact is what fails the NRMSE cut), not more statistics.
+  not used: the events on which PDS2 can be fitted are the ones with a clear signal in it, i.e. events closer to it, so that subsample depends on position. PDS2 is left out of the result (decision of Prof. Yan Liu, September 2026).
 
 --- PAS1 ---
           series    event  E_fit[eV]  E_rawwin[eV]   NRMSE  t_r[us]  t_f[us]

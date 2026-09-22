@@ -4,15 +4,15 @@
 用词尽量简单；专业词保持原样。斜体是给自己的提示，不用念。**加粗的英文**是看着屏幕说的句子。
 
 整个报告只讲一件事：**先说明一个脉冲怎么算出能量，再把同样的算法用到所有通道和所有事件。**
-时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 70 · 4 主图 35 · 5 峰高 70 · 6 功率和面积 55 · 7 为什么用拟合 80 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 80 · 11 总结 35 → 约 630 秒（约 10.5 分钟；讲的时候留出停顿和指图的时间，大约 13 分钟）。
+时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 70 · 4 主图 35 · 5 峰高 70 · 6 功率和面积 55 · 7 为什么用拟合 80 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 65 · 11 总结 35 → 约 615 秒（约 10 分钟；讲的时候留出停顿和指图的时间，大约 13 分钟）。
 
 ---
 
 ## Slide 1 — Title（约 20 秒）
 
-**中文**：大家好，我叫李知恒，来自明尼苏达大学。今天讲 Z7 的声子收集效率。问题是：一个 10.37 keV 的事件发生在晶体里，有多少能量被 TES 吸收。我们得到的结果是 32%，误差正负 1%。我先用一个脉冲说明能量是怎么算的，再把同样的方法用到整个探测器。
+**中文**：大家好，我叫李知恒，来自明尼苏达大学。今天讲 Z7 的声子收集效率。问题是：一个 10.37 keV 的事件发生在晶体里，有多少能量被 TES 吸收。我们得到的结果是 30.5%，相对误差 7.5%。我先用一个脉冲说明能量是怎么算的，再把同样的方法用到整个探测器。
 
-**English**: Hi everyone, my name is Zhiheng Li, from the University of Minnesota. Today I will talk about the phonon collection efficiency of Z7. The question is: when a 10.37 keV event happens in the crystal, how much of the energy is absorbed by the TESs. Our result is 32 percent, with an uncertainty of plus or minus 1 percent. I will first use one pulse to show how the energy is calculated, and then apply the same method to the whole detector.
+**English**: Hi everyone, my name is Zhiheng Li, from the University of Minnesota. Today I will talk about the phonon collection efficiency of Z7. The question is: when a 10.37 keV event happens in the crystal, how much of the energy is absorbed by the TESs. Our result is 30.5 percent, with a relative uncertainty of 7.5 percent. I will first use one pulse to show how the energy is calculated, and then apply the same method to the whole detector.
 
 ---
 
@@ -82,19 +82,19 @@
 
 ---
 
-## Slide 10 — Summed over the channels: 32 ± 1 %（约 80 秒）
+## Slide 10 — Summed over the channels: 30.5 %（约 65 秒）
 
-**中文**：这是结果。对每个事件把各通道的能量加起来，再看这些总能量的分布。和上一页比，宽度从 15% 降到 7.5%，而且变对称了，说明事件位置造成的差别在求和后大部分抵消了。灰色是 10 个通道的和，峰在 10.37 keV 的 30.5%。这里没算 PDS2——它有低频起伏，只有一部分事件能拟合上。绿色把 PDS2 也加进来，但只用了它能拟合的那些事件，所以它的贡献只能给一个范围：完整效率在 31.5% 到 32.9% 之间，写成 32% 加减 1%。要收窄这个范围，得先解决 PDS2 的噪声。最右边的红线是 10.37 keV，可以看到大约三分之二的能量没有被 TES 吸收。
+**中文**：这是结果。对每个事件把各通道的能量加起来，再看这些总能量的分布。和上一页比，宽度从 15% 降到 7.5%，而且变对称了，说明事件位置造成的差别在求和后大部分抵消了。灰色是 10 个通道的和，峰在 10.37 keV 的 30.5%。这里没算 PDS2：它只有大约 40% 的事件能拟合上，能拟合上的都是信号明显的事件，也就是发生位置偏向 PDS2 的事件，所以我们把它排除。我们用宽度除以峰位作为误差，所以收集效率是 30.5%，相对误差 7.5%。最右边的红线是 10.37 keV，可以看到大约三分之二的能量没有被 TES 吸收。
 
-**English**: This is the result. For each event we add up the energies of the channels and look at the distribution of these totals. **Compared with the last slide, the width drops from 15 percent to 7.5 percent and the distribution becomes symmetric,** so most of the difference from the event position cancels in the sum. **Grey is the sum over 10 channels, and its peak sits at 30.5 percent of 10.37 keV.** PDS2 is not in it: it has the low-frequency swing, and only part of its events can be fitted. Green adds PDS2, but only for the events where it can be fitted, so its contribution can only be given as a range: **the full efficiency is between 31.5 and 32.9 percent, which we write as 32 plus or minus 1 percent.** To narrow that range we have to fix the noise in PDS2. **The red line on the far right is 10.37 keV:** about two thirds of the energy is not absorbed by the TESs.
+**English**: This is the result. For each event we add up the energies of the channels and look at the distribution of these totals. **Compared with the last slide, the width drops from 15 percent to 7.5 percent and the distribution becomes symmetric,** so most of the difference from the event position cancels in the sum. **Grey is the sum over 10 channels, and its peak sits at 30.5 percent of 10.37 keV.** PDS2 is not in it: only about 40 percent of its events can be fitted, and those are the events with a clear signal, so they happened closer to PDS2. That is why we leave it out. **We take the width over the peak as the uncertainty, so the collection efficiency is 30.5 percent, with a relative uncertainty of 7.5 percent.** **The red line on the far right is 10.37 keV:** about two thirds of the energy is not absorbed by the TESs.
 
 ---
 
 ## Slide 11 — Summary, and what is still open（约 35 秒）
 
-**中文**：总结三句话。第一，把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，而且能量用拟合来算，不受噪声和基线漂移的影响。第二，结果是 Z7 的 TES 吸收了一个 10.37 keV 事件能量的 32%，误差正负 1%；CDMS 文档在 R37 的 CUTE tower 上得到 26% 到 41%，我们落在这个范围里。第三，还没解决的：只做了 Z7，其他探测器还没做；Z7 的偏压还没确认；没有 dI/dV 数据；PDS2 的噪声就是那正负 1%；还有 12.5% 的事件拟合不上。谢谢大家。
+**中文**：总结三句话。第一，把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，而且能量用拟合来算，不受噪声和基线漂移的影响。第二，结果是 Z7 的 TES 吸收了一个 10.37 keV 事件能量的 30.5%，相对误差 7.5%；CDMS 文档在 R37 的 CUTE tower 上得到 26% 到 41%，我们落在这个范围里。第三，还没解决的：只做了 Z7，其他探测器还没做；Z7 的偏压还没确认；没有 dI/dV 数据；PDS2 因为噪声没有算进去；还有 12.5% 的事件拟合不上。谢谢大家。
 
-**English**: In summary. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 32 plus or minus 1 percent of the energy of a 10.37 keV event, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, the noise in PDS2 is the plus or minus 1 percent, and 12.5 percent of the events could not be fitted. Thank you.
+**English**: In summary. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 30.5 percent of the energy of a 10.37 keV event, with a relative uncertainty of 7.5 percent, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, PDS2 is not included because of its noise, and 12.5 percent of the events could not be fitted. Thank you.
 
 ---
 
@@ -154,8 +154,8 @@ English: The full equations have a term that depends on the inductance and the l
 English: Step one: write the heat balance equation of the TES and integrate it over the whole pulse. After the pulse the temperature returns to its original value, so the heat-capacity term integrates to zero. If we ignore the heat flow to the bath, the event energy equals the integral of the decrease in Joule heating. Step two: use the circuit equation, V_TES = V − I·R_L − L·dI/dt; the Joule heating is I·V_TES. Step three: write I as I₀ + δI and expand. Step four: integrate over the whole pulse; the inductor term is zero at the start and at the end, so its integral is zero. The result has the form on the slide: a linear term, I₀(R_L − R₀)·δI, plus a quadratic term.
 
 **Q11. CDMS 文档说 Method 2 更准一些，为什么用 Method 1？/ The note says Method 2 is a bit more accurate. Why use Method 1?**
-中文：两种方法只有二次项不同，算出的能量差 1.7%，比单个通道 15% 的宽度和 PDS2 带来的正负 1% 都小，所以对这个结果影响很小。用 Method 1 是导师的决定。如果需要，用 Method 2 重算一遍很快。
-English: The two methods differ only in the quadratic term, and the energies differ by 1.7 percent. That is smaller than the 15 percent width in one channel and smaller than the plus or minus 1 percent from PDS2, so it has little effect on the result. Using Method 1 was my supervisor's decision, and redoing the numbers with Method 2 would be quick if needed.
+中文：两种方法只有二次项不同，算出的能量差 1.7%，比单个通道 15% 的宽度和求和后 7.5% 的宽度都小，所以对这个结果影响很小。用 Method 1 是导师的决定。如果需要，用 Method 2 重算一遍很快。
+English: The two methods differ only in the quadratic term, and the energies differ by 1.7 percent. That is smaller than the 15 percent width in one channel and smaller than the 7.5 percent width of the sum, so it has little effect on the result. Using Method 1 was my supervisor's decision, and redoing the numbers with Method 2 would be quick if needed.
 
 ---
 

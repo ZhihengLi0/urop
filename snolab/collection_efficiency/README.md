@@ -1,7 +1,10 @@
 # collection_efficiency
 
 How much of a 10.37 keV K-line event ends up as energy in the TESs of Z7.
-Result: **32 ± 1 %**.
+Result: **30.5 %**, relative uncertainty σ/μ = 7.5 % (± 2.3 percentage points), from
+the 10 channels other than PDS2 (1827 events). PDS2 is left out: it fits on only
+42 % of the events, the ones near it, so its subsample depends on position
+(Prof. Yan Liu, September 2026; the earlier 32 ± 1 % bracket is withdrawn).
 
 The recorded trace is a current, and the area under a current is a charge, not
 an energy. So each trace is fitted with a two-exponential, the fitted current is

@@ -417,12 +417,6 @@ if len(stats) > 1:
             label=(f"sum over the {len(core)} core channels, {Es.size} events: "
                    f"$\\mu$ = {mu_s:.0f} eV, $\\sigma$ = {sig_s:.0f} eV "
                    f"({100 * sig_s / mu_s:.1f}%)"))
-    if Es_all.size > 10:
-        ax.hist(Es_all, bins=sbins, histtype="step", lw=1.5, color="#1B7A3D",
-                label=(f"sum over all {len(stats)} channels, {Es_all.size} events "
-                       f"({100 * Es_all.size / n_ev:.0f}%): "
-                       f"$\\mu$ = {mu_a:.0f} eV, $\\sigma$ = {sig_a:.0f} eV "
-                       f"({100 * sig_a / mu_a:.1f}%)"))
     xg = np.linspace(0, 8000, 800)
     ax.plot(xg, gauss_curve(xg, mu_s, sig_s, nc_s, 100.0), lw=1.8,
             color="#0B1E4E", ls=(0, (5, 3)), label="Gaussian fit to the core")
@@ -435,15 +429,12 @@ if len(stats) > 1:
     ax.tick_params(labelsize=14)
     ax.set_title(
         f"Z{det}: total energy absorbed by the TESs per K-line event\n"
-        f"core sum ({len(core)} channels, fit acceptance $\\geq$ "
-        f"{100 * ACCEPT_MIN:.0f}%): collection efficiency = {mu_s:.0f} / "
-        f"{E_TRUE:.0f} = {100 * mu_s / E_TRUE:.1f}%, spread "
-        f"{100 * sig_s / mu_s:.1f}%"
+        f"sum over {len(core)} channels: collection efficiency = {mu_s:.0f} / "
+        f"{E_TRUE:.0f} = {100 * mu_s / E_TRUE:.1f}%,   "
+        f"$\\sigma/\\mu$ = {100 * sig_s / mu_s:.1f}%"
         + (f"\nleft out: {', '.join(left_out)} (fit acceptance "
-           f"{', '.join(f'{100 * accept[c]:.0f}%' for c in left_out)}); with it the "
-           f"efficiency lies\nbetween {100 * mu_a / E_TRUE:.1f}% and "
-           f"{100 * (mu_s + mu_a - mu_sub) / E_TRUE:.1f}% (a bracket, see the text file)"
-           if left_out and Es_all.size > 10 else ""), fontsize=14)
+           f"{', '.join(f'{100 * accept[c]:.0f}%' for c in left_out)})"
+           if left_out else ""), fontsize=14)
     top = ax.secondary_xaxis("top", functions=(lambda e: 100 * e / E_TRUE,
                                                lambda p: p * E_TRUE / 100))
     top.set_xlabel("collection efficiency (% of 10.37 keV)", fontsize=15)
@@ -497,6 +488,11 @@ with open(fn, "w") as fh:
                  f"({100 * ss['sig'] / ss['mu']:.2f}%)\n")
         fh.write(f"  collection efficiency over the core = {ss['mu']:.1f} / "
                  f"{E_TRUE:.0f} = {100 * ss['mu'] / E_TRUE:.2f}%\n")
+        fh.write(f"  => adopted result: collection efficiency = "
+                 f"{100 * ss['mu'] / E_TRUE:.2f}% with a relative uncertainty of "
+                 f"sigma/mu = {100 * ss['sig'] / ss['mu']:.2f}% "
+                 f"(= +- {100 * ss['sig'] / E_TRUE:.2f} percentage points), "
+                 f"from the 10 channels alone.\n")
         if ss['left_out'] and ss['n_all'] > 10:
             pds = ss['mu_all'] - ss['mu_sub']
             best = ss['mu'] + pds
@@ -516,24 +512,10 @@ with open(fn, "w") as fh:
                      f"less energy in the core.\n")
             fh.write(f"  their share on that subsample is {ss['mu_all']:.1f} - "
                      f"{ss['mu_sub']:.1f} = {pds:.1f} eV.\n")
-            fh.write("\nThe full efficiency is therefore a bracket, not a single "
-                     "number:\n")
-            fh.write(f"  lower  {100 * ss['mu_all'] / E_TRUE:.2f}%  "
-                     f"({ss['mu_all']:.1f} eV): the all-channel sum taken as it "
-                     f"stands. Reads low if that subsample is not representative, "
-                     f"and it is not: its core sum is "
-                     f"{100 * (ss['mu_sub'] / ss['mu'] - 1):+.1f}% off.\n")
-            fh.write(f"  upper  {100 * best / E_TRUE:.2f}%  ({best:.1f} eV): the "
-                     f"unbiased core sum plus that share. Reads high because a "
-                     f"subsample whose core is low has its energy sitting closer "
-                     f"to the left-out channel, so {pds:.1f} eV overstates the "
-                     f"typical share.\n")
-            fh.write(f"  => collection efficiency = "
-                     f"{50 * (ss['mu_all'] + best) / E_TRUE:.0f} +- "
-                     f"{50 * (best - ss['mu_all']) / E_TRUE:.0f} %, and the way to "
-                     f"collapse the bracket is to make PDS2 fittable (its "
-                     f"low-frequency artefact is what fails the NRMSE cut), not "
-                     f"more statistics.\n")
+            fh.write(f"  not used: the events on which PDS2 can be fitted are the "
+                     f"ones with a clear signal in it, i.e. events closer to it, "
+                     f"so that subsample depends on position. PDS2 is left out of "
+                     f"the result (decision of Prof. Yan Liu, September 2026).\n")
     for c, st in stats.items():
         fh.write(f"\n--- {c} ---\n")
         fh.write(f"{'series':>16} {'event':>8} {'E_fit[eV]':>10} "

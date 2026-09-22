@@ -198,30 +198,30 @@ lines(s, [
 ], Inches(9.35), Inches(1.6), Inches(3.6), Inches(5.0), size=15)
 
 # ------------------------------------------------------------------ 10 sum
-s = new("Summed over the channels: 32 ± 1 %",
+s = new("Summed over the channels: 30.5 %",
         "the total energy the TESs absorbed per K-line event",
         notes="Grey: ten channels that fit ≥ 95% of events, 1827 events, 3162 eV = 30.5%, width "
-              "7.5% — the position dependence cancels in the sum. PDS2 fits only 42% (the swing) "
-              "and on those events the other ten channels are 4.8% low, so its share is a bracket: "
-              "31.5 to 32.9%. Red line 10.37 keV.")
+              "7.5% — the position dependence cancels in the sum. Uncertainty = sigma/mu of the "
+              "Gaussian fit, 7.5% (Prof. Liu). PDS2 fits only 42%, and those are events near it, "
+              "so it is left out. Red line 10.37 keV.")
 pic(s, "hist_sum.png", L, T, Inches(8.8), Inches(5.9))
 lines(s, [
     "!Ten channels summed, 1827 events: 3162 eV = 30.5 %, and the width drops to 7.5 % — the position effect cancels.",
-    "PDS2 fits only 42 % of the events (that slow swing), and those events are not typical; its share can only be bracketed.",
-    "!Full efficiency 31.5–32.9 %:  32 ± 1 %.",
+    "PDS2 is left out: only 42 % of its events can be fitted, and those are the events that happened near it.",
+    "!Collection efficiency:\n30.5\u00a0%\u00a0±\u00a02.3\u00a0%  (σ/μ\u00a0=\u00a07.5\u00a0%).",
     "Red line: 10.37 keV — two thirds of the energy never reaches the TESs.",
 ], Inches(9.35), Inches(1.6), Inches(3.6), Inches(5.0), size=15)
 
 # ------------------------------------------------------------------ 11 summary
 s = new("Summary, and what is still open",
-        notes="Chain: current -> power -> energy -> sum -> 32 ± 1%. R37 CUTE note: 26-41%. Open: "
+        notes="Chain: current -> power -> energy -> sum over 10 channels -> 30.5% (sigma/mu 7.5%). R37 CUTE note: 26-41%. Open: "
               "Z7 only; HV bias unknown (0 V assumed); no dIdV, inductor term dropped; PDS2; 12.5% "
               "of events fit nowhere.")
 lines(s, [
     "The current pulse becomes a power pulse through the TES equations; the area under the power is the energy.",
     "The energy is taken from the fitted pulse, so the noise at the peak and the baseline drift do not enter.",
-    "!Z7 absorbs 32 ± 1 % of a 10.37 keV event in its TESs.   The CDMS note reports 26–41 % on the R37 CUTE tower.",
-    "Open: Z7 only · the bias of Z7 is not established (0 V assumed) · no dI/dV · PDS2 is the ± 1 % · 12.5 % of events fit in no channel.",
+    "!Z7 absorbs 30.5 % ± 2.3 % (σ/μ = 7.5 %) of a 10.37 keV event in its TESs, summed over 10 channels.   The CDMS note reports 26–41 % on the R37 CUTE tower.",
+    "Open: Z7 only · the bias of Z7 is not established (0 V assumed) · no dI/dV · PDS2 not included · 12.5 % of events fit in no channel.",
 ], L, Inches(1.6), W, Inches(4.6), size=19)
 
 # ================================================================== backup
@@ -232,7 +232,7 @@ s = new("Backup — the two Methods of the CDMS note",
         notes="c2 = 2 is Method 1 (used here), c2 = -1 is Method 2; 1.7% apart in energy.")
 lines(s, [
     "δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²     with c₂ = 2 (Method 1, used here) and c₂ = −1 (Method 2)",
-    "The two differ only in the quadratic term: 1.7 % in energy (PBS1, median of 15 events) — far below the 15 % single-channel width and the PDS2 bracket.",
+    "The two differ only in the quadratic term: 1.7 % in energy (PBS1, median of 15 events) — far below the 15 % single-channel width and the 7.5 % width of the sum.",
     "The inductor term of the full equations needs L and the loop gain from dI/dV, which do not exist for these series on MSI; it is neglected.",
     "The official Eabs (trigger bin 16383, baseline bins 93..15758, 5-pole 20 kHz prefilter, window −0.5/+1 ms, same formula) is reproduced to 0.2 %; the grey outlines on the histogram slides are it.",
 ], L, Inches(1.45), W, Inches(5.5), size=17)
