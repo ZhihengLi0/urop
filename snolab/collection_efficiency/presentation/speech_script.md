@@ -4,7 +4,7 @@
 用词尽量简单；专业词保持原样。斜体是给自己的提示，不用念。**加粗的英文**是看着屏幕说的句子。
 
 整个报告只讲一件事：**先说明一个脉冲怎么算出能量，再把同样的算法用到所有通道和所有事件。**
-时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 70 · 4 主图 35 · 5 峰高 70 · 6 功率和面积 55 · 7 为什么用拟合 80 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 75 · 11 总结 35 → 约 625 秒（约 10.5 分钟；讲的时候留出停顿和指图的时间，大约 13 分钟）。
+时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 65 · 4 主图 35 · 5 峰高 65 · 6 功率和面积 50 · 7 为什么用拟合 70 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 75 · 11 总结 35 → 约 600 秒（约 10 分钟；讲的时候留出停顿和指图的时间，大约 12 分钟）。
 
 ---
 
@@ -24,11 +24,11 @@
 
 ---
 
-## Slide 3 — The formula, and the two numbers it needs（约 70 秒）
+## Slide 3 — The formula, and the two numbers it needs（约 65 秒）
 
-**中文**：这一页是换算公式，我们用的是 CDMS 收集效率文档里的 Method 1。公式怎么来的，简单说一下：事件加热 TES，TES 的电阻变大，电流变小，TES 上的焦耳热也变小。脉冲结束后 TES 回到原来的温度。如果不考虑流到热浴的那部分热量，事件带进来的能量就等于焦耳热减少的总量。把电路方程代进去展开，就得到这个公式：δP 等于一个线性项加一个二次项。两个系数由这个通道的工作点决定，也就是采数据时 TES 稳定在的那个电流和电阻。幻灯片上列出了 I₀、R₀、R_L 这三个数。R_L 是和 TES 串联的负载电阻，等于寄生电阻加分流电阻。对 PBS1，线性项系数是 0.45 微伏，二次项系数是 0.0385 欧姆。二次项很小，只占能量的 1% 多一点。第二行是能量。δI 用双指数函数拟合以后，δP 的积分可以直接写成公式，能量只和拟合得到的幅度 A 和两个时间常数有关。文档里还有一个 Method 2。它的线性项和 Method 1 一样，只有二次项不同：Method 1 是加 2R_L，Method 2 是减 R_L。链接在最下面。
+**中文**：这一页是换算公式，我们用的是 CDMS 收集效率文档里的 Method 1。公式怎么来的：事件加热 TES，TES 的电阻变大，焦耳热变小。如果不考虑流到热浴的那部分热量，事件带进来的能量就等于焦耳热减少的总量。算下来就得到这个公式：δP 等于一个线性项加一个二次项。两个系数来自这个通道的工作点，幻灯片上的 I₀、R₀、R_L 就是。R_L 是和 TES 串联的负载电阻，等于寄生电阻加分流电阻。对 PBS1，线性项系数是 0.45 微伏，二次项系数是 0.0385 欧姆。二次项很小，只占能量的 1% 多一点。第二行是能量。δI 用双指数拟合，所以 δP 的积分是一个简单的公式，能量只和幅度 A 和两个时间常数有关。文档里还有一个 Method 2。它只有二次项不同：减 R_L，而不是加 2R_L。链接在最下面。
 
-**English**: This slide shows the conversion formula. **We use Method 1 from the CDMS collection-efficiency note.** Briefly, where it comes from: the event heats the TES, the TES resistance goes up, the current goes down, and the Joule heating on the TES goes down. After the pulse, the TES returns to its original temperature. If we ignore the heat that flows to the bath, the energy from the event equals the total decrease in Joule heating. Putting the circuit equation into this and expanding it gives the formula: δP is a linear term plus a quadratic term. The two coefficients are set by the operating point of the channel, which is the steady current and resistance the TES sits at while we take data. The slide lists the three numbers, I₀, R₀ and R_L. **R_L is the load resistance in series with the TES: the parasitic resistance plus the shunt resistance.** **For PBS1, the linear coefficient is 0.45 microvolts and the quadratic coefficient is 0.0385 ohms.** The quadratic term is small, a little more than 1 percent of the energy. **The second line is the energy. After we fit δI with a two-exponential function, the integral of δP can be written as a formula, and the energy depends only on the fitted amplitude A and the two time constants.** **The note also gives a Method 2.** Its linear term is the same as in Method 1, and only the quadratic term is different: Method 1 has +2R_L, Method 2 has −R_L. The link is at the bottom.
+**English**: This slide shows the conversion formula. **We use Method 1 from the CDMS collection-efficiency note.** Where it comes from: the event heats the TES, its resistance goes up, and its Joule heating goes down. If we ignore the heat that flows to the bath, the event energy equals the total drop in Joule heating. Working this out gives the formula: δP is a linear term plus a quadratic term. The two coefficients come from the operating point of the channel: I₀, R₀ and R_L on the slide. **R_L is the load resistance in series with the TES: the parasitic resistance plus the shunt resistance.** **For PBS1, the linear coefficient is 0.45 microvolts and the quadratic coefficient is 0.0385 ohms.** The quadratic term is small, a little more than 1 percent of the energy. **The second line is the energy. Because δI is fitted with two exponentials, the integral is a simple formula: the energy depends only on A and the two time constants.** **The note also gives a Method 2.** It differs only in the quadratic term: minus R_L instead of plus 2R_L. The link is at the bottom.
 
 ---
 
@@ -40,29 +40,29 @@
 
 ---
 
-## Slide 5 — The height（约 70 秒）
+## Slide 5 — The height（约 65 秒）
 
 *这页指着图讲。*
 
-**中文**：这是同一个脉冲的顶部放大。灰点是原始采样点。蓝线是同一条波形过了 100 kHz 低通之后的结果。红线是双指数拟合，拟合是在蓝线上做的。绿线是 20 kHz 低通，官方的 Eabs 用它。黄色竖条是脉冲的顶部，那里有近百个采样点，高度差不多。右上角的表是四种取高度的方法。**取原始采样点的最大值会偏高 23%**，因为挑到的是噪声刚好最高的那个点；拟合用了上升、顶部和下降所有的点，噪声互相抵消。所以后面所有的能量都用拟合来算。
+**中文**：这是同一个脉冲的顶部放大。灰点是原始采样点。蓝线是同一条波形过了 100 kHz 低通之后的结果。红线是双指数拟合，拟合是在蓝线上做的。绿线是 20 kHz 低通，官方的 Eabs 用它。黄色竖条是脉冲的顶部，那里有近百个采样点，高度差不多。右上角的表是四种取高度的方法。**取原始采样点的最大值会偏高 23%**，因为挑到的是噪声最大的那个点。拟合用了所有的点，噪声互相抵消。所以后面所有的能量都用拟合来算。
 
-**English**: **This is the top of the same pulse, zoomed in. Grey is the raw samples. Blue is the same trace after a 100 kilohertz low pass. Red is the two-exponential fit, and it is fitted on the blue line. Green is a 20 kilohertz low pass, which the official Eabs uses.** The yellow band is the top of the pulse, where about a hundred samples have almost the same height. The table lists four ways to take the height. **Taking the largest raw sample is 23 percent too high,** because it picks the sample where the noise happened to be highest; the fit uses all the samples on the rise, the top and the fall, so the noise averages out. That is why every energy from here on comes from the fit.
-
----
-
-## Slide 6 — The power pulse, and its area（约 55 秒）
-
-**中文**：这是同一个脉冲的功率。红线是把拟合出的电流代进公式算出来的，两项都算。蓝色虚线只有线性项，和红线几乎重合。橙色点线只有二次项，放大 20 倍才看得见。灰点是原始采样点算出的功率。绿线是 20 kHz 波形算出的功率。**粉色面积就是这个通道吸收的能量**，二次项只占其中 1.3%。
-
-**English**: This is the power of the same pulse. Red is the fitted current put through the formula, with both terms. The blue dashed line is the linear term alone, and it almost overlaps the red. The orange dotted line is the quadratic term alone, drawn twenty times larger. The grey dots are the power from the raw samples. The green line is the power from the 20 kilohertz trace. **The shaded area is the energy absorbed in this channel,** and the quadratic term is only 1.3 percent of it.
+**English**: **This is the top of the same pulse, zoomed in. Grey is the raw samples. Blue is the same trace after a 100 kilohertz low pass. Red is the two-exponential fit, and it is fitted on the blue line. Green is a 20 kilohertz low pass, which the official Eabs uses.** The yellow band is the top of the pulse, where about a hundred samples have almost the same height. The table lists four ways to take the height. **Taking the largest raw sample is 23 percent too high,** because it picks the sample with the most noise. The fit uses all the samples, so the noise averages out. That is why every energy from here on comes from the fit.
 
 ---
 
-## Slide 7 — Why we integrate the fit, not the raw data（约 80 秒）
+## Slide 6 — The power pulse, and its area（约 50 秒）
 
-**中文**：有人可能会问：公式对任何电流都能用，为什么不直接对原始数据积分？这一页就是答案。上面一排是两个事件的原始电流，红色是拟合出来的脉冲，黑线是基线。右上角的小图把脉冲之后那段放大了，橙色虚线是这段电流的平均值，橙色箭头指着它。左边这个事件，脉冲之后电流回到了基线；右边这个事件，明显低于基线。这点偏移埋在噪声里，用眼睛看不出来。下面一排是累计能量，横轴和上面一样。红线是对拟合脉冲积分：脉冲之前是 0，脉冲一来升上去，之后保持不变。绿色虚线是公式算出的能量，红线的终点落在它上面。灰线是对原始数据积分：左边和红线差不多，右边却一路往下，最后变成负的。原因就是上面那点偏移——积分会把它一直累加下去。能量是正的，灰线却掉到负值，说明这样算出来的不是事件的能量。所以能量要用拟合来算，这样不受峰值噪声和基线漂移的影响。
+**中文**：这是同一个脉冲的功率。红线是拟合算出的功率，两项都算。蓝色虚线只有线性项，和红线几乎重合。橙色点线只有二次项，放大 20 倍才看得见。灰点是原始采样点算出的功率。绿线是 20 kHz 波形算出的功率。**粉色面积就是这个通道吸收的能量**，二次项只占其中 1.3%。
 
-**English**: One question is: the formula works for any current, so why not integrate the raw data directly? This slide is the answer. **The top row shows the raw current of two events, with the fitted pulse in red and the baseline in black.** The small panel in the top right zooms in on the part after the pulse. The orange dashed line is the average current there, and the orange arrow points to it. **On the left the current comes back to the baseline; on the right it stays below the baseline.** That offset is buried in the noise, so we cannot see it by eye. **The bottom row shows the cumulative energy, on the same time axis.** Red is the integral of the fitted pulse: zero before the pulse, up when the pulse comes, then flat, and it ends on the green dashed line, which is the value from the formula. **Grey is the integral of the raw data: on the left it is close to the red curve, but on the right it keeps going down and ends up negative.** That is the offset from the panel above: the integral keeps adding it up. An energy cannot be negative, so this is not the energy of the event. So the energy has to be calculated from the fit, where the noise at the peak and the baseline drift do not enter.
+**English**: This is the power of the same pulse. Red is the power from the fit, with both terms. The blue dashed line is the linear term alone, and it almost overlaps the red. The orange dotted line is the quadratic term alone, drawn twenty times larger. The grey dots are the power from the raw samples. The green line is the power from the 20 kilohertz trace. **The shaded area is the energy absorbed in this channel,** and the quadratic term is only 1.3 percent of it.
+
+---
+
+## Slide 7 — Why we integrate the fit, not the raw data（约 70 秒）
+
+**中文**：为什么不直接对原始数据积分？这一页就是答案。上面一排是两个事件的原始电流，红色是拟合出来的脉冲，黑线是基线。右上角的小图是脉冲之后那段的放大，橙色线是那段电流的平均值。左边这个事件，脉冲之后电流回到了基线；右边这个事件，明显低于基线。这点偏移埋在噪声里，用眼睛看不出来。下面一排是累计能量，横轴和上面一样。红线是对拟合脉冲积分：跟着脉冲升上去，然后保持不变，停在绿线上，绿线是公式算出的能量。灰线是对原始数据积分：左边和红线差不多，右边却一路往下，最后变成负的。积分把上面那点偏移一直累加下去。能量不可能是负的，所以我们用拟合来算。
+
+**English**: Why not integrate the raw data directly? This slide shows why. **The top row shows the raw current of two events, with the fitted pulse in red and the baseline in black.** The small panel zooms in after the pulse; the orange line is the average current there. **On the left the current comes back to the baseline; on the right it stays below the baseline.** That offset is buried in the noise, so we cannot see it by eye. **The bottom row shows the cumulative energy, on the same time axis.** Red is the integral of the fit: it rises with the pulse, then stays flat, on the green line from the formula. **Grey is the integral of the raw data: on the left it is close to the red curve, but on the right it keeps going down and ends up negative.** The integral keeps adding up that small offset. An energy cannot be negative, so we use the fit.
 
 ---
 
