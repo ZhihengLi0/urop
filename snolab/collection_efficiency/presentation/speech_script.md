@@ -4,7 +4,7 @@
 用词尽量简单；专业词保持原样。斜体是给自己的提示，不用念。**加粗的英文**是看着屏幕说的句子。
 
 整个报告只讲一件事：**先说明一个脉冲怎么算出能量，再把同样的算法用到所有通道和所有事件。**
-时间分配（秒）：1 题目 20 · 2 主要思路 60 · 3 公式 65 · 4 主图 35 · 5 峰高 65 · 6 功率和面积 50 · 7 为什么用拟合 70 · 8 其他通道 55 · 9 所有事件 70 · 10 求和 75 · 11 总结 35 → 约 600 秒（约 10 分钟；讲的时候留出停顿和指图的时间，大约 12 分钟）。
+时间分配（秒）：1 题目 20 · 2 主要思路 55 · 3 公式 65 · 4 主图 35 · 5 峰高 65 · 6 功率和面积 50 · 7 为什么用拟合 70 · 8 其他通道 50 · 9 所有事件 60 · 10 求和 70 · 11 总结 35 → 约 575 秒（约 9.5 分钟；讲的时候留出停顿和指图的时间，大约 12 分钟）。
 
 ---
 
@@ -16,11 +16,11 @@
 
 ---
 
-## Slide 2 — The Main Idea（约 60 秒）
+## Slide 2 — The Main Idea（约 55 秒）
 
-**中文**：先给定义。这个定义只对工作在 0 伏的探测器成立，也就是没有 NTL 效应。收集效率等于 TES 吸收的能量除以 10.37 keV，TES 吸收的能量是所有通道加起来。为什么要求 0 伏：如果探测器加了电压，电子和空穴在电场里移动，会多产生一些声子，这就是 NTL 效应。那样晶体里的总能量就大于 10.37 keV。屏幕上这一行是计算步骤：事件在晶体里产生声子，声子到达 TES，我们记录到电流的变化 δI，把 δI 换算成功率的变化 δP，对 δP 积分得到一个通道的能量，把所有通道加起来，最后除以 10.37 keV。选 Z7 是因为它的噪声低，K 线的峰和噪声触发分得很开。
+**中文**：先给定义。这个定义针对工作在 0 伏的探测器，没有 NTL 效应。收集效率等于 TES 吸收的能量除以 10.37 keV，TES 吸收的能量是所有通道加起来。如果探测器加了电压，电子和空穴移动时会多产生声子，这就是 NTL 效应，晶体里的总能量就大于 10.37 keV。屏幕上这一行是计算步骤：事件在晶体里产生声子，声子到达 TES，我们记录到电流的变化 δI，把 δI 换算成功率的变化 δP，对 δP 积分得到一个通道的能量，把所有通道加起来，最后除以 10.37 keV。选 Z7 是因为它的噪声低，K 线的峰和噪声触发分得很开。
 
-**English**: First, the definition. It holds for a detector operated at zero volts, so with no NTL effect. The collection efficiency is the energy absorbed by the TESs divided by 10.37 keV, and the absorbed energy is summed over all channels. Why zero volts: if there is a voltage on the detector, the electrons and holes move in the electric field and create extra phonons. This is the NTL effect. Then the total energy in the crystal is more than 10.37 keV. **The line of boxes on the screen shows the steps: the event creates phonons in the crystal, the phonons reach the TES, we record the change in current, δI, we turn it into the change in power, δP, the integral of δP is the energy in one channel, we add up all the channels, and we divide by 10.37 keV.** We use Z7 because its noise is low and its K-line peak is well separated from the noise triggers.
+**English**: First, the definition. This is for a detector at zero volts, with no NTL effect. The collection efficiency is the energy absorbed by the TESs divided by 10.37 keV, and the absorbed energy is summed over all channels. With a voltage, the electrons and holes make extra phonons as they move. This is the NTL effect, and then the crystal gets more than 10.37 keV. **The line of boxes on the screen shows the steps: the event creates phonons in the crystal, the phonons reach the TES, we record the change in current, δI, we turn it into the change in power, δP, the integral of δP is the energy in one channel, we add up all the channels, and we divide by 10.37 keV.** We use Z7 because its noise is low and its K-line peak is well separated from the noise triggers.
 
 ---
 
@@ -66,27 +66,27 @@
 
 ---
 
-## Slide 8 — The same event in its other channels（约 55 秒）
+## Slide 8 — The same event in its other channels（约 50 秒）
 
-**中文**：一个通道讲完了，下面对同一个事件的 11 个通道都做同样的计算，这里显示其中 4 个。右边的表格列出了这个事件 11 个通道各自的能量，差别很大，最多的那个通道是最少的两倍多。按面来看，第 1 面占 60%，第 2 面占 40%，说明这个事件可能发生在靠近第 1 面的位置。要注意 Z7 的 PFS2 没有读出，所以第 2 面只有 5 个通道。11 个通道加起来是 10.37 keV 的 33%。作为检查，用官方的做法对同一个事件算一遍，两者差 0.6%。
+**中文**：一个通道讲完了，下面对同一个事件的 11 个通道都做同样的计算，这里显示其中 4 个。右边的表格列出了这个事件 11 个通道各自的能量，差别很大，最多的那个通道是最少的两倍多。第 1 面占 60%，第 2 面占 40%，所以这个事件发生在靠近第 1 面的位置。要注意 Z7 的 PFS2 没有读出，所以第 2 面只有 5 个通道。11 个通道加起来是 10.37 keV 的 33%。作为检查，用官方的算法在同一个事件上给出的结果差 0.6%。
 
-**English**: That is one channel. Next, we do the same calculation for all 11 channels of the same event; 4 of them are shown here. **The table on the right lists the energy of each of the 11 channels for this event. They are very different: the largest channel has more than twice the smallest. By face, side 1 takes 60 percent and side 2 takes 40 percent,** so this event probably happened closer to side 1. Note that PFS2 is not read out on Z7, so side 2 has only 5 channels. **Summed over the 11 channels, the event gives 33 percent of 10.37 keV.** As a check, the official recipe on the same event agrees to 0.6 percent.
-
----
-
-## Slide 9 — Now every event: one channel（约 70 秒）
-
-**中文**：从一个事件扩展到所有事件。这里还是 PBS1，每个事件做一次拟合和一次积分，得到一个能量。横轴是能量，纵轴是事件数。红色来自拟合，灰色轮廓来自官方窗口对原始波形的积分，两者的峰位只差 0.2%。红色那条分布的峰在 285 电子伏，宽度是峰位的 15%。要注意，这些事件的真实能量都一样，但分布还是有 15% 宽。分布的右边有一条长尾，这些是离 PBS1 比较近的事件。所以一个通道的宽度主要来自事件发生的位置，而不是噪声。下一页会看到证据：把通道加起来以后宽度会明显变小。虚线是只对中间部分做的高斯拟合，所以 μ 是峰的位置，不是平均值。
-
-**English**: Now we go from one event to all events. **This is still PBS1. For each event we do one fit and one integral, and get one energy. The horizontal axis is energy and the vertical axis is the number of events. Red is from the fit, the grey outline is from the official window on the raw traces, and their peaks differ by only 0.2 percent. The red distribution peaks at 285 electron volts and its width is 15 percent of that.** Note that all of these events have the same true energy, and the distribution is still 15 percent wide. **The distribution has a long tail on the right;** these are events that happened closer to PBS1. So the width in one channel comes mainly from where the event happened, and not from noise. The next slide shows the evidence: when we add the channels, the width becomes much smaller. The dashed curve is a Gaussian fit to the central part only, so mu is the position of the peak, not the mean.
+**English**: That is one channel. Next, we do the same calculation for all 11 channels of the same event; 4 of them are shown here. **The table on the right lists the energy of each of the 11 channels for this event. They are very different: the largest channel has more than twice the smallest. Side 1 gets 60 percent and side 2 gets 40 percent,** so the event was closer to side 1. Note that PFS2 is not read out on Z7, so side 2 has only 5 channels. **Summed over the 11 channels, the event gives 33 percent of 10.37 keV.** The official method gives the same result within 0.6 percent.
 
 ---
 
-## Slide 10 — Summed over the channels: 30.5 %（约 75 秒）
+## Slide 9 — Now every event: one channel（约 60 秒）
 
-**中文**：这是结果。对每个事件把各通道的能量加起来，再看这些总能量的分布。和上一页比，宽度从 15% 降到 7.5%，而且变对称了，说明事件位置造成的差别在求和后大部分抵消了。灰色是 10 个通道的和，峰在 10.37 keV 的 30.5%。这里没算 PDS2：它只有大约 40% 的事件能拟合上，能拟合上的都是信号明显的事件，也就是发生位置偏向 PDS2 的事件，所以我们把它排除。我们用宽度除以峰位作为误差，所以收集效率是 30.5%，相对误差 7.5%。最右边的红线是 10.37 keV，可以看到大约三分之二的能量没有被 TES 吸收。
+**中文**：从一个事件扩展到所有事件。这里还是 PBS1，每个事件做一次拟合和一次积分，得到一个能量。横轴是能量，纵轴是事件数。红色来自拟合，灰色是官方的算法，两者的峰位差 0.2%。红色那条分布的峰在 285 电子伏，宽度是峰位的 15%。要注意，这些事件的真实能量都一样，但分布还是有 15% 宽。分布的右边有一条长尾，这些是离 PBS1 比较近的事件。所以宽度来自事件发生的位置，不是噪声。下一页会看到这一点。虚线是只对中间部分做的高斯拟合，所以 μ 是峰的位置，不是平均值。
 
-**English**: This is the result. For each event we add up the energies of the channels and look at the distribution of these totals. **Compared with the last slide, the width drops from 15 percent to 7.5 percent and the distribution becomes symmetric,** so most of the difference from the event position cancels in the sum. **Grey is the sum over 10 channels, and its peak sits at 30.5 percent of 10.37 keV.** PDS2 is not in it: only about 40 percent of its events can be fitted, and those are the events with a clear signal, so they happened closer to PDS2. That is why we leave it out. **We take the width over the peak as the uncertainty, so the collection efficiency is 30.5 percent, with a relative uncertainty of 7.5 percent.** **The red line on the far right is 10.37 keV:** about two thirds of the energy is not absorbed by the TESs.
+**English**: Now we go from one event to all events. **This is still PBS1. For each event we do one fit and one integral, and get one energy. The horizontal axis is energy and the vertical axis is the number of events. Red is from the fit, grey is the official method, and the peaks agree within 0.2 percent. The red distribution peaks at 285 electron volts and its width is 15 percent of that.** Note that all of these events have the same true energy, and the distribution is still 15 percent wide. **The distribution has a long tail on the right;** these are events that happened closer to PBS1. So the width comes from where the event happened, not from noise. The next slide shows this. The dashed curve is a Gaussian fit to the central part only, so mu is the position of the peak, not the mean.
+
+---
+
+## Slide 10 — Summed over the channels: 30.5 %（约 70 秒）
+
+**中文**：这是结果。对每个事件把各通道的能量加起来，再看这些总能量的分布。和上一页比，宽度从 15% 降到 7.5%，而且变对称了，说明事件位置造成的差别在求和后大部分抵消了。灰色是 10 个通道的和，峰在 10.37 keV 的 30.5%。这里没算 PDS2：它只有大约 40% 的事件能拟合上，能拟合上的都是信号明显的事件，也就是发生位置偏向 PDS2 的事件，所以我们把它排除。宽度除以峰位是 7.5%，这就是我们的误差。最右边的红线是 10.37 keV，可以看到大约三分之二的能量没有被 TES 吸收。
+
+**English**: This is the result. For each event we add up the energies of the channels and look at the distribution of these totals. **Compared with the last slide, the width drops from 15 percent to 7.5 percent and the distribution becomes symmetric,** so most of the difference from the event position cancels in the sum. **Grey is the sum over 10 channels, and its peak sits at 30.5 percent of 10.37 keV.** PDS2 is not in it: only about 40 percent of its events can be fitted, and those are the events with a clear signal, so they happened closer to PDS2. That is why we leave it out. **The width over the peak, 7.5 percent, is our uncertainty.** **The red line on the far right is 10.37 keV:** about two thirds of the energy is not absorbed by the TESs.
 
 ---
 
