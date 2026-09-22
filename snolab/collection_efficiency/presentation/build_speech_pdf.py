@@ -59,16 +59,18 @@ for ln in lines:
     elif ln.startswith("- "):
         out.append(f"<p class='li'>• {inline(ln[2:])}</p>")
     elif ln.strip():
-        out.append(f"<p>{inline(ln)}</p>")
+        # the notes above the first slide are for the speaker only: set small
+        cls = "" if card or any("class='card'" in o for o in out) else " class='intro'"
+        out.append(f"<p{cls}>{inline(ln)}</p>")
 close_card()
 
 CSS = """
 @page { size: A4; margin: 14mm 13mm; }
 body { font-family: 'Droid Sans', 'DroidSansFallback', 'Noto Sans CJK SC', sans-serif;
        font-size: 12.5pt; line-height: 1.5; color: #222; max-width: 190mm; margin: 0 auto; }
-h1 { font-size: 18pt; color: #1F3864; margin: 0 0 6pt; }
+h1 { font-size: 16pt; color: #1F3864; margin: 0 0 4pt; }
 h2 { font-size: 14pt; color: #1F3864; margin: 0 0 6pt; border-bottom: 1.5px solid #1F3864; padding-bottom: 3pt; }
-.card { break-inside: avoid; page-break-inside: avoid; margin: 0 0 14pt; padding: 6pt 8pt;
+.card { break-inside: avoid; page-break-inside: avoid; margin: 0 0 10pt; padding: 6pt 8pt;
         border: 1px solid #D0D5DD; border-radius: 6px; }
 .en { break-inside: avoid; page-break-inside: avoid; background: #F7F9FC; padding: 4pt 8pt; border-radius: 4px; }
 .en b { color: #1F3864; background: #E4ECF7; }
@@ -77,6 +79,7 @@ p { margin: 4pt 0; }
 .hint, i.hint { color: #888; }
 code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px; }
 .li { margin-left: 10pt; }
+.intro { font-size: 9.5pt; line-height: 1.3; margin: 2pt 0; color: #444; }
 """
 open(dst, "w", encoding="utf-8").write(
     "<!doctype html><html><head><meta charset='utf-8'><title>speech script</title>"
