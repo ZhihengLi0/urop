@@ -10,9 +10,9 @@
 
 ## Slide 1 — Title（约 20 秒）
 
-**中文**：大家好，我叫李知恒，来自明尼苏达大学。今天讲 Z7 的声子收集效率。问题是：一个 10.37 keV 的事件发生在晶体里，有多少能量被 TES 吸收。我们得到的结果是 30.5%，用的是 10 个通道；另外两个排除了，一个没有读出，一个噪声太大。我先用一个脉冲说明能量是怎么算的，再把同样的方法用到整个探测器。
+**中文**：大家好，我叫李知恒，来自明尼苏达大学。今天讲 Z7 的声子收集效率。问题是：一个 10.37 keV 的事件发生在晶体里，有多少能量被 TES 吸收。我们得到的结果是 30.5%，用的是 10 个通道；另外两个排除了，一个数据缺失，一个噪声太大。我先用一个脉冲说明能量是怎么算的，再把同样的方法用到整个探测器。
 
-**English**: Hi everyone, my name is Zhiheng Li, from the University of Minnesota. Today I will talk about the phonon collection efficiency of Z7. The question is: when a 10.37 keV event happens in the crystal, how much of the energy is absorbed by the TESs. Our result is 30.5 percent, from 10 channels. We leave out two: one is not read out, and one is too noisy. I will first use one pulse to show how the energy is calculated, and then apply the same method to the whole detector.
+**English**: Hi everyone, my name is Zhiheng Li, from the University of Minnesota. Today I will talk about the phonon collection efficiency of Z7. The question is: when a 10.37 keV event happens in the crystal, how much of the energy is absorbed by the TESs. Our result is 30.5 percent, from 10 channels. We leave out two: one is missing, and one is too noisy. I will first use one pulse to show how the energy is calculated, and then apply the same method to the whole detector.
 
 ---
 
