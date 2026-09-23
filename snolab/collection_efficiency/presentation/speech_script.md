@@ -70,7 +70,7 @@
 
 **中文**：一个通道讲完了，下面对同一个事件的 11 个通道都做同样的计算，这里显示其中 4 个。右边的表格列出了这个事件 11 个通道各自的能量，差别很大，最多的那个通道是最少的两倍多。第 1 面占 60%，第 2 面占 40%，所以这个事件发生在靠近第 1 面的位置。要注意 Z7 的 PFS2 没有读出，所以第 2 面只有 5 个通道。11 个通道加起来是 10.37 keV 的 33%。这是一个事件，而且含 PDS2。作为检查，用官方的算法在同一个事件上给出的结果差 0.6%。
 
-**English**: That is one channel. Next, we do the same calculation for all 11 channels of the same event; 4 of them are shown here. **The table on the right lists the energy of each of the 11 channels for this event. They are very different: the largest channel has more than twice the smallest. Side 1 gets 60 percent and side 2 gets 40 percent,** so the event was closer to side 1. Note that PFS2 is not read out on Z7, so side 2 has only 5 channels. **Summed over the 11 channels, the event gives 33 percent of 10.37 keV.** This is one event, including PDS2. The official method gives the same result within 0.6 percent.
+**English**: That is one channel. Next, we do the same calculation for all 11 channels of the same event; 4 of them are shown here. **The table on the right lists the energy of the 11 channels for this event. They are very different: the largest channel has more than twice the smallest. Side 1 gets 60 percent and side 2 gets 40 percent,** so the event was closer to side 1. Note that PFS2 is not read out on Z7, so side 2 has only 5 channels. **Summed over the 11 channels, the event gives 33 percent of 10.37 keV.** This is one event, including PDS2. The official method gives the same result within 0.6 percent.
 
 ---
 
