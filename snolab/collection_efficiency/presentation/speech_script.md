@@ -4,7 +4,7 @@
 用词尽量简单；专业词保持原样。斜体是给自己的提示，不用念。**加粗的英文**是看着屏幕说的句子。
 
 整个报告只讲一件事：**先说明一个脉冲怎么算出能量，再把同样的算法用到所有通道和所有事件。**
-时间分配（秒）：1 题目 20 · 2 主要思路 55 · 3 公式 65 · 4 主图 35 · 5 峰高 65 · 6 功率和面积 50 · 7 为什么用拟合 70 · 8 其他通道 50 · 9 所有事件 60 · 10 求和 70 · 11 总结 35 → 约 575 秒（约 9.5 分钟；讲的时候留出停顿和指图的时间，大约 12 分钟）。
+时间分配（秒）：1 题目 20 · 2 主要思路 45 · 3 公式 65 · 4 主图 35 · 5 峰高 65 · 6 功率和面积 50 · 7 为什么用拟合 70 · 8 其他通道 50 · 9 所有事件 55 · 10 求和 70 · 11 总结 35 → 约 560 秒（约 9.5 分钟；讲的时候留出停顿和指图的时间，大约 12 分钟）。
 
 ---
 
@@ -16,11 +16,11 @@
 
 ---
 
-## Slide 2 — The Main Idea（约 55 秒）
+## Slide 2 — The Main Idea（约 45 秒）
 
-**中文**：先给定义。这个定义针对工作在 0 伏的探测器，没有 NTL 效应。收集效率等于 TES 吸收的能量除以 10.37 keV，TES 吸收的能量是所有通道加起来。如果探测器加了电压，电子和空穴移动时会多产生声子，这就是 NTL 效应，晶体里的总能量就大于 10.37 keV。屏幕上这一行是计算步骤：事件在晶体里产生声子，声子到达 TES，我们记录到电流的变化 δI，把 δI 换算成功率的变化 δP，对 δP 积分得到一个通道的能量，把所有通道加起来，最后除以 10.37 keV。选 Z7 是因为它的噪声低，K 线的峰和噪声触发分得很开。
+**中文**：先给定义。这个定义针对工作在 0 伏的探测器，没有 NTL 效应。收集效率等于 TES 吸收的能量除以 10.37 keV，TES 吸收的能量是所有通道加起来。屏幕上这一行是计算步骤：事件在晶体里产生声子，声子到达 TES，我们记录到电流的变化 δI，把 δI 换算成功率的变化 δP，对 δP 积分得到一个通道的能量，把所有通道加起来，最后除以 10.37 keV。选 Z7 是因为它的噪声低，K 线的峰和噪声触发分得很开。
 
-**English**: First, the definition. This is for a detector at zero volts, with no NTL effect. The collection efficiency is the energy absorbed by the TESs divided by 10.37 keV, and the absorbed energy is summed over all channels. With a voltage, the electrons and holes make extra phonons as they move. This is the NTL effect, and then the crystal gets more than 10.37 keV. **The line of boxes on the screen shows the steps: the event creates phonons in the crystal, the phonons reach the TES, we record the change in current, δI, we turn it into the change in power, δP, the integral of δP is the energy in one channel, we add up all the channels, and we divide by 10.37 keV.** We use Z7 because its noise is low and its K-line peak is well separated from the noise triggers.
+**English**: First, the definition. This is for a detector at zero volts, with no NTL effect. The collection efficiency is the energy absorbed by the TESs divided by 10.37 keV, and the absorbed energy is summed over all channels. **The line of boxes on the screen shows the steps: the event creates phonons in the crystal, the phonons reach the TES, we record the change in current, δI, we turn it into the change in power, δP, the integral of δP is the energy in one channel, we add up all the channels, and we divide by 10.37 keV.** We use Z7 because its noise is low and its K-line peak is well separated from the noise triggers.
 
 ---
 
@@ -74,11 +74,11 @@
 
 ---
 
-## Slide 9 — Now every event: one channel（约 60 秒）
+## Slide 9 — Now every event: one channel（约 55 秒）
 
-**中文**：从一个事件扩展到所有事件。这里还是 PBS1，每个事件做一次拟合和一次积分，得到一个能量。横轴是能量，纵轴是事件数。红色来自拟合，灰色是官方的算法，两者的峰位差 0.2%。红色那条分布的峰在 285 电子伏，宽度是峰位的 15%。要注意，这些事件的真实能量都一样，但分布还是有 15% 宽。分布的右边有一条长尾，这些是离 PBS1 比较近的事件。所以宽度来自事件发生的位置，不是噪声。下一页会看到这一点。虚线是只对中间部分做的高斯拟合，所以 μ 是峰的位置，不是平均值。
+**中文**：从一个事件扩展到所有事件。这里还是 PBS1，每个事件做一次拟合和一次积分，得到一个能量。横轴是能量，纵轴是事件数。红色来自拟合，灰色是官方的算法，两者的峰位差 0.2%。红色那条分布的峰在 285 电子伏，宽度是峰位的 15%。要注意，这些事件的真实能量都一样，但分布还是有 15% 宽。分布的右边有一条长尾，这些是离 PBS1 比较近的事件。所以宽度来自事件发生的位置，不是噪声。下一页会看到这一点。
 
-**English**: Now we go from one event to all events. **This is still PBS1. For each event we do one fit and one integral, and get one energy. The horizontal axis is energy and the vertical axis is the number of events. Red is from the fit, grey is the official method, and the peaks agree within 0.2 percent. The red distribution peaks at 285 electron volts and its width is 15 percent of that.** Note that all of these events have the same true energy, and the distribution is still 15 percent wide. **The distribution has a long tail on the right;** these are events that happened closer to PBS1. So the width comes from where the event happened, not from noise. The next slide shows this. The dashed curve is a Gaussian fit to the central part only, so mu is the position of the peak, not the mean.
+**English**: Now we go from one event to all events. **This is still PBS1. For each event we do one fit and one integral, and get one energy. The horizontal axis is energy and the vertical axis is the number of events. Red is from the fit, grey is the official method, and the peaks agree within 0.2 percent. The red distribution peaks at 285 electron volts and its width is 15 percent of that.** Note that all of these events have the same true energy, and the distribution is still 15 percent wide. **The distribution has a long tail on the right;** these are events that happened closer to PBS1. So the width comes from where the event happened, not from noise. The next slide shows this.
 
 ---
 
