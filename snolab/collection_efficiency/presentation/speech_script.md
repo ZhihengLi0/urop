@@ -76,9 +76,9 @@
 
 ## Slide 9 — Now every event: one channel（约 55 秒）
 
-**中文**：从一个事件扩展到所有事件。这里还是 PBS1，每个事件做一次拟合和一次积分，得到一个能量。横轴是能量，纵轴是事件数。红色来自拟合，灰色是官方的算法，两者的峰位差 0.2%。红色那条分布的峰在 285 电子伏，宽度是峰位的 15%。要注意，这些事件的真实能量都一样，但分布还是有 15% 宽。分布的右边有一条长尾，这些是离 PBS1 比较近的事件。所以宽度来自事件发生的位置，不是噪声。下一页会看到这一点。
+**中文**：从一个事件扩展到所有事件。这里还是 PBS1，每个事件做一次拟合和一次积分，得到一个能量。横轴是能量，纵轴是事件数。红色来自拟合，灰色是官方的算法，两者的峰位差 0.2%。红色那条分布的峰在 285 电子伏。这些事件的能量都一样，但分布有 15% 宽。分布的右边有一条长尾，这些是离 PBS1 比较近的事件。所以宽度来自事件发生的位置，不是噪声。下一页会看到这一点。
 
-**English**: Now we go from one event to all events. **This is still PBS1. For each event we do one fit and one integral, and get one energy. The horizontal axis is energy and the vertical axis is the number of events. Red is from the fit, grey is the official method, and the peaks agree within 0.2 percent. The red distribution peaks at 285 electron volts and its width is 15 percent of that.** Note that all of these events have the same true energy, and the distribution is still 15 percent wide. **The distribution has a long tail on the right;** these are events that happened closer to PBS1. So the width comes from where the event happened, not from noise. The next slide shows this.
+**English**: Now we go from one event to all events. **This is still PBS1. For each event we do one fit and one integral, and get one energy. The horizontal axis is energy and the vertical axis is the number of events. Red is from the fit, grey is the official method, and the peaks agree within 0.2 percent. The peak is at 285 electron volts.** All these events have the same energy, but the width is 15 percent. **The distribution has a long tail on the right;** these are events that happened closer to PBS1. So the width comes from where the event happened, not from noise. The next slide shows this.
 
 ---
 
