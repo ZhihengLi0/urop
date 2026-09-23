@@ -60,9 +60,9 @@
 
 ## Slide 7 — Why we integrate the fit, not the raw data（约 70 秒）
 
-**中文**：为什么不直接对原始数据积分？这一页就是答案。上面一排是两个事件的原始电流，红色是拟合出来的脉冲，黑线是基线。右上角的小图是脉冲之后那段的放大，橙色线是那段电流的平均值。左边这个事件，脉冲之后电流回到了基线；右边这个事件，明显低于基线。这点偏移埋在噪声里，用眼睛看不出来。下面一排是累计能量，横轴和上面一样。红线是对拟合脉冲积分：跟着脉冲升上去，然后保持不变，停在绿线上，绿线是公式算出的能量。灰线是对原始数据积分：左边和红线差不多，右边却一路往下，最后变成负的。积分把上面那点偏移一直累加下去。能量不可能是负的，所以我们用拟合来算。
+**中文**：为什么不直接对原始数据积分？这一页就是答案。上面一排是两个事件的原始电流，红色是拟合出来的脉冲，黑线是基线。右上角的小图是脉冲之后那段的放大，橙色线是那段电流的平均值。左边这个事件，脉冲之后电流回到了基线；右边这个事件，明显低于基线。这点偏移埋在噪声里，用眼睛看不出来。下面一排是累计能量，横轴和上面一排是一样的。红线是对拟合脉冲积分：跟着脉冲升上去，然后保持不变，停在绿线上，绿线是公式算出的能量。灰线是对原始数据积分：左边和红线差不多，右边却一路往下，最后变成负的。积分把上面那点偏移一直累加下去。能量不可能是负的，所以我们用拟合来算。
 
-**English**: Why not integrate the raw data directly? This slide shows why. **The top row shows the raw current of two events, with the fitted pulse in red and the baseline in black.** The small panel zooms in after the pulse; the orange line is the average current there. **On the left the current comes back to the baseline; on the right it stays below the baseline.** That offset is buried in the noise, so we cannot see it by eye. **The bottom row shows the cumulative energy, on the same time axis.** Red is the integral of the fit: it rises with the pulse, then stays flat, on the green line from the formula. **Grey is the integral of the raw data: on the left it is close to the red curve, but on the right it keeps going down and ends up negative.** The integral keeps adding up that small offset. An energy cannot be negative, so we use the fit.
+**English**: Why not integrate the raw data directly? This slide shows why. **The top row shows the raw current of two events, with the fitted pulse in red and the baseline in black.** The small panel zooms in after the pulse; the orange line is the average current there. **On the left the current comes back to the baseline; on the right it stays below the baseline.** That offset is buried in the noise, so we cannot see it by eye. **The bottom row shows the cumulative energy, and they share the same time axis.** Red is the integral of the fit: it rises with the pulse, then stays flat, on the green line from the formula. **Grey is the integral of the raw data: on the left it is close to the red curve, but on the right it keeps going down and ends up negative.** The integral keeps adding up that small offset. An energy cannot be negative, so we use the fit.
 
 ---
 
