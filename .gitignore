@@ -4,3 +4,8 @@ __pycache__/
 *.pyc
 database/CS2_Database_介绍.md
 database/progresSQRL是什么 - Claude.pdf
+# local-only working material, never commit
+cute-r36/
+project_old_WiKi/
+tutorials/
+LED/all_events.pkl

@@ -106,7 +106,7 @@ tb = textbox(s, Inches(0.9), Inches(2.3), Inches(11.5), Inches(1.8))
 run(tb.text_frame.paragraphs[0], "Phonon collection efficiency of Z7", 40, NAVY, bold=True)
 tb = textbox(s, Inches(0.9), Inches(4.7), Inches(11.5), Inches(1.2))
 run(tb.text_frame.paragraphs[0], "Zhiheng Li  ·  University of Minnesota  ·  SuperCDMS SNOLAB Run 4  ·  September 2026", 16)
-run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab/collection_efficiency/", 13, GRAY)
+run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab_run4_phonon_pulse_analysis/collection_efficiency/", 13, GRAY)
 
 # ------------------------------------------------------------------ 2 question
 s = new("The Main Idea", notes="Efficiency = energy absorbed by the TESs, summed over all "

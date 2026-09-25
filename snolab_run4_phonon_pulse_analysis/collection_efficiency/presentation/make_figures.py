@@ -2,7 +2,7 @@
 """Slide-sized figures for the collection-efficiency talk.
 
 Crops the versioned result figures in ../results/plots/current_power_overlay/
-(and the Z7 spectrum in ../../kline_population/results/plots/) into panels that
+(and the Z7 spectrum in ../../phonon_pulse_template_generation/kline_population/results/plots/) into panels that
 stay legible on a 16:9 slide, and draws the formula card. Nothing is re-fitted or
 re-computed here; every number on the slides comes from the result text files.
 
@@ -19,7 +19,8 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "..", "results", "plots", "current_power_overlay")
-SPEC = os.path.join(HERE, "..", "..", "kline_population", "results", "plots")
+SPEC = os.path.join(HERE, "..", "..", "phonon_pulse_template_generation",
+                    "kline_population", "results", "plots")
 OUT = os.path.join(HERE, "figures")
 os.makedirs(OUT, exist_ok=True)
 

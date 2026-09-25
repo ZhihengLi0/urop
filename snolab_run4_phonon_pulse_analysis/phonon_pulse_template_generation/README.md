@@ -1,4 +1,4 @@
-# SNOLAB Run 4 — Phonon Pulse Template Project
+# SNOLAB R4 Phonon Pulse Template Generation
 
 Author: Zhiheng Li
 

@@ -1,0 +1,52 @@
+# Run outputs — large binary files
+**/run/
+# Pickle cache files
+*.pkl
+# ROOT histogram files
+*.root
+# Plot outputs
+*.png
+*.pdf
+# Python cache
+__pycache__/
+*.pyc
+# Claude project settings
+.claude/
+# Jupyter checkpoints
+.ipynb_checkpoints/
+# AI handoff doc stays local on MSI only
+CONTEXT_FOR_NEXT_AI.md
+# derived from the MSI-only handoff doc, never commit
+CONTEXT_FOR_NEXT_AI.html
+.~*.pptx
+speech_script.html
+
+# ---- phonon_pulse_template_generation/ ----
+# Final template ROOT files are versioned (exception to *.root)
+!phonon_pulse_template_generation/lp_fit_align/results/root_files/*.root
+# Final figures are versioned (exception to *.png)
+!phonon_pulse_template_generation/lp_fit_align/results/plots/**/*.png
+# Presentation deliverables are versioned (exceptions to *.png / *.pdf)
+!phonon_pulse_template_generation/presentation/figures/*.png
+!phonon_pulse_template_generation/presentation/*.pdf
+!phonon_pulse_template_generation/presentation/backup_galleries/*.pdf
+phonon_pulse_template_generation/presentation/backup_galleries/_pptx/
+# annotated review copies stay on MSI only
+phonon_pulse_template_generation/presentation/改正建议.pdf
+# Deliverables are versioned
+!phonon_pulse_template_generation/deliverables/**/*.root
+!phonon_pulse_template_generation/deliverables/**/*.png
+# K-line population figures are versioned (exception to *.png)
+!phonon_pulse_template_generation/kline_population/results/plots/*.png
+# Energy-regression figures are versioned (exception to *.png)
+!phonon_pulse_template_generation/neural_network/results/plots/*.png
+
+# ---- collection_efficiency/ ----
+# Energy histograms are versioned (exception to *.png)
+!collection_efficiency/results/plots/**/*.png
+# Collection-efficiency talk: slide figures, deck PDF, speech PDF
+!collection_efficiency/presentation/figures/*.png
+!collection_efficiency/presentation/*.pdf
+# annotated review copies are large; keep them on MSI only
+collection_efficiency/presentation/纠正意见.pdf
+collection_efficiency/presentation/*.mp4
