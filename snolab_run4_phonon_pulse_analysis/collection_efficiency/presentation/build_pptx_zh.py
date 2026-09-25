@@ -108,7 +108,7 @@ s = new(None)
 tb = textbox(s, Inches(0.9), Inches(2.3), Inches(11.5), Inches(1.8))
 run(tb.text_frame.paragraphs[0], "Z7 的声子收集效率", 40, NAVY, bold=True)
 tb = textbox(s, Inches(0.9), Inches(4.7), Inches(11.5), Inches(1.2))
-run(tb.text_frame.paragraphs[0], "李知恒  ·  明尼苏达大学  ·  SuperCDMS SNOLAB Run 4  ·  2026 年 9 月", 16)
+run(tb.text_frame.paragraphs[0], "李志恒  ·  明尼苏达大学  ·  SuperCDMS SNOLAB Run 4  ·  2026 年 9 月", 16)
 run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab_run4_phonon_pulse_analysis/collection_efficiency/", 13, GRAY)
 
 # ------------------------------------------------------------------ 2 问题
