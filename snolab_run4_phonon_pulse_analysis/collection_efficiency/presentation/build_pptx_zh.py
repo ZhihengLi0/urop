@@ -216,5 +216,15 @@ for ttl, name in [
     s = new(ttl)
     pic(s, name, L, T, W, Inches(5.75))
 
+s = new("Backup — 事件计数：每一步排除了多少")
+lines(s, [
+    "K 线附近的 PTOFamps 窗口（30 个 series，无 trigger cut）：  2207 个事件",
+    "− 276 个（12.5%）：双指数拟合在每个通道上都失败（NRMSE 全部 > 0.2）—— 疑似 pileup / glitch，未逐个检查",
+    "= 1931 个至少有一个通道拟合成功",
+    "− 104 个：10 个核心通道里至少有一个拟合失败 —— 总能量缺一块，加进去会偏低",
+    "!= 1827 个（占 2207 的 83%）进入总能量分布",
+    "通道层面的排除（另算）：  PDS2 不计入（只有 42% 的事件能拟合，而且都是它附近的事件） · PFS2 在 Z7 上没有数据",
+], L, Inches(1.6), W, Inches(5.0), size=17)
+
 prs.save(OUT)
 print(f"saved {OUT}: {n_slide} slides")

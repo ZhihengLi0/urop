@@ -250,5 +250,18 @@ for ttl, name, note in [
     s = new(ttl, notes=note)
     pic(s, name, L, T, W, Inches(5.75))
 
+s = new("Backup — event bookkeeping: what is excluded at each step",
+        notes="2207 selected; 276 fit nowhere (12.5%); 104 more miss at least one of "
+              "the 10 core channels; 1827 (83%) enter the sum. PDS2 excluded as a "
+              "channel (fits 42%), PFS2 has no data.")
+lines(s, [
+    "PTOFamps window around the K line (30 series, no trigger cut):   2207 events",
+    "− 276 events (12.5 %): the two-exponential fit fails in every channel (all NRMSE > 0.2) — pileup / glitches, not checked one by one",
+    "= 1931 events with at least one usable fit",
+    "− 104 events: at least one of the 10 core channels failed to fit — an incomplete sum would read low",
+    "!= 1827 events (83 % of 2207) enter the summed-energy distribution",
+    "Channel-level cuts, applied separately:   PDS2 left out (fits only 42 % of events, the ones near it) · PFS2 has no data on Z7",
+], L, Inches(1.6), W, Inches(5.0), size=17)
+
 prs.save(OUT)
 print(f"saved {OUT}: {n_slide} slides")

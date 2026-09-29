@@ -106,6 +106,8 @@
 **B2 两个 Method 和官方 Eabs**：公式是 δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²。c₂ 等于 2 是 Method 1（本报告用的），等于负 1 是 Method 2；两者算出的能量差 1.7%。官方 Eabs 我们自己重新算了一遍，差别在 0.2% 以内。它的做法是：触发在第 16383 个点，基线用第 93 到 15758 个点的平均值，用 5 阶 20 kHz Butterworth 滤波，积分窗口从触发前 0.5 毫秒到触发后 1 毫秒。
 **B2 The two Methods and the official Eabs**: the formula is δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)². c₂ = 2 is Method 1, the one used here, and c₂ = −1 is Method 2; the two differ by 1.7 percent in energy. We reproduce the official Eabs to within 0.2 percent. It uses the trigger at sample 16383, the baseline as the mean of samples 93 to 15758, a 5-pole 20 kilohertz Butterworth filter, and an integration window from 0.5 milliseconds before to 1 millisecond after the trigger.
 
+**B7 事件计数** / event bookkeeping：2207 个选进来；276 个（12.5%）在任何通道都拟合不上（疑似 pileup/glitch，未逐个检查）；再排除 104 个10 个核心通道里有失败的；最后 1827 个（83%）进入求和。PDS2 是通道层面的排除，另算。
+
 **B3–B6**：完整的原图：15 个事件的电流和功率图、15 个事件的累计能量图、事件 30646 所有通道的图、11 个通道各自的能量分布（每个通道都是右边长，PDS2 标出没有加进总和）。
 **B3–B6**: the full original figures: current and power for 15 events, cumulative energy for 15 events, all channels of event 30646, and the energy distribution of each of the 11 channels (each has a long tail on the right; PDS2 is marked as not included in the sum).
 
