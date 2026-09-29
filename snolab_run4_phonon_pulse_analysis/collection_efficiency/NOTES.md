@@ -436,7 +436,7 @@ series 的每个 K 线事件、每个通道:双指数拟合(µA/ms 量纲)→ �
 
 ### 13b. 按 series 各用各的系数重算(2026-09-29,对比用;原结果文件未动)
 
-`kline_energy_hist.py --bias series`,输出带 `_seriesbias` 后缀。10 通道求和:
+`kline_energy_hist.py --bias series`,输出带 `_seriesbias` 后缀,放在 `results/plots/bias_point_check/`(连同 I₀ 图和 README)。10 通道求和:
 
 | | 全部 1827 | 第一组 6/17–20(1225) | 第二组 6/21–23(602) |
 |---|---|---|---|

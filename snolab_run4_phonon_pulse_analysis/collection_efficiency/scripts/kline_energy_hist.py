@@ -123,6 +123,8 @@ bias = read_bias(series_list[0])
 bias_by_series = ({s_: read_bias(s_) for s_ in series_list} if args.bias == "series"
                   else {})
 SUFFIX = "_seriesbias" if args.bias == "series" else ""
+if args.bias == "series":            # the comparison lives next to the I0 check, not with the result
+    OUT_DIR = os.path.join(HERE, "results", "plots", "bias_point_check")
 if bias_by_series:
     vals = sorted({round(b_["PBS1"]["lin"] * 1e6, 3) for b_ in bias_by_series.values()})
     print(f"per-series bias points: PBS1 linear coefficient takes the values {vals} uV")

@@ -44,7 +44,7 @@ COPY = {
     "hist_PBS1.png": os.path.join(SRC, "zip7_kline_energy_hist_PBS1.png"),
     "hist_allchan.png": os.path.join(SRC, "zip7_kline_energy_hist_allchan.png"),
     "hist_sum.png": os.path.join(SRC, "zip7_kline_energy_sum_hist.png"),
-    "i0_histogram.png": os.path.join(SRC, "zip7_I0_histogram.png"),
+    "i0_histogram.png": os.path.join(SRC, "..", "bias_point_check", "zip7_I0_histogram.png"),
     "peak_full.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646.png"),
     "peak_top.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646_top.png"),
     "peak_bottom.png": os.path.join(SRC, f"{S}_peak_raw_vs_lp_PBS1_ev30646_bottom.png"),

@@ -10,7 +10,7 @@ the I0 of its own series, and histograms it per channel. The vertical line marks
 the value actually used (first series); the spread shows how much the bias
 point moved between series, i.e. the size of that approximation.
 
-Outputs (results/plots/current_power_overlay/):
+Outputs (results/plots/bias_point_check/):
     zip{det}_I0_histogram.png   one panel per channel, events per I0 bin
     zip{det}_I0_histogram.txt   per channel: value used, min / max / mean over
                                 the series, and the event-weighted spread
@@ -36,7 +36,8 @@ RAW_CACHE = ("/projects/standard/yanliusp/shared/zhiheng/snolab"
 PROC_DIR = ("/projects/standard/yanliusp/shared/data/CDMS/SNOLAB/R4"
             "/Processed/Default/Default_tag/Unmerged")
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_DIR = os.path.join(HERE, "results", "plots", "current_power_overlay")
+RES_DIR = os.path.join(HERE, "results", "plots", "current_power_overlay")   # the energies
+OUT_DIR = os.path.join(HERE, "results", "plots", "bias_point_check")
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--det", type=int, default=7)
@@ -78,7 +79,7 @@ chans = [c for c in ALL_CHANS if all(c in b for b in bias.values())]
 used = bias[series_list[0]]           # what kline_energy_hist.py applies everywhere
 
 # ---- the events that enter the sum: parse the result text file
-txt = os.path.join(OUT_DIR, f"zip{det}_kline_energy_hist_allchan.txt")
+txt = os.path.join(RES_DIR, f"zip{det}_kline_energy_hist_allchan.txt")
 per_event = {}
 ch = None
 for ln in open(txt):
