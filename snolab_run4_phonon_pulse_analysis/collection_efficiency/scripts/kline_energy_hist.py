@@ -74,6 +74,10 @@ ap.add_argument("--chan", default="PBS1",
                 help='channel name, or "all" for every channel')
 ap.add_argument("--formula", default="method1",
                 choices=["method1", "method2", "exact"])
+ap.add_argument("--bias", default="first", choices=["first", "series"],
+                help="bias point (I0, R0, R_L) from the first series' detectorConfig "
+                     "applied to every series (first), or each series' own (series); "
+                     "'series' writes its outputs with the suffix _seriesbias")
 args = ap.parse_args()
 det = args.det
 c2_fac = {"method1": 2.0, "method2": -1.0, "exact": 1.0}[args.formula]
@@ -98,13 +102,30 @@ cfgf = (sorted(glob.glob(os.path.join(PROC_DIR, f"{series_list[0]}_Addison.root"
 cfg = uproot.open(cfgf[0])[f"detectorConfigDir/detectorConfigZip{det}"]
 _c = lambda ch, f: float(cfg[f"{ch}{f}"].array(library="np")[0])
 
-bias = {}
-for ch in ALL_CHANS:
-    i0, r0 = _c(ch, "i0"), _c(ch, "r0")
-    if not np.isfinite(i0) or i0 == 0 or r0 <= 0:
-        continue
-    rl = _c(ch, "rp") + _c(ch, "rshunt")
-    bias[ch] = dict(lin=i0 * (rl - r0), quad=c2_fac * rl, dt=_c(ch, "timePerBin"))
+def read_bias(series):
+    """Bias point of every channel from that series' detectorConfig."""
+    fs = (sorted(glob.glob(os.path.join(PROC_DIR, f"{series}_Addison.root")))
+          + sorted(glob.glob(os.path.join(PROC_DIR, f"UMN.Addison.*_{series}_F*.root"))))
+    cfg_ = uproot.open(fs[0])[f"detectorConfigDir/detectorConfigZip{det}"]
+    g = lambda ch, f: float(cfg_[f"{ch}{f}"].array(library="np")[0])
+    out = {}
+    for ch in ALL_CHANS:
+        i0, r0 = g(ch, "i0"), g(ch, "r0")
+        if not np.isfinite(i0) or i0 == 0 or r0 <= 0:
+            continue
+        rl = g(ch, "rp") + g(ch, "rshunt")
+        out[ch] = dict(lin=i0 * (rl - r0), quad=c2_fac * rl, dt=g(ch, "timePerBin"),
+                       i0=i0, r0=r0, rl=rl)
+    return out
+
+
+bias = read_bias(series_list[0])
+bias_by_series = ({s_: read_bias(s_) for s_ in series_list} if args.bias == "series"
+                  else {})
+SUFFIX = "_seriesbias" if args.bias == "series" else ""
+if bias_by_series:
+    vals = sorted({round(b_["PBS1"]["lin"] * 1e6, 3) for b_ in bias_by_series.values()})
+    print(f"per-series bias points: PBS1 linear coefficient takes the values {vals} uV")
 chans = ([c for c in ALL_CHANS if c in bias] if args.chan == "all"
          else [args.chan])
 print("channels:", " ".join(chans))
@@ -153,9 +174,10 @@ def fit_trace(trace):
                 i2w=float((raw ** 2).sum() * DT))
 
 
-def energies_from(chan, rec):
+def energies_from(chan, rec, series=None):
     """(E_closed, E_rawwindow) for the requested formula, from a cache record."""
-    lin, quad = bias[chan]["lin"], bias[chan]["quad"]
+    b_ = bias_by_series.get(series, bias)
+    lin, quad = b_[chan]["lin"], b_[chan]["quad"]
     amp, t_r, t_f = rec["amp"], rec["t_r"], rec["t_f"]
     i1 = amp * (t_f - t_r)
     i2 = amp ** 2 * (t_f / 2 + t_r / 2 - 2 * t_f * t_r / (t_f + t_r))
@@ -210,7 +232,7 @@ for s in series_list:
             if rec is None:
                 n_skip[chan] += 1
                 continue
-            e_fit, e_raw = energies_from(chan, rec)
+            e_fit, e_raw = energies_from(chan, rec, s)
             rows[chan].append((s, evn, e_fit, e_raw, rec["nrmse"],
                                rec["t_r"], rec["t_f"]))
     if dirty:
@@ -309,7 +331,7 @@ if len(chans) == 1:
               frameon=False)
     ax.grid(alpha=0.25)
     fig.tight_layout()
-    fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_hist_{c}.png")
+    fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_hist_{c}{SUFFIX}.png")
     fig.savefig(fn, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print("saved", fn)
@@ -359,7 +381,7 @@ if len(chans) > 1:
         f"{100 * tot_mu / E_TRUE:.1f}% of the {E_TRUE / 1e3:.2f} keV K line)",
         fontsize=11, y=0.998)
     fig.tight_layout(rect=(0, 0, 1, 0.93))
-    fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_hist_allchan.png")
+    fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_hist_allchan{SUFFIX}.png")
     fig.savefig(fn, dpi=150)
     plt.close(fig)
     print("saved", fn)
@@ -443,18 +465,20 @@ if len(stats) > 1:
               frameon=False)
     ax.grid(alpha=0.25)
     fig.tight_layout()
-    fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_sum_hist.png")
+    fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_sum_hist{SUFFIX}.png")
     fig.savefig(fn, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print("saved", fn)
 
 # ------------------------------------------------------------------- text table
 tag = "allchan" if len(chans) > 1 else chans[0]
-fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_hist_{tag}.txt")
+fn = os.path.join(OUT_DIR, f"zip{det}_kline_energy_hist_{tag}{SUFFIX}.txt")
 with open(fn, "w") as fh:
     fh.write(f"Z{det} K-line event energies | {args.formula} | "
              f"{len(series_list)} series | per event: 2-exp fit in current units, "
              f"closed-form power integral | NRMSE <= {NRMSE_MAX}\n\n")
+    fh.write("bias point: " + ("each series' own detectorConfig" if bias_by_series else
+             f"detectorConfig of the first series ({series_list[0]}) applied to every series") + "\n\n")
     fh.write("mu is the Gaussian PEAK of that channel's distribution. The single-"
              "channel distributions are right skewed (an event close to a channel "
              "gives it a large share), so mu sits below the plain mean and the "
