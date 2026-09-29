@@ -226,5 +226,12 @@ lines(s, [
     "通道层面的排除（另算）：  PDS2 不计入（只有 42% 的事件能拟合，而且都是它附近的事件） · PFS2 在 Z7 上没有数据",
 ], L, Inches(1.6), W, Inches(5.0), size=17)
 
+s = new("Backup — 系数背后的 TES 偏置电流 I₀")
+pic(s, "i0_histogram.png", L, T, W, Inches(5.0))
+lines(s, [
+    "每个通道每个 series 一个 I₀（detectorConfig，30 个 series），按进入求和的 1827 个事件加权。红色虚线：所有 series 都用的那个值（第一个 series，如 PBS1 −18.07 µA）。",
+    "!两个偏置状态：6 月 17–20 日（1225 个事件）就是所用的值；6 月 21–23 日（602 个事件）|I₀| 大 10%、R₀ 小 20%。两个状态下拟合出的脉冲一样（能量和下降时间差 2% 以内）；官方按 series 算的 Eabs 在第二个状态低 16.5%。待解决。",
+], L, Inches(6.25), W, Inches(1.1), size=12)
+
 prs.save(OUT)
 print(f"saved {OUT}: {n_slide} slides")

@@ -17,6 +17,7 @@ divided by 10.37 keV, the collection efficiency.
 |---|---|
 | `scripts/plot_fitted_current_power.py` | current and power overlay, cumulative energy, one series, 15 events and all channels of one event |
 | `scripts/plot_peak_raw_vs_lowpass.py` | one pulse on the peak, read as ADC / µA / fW; why the height comes from the fit |
+| `scripts/i0_histogram.py` | the TES bias current I₀ per channel and series (detectorConfig), weighted by the events in the sum; exposes the two bias states of the 30 series (`results/plots/current_power_overlay/zip7_I0_histogram.png/.txt`) |
 | `scripts/kline_energy_hist.py` | every K-line event fitted and integrated (fit cache in `run/fit_cache/`), per-channel histograms, the summed histogram and the efficiency |
 | `results/plots/current_power_overlay/` | the figures and the text files with every number |
 | `NOTES.md` | the derivation, the constants and where they come from, the official Eabs definition, what was tried and corrected |
