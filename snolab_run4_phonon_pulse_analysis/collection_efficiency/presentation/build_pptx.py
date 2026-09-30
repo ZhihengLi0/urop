@@ -268,13 +268,13 @@ s = new("Backup — the TES bias current I₀ behind the coefficients",
         notes="One I0 per channel per series from detectorConfig, weighted by the events "
               "in the sum over all 30 series. Two bias states: 17 series (June 17-20) at the values used, 13 series "
               "(June 21-23) with |I0| 10% larger and R0 20% smaller. The analysis uses the first "
-              "series' bias point everywhere; the fitted pulses (size and fall time) are the same "
-              "in both states within 2%, the standard Default_tag processing (per-series config) gives 16.5% less Eabs in the second "
+              "series' bias point everywhere; the fitted pulses are the same "
+              "in both states (energy within 1%, time constants within 4%), the standard Default_tag processing (per-series config) gives 16.5% less Eabs in the second "
               "state. Open item.")
 pic(s, "i0_histogram.png", L, T, W, Inches(5.0))
 lines(s, [
     "One I₀ per channel per series (detectorConfig, all 30 series), weighted by the events in the sum. Red dashed: the value used for every series (first series, e.g. PBS1 −18.07 µA).",
-    "!Two bias states: June 17–20 (1225 events) at the values used; June 21–23 (602 events) with |I₀| 10 % larger and R₀ 20 % smaller. The fitted pulses are the same in both (energy and fall time within 2 %); the group's standard cdmsbats processing (Default_tag, per-series detectorConfig) gives 16.5 % less Eabs in the second state. Decision (Prof. Liu): the 13 later series are left out; the result uses the 17 series of the first state.",
+    "!Two bias states: June 17–20 (1225 events) at the values used; June 21–23 (602 events) with |I₀| 10 % larger and R₀ 20 % smaller. The fitted pulses are the same in both (energy within 1 %, rise and fall times within 4 %); the group's standard cdmsbats processing (Default_tag, per-series detectorConfig) gives 16.5 % less Eabs in the second state. Decision (Prof. Liu): the 13 later series are left out; the result uses the 17 series of the first state.",
 ], L, Inches(6.25), W, Inches(1.1), size=12)
 
 prs.save(OUT)
