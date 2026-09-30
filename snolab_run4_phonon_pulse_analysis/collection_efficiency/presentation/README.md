@@ -22,9 +22,9 @@ Method 2 mentioned; closed form, bias point)
 fit (raw max 885 vs fit 717 ADC, +23 %) → the power pulse and its area
 (quadratic 1.9 %, 305 eV) → why the fit is integrated and not the data (drift,
 −169 vs 277 eV) → the same event in its other channels (3419 eV = 33 %) → every
-event, one channel (PBS1: 285 eV, 15 % wide, lopsided = position) → summed over
-the channels (10 channels, **30.5 %**, σ/μ = 7.5 % as the uncertainty; PDS2 left out) → summary and
-what is open (Z7 only, HV bias, no dI/dV, PDS2, 12.5 % of events fit nowhere).
+event, one channel (PBS1: 287 eV, 15 % wide, lopsided = position) → summed over
+the channels (10 channels, 17 series, **30.4 %**, σ/μ = 7.6 % as the uncertainty; PDS2 left out) → summary and
+what is open (Z7 only, HV bias, no dI/dV, PDS2, 11 % of events fit nowhere, 13 later series not used).
 
 Backup (6): the Z7 spectrum, the three formula versions and the official Eabs,
 and four full result figures.

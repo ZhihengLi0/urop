@@ -1,8 +1,10 @@
 # collection_efficiency
 
 How much of a 10.37 keV K-line event ends up as energy in the TESs of Z7.
-Result: **30.5 %**, relative uncertainty σ/μ = 7.5 % (± 2.3 percentage points), from
-the 10 channels other than PDS2 (1827 events). PDS2 is left out: it fits on only
+Result: **30.4 %**, relative uncertainty σ/μ = 7.6 % (± 2.3 percentage points), from
+the 10 channels other than PDS2, over the 17 series of June 17–20 (1225 events).
+The 13 series from June 21 on sit at a different bias point (R₀ 20 % lower) and
+are left out (Prof. Yan Liu, 2026-09-29; see `results/plots/bias_point_check/`). PDS2 is left out: it fits on only
 42 % of the events, the ones near it, so its subsample depends on position
 (Prof. Yan Liu, September 2026; the earlier 32 ± 1 % bracket is withdrawn).
 
@@ -36,5 +38,5 @@ takes about an hour and must go through SLURM.
 
 Open items: only Z7 so far; the HV bias of Z7 in these series is not
 established (all numbers assume 0 V); no dI/dV data on MSI, so the loop gain and
-the inductor term are unknown; PDS2's low-frequency artefact is the ±1 %; 276 of
-the 2207 events (12.5 %) fit in no channel and are not in the histograms.
+the inductor term are unknown; PDS2 is left out; 158 of the 1442 events (11 %)
+fit in no channel and are not in the histograms.

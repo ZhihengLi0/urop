@@ -10,9 +10,9 @@
 
 ## Slide 1 — Title（约 20 秒）
 
-**中文**：大家好，我叫李志恒，来自明尼苏达大学。今天讲 Z7 的声子收集效率。问题是：一个 10.37 keV 的事件发生在晶体里，有多少能量被 TES 吸收。我们得到的结果是 30.5%，用的是 10 个通道；另外两个排除了，一个数据缺失，一个噪声太大。我先用一个脉冲说明能量是怎么算的，再把同样的方法用到整个探测器。
+**中文**：大家好，我叫李志恒，来自明尼苏达大学。今天讲 Z7 的声子收集效率。问题是：一个 10.37 keV 的事件发生在晶体里，有多少能量被 TES 吸收。我们得到的结果是 30.4%，用的是 10 个通道；另外两个排除了，一个数据缺失，一个噪声太大。我先用一个脉冲说明能量是怎么算的，再把同样的方法用到整个探测器。
 
-**English**: Hi everyone, my name is Zhiheng Li, from the University of Minnesota. Today I will talk about the phonon collection efficiency of Z7. The question is: when a 10.37 keV event happens in the crystal, how much of the energy is absorbed by the TESs. Our result is 30.5 percent, from 10 channels. We leave out two: one is missing, and one is too noisy. I will first use one pulse to show how the energy is calculated, and then apply the same method to the whole detector.
+**English**: Hi everyone, my name is Zhiheng Li, from the University of Minnesota. Today I will talk about the phonon collection efficiency of Z7. The question is: when a 10.37 keV event happens in the crystal, how much of the energy is absorbed by the TESs. Our result is 30.4 percent, from 10 channels. We leave out two: one is missing, and one is too noisy. I will first use one pulse to show how the energy is calculated, and then apply the same method to the whole detector.
 
 ---
 
@@ -76,25 +76,25 @@
 
 ## Slide 9 — Now every event: one channel（约 55 秒）
 
-**中文**：从一个事件扩展到所有事件。这里还是 PBS1，每个事件做一次拟合和一次积分，得到一个能量。横轴是能量，纵轴是事件数。红色来自拟合，灰色是官方的算法，两者的峰位差 0.2%。红色那条分布的峰在 285 电子伏。这些事件的能量都一样，但分布有 15% 宽。分布的右边有一条长尾，这些是离 PBS1 比较近的事件。所以宽度来自事件发生的位置，不是噪声。下一页会看到这一点。
+**中文**：从一个事件扩展到所有事件。这里还是 PBS1，每个事件做一次拟合和一次积分，得到一个能量。横轴是能量，纵轴是事件数。红色来自拟合，灰色是官方的算法，两者的峰位差 0.2%。红色那条分布的峰在 287 电子伏。这些事件的能量都一样，但分布有 15% 宽。分布的右边有一条长尾，这些是离 PBS1 比较近的事件。所以宽度来自事件发生的位置，不是噪声。下一页会看到这一点。
 
-**English**: Now we go from one event to all events. **This is still PBS1. For each event we do one fit and one integral, and get one energy. The horizontal axis is energy and the vertical axis is the number of events. Red is from the fit, grey is the official method, and the peaks agree within 0.2 percent. The peak is at 285 electron volts.** All these events have the same energy, but the width is 15 percent. **The distribution has a long tail on the right;** these are events that happened closer to PBS1. So the width comes from where the event happened, not from noise. The next slide shows this.
+**English**: Now we go from one event to all events. **This is still PBS1. For each event we do one fit and one integral, and get one energy. The horizontal axis is energy and the vertical axis is the number of events. Red is from the fit, grey is the official method, and the peaks agree within 0.2 percent. The peak is at 287 electron volts.** All these events have the same energy, but the width is 15 percent. **The distribution has a long tail on the right;** these are events that happened closer to PBS1. So the width comes from where the event happened, not from noise. The next slide shows this.
 
 ---
 
-## Slide 10 — Summed over the channels: 30.5 %（约 70 秒）
+## Slide 10 — Summed over the channels: 30.4 %（约 70 秒）
 
-**中文**：这是结果。对每个事件把各通道的能量加起来，再看这些总能量的分布。和上一页比，宽度从 15% 降到 7.5%，而且变对称了，说明事件位置造成的差别在求和后大部分抵消了。灰色是 10 个通道的和，峰在 10.37 keV 的 30.5%。这里没算 PDS2：它只有大约 40% 的事件能拟合上，能拟合上的都是信号明显的事件，也就是发生位置偏向 PDS2 的事件，所以我们把它排除。宽度除以峰位是 7.5%，这就是我们的误差。最右边的红线是 10.37 keV，可以看到大约三分之二的能量没有被 TES 吸收。
+**中文**：这是结果。对每个事件把各通道的能量加起来，再看这些总能量的分布。和上一页比，宽度从 15% 降到 7.6%，而且变对称了，说明事件位置造成的差别在求和后大部分抵消了。灰色是 10 个通道的和，峰在 10.37 keV 的 30.4%。这里没算 PDS2：它只有大约 40% 的事件能拟合上，能拟合上的都是信号明显的事件，也就是发生位置偏向 PDS2 的事件，所以我们把它排除。宽度除以峰位是 7.6%，这就是我们的误差。最右边的红线是 10.37 keV，可以看到大约三分之二的能量没有被 TES 吸收。
 
-**English**: This is the result. For each event we add up the energies of the channels and look at the distribution of these totals. **Compared with the last slide, the width drops from 15 percent to 7.5 percent and the distribution becomes symmetric,** so most of the difference from the event position cancels in the sum. **Grey is the sum over 10 channels, and its peak sits at 30.5 percent of 10.37 keV.** PDS2 is not in it: only about 40 percent of its events can be fitted, and those are the events with a clear signal, so they happened closer to PDS2. That is why we leave it out. **The width over the peak, 7.5 percent, is our uncertainty.** **The red line on the far right is 10.37 keV:** about two thirds of the energy is not absorbed by the TESs.
+**English**: This is the result. For each event we add up the energies of the channels and look at the distribution of these totals. **Compared with the last slide, the width drops from 15 percent to 7.6 percent and the distribution becomes symmetric,** so most of the difference from the event position cancels in the sum. **Grey is the sum over 10 channels, and its peak sits at 30.4 percent of 10.37 keV.** PDS2 is not in it: only about 40 percent of its events can be fitted, and those are the events with a clear signal, so they happened closer to PDS2. That is why we leave it out. **The width over the peak, 7.6 percent, is our uncertainty.** **The red line on the far right is 10.37 keV:** about two thirds of the energy is not absorbed by the TESs.
 
 ---
 
 ## Slide 11 — Summary, and what is still open（约 35 秒）
 
-**中文**：总结三句话。第一，把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，而且能量用拟合来算，不受噪声和基线漂移的影响。第二，结果是 Z7 的 TES 吸收了一个 10.37 keV 事件能量的 30.5%，用 10 个通道，排除了没有读出的和噪声大的那两个；CDMS 文档在 R37 的 CUTE tower 上得到 26% 到 41%，我们落在这个范围里。第三，还没解决的：只做了 Z7，其他探测器还没做；Z7 的偏压还没确认；没有 dI/dV 数据；PDS2 因为噪声没有算进去；还有 12.5% 的事件拟合不上。谢谢大家。
+**中文**：总结三句话。第一，把电流脉冲换算成功率脉冲，功率曲线下的面积就是能量，而且能量用拟合来算，不受噪声和基线漂移的影响。第二，结果是 Z7 的 TES 吸收了一个 10.37 keV 事件能量的 30.4%，用 10 个通道，排除了没有读出的和噪声大的那两个；CDMS 文档在 R37 的 CUTE tower 上得到 26% 到 41%，我们落在这个范围里。第三，还没解决的：只做了 Z7，其他探测器还没做；Z7 的偏压还没确认；没有 dI/dV 数据；PDS2 因为噪声没有算进去；还有 11% 的事件拟合不上；6 月 21 日之后偏置点变了的 13 个 series 没有用。谢谢大家。
 
-**English**: In summary. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 30.5 percent of the energy of a 10.37 keV event, from 10 channels, with the unread and the noisy one left out, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, PDS2 is not included because of its noise, and 12.5 percent of the events could not be fitted. Thank you.
+**English**: In summary. First, we turn the current pulse into a power pulse, the area under the power is the energy, and we take it from the fit, so the noise at the peak and the baseline drift do not enter. **Second, the TESs of Z7 absorb 30.4 percent of the energy of a 10.37 keV event, from 10 channels, with the unread and the noisy one left out, and the CDMS note found 26 to 41 percent on the R37 CUTE tower, so we sit inside that range.** Third, what is still open: only Z7 so far, the bias of Z7 is not confirmed, there is no dI/dV data, PDS2 is not included because of its noise, 11 percent of the events could not be fitted, and the 13 series after June 21, where the bias point changed, are not used. Thank you.
 
 ---
 
@@ -106,7 +106,9 @@
 **B2 两个 Method 和官方 Eabs**：公式是 δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²。c₂ 等于 2 是 Method 1（本报告用的），等于负 1 是 Method 2；两者算出的能量差 1.7%。官方 Eabs 我们自己重新算了一遍，差别在 0.2% 以内。它的做法是：触发在第 16383 个点，基线用第 93 到 15758 个点的平均值，用 5 阶 20 kHz Butterworth 滤波，积分窗口从触发前 0.5 毫秒到触发后 1 毫秒。
 **B2 The two Methods and the official Eabs**: the formula is δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)². c₂ = 2 is Method 1, the one used here, and c₂ = −1 is Method 2; the two differ by 1.7 percent in energy. We reproduce the official Eabs to within 0.2 percent. It uses the trigger at sample 16383, the baseline as the mean of samples 93 to 15758, a 5-pole 20 kilohertz Butterworth filter, and an integration window from 0.5 milliseconds before to 1 millisecond after the trigger.
 
-**B7 事件计数** / event bookkeeping：2207 个选进来；276 个（12.5%）在任何通道都拟合不上（疑似 pileup/glitch，未逐个检查）；再排除 104 个10 个核心通道里有失败的；最后 1827 个（83%）进入求和。PDS2 是通道层面的排除，另算。
+**B7 事件计数** / event bookkeeping：17 个 series（6 月 21 日起的 13 个偏置点不同，老师决定不用）；1442 个选进来；158 个（11%）在任何通道都拟合不上（疑似 pileup/glitch，未逐个检查）；再排除 59 个 10 个核心通道里有失败的；最后 1225 个（85%）进入求和。PDS2 是通道层面的排除，另算。
+
+**B8 偏置电流 I₀** / the bias current：每个 series 的配置里 I₀、R₀ 各一个值，30 个 series 分两组，6 月 21 日起 R₀ 低 20%、线性系数低 28%；脉冲本身没变，组里的标准处理在后一组低 16.5%。老师决定后 13 个 series 不用。
 
 **B3–B6**：完整的原图：15 个事件的电流和功率图、15 个事件的累计能量图、事件 30646 所有通道的图、11 个通道各自的能量分布（每个通道都是右边长，PDS2 标出没有加进总和）。
 **B3–B6**: the full original figures: current and power for 15 events, cumulative energy for 15 events, all channels of event 30646, and the energy distribution of each of the 11 channels (each has a long tail on the right; PDS2 is marked as not included in the sum).
@@ -139,7 +141,7 @@ English: The PDS2 trace has a large low-frequency swing, clearly visible after a
 中文：每个通道的分布右边长，峰位比平均值小。事件总能量的平均值等于各通道平均值之和，不等于各通道峰位之和。把峰位相加会低 21%。
 English: Each channel's distribution has a long tail on the right, so its peak is lower than its mean. The mean of the total energy equals the sum of the channel means, not the sum of the channel peaks. Adding the peaks gives a value that is 21 percent too low.
 
-**Q7. 拟合失败的 12.5% 事件怎么处理？/ What about the 12.5 % of events that could not be fitted?**
+**Q7. 拟合失败的 11% 事件怎么处理？/ What about the 11 % of events that could not be fitted?**
 中文：还没有检查。如果这些事件的能量分布和其他事件不同，效率会有偏差。这是下一步要做的。
 English: We have not checked them yet. If their energy distribution is different from the other events, the efficiency could be biased. This is one of the next steps.
 
@@ -156,8 +158,8 @@ English: The full equations have a term that depends on the inductance and the l
 English: Step one: write the heat balance equation of the TES and integrate it over the whole pulse. After the pulse the temperature returns to its original value, so the heat-capacity term integrates to zero. If we ignore the heat flow to the bath, the event energy equals the integral of the decrease in Joule heating. Step two: use the circuit equation, V_TES = V − I·R_L − L·dI/dt; the Joule heating is I·V_TES. Step three: write I as I₀ + δI and expand. Step four: integrate over the whole pulse; the inductor term is zero at the start and at the end, so its integral is zero. The result has the form on the slide: a linear term, I₀(R_L − R₀)·δI, plus a quadratic term.
 
 **Q11. CDMS 文档说 Method 2 更准一些，为什么用 Method 1？/ The note says Method 2 is a bit more accurate. Why use Method 1?**
-中文：两种方法只有二次项不同，算出的能量差 1.7%，比单个通道 15% 的宽度和求和后 7.5% 的宽度都小，所以对这个结果影响很小。用 Method 1 是导师的决定。如果需要，用 Method 2 重算一遍很快。
-English: The two methods differ only in the quadratic term, and the energies differ by 1.7 percent. That is smaller than the 15 percent width in one channel and smaller than the 7.5 percent width of the sum, so it has little effect on the result. Using Method 1 was my supervisor's decision, and redoing the numbers with Method 2 would be quick if needed.
+中文：两种方法只有二次项不同，算出的能量差 1.7%，比单个通道 15% 的宽度和求和后 7.6% 的宽度都小，所以对这个结果影响很小。用 Method 1 是导师的决定。如果需要，用 Method 2 重算一遍很快。
+English: The two methods differ only in the quadratic term, and the energies differ by 1.7 percent. That is smaller than the 15 percent width in one channel and smaller than the 7.6 percent width of the sum, so it has little effect on the result. Using Method 1 was my supervisor's decision, and redoing the numbers with Method 2 would be quick if needed.
 
 ---
 

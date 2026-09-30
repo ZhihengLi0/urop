@@ -74,6 +74,10 @@ ap.add_argument("--chan", default="PBS1",
                 help='channel name, or "all" for every channel')
 ap.add_argument("--formula", default="method1",
                 choices=["method1", "method2", "exact"])
+ap.add_argument("--before", default="24260621",
+                help="use only the series whose 8-digit prefix sorts before this (2426MMDD, i.e. the series number); the "
+                     "detector bias point of Z7 changes on 2026-06-21 and Prof. Liu decided "
+                     "(2026-09-29) to leave the later 13 series out; 'none' uses every series")
 ap.add_argument("--bias", default="first", choices=["first", "series"],
                 help="bias point (I0, R0, R_L) from the first series' detectorConfig "
                      "applied to every series (first), or each series' own (series); "
@@ -94,7 +98,11 @@ def two_exp_uA(t_ms, amp_uA, tr_ms, tf_ms, base_uA, t0_ms):
 
 series_list = sorted(os.path.basename(f)[:-4] for f in
                      glob.glob(os.path.join(RAW_CACHE, f"zip{det}_series", "*.pkl")))
-print(f"{len(series_list)} cached series")
+n_cached = len(series_list)
+if args.before != "none":
+    series_list = [s_ for s_ in series_list if s_[:8] < args.before]
+print(f"{n_cached} cached series, {len(series_list)} used"
+      + (f" (before {args.before})" if args.before != "none" else ""))
 
 cfgf = (sorted(glob.glob(os.path.join(PROC_DIR, f"{series_list[0]}_Addison.root")))
         + sorted(glob.glob(os.path.join(PROC_DIR,
@@ -479,6 +487,8 @@ with open(fn, "w") as fh:
     fh.write(f"Z{det} K-line event energies | {args.formula} | "
              f"{len(series_list)} series | per event: 2-exp fit in current units, "
              f"closed-form power integral | NRMSE <= {NRMSE_MAX}\n\n")
+    fh.write(f"series used: {len(series_list)} of {n_cached} cached"
+             + (f" (starting before {args.before}; the bias point changes on 2026-06-21)" if args.before != "none" else "") + "\n")
     fh.write("bias point: " + ("each series' own detectorConfig" if bias_by_series else
              f"detectorConfig of the first series ({series_list[0]}) applied to every series") + "\n\n")
     fh.write("mu is the Gaussian PEAK of that channel's distribution. The single-"

@@ -111,12 +111,12 @@ run(tb.text_frame.add_paragraph(), "github.com/ZhihengLi0/urop  →  snolab_run4
 # ------------------------------------------------------------------ 2 question
 s = new("The Main Idea", notes="Efficiency = energy absorbed by the TESs, summed over all "
         "channels, / 10.37 keV, for a detector operated at 0 V (no NTL amplification). Z7, "
-        "K-line events of the Ge activation, SNOLAB R4, 2207 events over 30 series.")
+        "K-line events of the Ge activation, SNOLAB R4, 1442 events over 17 series (the 13 series after the June 21 re-bias left out).")
 pic(s, "chain.png", L, Inches(1.4), W, Inches(2.6))
 lines(s, [
     "!For detectors operated at 0 V (no NTL effect):",
     "Collection efficiency  =  energy absorbed by the TESs, summed over all channels  ÷  the 10.37 keV of the event",
-    "Sample: Z7, the K-line events of the Ge activation run, from SNOLAB R4 (2207 events, 30 series, all 11 channels).",
+    "Sample: Z7, the K-line events of the Ge activation run, from SNOLAB R4 (1442 events, 17 series, all 11 channels).",
 ], L, Inches(4.3), W, Inches(2.7))
 
 # ------------------------------------------------------------------ 3 the formula
@@ -185,43 +185,43 @@ lines(s, [
 
 # ------------------------------------------------------------------ 9 all events
 s = new("Now every event: one channel gives a wide, lopsided distribution",
-        "PBS1, 1917 K-line events, one fit and one integral each",
-        notes="Red: fit. Grey outline: official window on the raw trace; same peak to 0.2%. Peak 285 "
+        "PBS1, 1273 K-line events, one fit and one integral each",
+        notes="Red: fit. Grey outline: official window on the raw trace; same peak to 0.2%. Peak 287 "
               "eV, width 42 eV = 15%, for a fixed-energy line. Right tail to 600 eV: events near "
               "PBS1. The width is position, not noise.")
 pic(s, "hist_PBS1.png", L, T, Inches(8.8), Inches(5.9))
 lines(s, [
     "Red: from the fit. Grey: the official window on the raw trace. Same peak to 0.2 %.",
-    "!Peak 285 eV, width 15 % — for a line whose energy is fixed.",
+    "!Peak 287 eV, width 15 % — for a line whose energy is fixed.",
     "The tail to the right is the events that happened near this channel.",
     "!One channel's width is event position, not noise.",
 ], Inches(9.35), Inches(1.6), Inches(3.6), Inches(5.0), size=15)
 
 # ------------------------------------------------------------------ 10 sum
-s = new("Summed over the channels: 30.5 %",
+s = new("Summed over the channels: 30.4 %",
         "the total energy the TESs absorbed per K-line event",
-        notes="Grey: ten channels that fit ≥ 95% of events, 1827 events, 3162 eV = 30.5%, width "
-              "7.5% — the position dependence cancels in the sum. Uncertainty = sigma/mu of the "
-              "Gaussian fit, 7.5% (Prof. Liu). PDS2 fits only 42%, and those are events near it, "
+        notes="Grey: ten channels that fit ≥ 95% of events, 1225 events, 3155 eV = 30.4%, width "
+              "7.6% — the position dependence cancels in the sum. Uncertainty = sigma/mu of the "
+              "Gaussian fit, 7.6% (Prof. Liu). PDS2 fits only 42%, and those are events near it, "
               "so it is left out. Red line 10.37 keV.")
 pic(s, "hist_sum.png", L, T, Inches(8.8), Inches(5.9))
 lines(s, [
-    "!Ten channels summed, 1827 events: 3162 eV = 30.5 %, and the width drops to 7.5 % — the position effect cancels.",
+    "!Ten channels summed, 1225 events: 3155 eV = 30.4 %, and the width drops to 7.6 % — the position effect cancels.",
     "PDS2 is left out: only 42 % of its events can be fitted, and those are the events that happened near it.",
-    "!Collection efficiency:\n30.5\u00a0%\u00a0±\u00a02.3\u00a0%  (σ/μ\u00a0=\u00a07.5\u00a0%).",
+    "!Collection efficiency:\n30.4\u00a0%\u00a0±\u00a02.3\u00a0%  (σ/μ\u00a0=\u00a07.6\u00a0%).",
     "Red line: 10.37 keV — two thirds of the energy never reaches the TESs.",
 ], Inches(9.35), Inches(1.6), Inches(3.6), Inches(5.0), size=15)
 
 # ------------------------------------------------------------------ 11 summary
 s = new("Summary, and what is still open",
-        notes="Chain: current -> power -> energy -> sum over 10 channels -> 30.5% (sigma/mu 7.5%). R37 CUTE note: 26-41%. Open: "
-              "Z7 only; HV bias unknown (0 V assumed); no dIdV, inductor term dropped; PDS2; 12.5% "
+        notes="Chain: current -> power -> energy -> sum over 10 channels, 17 series -> 30.4% (sigma/mu 7.6%). R37 CUTE note: 26-41%. Open: "
+              "Z7 only; HV bias unknown (0 V assumed); no dIdV, inductor term dropped; PDS2; 11% "
               "of events fit nowhere.")
 lines(s, [
     "The current pulse becomes a power pulse through the TES equations; the area under the power is the energy.",
     "The energy is taken from the fitted pulse, so the noise at the peak and the baseline drift do not enter.",
-    "!Z7 absorbs 30.5 % ± 2.3 % (σ/μ = 7.5 %) of a 10.37 keV event in its TESs, summed over 10 channels.   The CDMS note reports 26–41 % on the R37 CUTE tower.",
-    "Open: Z7 only · the bias of Z7 is not established (0 V assumed) · no dI/dV · PDS2 not included · 12.5 % of events fit in no channel.",
+    "!Z7 absorbs 30.4 % ± 2.3 % (σ/μ = 7.6 %) of a 10.37 keV event in its TESs, summed over 10 channels.   The CDMS note reports 26–41 % on the R37 CUTE tower.",
+    "Open: Z7 only · the bias of Z7 is not established (0 V assumed) · no dI/dV · PDS2 not included · 11 % of events fit in no channel · 13 later series (different bias point) not used.",
 ], L, Inches(1.6), W, Inches(4.6), size=19)
 
 # ================================================================== backup
@@ -232,7 +232,7 @@ s = new("Backup — the two Methods of the CDMS note",
         notes="c2 = 2 is Method 1 (used here), c2 = -1 is Method 2; 1.7% apart in energy.")
 lines(s, [
     "δP = I₀(R_L − R₀)·δI + c₂·R_L·(δI)²     with c₂ = 2 (Method 1, used here) and c₂ = −1 (Method 2)",
-    "The two differ only in the quadratic term: 1.7 % in energy (PBS1, median of 15 events) — far below the 15 % single-channel width and the 7.5 % width of the sum.",
+    "The two differ only in the quadratic term: 1.7 % in energy (PBS1, median of 15 events) — far below the 15 % single-channel width and the 7.6 % width of the sum.",
     "The inductor term of the full equations needs L and the loop gain from dI/dV, which do not exist for these series on MSI; it is neglected.",
     "The official Eabs (trigger bin 16383, baseline bins 93..15758, 5-pole 20 kHz prefilter, window −0.5/+1 ms, same formula) is reproduced to 0.2 %; the grey outlines on the histogram slides are it.",
 ], L, Inches(1.45), W, Inches(5.5), size=17)
@@ -251,29 +251,30 @@ for ttl, name, note in [
     pic(s, name, L, T, W, Inches(5.75))
 
 s = new("Backup — event bookkeeping: what is excluded at each step",
-        notes="2207 selected; 276 fit nowhere (12.5%); 104 more miss at least one of "
-              "the 10 core channels; 1827 (83%) enter the sum. PDS2 excluded as a "
+        notes="17 series (June 17-20; the 13 later series sit at a different bias point and are left out, Prof. Liu). 1442 selected; 158 fit nowhere (11%); 59 more miss at least one of "
+              "the 10 core channels; 1225 (85%) enter the sum. PDS2 excluded as a "
               "channel (fits 42%), PFS2 has no data.")
 lines(s, [
-    "PTOFamps window around the K line (30 series, no trigger cut):   2207 events",
-    "− 276 events (12.5 %): the two-exponential fit fails in every channel (all NRMSE > 0.2) — pileup / glitches, not checked one by one",
-    "= 1931 events with at least one usable fit",
-    "− 104 events: at least one of the 10 core channels failed to fit — an incomplete sum would read low",
-    "!= 1827 events (83 % of 2207) enter the summed-energy distribution",
+    "17 series, June 17–20 (the 13 series from June 21 on sit at a different bias point and are left out)",
+    "PTOFamps window around the K line (no trigger cut):   1442 events",
+    "− 158 events (11 %): the two-exponential fit fails in every channel (all NRMSE > 0.2) — pileup / glitches, not checked one by one",
+    "= 1284 events with at least one usable fit",
+    "− 59 events: at least one of the 10 core channels failed to fit — an incomplete sum would read low",
+    "!= 1225 events (85 % of 1442) enter the summed-energy distribution",
     "Channel-level cuts, applied separately:   PDS2 left out (fits only 42 % of events, the ones near it) · PFS2 has no data on Z7",
 ], L, Inches(1.6), W, Inches(5.0), size=17)
 
 s = new("Backup — the TES bias current I₀ behind the coefficients",
-        notes="One I0 per channel per series from detectorConfig, weighted by the 1827 events "
-              "in the sum. Two bias states: 17 series (June 17-20) at the values used, 13 series "
+        notes="One I0 per channel per series from detectorConfig, weighted by the events "
+              "in the sum over all 30 series. Two bias states: 17 series (June 17-20) at the values used, 13 series "
               "(June 21-23) with |I0| 10% larger and R0 20% smaller. The analysis uses the first "
               "series' bias point everywhere; the fitted pulses (size and fall time) are the same "
               "in both states within 2%, the standard Default_tag processing (per-series config) gives 16.5% less Eabs in the second "
               "state. Open item.")
 pic(s, "i0_histogram.png", L, T, W, Inches(5.0))
 lines(s, [
-    "One I₀ per channel per series (detectorConfig, 30 series), weighted by the 1827 events in the sum. Red dashed: the value used for every series (first series, e.g. PBS1 −18.07 µA).",
-    "!Two bias states: June 17–20 (1225 events) at the values used; June 21–23 (602 events) with |I₀| 10 % larger and R₀ 20 % smaller. The fitted pulses are the same in both (energy and fall time within 2 %); the group's standard cdmsbats processing (Default_tag, per-series detectorConfig) gives 16.5 % less Eabs in the second state. Open item.",
+    "One I₀ per channel per series (detectorConfig, all 30 series), weighted by the events in the sum. Red dashed: the value used for every series (first series, e.g. PBS1 −18.07 µA).",
+    "!Two bias states: June 17–20 (1225 events) at the values used; June 21–23 (602 events) with |I₀| 10 % larger and R₀ 20 % smaller. The fitted pulses are the same in both (energy and fall time within 2 %); the group's standard cdmsbats processing (Default_tag, per-series detectorConfig) gives 16.5 % less Eabs in the second state. Decision (Prof. Liu): the 13 later series are left out; the result uses the 17 series of the first state.",
 ], L, Inches(6.25), W, Inches(1.1), size=12)
 
 prs.save(OUT)
