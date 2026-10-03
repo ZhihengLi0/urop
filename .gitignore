@@ -9,3 +9,6 @@ cute-r36/
 project_old_WiKi/
 tutorials/
 LED/all_events.pkl
+
+# split out into its own repository: github.com/ZhihengLi0/snolab_run4_phonon_pulse_analysis
+snolab_run4_phonon_pulse_analysis/
