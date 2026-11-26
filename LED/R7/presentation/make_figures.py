@@ -130,7 +130,7 @@ def week_timeline():
     bx.barh(0, sp - pz - on, left=x0 + on, color="C1", alpha=0.75, edgecolor="k", lw=0.6)
     bx.barh(0, off - sp - pz, left=x0 + sp + pz, color="C2", alpha=0.75, edgecolor="k", lw=0.6)
     bx.text(x0 + on / 2, 0, "wait", ha="center", va="center", fontsize=11)
-    bx.text(x0 + off / 2, 0.62, "LED run: about %.0f min" % (run_s / 60), ha="center", va="bottom", fontsize=12, color="C0")
+    bx.text(x0 + off / 2, 0.55, "LED run: about %.0f min" % (run_s / 60), ha="center", va="bottom", fontsize=12, color="C0")
     bx.annotate("phase 1: %d flashes" % tm["n_flashes"]["phase1"], (x0 + (on + sp) / 2, -0.4), (x0 + on - 17, -1.3),
                 fontsize=11, ha="center", arrowprops=dict(arrowstyle="-", lw=0.7))
     bx.annotate("phase 2: %d flashes" % tm["n_flashes"]["phase2"], (x0 + (sp + off) / 2, -0.4), (x0 + off + 12, -1.3),
@@ -138,6 +138,8 @@ def week_timeline():
     bx.barh(0, cycle - (x0 + off), left=x0 + off, color="w", edgecolor="k", lw=0.6, hatch="///")
     bx.text(cycle + 1.5, 0, "stop, relock,\nthen again", ha="left", va="center", fontsize=11)
     bx.set_xlim(-2, cycle + 22); bx.set_ylim(-1.75, 1.45); bx.set_yticks([])
+    bx.set_title("One cycle of the script, enlarged. Each blue line above is one LED run: wait, then phase 1 (orange), then phase 2 (green)",
+                 fontsize=10.5, loc="left")
     bx.set_xlabel("minutes within one sequencer cycle (from the script's wait times; measured: one LED run every %.0f min)" % cycle)
     for sp_ in ("top", "right", "left"):
         bx.spines[sp_].set_visible(False)
@@ -193,6 +195,12 @@ def template_method():
     fig.suptitle("%s, channel %s" % (METHOD_CELL, ch), fontsize=10, y=0.995)
     fig.tight_layout(); fig.savefig(os.path.join(FIG, "fig_template_method.png"), dpi=140); plt.close(fig)
     print("template method figure:", METHOD_CELL, ch, "overlay", len(overlay))
+    # the analytic pulse as a typeset formula (fit_led.model3), placed on the method slide as a picture
+    fig = plt.figure(figsize=(8, 0.8))
+    fig.text(0.5, 0.5, r"$A_1\left(e^{-t/\tau_{f1}} - e^{-t/\tau_r}\right) \;+\; A_2\left(e^{-t/\tau_{f2}} - e^{-t/\tau_r}\right)$",
+             ha="center", va="center", fontsize=22, math_fontfamily="stix", color="#333333")
+    fig.savefig(os.path.join(FIG, "fig_formula_analytic.png"), dpi=300, bbox_inches="tight", pad_inches=0.03, transparent=True)
+    plt.close(fig)
     return dict(cell=METHOD_CELL, channel=ch)
 
 

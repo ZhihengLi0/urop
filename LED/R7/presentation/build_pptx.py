@@ -326,9 +326,10 @@ lines(s, [Z("1. Events: the detector triggered on this LED's flash. All 12 chann
             "6. 保留拟合合理的脉冲；把实测脉冲平移，使拟合出的起点对齐。"),
           Z("7. Template = mean of the aligned pulses of all %d series (%s million pulses in total)." % (n_ok, mill),
             "7. 模板 = %d 个 series 所有对齐后脉冲的平均（共 %s 百万个脉冲）。" % (n_ok, mill)),
-          Z("Analytic pulse: fit of the template with A₁(e^(−t/τf1) − e^(−t/τr)) + A₂(e^(−t/τf2) − e^(−t/τr)).",
-            "解析脉冲：用 A₁(e^(−t/τf1) − e^(−t/τr)) + A₂(e^(−t/τf2) − e^(−t/τr)) 拟合模板。")],
-      L, Inches(1.45), Inches(7.0), Inches(5.7), size=15)
+          Z("Analytic pulse: fit of the template with one rise time and two fall times:",
+            "解析脉冲：用一个上升时间、两个下降时间的函数拟合模板：")],
+      L, Inches(1.45), Inches(7.0), Inches(4.6), size=15)
+pic(s, "fig_formula_analytic.png", L, Inches(5.55), Inches(6.2), Inches(0.6))
 
 # ───────────────────────────────────────────────────────────────── 10 template example
 cc = cell[CLEAN]
