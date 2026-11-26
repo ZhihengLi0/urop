@@ -25,6 +25,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from scipy.ndimage import median_filter
+from scipy.signal import butter, sosfilt, sosfilt_zi
 from lp_template_led import lp, WIN_LO, WIN_HI, CHANS, PSUM_MEDFILT, START_TOL
 from analyze_led import OUT
 import fit_led
@@ -32,6 +33,7 @@ import fit_led
 LP = os.path.join(OUT, "lpfit")
 SR = lp.SAMPLERATE
 PULSE_FRAC_SIGNAL = 0.3
+EXAMPLE_LP_KHZ = 40.0                     # low-pass of the example-pulse figure (Prof. Liu)
 PULSE_TAGS = (0, 1, 6)                     # extract_led_events.TAGS: good, glitch, bipolar
 A = fit_led.A                              # fit_led works on a 32768 array aligned at sample 8000
 X_MS = (np.arange(WIN_LO, WIN_HI) - lp.RISE_REF_IDX) / SR * 1e3
@@ -63,7 +65,8 @@ def us(v):
 
 
 def plot_example(example_id, cells, psum, per_series, store):
-    # example pulses: one PSum per series, light -> dark in time
+    # example pulses (Prof. Liu): one PSum per series, normalised to its peak, 40 kHz low-pass, light -> dark in time.
+    # The raw-ADC panels were dropped at his request.
     c = cells[example_id]
     lst = sorted(psum[example_id], key=lambda x: x[0])
     # light -> dark in time, through several hues (yellow-green -> teal -> blue -> purple): with 45 overlapping
@@ -71,38 +74,27 @@ def plot_example(example_id, cells, psum, per_series, store):
     cmap = plt.get_cmap("viridis_r")
     C0 = 0.08
     cols = [cmap(C0 + (1 - C0) * i / max(len(lst) - 1, 1)) for i in range(len(lst))]
+    sos = butter(4, EXAMPLE_LP_KHZ * 1e3 / (0.5 * SR), btype="low", output="sos")
+    zi = sosfilt_zi(sos)
     x_full = np.arange(lp.TRACELENGTH) / SR * 1e3
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5.6), gridspec_kw=dict(width_ratios=[2.2, 1, 1]))
+    fig, ax = plt.subplots(figsize=(11.5, 5.0))
     for (t, s, ex), col in zip(lst, cols):
-        y = ex["psum"]
-        axes[0].plot(x_full, y, color=col, lw=0.5)
-        axes[1].plot(x_full, y, color=col, lw=0.7)
-        # shape only: wide median filter (removes the LED pickup spike) + low-pass, / the positive pulse peak
-        yl = lp.lowpass(median_filter(y.astype(np.float64), size=PSUM_MEDFILT, mode="nearest"))
+        # wide median filter (removes the LED pickup spike), then the low-pass (steady-state start, as lp.lowpass)
+        y = median_filter(ex["psum"].astype(np.float64), size=PSUM_MEDFILT, mode="nearest")
+        yl, _ = sosfilt(sos, y, zi=zi * y[0])
         pk = np.max(yl[lp.RISE_REF_IDX - 1000:lp.RISE_REF_IDX + 4000])
-        axes[2].plot(x_full, yl / pk, color=col, lw=0.7)
+        ax.plot(x_full, yl / pk, color=col, lw=0.9)
     t0 = lp.RISE_REF_IDX / SR * 1e3
-    axes[0].set_xlim(0, x_full[-1]); axes[0].set_xlabel("time in the trace [ms]"); axes[0].set_ylabel("PSum [ADC], baseline subtracted")
-    axes[1].set_xlim(t0 - 1, t0 + 8); axes[1].set_xlabel("time in the trace [ms] (zoom)")
-    axes[2].set_xlim(t0 - 1, t0 + 8); axes[2].set_ylim(-0.2, 1.1); axes[2].set_xlabel("time in the trace [ms] (zoom)")
-    axes[2].set_ylabel("PSum, 50 us median + 100 kHz low-pass, / own peak")
-    axes[0].set_title("one typical pulse per series (%d series): raw PSum, ADC" % len(lst), fontsize=10)
-    axes[1].set_title("zoom on the pulse", fontsize=10)
-    axes[2].set_title("same pulses normalised: shape only", fontsize=10)
-    for ax in axes:
-        ax.grid(alpha=0.2)
+    ax.set_xlim(t0 - 1, t0 + 8); ax.set_ylim(-0.2, 1.1); ax.grid(alpha=0.25); ax.tick_params(labelsize=12)
+    ax.set_xlabel("time in the trace [ms]", fontsize=13); ax.set_ylabel("PSum / its peak", fontsize=13)
+    ax.set_title("%s PSum on LED %s of %s: one pulse per series (%d series), %.0f kHz low-pass" %
+                 (c["det"], c["led"].split("#")[1], c["led"].split("#")[0], len(lst), EXAMPLE_LP_KHZ), fontsize=12)
     sm = plt.cm.ScalarMappable(cmap=matplotlib.colors.LinearSegmentedColormap.from_list("b", [cmap(v) for v in np.linspace(C0, 1.0, 64)]),
                                norm=plt.Normalize(mdates.date2num(lst[0][0]), mdates.date2num(lst[-1][0])))
-    fig.subplots_adjust(left=0.05, right=0.9, bottom=0.17, top=0.86, wspace=0.2)
-    cb = fig.colorbar(sm, cax=fig.add_axes([0.915, 0.17, 0.012, 0.69]))
-    cb.ax.yaxis.set_major_formatter(mdates.DateFormatter("%m-%d %H:%M")); cb.set_label("series start (light = early, dark = late)")
-    fig.suptitle("%s: Z7-style example pulses — detector %s PSum (sum of its 12 channels) on LED %s of %s, %s" %
-                 (example_id, c["det"], c["led"].split("#")[1], c["led"].split("#")[0], c["phase"]), fontsize=12)
-    fig.text(0.01, 0.005, "Per series the pulse whose PSum amplitude is closest to that series' median is shown "
-             "(a typical pulse, not an outlier). PSum = sum of the 12 raw channels, each minus its own baseline "
-             "(median of samples 2000-12000); no filter in the left and middle panels.\nThe sharp negative spike at the start is "
-             "pickup of the LED drive pulse in Z7's own readout (S1 side); the right panel removes it to compare shapes.", fontsize=8, family="monospace")
-    fig.savefig(os.path.join(LP, "example_pulses_%s.png" % example_id), dpi=110); plt.close(fig)
+    cb = fig.colorbar(sm, ax=ax, pad=0.02)
+    cb.ax.yaxis.set_major_formatter(mdates.DateFormatter("%d %b")); cb.ax.tick_params(labelsize=11)
+    cb.set_label("series start (light = early, dark = late)", fontsize=12)
+    fig.tight_layout(); fig.savefig(os.path.join(LP, "example_pulses_%s.png" % example_id), dpi=160); plt.close(fig)
 
     # shape vs time of the example cell: per series median per-pulse rise / fall, per channel
     fig, axes = plt.subplots(1, 2, figsize=(15, 4.8), sharex=True)

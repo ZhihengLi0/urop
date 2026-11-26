@@ -21,3 +21,5 @@ LED/R7/logs/
 LED/R7/HANDOFF_LED.md
 # DAQ sequencer scripts (collaboration-internal)
 LED/*.msl
+# advisor comments on the deck stay local
+LED/R7/presentation/*_commented.pdf

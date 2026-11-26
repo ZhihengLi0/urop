@@ -16,15 +16,15 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 .intro { font-size: 9.5pt; line-height: 1.3; margin: 2pt 0; color: #444; }
 </style></head><body><h1>Speaker Script — LED runs in SNOLAB Run 7</h1>
 <section class='card'><h2>Slide 1: Title(about 15 s)</h2>
-<div class='en'><p>Hi everyone, I&#x27;m Zhiheng. Today I&#x27;ll show the LED data from Run 7. Four points: who sees which LED, amplitude stability, trigger stability, and pulse templates.</p>
+<div class='en'><p>Hi everyone, I&#x27;m Zhiheng. Today I&#x27;ll show the post-activation LED data from Run 7. Four points: who sees which LED, amplitude stability, trigger stability, and pulse templates.</p>
 </div>
 </section>
 <section class='card'><h2>Slide 2: Background(about 45 s)</h2>
-<div class='en'><p>First, the background. This is Run 7 data after the Cf calibration. The DAQ script runs in a loop: low-background data, then one LED run, about every 2 hours. Each line on the top is one LED run. From September 15 to 21 there are 47 of them, and we use 45.</p>
+<div class='en'><p>First, the background. This is Run 7 data after the neutron activation. The DAQ script runs in a loop: low-background data, then one LED run, about every 2 hours. Each line on the top is one LED run. From September 15 to 21 there are 47 of them, and we use 45.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 3: One LED run(about 40 s)</h2>
-<div class='en'><p>Inside one LED run: in phase one, 15 LEDs flash. Then 3 seconds off. In phase two, 12 LEDs flash. Each LED flashes once per second, 151 times. Each trigger reads out only the detector that triggered.</p>
+<section class='card'><h2>Slide 3: Example LED run(about 40 s)</h2>
+<div class='en'><p>Here is one LED run as an example. In phase one, 15 LEDs flash. In phase two, 12 LEDs flash. Each LED flashes once per second, 151 times in total. Each trigger reads out only the detector that triggered.</p>
 </div>
 </section>
 <section class='card'><h2>Slide 4: Visibility: phase 1(about 55 s)</h2>
@@ -36,15 +36,15 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 </div>
 </section>
 <section class='card'><h2>Slide 6: Stability: amplitude vs time(about 50 s)</h2>
-<div class='en'><p>Second, amplitude versus time. Each row is one cell, each column is one series, in time order. White means normal. Most of it is white: 91 percent of the points are within 10 percent. So it is mostly stable, but a few spots need a second look.</p>
+<div class='en'><p>Second, amplitude versus time. Each row is one detector with one LED, each column is one series, in time order. Phase one is on the left, phase two on the right. White means average. Most of it is white: 91 percent of the points are within 10 percent. So it is mostly stable, but a few spots need a second look.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 7: Amplitude: cases to look at again(about 50 s)</h2>
-<div class='en'><p>These need a second look. The clearest one: early on September 18, Z20&#x27;s LEDs became much dimmer, and a few hours later they were back to normal. Z19 also saw Z20&#x27;s LED get dimmer, so it is the LED, not the detector. Also, on the first day a few cells are a bit high.</p>
+<section class='card'><h2>Slide 7: Amplitude: cases to look at again(about 55 s)</h2>
+<div class='en'><p>These need a second look. The clearest one: early on September 18, Z20 is much lower, and Z19 with Z20&#x27;s LED is lower too. A few hours later they are back. The operation elog says that on September 17 at 10 pm there were chiller alarms, and the detectors were put into safe state. So some HEMT settings of Z19 and Z20 might have changed. The small red bars are the error bars. Also, on the first day a few cells are a bit high.</p>
 </div>
 </section>
 <section class='card'><h2>Slide 8: Stability: trigger fraction vs time(about 55 s)</h2>
-<div class='en'><p>Third, trigger fraction versus time. Yellow means it triggers on every flash. The own-LED cells stay yellow: stable. Other cells have steps. I checked the ODB: the steps are exactly where the trigger thresholds were changed, the black lines. So these are setting changes, not unstable detectors.</p>
+<div class='en'><p>Third, trigger fraction versus time. Yellow means it triggers on every flash. The own-LED rows stay yellow: stable. Other rows have steps. The steps are exactly where the trigger thresholds were changed, the black lines. For example, the elog says that on September 18 at ten past midnight the thresholds of detectors 9, 10, 11 and 15 were raised. So these are setting changes, not unstable detectors.</p>
 </div>
 </section>
 <section class='card'><h2>Slide 9: Template generation: method(about 65 s)</h2>
@@ -55,12 +55,12 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 <div class='en'><p>Here is Z2 as an example, twelve channels. Blue are the aligned single pulses, red is the template, and the dashed black line is the analytic pulse. Channels with a grey title have no clear pulse, so we do not fit an analytic pulse there.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 11: Example pulses: Z7 PSum with Z7&#x27;s LED(about 60 s)</h2>
-<div class='en'><p>Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late: yellow is the first day, purple the last. On the left, raw ADC: the amplitude slowly goes down. The sharp negative spike at the start is pickup from the LED drive. On the right, each pulse is divided by its own peak, so we only see the shape. They lie on top of each other: the shape did not change.</p>
+<section class='card'><h2>Slide 11: Example pulses: Z7 PSum with Z7&#x27;s LED(about 55 s)</h2>
+<div class='en'><p>Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late: yellow is the first day, purple the last. Each pulse goes through a 40 kilohertz low-pass filter to remove high-frequency noise, and is divided by its own peak, so we only see the shape. The pulses lie on top of each other: the shape did not change during the week. The narrow spike just before the pulse is pickup from the LED drive.</p>
 </div>
 </section>
 <section class='card'><h2>Slide 12: Summary(about 40 s)</h2>
-<div class='en'><p>To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly stable; Z20&#x27;s LEDs on September 18 need a closer look. Trigger fraction: stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
+<div class='en'><p>To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly stable; Z19 and Z20 were low on September 18, after the detectors were put into safe state. Trigger fraction: stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
 </div>
 </section>
 <section class='card'><h2>Likely questions (one or two sentences each)</h2>
@@ -69,12 +69,12 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 <div class='en'><p>Only the triggering detector is read out. If the light is below threshold, we cannot see it.</p>
 </div>
 </section>
-<section class='card'><p><b>Q2. Was the Z20 drop the LED or the detector?</b></p>
-<div class='en'><p>It looks like the LED. Z19 also saw Z20&#x27;s LED get dimmer, but Z19 with its own LED was normal. We do not know why yet.</p>
+<section class='card'><p><b>Q2. Why are Z19 and Z20 low on 18 September?</b></p>
+<div class='en'><p>The operation elog says that on 17 September at 22:04 there were chiller alarms and the detectors were put into safe state. After the recovery, some HEMT settings of Z19 and Z20 might have changed. By 1 pm it was back to normal.</p>
 </div>
 </section>
 <section class='card'><p><b>Q3. Who changed the trigger thresholds?</b></p>
-<div class='en'><p>I do not know. I only see the changes in the ODB. We should ask the people on shift.</p>
+<div class='en'><p>It is in the elog. For example, on 18 September at 00:10 the thresholds of Det09, Det10, Det11 and Det15 were raised. I still need to look up the other changes.</p>
 </div>
 </section>
 <section class='card'><p><b>Q4. How exactly are the templates made?</b></p>
@@ -83,5 +83,9 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 </section>
 <section class='card'><p><b>Q5. Some templates have a spike at the start?</b></p>
 <div class='en'><p>Those are own-LED cells: the LED drive is picked up by the readout. The neighbouring detector sees the same LED cleanly, so we can use its template.</p>
+</div>
+</section>
+<section class='card'><p><b>Q6. Why the 40 kHz low-pass on the example pulses?</b></p>
+<div class='en'><p>To remove high-frequency noise, so the 45 pulses are easier to compare. The pulse rise and fall are much slower than that, so the shape hardly changes.</p>
 </div>
 </section></body></html>

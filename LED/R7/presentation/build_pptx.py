@@ -14,6 +14,7 @@ speech_script.md (Chinese + English per slide, short sentences) is written from 
 import csv
 import json
 import os
+import re
 import sys
 
 from PIL import Image
@@ -45,6 +46,12 @@ cells = list(csv.DictReader(open(os.path.join(OUTD, "summary", "cells.csv"))))
 tmpl = list(csv.DictReader(open(os.path.join(OUTD, "lpfit", "LED_cell_templates.csv"))))
 thr_rows = list(csv.DictReader(open(os.path.join(OUTD, "summary", "trigger_settings.csv"))))
 EX = "P1-07"          # Z7 PSum in Z7's LED (Prof. Liu's example)
+# low-pass of the example-pulse figure, read from the script that draws it
+EX_LP = int(float(re.search(r"EXAMPLE_LP_KHZ = ([0-9.]+)", open(os.path.join(os.path.dirname(HERE), "lp_template_combine.py")).read()).group(1)))
+# From the operation elog, as quoted by Prof. Liu in his comments on the deck (2026-11-26):
+#   "20260917 22:04 Following URGENT chiller alarms and alarm from DAQ, we have put the detectors into safe state ..."
+#   "Some HEMT settings of Z19 and Z20 might have changed"
+#   "Trigger thresholds for Det09, Det10, Det11 and Det15 were adjusted to higher values, on 20260918 00:10."
 CLEAN = "P1-02"       # a clean own-LED cell for the template slide
 cell = {c["id"]: c for c in cells}
 
@@ -191,11 +198,11 @@ FIG_W, TXT_L, TXT_W = Inches(8.6), Inches(9.35), Inches(3.7)      # figure left,
 
 # ───────────────────────────────────────────────────────────────── 1 title
 s = new(None, sec=15,
-        zh="大家好，我是李志恒。今天讲 Run 7 的 LED 数据。按老师说的四点讲：谁看到哪个 LED，幅度稳不稳，触发稳不稳，还有脉冲模板。",
-        en="Hi everyone, I'm Zhiheng. Today I'll show the LED data from Run 7. Four points: who sees which LED, "
+        zh="大家好，我是李志恒。今天讲 Run 7 中子活化之后的 LED 数据。按老师说的四点讲：谁看到哪个 LED，幅度稳不稳，触发稳不稳，还有脉冲模板。",
+        en="Hi everyone, I'm Zhiheng. Today I'll show the post-activation LED data from Run 7. Four points: who sees which LED, "
            "amplitude stability, trigger stability, and pulse templates.")
 tb = textbox(s, Inches(0.9), Inches(2.2), Inches(11.5), Inches(2.0))
-run(tb.text_frame.paragraphs[0], Z("LED runs in SNOLAB Run 7", "SNOLAB Run 7 的 LED 数据"), 36, NAVY, bold=True)
+run(tb.text_frame.paragraphs[0], Z("Post-activation LED runs in SNOLAB Run 7", "SNOLAB Run 7 活化之后的 LED 数据"), 36, NAVY, bold=True)
 run(tb.text_frame.add_paragraph(), Z("visibility, stability and pulse templates", "可见度、稳定性和脉冲模板"), 20, GRAY)
 tb = textbox(s, Inches(0.9), Inches(4.8), Inches(11.5), Inches(1.2))
 run(tb.text_frame.paragraphs[0], Z("Zhiheng Li, University of Minnesota", "李志恒，明尼苏达大学"), 16)
@@ -206,31 +213,30 @@ s = new(Z("Background", "背景"),
         Z("%d LED runs from %d to %d Sep" % (cp["n_all"], day(cp["first_all"]), day(cp["last_all"])),
           "9 月 %d 日到 %d 日，%d 个 LED run" % (day(cp["first_all"]), day(cp["last_all"]), cp["n_all"])),
         fig="fig_week_timeline.png", sec=45,
-        zh="先说背景。这是 Run 7 在 Cf 刻度之后的数据。DAQ 脚本一直循环：先取低本底数据，再取一个 LED run，大概每 %d 个小时一次。"
+        zh="先说背景。这是 Run 7 在中子活化之后的数据。DAQ 脚本一直循环：先取低本底数据，再取一个 LED run，大概每 %d 个小时一次。"
            "上面每一条竖线是一个 LED run。从 9 月 %d 号到 %d 号一共 %d 个，我们用了 %d 个。"
            % (hours, day(cp["first_all"]), day(cp["last_all"]), cp["n_all"], n_ok),
-        en="First, the background. This is Run 7 data after the Cf calibration. The DAQ script runs in a loop: "
+        en="First, the background. This is Run 7 data after the neutron activation. The DAQ script runs in a loop: "
            "low-background data, then one LED run, about every %d hours. Each line on the top is one LED run. "
            "From September %d to %d there are %d of them, and we use %d."
            % (hours, day(cp["first_all"]), day(cp["last_all"]), cp["n_all"], n_ok))
 pic(s, "fig_week_timeline.png", L, T, W, Inches(4.3))
-lines(s, [Z("Run 7, after the Cf calibration.", "Run 7，Cf 刻度之后。"),
+lines(s, [Z("Run 7, after the neutron activation.", "Run 7，中子活化之后。"),
           Z("The script repeats: low-background run, then LED run, about every %d hours." % hours,
             "脚本循环：先低本底 run，再 LED run，大约每 %d 小时一次。" % hours),
           Z("%d LED runs, %d used." % (cp["n_all"], n_ok), "%d 个 LED run，用了 %d 个。" % (cp["n_all"], n_ok))],
       L, Inches(5.7), W, Inches(1.6))
 
-# ───────────────────────────────────────────────────────────────── 3 one run
-s = new(Z("One LED run", "一次 LED run"), Z("two phases of LED flashes", "两段 LED 闪光"), fig="fig_run_timeline.png", sec=40,
-        zh="一个 LED run 里面是这样的。第一段 %d 个 LED 在闪，停 %d 秒，第二段换 %d 个 LED。每个 LED 每秒闪一次，一共 %d 次。"
-           "每次触发只读出触发的那个探测器。" % (n_led1, pause, n_led2, n_flash),
-        en="Inside one LED run: in phase one, %d LEDs flash. Then %d seconds off. In phase two, %d LEDs flash. "
-           "Each LED flashes once per second, %d times. Each trigger reads out only the detector that triggered."
-           % (n_led1, pause, n_led2, n_flash))
+# ───────────────────────────────────────────────────────────────── 3 example run
+s = new(Z("Example LED run", "LED run 的例子"), fig="fig_run_timeline.png", sec=40,
+        zh="这是一个 LED run 的例子。第一段 %d 个 LED 在闪，第二段换 %d 个 LED。每个 LED 每秒闪一次，一共 %d 次。"
+           "每次触发只读出触发的那个探测器。" % (n_led1, n_led2, n_flash),
+        en="Here is one LED run as an example. In phase one, %d LEDs flash. In phase two, %d LEDs flash. "
+           "Each LED flashes once per second, %d times in total. Each trigger reads out only the detector that triggered."
+           % (n_led1, n_led2, n_flash))
 pic(s, "fig_run_timeline.png", L, T, W, Inches(4.3))
-lines(s, [Z("Phase 1: %d LEDs.  %d s off.  Phase 2: %d LEDs." % (n_led1, pause, n_led2),
-            "第一段 %d 个 LED，停 %d 秒，第二段 %d 个 LED。" % (n_led1, pause, n_led2)),
-          Z("Each LED flashes once per second, %d times." % n_flash, "每个 LED 每秒闪一次，共 %d 次。" % n_flash),
+lines(s, [Z("Phase 1: %d LEDs.  Phase 2: %d LEDs." % (n_led1, n_led2), "第一段 %d 个 LED，第二段 %d 个 LED。" % (n_led1, n_led2)),
+          Z("Each LED flashes once per second, %d times in total." % n_flash, "每个 LED 每秒闪一次，一共 %d 次。" % n_flash),
           Z("Only the detector that triggers is read out.", "每次只读出触发的那个探测器。")],
       L, Inches(5.7), W, Inches(1.6))
 
@@ -260,42 +266,50 @@ for ph, sec in (("phase1", 55), ("phase2", 35)):
 
 # ───────────────────────────────────────────────────────────────── 6 amplitude
 s = new(Z("Stability: amplitude vs time", "稳定性：幅度随时间"), fig="fig_amp_map.png", sec=50,
-        zh="第二点，幅度随时间。每一行是一个格子，每一列是一个 series，按时间排。白色就是正常。"
+        zh="第二点，幅度随时间。每一行是一个探测器看一个 LED，每一列是一个 series，按时间排。左边是第一段，右边是第二段。白色就是平均水平。"
            "大部分是白的，%d%% 的点变化在 10%% 以内。所以大部分是稳定的，但有几个地方要再看。" % amp10,
-        en="Second, amplitude versus time. Each row is one cell, each column is one series, in time order. White means "
-           "normal. Most of it is white: %d percent of the points are within 10 percent. So it is mostly stable, but a "
-           "few spots need a second look." % amp10)
-pic(s, "fig_amp_map.png", L, T, FIG_W, Inches(6.1))
-lines(s, [Z("One row per cell, one column per series.", "一行一个格子，一列一个 series。"),
-          Z("White means normal.", "白色就是正常。"),
+        en="Second, amplitude versus time. Each row is one detector with one LED, each column is one series, in time order. "
+           "Phase one is on the left, phase two on the right. White means average. Most of it is white: %d percent of the "
+           "points are within 10 percent. So it is mostly stable, but a few spots need a second look." % amp10)
+pic(s, "fig_amp_map.png", L, T, W, Inches(4.5))
+lines(s, [Z("One row per detector and LED, one column per series.", "一行是一个探测器看一个 LED，一列是一个 series。"),
+          Z("White means average.", "白色就是平均水平。"),
           Z("Mostly stable: %d\u00a0%% within 10\u00a0%%." % amp10, "大部分稳定：%d\u00a0%% 在 10\u00a0%% 以内。" % amp10)],
-      TXT_L, Inches(1.6), TXT_W, Inches(5.0))
+      L, Inches(5.85), W, Inches(1.5), size=16)
 
 # ───────────────────────────────────────────────────────────────── 7 cases
-s = new(Z("Amplitude: cases to look at again", "幅度：需要再看的情况"), fig="fig_stab_cases.png", sec=50,
-        zh="这几个要再看。最明显的是 9 月 18 号凌晨，Z20 的 LED 一下子暗了很多，过了几个小时又恢复了。"
-           "Z19 看 Z20 的 LED 也变暗，所以是 LED 的问题，不是探测器。还有第一天几个格子偏高一点。",
-        en="These need a second look. The clearest one: early on September 18, Z20's LEDs became much dimmer, and a few "
-           "hours later they were back to normal. Z19 also saw Z20's LED get dimmer, so it is the LED, not the "
-           "detector. Also, on the first day a few cells are a bit high.")
-pic(s, "fig_stab_cases.png", L, T, W, Inches(4.55))
-lines(s, [Z("%s to %s: Z20's LEDs were much dimmer." % (z20_from, z20_to), "%s 到 %s：Z20 的 LED 暗了很多。" % (z20_from, z20_to)),
-          Z("Z19 saw it too, so it is the LED, not the detector.", "Z19 也看到了，所以是 LED，不是探测器。"),
+s = new(Z("Amplitude: cases to look at again", "幅度：需要再看的情况"), fig="fig_stab_cases.png", sec=55,
+        zh="这几个要再看。最明显的是 9 月 18 号凌晨：Z20 低了很多，Z19 看 Z20 的 LED 也低，过了几个小时恢复了。"
+           "运行日志里写着：9 月 17 号晚上十点，冷水机报警，探测器被放进了 safe state。所以可能是 Z19 和 Z20 的一些 HEMT 设置变了。"
+           "每个点上的红色短线是误差棒。另外，第一天有几个格子偏高一点。",
+        en="These need a second look. The clearest one: early on September 18, Z20 is much lower, and Z19 with Z20's LED "
+           "is lower too. A few hours later they are back. The operation elog says that on September 17 at 10 pm there were "
+           "chiller alarms, and the detectors were put into safe state. So some HEMT settings of Z19 and Z20 might have "
+           "changed. The small red bars are the error bars. Also, on the first day a few cells are a bit high.")
+pic(s, "fig_stab_cases.png", L, T, W, Inches(4.45))
+lines(s, [Z("%s to %s: Z20 and Z19 are low." % (z20_from, z20_to), "%s 到 %s：Z20 和 Z19 偏低。" % (z20_from, z20_to)),
+          Z("Elog, 17 Sep 22:04: chiller alarms, the detectors were put into safe state.",
+            "运行日志，9 月 17 日 22:04：冷水机报警，探测器进入 safe state。"),
+          Z("Some HEMT settings of Z19 and Z20 might have changed.", "Z19 和 Z20 的一些 HEMT 设置可能变了。"),
           Z("First day: a few cells are a bit high.", "第一天：几个格子偏高一点。")],
-      L, Inches(5.85), W, Inches(1.5), size=16)
+      L, Inches(5.75), W, Inches(1.6), size=15)
 
 # ───────────────────────────────────────────────────────────────── 8 trigger fraction
 s = new(Z("Stability: trigger fraction vs time", "稳定性：触发比例随时间"), fig="fig_trig_map.png", sec=55,
-        zh="第三点，触发比例随时间。黄色是每次闪光都触发。自己 LED 的格子一直是黄的，很稳定。"
-           "其他格子有台阶。我查了数据库，台阶正好在触发阈值被改的地方，就是图上的黑线。所以这是设置变了，不是探测器不稳定。",
-        en="Third, trigger fraction versus time. Yellow means it triggers on every flash. The own-LED cells stay yellow: "
-           "stable. Other cells have steps. I checked the ODB: the steps are exactly where the trigger thresholds were "
-           "changed, the black lines. So these are setting changes, not unstable detectors.")
-pic(s, "fig_trig_map.png", L, T, FIG_W, Inches(6.1))
+        zh="第三点，触发比例随时间。黄色是每次闪光都触发。自己 LED 的那些行一直是黄的，很稳定。"
+           "其他行有台阶。台阶正好在触发阈值被改的地方，就是图上的黑线。比如运行日志里记着，9 月 18 号零点十分，"
+           "9 号、10 号、11 号、15 号探测器的阈值被调高了。所以这是设置变了，不是探测器不稳定。",
+        en="Third, trigger fraction versus time. Yellow means it triggers on every flash. The own-LED rows stay yellow: "
+           "stable. Other rows have steps. The steps are exactly where the trigger thresholds were changed, the black "
+           "lines. For example, the elog says that on September 18 at ten past midnight the thresholds of detectors 9, 10, "
+           "11 and 15 were raised. So these are setting changes, not unstable detectors.")
+pic(s, "fig_trig_map.png", L, T, W, Inches(4.5))
 lines(s, [Z("Yellow: triggers on every flash.", "黄色：每次闪光都触发。"),
           Z("Own LED: stable.", "自己的 LED：稳定。"),
-          Z("The steps are where the trigger thresholds were changed (black lines).", "台阶出现在触发阈值改动的地方（黑线）。")],
-      TXT_L, Inches(1.6), TXT_W, Inches(5.0))
+          Z("The steps are where the trigger thresholds were changed (black lines).", "台阶出现在触发阈值改动的地方（黑线）。"),
+          Z("Elog: thresholds of Det09, Det10, Det11 and Det15 were raised on 18 Sep 00:10.",
+            "运行日志：9 月 18 日 00:10 调高了 Det09、Det10、Det11、Det15 的阈值。")],
+      L, Inches(5.75), W, Inches(1.6), size=15)
 
 # ───────────────────────────────────────────────────────────────── 9 template method
 # Steps as coded in ../lp_template_led.py (median filter MEDFILT, selection START_TOL), the imported
@@ -357,33 +371,37 @@ lines(s, [Z("Blue: aligned single pulses.", "蓝色：对齐后的单个脉冲�
 
 # ───────────────────────────────────────────────────────────────── 11 example pulses
 s = new(Z("Example pulses: Z7 PSum with Z7's LED", "例子脉冲：Z7 PSum，Z7 自己的 LED"),
-        Z("%d pulses, one per series" % n_ok, "%d 个脉冲，每个 series 一个" % n_ok),
-        fig="example_pulses_%s.png" % EX, sec=60,
-        zh="老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 %d 个，"
-           "颜色从浅到深是从早到晚：黄色最早，紫色最晚。左边是原始的 ADC，可以看到幅度慢慢变小。开头那个很尖的负信号是 LED 的串扰。"
-           "右边每条除以自己的峰值，只看形状：基本叠在一起，形状没有变。" % n_ok,
+        Z("%d pulses, one per series; %d kHz low-pass, divided by the peak" % (n_ok, EX_LP),
+          "%d 个脉冲，每个 series 一个；%d kHz 低通，除以峰值" % (n_ok, EX_LP)),
+        fig="example_pulses_%s.png" % EX, sec=55,
+        zh="老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 %d 个。"
+           "颜色从浅到深是从早到晚：黄色最早，紫色最晚。每个脉冲先过一个 %d 千赫的低通滤波，把高频噪声去掉，再除以自己的峰值，只看形状。"
+           "这些脉冲基本叠在一起，说明这一周形状没有变。脉冲前面那个很窄的尖峰是 LED 驱动的串扰。" % (n_ok, EX_LP),
         en="Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve "
-           "channels summed: the PSum. One pulse per series, %d in total. Light to dark is early to late: yellow is the first day, purple the last. On the left, "
-           "raw ADC: the amplitude slowly goes down. The sharp negative spike at the start is pickup from the LED drive. "
-           "On the right, each pulse is divided by its own peak, so we only see the shape. They lie on top of each "
-           "other: the shape did not change." % n_ok)
-pic(s, "example_pulses_%s.png" % EX, L, T, W, Inches(4.4))
+           "channels summed: the PSum. One pulse per series, %d in total. Light to dark is early to late: yellow is the "
+           "first day, purple the last. Each pulse goes through a %d kilohertz low-pass filter to remove high-frequency "
+           "noise, and is divided by its own peak, so we only see the shape. The pulses lie on top of each other: the "
+           "shape did not change during the week. The narrow spike just before the pulse is pickup from the LED drive."
+           % (n_ok, EX_LP))
+pic(s, "example_pulses_%s.png" % EX, L, T, W, Inches(4.6))
 lines(s, [Z("Colour: light (yellow) is early, dark (purple) is late.", "颜色：浅色（黄）是早的，深色（紫）是晚的。"),
-          Z("The amplitude goes down slowly.", "幅度慢慢变小。"),
-          Z("Divided by its own peak, the shape stays the same.", "除以各自的峰值后，形状不变。")],
-      L, Inches(5.8), W, Inches(1.5))
+          Z("Each pulse: %d kHz low-pass filter, then divided by its own peak." % EX_LP,
+            "每个脉冲：%d kHz 低通滤波，再除以自己的峰值。" % EX_LP),
+          Z("The shape stays the same over the week.", "一周内形状不变。")],
+      L, Inches(5.95), W, Inches(1.4), size=16)
 
 # ───────────────────────────────────────────────────────────────── 12 summary
 s = new(Z("Summary", "总结"), sec=40,
-        zh="总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定，9 月 18 号 Z20 的 LED 要再查。"
-           "触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。",
+        zh="总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定；9 月 18 号 Z19 和 Z20 偏低，"
+           "是在探测器进入 safe state 之后。触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。",
         en="To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly "
-           "stable; Z20's LEDs on September 18 need a closer look. Trigger fraction: stable; the steps are threshold "
-           "changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.")
+           "stable; Z19 and Z20 were low on September 18, after the detectors were put into safe state. Trigger fraction: "
+           "stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change "
+           "during the week. Thank you.")
 lines(s, [Z("Visibility: each LED is seen by its own detector, and often by the next one.",
             "可见度：每个 LED 自己的探测器看得到，隔壁的也常常看到。"),
-          Z("Amplitude: mostly stable. To look at again: Z20's LEDs on %s." % z20_from[:6],
-            "幅度：大部分稳定。要再看：Z20 的 LED（%s）。" % z20_from[:6]),
+          Z("Amplitude: mostly stable. Z19 and Z20 are low on %s, after the safe state of 17 Sep." % z20_from[:6],
+            "幅度：大部分稳定。Z19、Z20 在 %s 偏低，在 9 月 17 日进入 safe state 之后。" % z20_from[:6]),
           Z("Trigger fraction: stable. The steps are threshold changes.", "触发比例：稳定。台阶是阈值改了。"),
           Z("Templates: one per cell. The Z7 pulse shape is the same all week.", "模板：每个格子一个。Z7 的脉冲形状一周内不变。")],
       L, Inches(1.6), W, Inches(5.0), size=20)
@@ -393,9 +411,8 @@ n_main = n_slide
 s = new(Z("Backup: is it the LED or the detector?", "备用：是 LED 还是探测器？"), fig="fig_same_led.png")
 if s:
     pic(s, "fig_same_led.png", L, T, W, Inches(4.8))
-    lines(s, [Z("Same LED on two detectors: they move together. One detector with two LEDs: they do not.",
-                "同一个 LED、两个探测器：一起变。同一个探测器、两个 LED：不一起变。"),
-              Z("So the changes come from the LED light.", "所以变化来自 LED 的光。")], L, Inches(6.2), W, Inches(1.1), size=15)
+    lines(s, [Z("Same LED on two detectors: they move together. One detector with two LEDs: mostly not.",
+                "同一个 LED、两个探测器：一起变。同一个探测器、两个 LED：大多不一起变。")], L, Inches(6.2), W, Inches(1.1), size=15)
 
 s = new(Z("Backup: trigger thresholds", "备用：触发阈值"),
         Z("L1 activation threshold (DCRC0) in the ODB, per period", "ODB 里的 L1 触发阈值（DCRC0），按时间段"))
@@ -483,17 +500,20 @@ out += ["## 可能被问的问题 / Likely questions（回答一两句就够）"
         "**Q1. 为什么看不到更远的探测器？/ Why no detector further away?**",
         "中文：我们只读出触发的探测器。光如果太弱、没过阈值，就看不到。",
         "English: Only the triggering detector is read out. If the light is below threshold, we cannot see it.", "",
-        "**Q2. Z20 那次是 LED 还是探测器？/ Was the Z20 drop the LED or the detector?**",
-        "中文：像是 LED。Z19 看 Z20 的 LED 也变暗了，但 Z19 看自己的 LED 是正常的。原因还不知道。",
-        "English: It looks like the LED. Z19 also saw Z20's LED get dimmer, but Z19 with its own LED was normal. We do not know why yet.", "",
+        "**Q2. 9 月 18 日 Z19、Z20 为什么偏低？/ Why are Z19 and Z20 low on 18 September?**",
+        "中文：运行日志里写着，9 月 17 日 22:04 冷水机报警，探测器被放进 safe state。恢复之后，Z19 和 Z20 的一些 HEMT 设置可能变了。到下午一点就正常了。",
+        "English: The operation elog says that on 17 September at 22:04 there were chiller alarms and the detectors were put into safe state. After the recovery, some HEMT settings of Z19 and Z20 might have changed. By 1 pm it was back to normal.", "",
         "**Q3. 触发阈值是谁改的？/ Who changed the trigger thresholds?**",
-        "中文：我不知道，我只在数据库里看到它们改了。要问当时值班的人。",
-        "English: I do not know. I only see the changes in the ODB. We should ask the people on shift.", "",
+        "中文：运行日志里有记录。比如 9 月 18 日 00:10，Det09、Det10、Det11、Det15 的阈值被调高了。其他几次我还要去日志里查。",
+        "English: It is in the elog. For example, on 18 September at 00:10 the thresholds of Det09, Det10, Det11 and Det15 were raised. I still need to look up the other changes.", "",
         "**Q4. 模板具体怎么做的？/ How exactly are the templates made?**",
         "中文：每个脉冲：中值滤波、100 千赫低通、减基线、除以峰值，用两个指数拟合找起点，把实测脉冲按起点对齐，最后把所有 series 的脉冲取平均。拟合只用来找起点。",
         "English: For each pulse: median filter, 100 kilohertz low-pass, subtract the baseline, divide by the peak, fit two exponentials to find the start, and shift the measured pulse to that start. Then we average the pulses of all series. The fit is only used to find the start.", "",
         "**Q5. 有些模板开头有尖峰？/ Some templates have a spike at the start?**",
         "中文：那是自己 LED 的格子，LED 驱动串进了读出。隔壁探测器看同一个 LED 是干净的，可以用那个模板。",
-        "English: Those are own-LED cells: the LED drive is picked up by the readout. The neighbouring detector sees the same LED cleanly, so we can use its template.", ""]
+        "English: Those are own-LED cells: the LED drive is picked up by the readout. The neighbouring detector sees the same LED cleanly, so we can use its template.", "",
+        "**Q6. 例子脉冲为什么用 %d kHz 低通？/ Why the %d kHz low-pass on the example pulses?**" % (EX_LP, EX_LP),
+        "中文：为了去掉高频噪声，让 %d 条线更容易比较。脉冲的上升和下降比这慢得多，所以形状基本不变。" % n_ok,
+        "English: To remove high-frequency noise, so the %d pulses are easier to compare. The pulse rise and fall are much slower than that, so the shape hardly changes." % n_ok, ""]
 open(SPEECH, "w", encoding="utf-8").write("\n".join(out))
 print("wrote %s (%d s = %.1f min, %d main slides)" % (SPEECH, total, total / 60.0, len(main)))

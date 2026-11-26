@@ -124,3 +124,16 @@ The audience does not know the Z7 template script, so the deck never says "same 
    (`fit_led.fit`). A channel with a pulse in fewer than 30 % of the cell's events gets no analytic pulse.
 Figure `fig_template_method.png` (`make_figures.py --method`): one pulse with its fit, then aligned pulses, template and
 analytic pulse, for the signal channel of P1-02 with the largest pulses.
+
+## Prof. Liu's comments on the deck (2026-11-26, `SNOLAB_R7_LED_runs_20261125_commented.pdf`, kept local)
+All applied: title "Post-activation LED runs ..."; "after the neutron activation" (not "Cf calibration"); no numbers on the
+bands of the week timeline; slide 3 "Example LED run", no "3 s off", "151 times in total"; visibility plots with large numbers and
+axes and without cell IDs (`make_figures.visibility_talk`); amplitude and trigger maps in two blocks (phase 1 | phase 2) with
+readable axes, "White means average"; error bars on the cases figure (statistical error of the series median, 1.2533 sigma /
+sqrt(n) with sigma = (p84 - p16) / 2, median over the channels); example pulses: only the normalised panel, 40 kHz low-pass.
+CORRECTION ("This is wrong"): the low Z20 / Z19 amplitudes of 18 Sep 02:09-06:33 are NOT "Z20's LEDs were dimmer, so it is the
+LED, not the detector". Operation elog, 20260917 22:04: "Following URGENT chiller alarms and alarm from DAQ, we have put the
+detectors into safe state (green button, not red button). SNOLAB on-call (Paul Larochelle) says they are already working on
+recovering." Prof. Liu: "Some HEMT settings of Z19 and Z20 might have changed". Also from the elog: "Trigger thresholds for
+Det09, Det10, Det11 and Det15 were adjusted to higher values, on 20260918 00:10." The sections above that say the LED was dim
+are superseded by this. Not changed: the underline under the caption of the backup threshold table (no instruction given).
