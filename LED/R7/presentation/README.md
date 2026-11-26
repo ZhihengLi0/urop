@@ -8,6 +8,7 @@ Outline from Prof. Liu; `outline.md` lists the content and the checked facts beh
 |---|---|
 | `make_figures.py` | copies the analysis figures from `../out` into `figures/`, makes the talk-only figures, writes `stats.json` (every number quoted on a slide) |
 | `build_pptx.py` | builds the deck (python-pptx, 16:9, speaker notes on every slide) and `speech_script.md` |
+| `build_pptx.py --zh` | the same deck with Chinese slide text, `SNOLAB_R7_LED_runs_*_zh.pptx` (for reading; same numbers, figures keep their English labels, notes = the Chinese speaker text) |
 | `make_pdf.sh` | PDF of the deck (LibreOffice module) and of the speaker script (Chromium) |
 | `build_speech_pdf.py` | `speech_script.md` → HTML; `--en` for the English-only version |
 | `outline.md` | content and frozen facts of the talk |
