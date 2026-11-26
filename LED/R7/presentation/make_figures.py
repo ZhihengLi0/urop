@@ -40,12 +40,19 @@ def series_time(s):
     return datetime.strptime(s[2:], "%y%m%d_%H%M%S")
 
 
-def copy(src, dst=None):
+def copy(src, dst=None, crop=0.0, crop_top=0.0):
+    """Copy an analysis figure into figures/; crop = fraction of the height cut at the bottom (the long
+    monospace note that documents the figure in out/ is left out of the talk copy)."""
     p = os.path.join(OUT, src)
-    if os.path.exists(p):
-        shutil.copy(p, os.path.join(FIG, dst or os.path.basename(src)))
+    if not os.path.exists(p):
+        print("missing", src); return
+    d = os.path.join(FIG, dst or os.path.basename(src))
+    if crop or crop_top:
+        from PIL import Image
+        im = Image.open(p)
+        im.crop((0, int(round(im.height * crop_top)), im.width, int(round(im.height * (1 - crop))))).save(d)
     else:
-        print("missing", src)
+        shutil.copy(p, d)
 
 
 def script_times():
@@ -108,7 +115,7 @@ def week_timeline():
     for lab in ax.get_xticklabels():
         lab.set_ha("left"); lab.set_fontsize(11)
     bx.tick_params(labelsize=11); bx.xaxis.label.set_size(11)
-    ax.set_title("LED runs of the week, %s - %s: blue line = one LED run, analysed (%d); grey dotted with x = not used (%d)\n"
+    ax.set_title("LED runs from %s to %s: blue line = one run used (%d), grey dotted = not used (%d)\n"
                  "bands = blocks of consecutive runs, with the number of analysed runs"
                  % (tt[allser[0]].strftime("%d %b %H:%M"), tt[allser[-1]].strftime("%d %b %H:%M"), len(ser), len(DROPPED)), fontsize=11.5)
 
@@ -141,13 +148,15 @@ def week_timeline():
 
 def main():
     os.makedirs(FIG, exist_ok=True)
-    for f in ("summary/visibility_phase1.png", "summary/visibility_phase2.png", "stability/amplitude_vs_time.png",
-              "stability/trigger_fraction.png", "lpfit/cells_overview.png", "lpfit/example_pulses_%s.png" % EXAMPLE,
+    for f in ("stability/amplitude_vs_time.png", "stability/trigger_fraction.png", "lpfit/cells_overview.png",
               "lpfit/shape_vs_time_%s.png" % EXAMPLE):
         copy(f)
+    for f in ("summary/visibility_phase1.png", "summary/visibility_phase2.png"):
+        copy(f, crop=0.09)
+    copy("lpfit/example_pulses_%s.png" % EXAMPLE, crop=0.06, crop_top=0.075)   # the slide carries the title
     cells = rd("summary/cells.csv")
     for c in cells:
-        copy("lpfit/cell_%s.png" % c["id"])
+        copy("lpfit/cell_%s.png" % c["id"], crop=0.045)
     st = {}
     st["campaign"] = week_timeline()
 
@@ -175,14 +184,21 @@ def main():
     fig, ax = plt.subplots(figsize=(12, 4.2))
     ax.hist(np.mod(t[m], 1.0) * 1e3, bins=2000, range=(0, 1000), color="C0")
     ax.set_yscale("log"); ax.set_xlabel("trigger time within its second [ms]"); ax.set_ylabel("triggers per 0.5 ms")
-    ys = 200
+    # LED names: horizontal, on staggered heights where peaks are close, each joined to its peak by a thin line
+    levels = [300, 800, 2100, 5500, 14000]
+    last_x, lev = -1e9, -1
     for g in sorted((g for g in tm["groups"] if g["phase"] == "phase1"), key=lambda g: g["pos"]):
         lid = ids.get(("phase1", g["name"]))
-        if lid:
-            ax.annotate("%s LED%d" % lid, (g["pos"] * 1e3, sum(g["n_triggers"].values())), xytext=(0, 8),
-                        textcoords="offset points", rotation=90, fontsize=7, ha="center", va="bottom")
-    ax.set_ylim(0.8, 3000)
-    ax.set_title("Phase 1 of the same run: every LED flashes once per second at its own fixed time -> one peak per LED")
+        if not lid:
+            continue
+        x = g["pos"] * 1e3
+        lev = lev + 1 if x - last_x < 70 else 0
+        last_x = x
+        y = levels[lev % len(levels)]
+        ax.plot([x, x], [sum(g["n_triggers"].values()) * 1.1, y * 0.9], color="0.6", lw=0.6)
+        ax.text(x, y, "%s LED%d" % lid, fontsize=8, ha="center", va="bottom")
+    ax.set_ylim(0.8, 50000)
+    ax.set_title("Phase 1 of the same run: each LED flashes at its own time within the second, so each LED is one peak")
     fig.tight_layout(); fig.savefig(os.path.join(FIG, "fig_flash_groups.png"), dpi=130); plt.close(fig)
 
     # ---- stability maps: cell x series
@@ -229,12 +245,11 @@ def main():
             ax.axvline(x, color="k", lw=1.2)
         if sw_x is not None:                                   # 0913 -> 0918 sequencer script
             ax.axvline(sw_x - 0.5, color="r", lw=1.0, ls=":")
-        ax.text(0.0, -0.085, "black lines: L1 trigger thresholds changed (ODB);  red dotted: 0913 -> 0918 sequencer script",
+        ax.text(0.0, -0.085, "black lines: trigger thresholds changed;  red dotted: sequencer script changed",
                 transform=ax.transAxes, fontsize=8, va="top")
         fig.colorbar(im, ax=ax, fraction=0.03, pad=0.01, label=cl)
-        ax.set_title("one row per non-zero cell (detector <- LED), one column per series; grey = " +
-                     ("fewer than 20 good pulses, or two LEDs flash together in that series" if "amp" in name
-                      else "two LEDs flash together in that series (not separable)"))
+        ax.set_title(("Amplitude / its median" if "amp" in name else "Trigger fraction") +
+                     ": one row per cell, one column per series (grey = no data)")
         fig.tight_layout(); fig.savefig(os.path.join(FIG, name), dpi=130); plt.close(fig)
     def pearson(x, y):
         x, y = np.asarray(x, float), np.asarray(y, float)
@@ -290,7 +305,7 @@ def main():
     axes[2].barh(y, vals, color=cols); axes[2].set_yticks(y); axes[2].set_yticklabels(labs, fontsize=6.5)
     axes[2].axvline(0, color="k", lw=0.5); axes[2].set_xlim(-0.7, 1.05); axes[2].set_xlabel("correlation over the series")
     axes[2].set_title("blue: one LED seen by two detectors\norange: one detector, its two LEDs", fontsize=9)
-    fig.suptitle("Whose change is it? Amplitude vs time for the same LED on two detectors, and for the same detector with two LEDs", fontsize=11)
+    fig.suptitle("Is it the LED or the detector? Same LED on two detectors, and one detector with its two LEDs", fontsize=11)
     fig.tight_layout(rect=(0, 0, 1, 0.94)); fig.savefig(os.path.join(FIG, "fig_same_led.png"), dpi=130); plt.close(fig)
 
     # trigger fraction per threshold epoch
@@ -340,7 +355,7 @@ def main():
         ax.set_ylim(0.2, 1.4); ax.grid(alpha=0.3)
         ax.set_title("detector %s <- %s LED %s" % (d_, l_.split("#")[0], l_.split("#")[1]), fontsize=10)
     fig.autofmt_xdate()
-    fig.suptitle("Amplitude / median (median over the detector's channels); black = trigger thresholds changed, red dotted = 0913 -> 0918 script", fontsize=11)
+    fig.suptitle("Amplitude / its median for a few detectors (black lines: thresholds changed, red dotted: script changed)", fontsize=11)
     fig.tight_layout(rect=(0, 0, 1, 0.95)); fig.savefig(os.path.join(FIG, "fig_stab_cases.png"), dpi=130); plt.close(fig)
     z20 = sorted((s, round(float(np.median(v)), 2)) for (s, dd, ll), v in rel.items() if (dd, ll) == ("Z20", "Z20#0") and np.median(v) < 0.6)
     st["z20_low"] = z20

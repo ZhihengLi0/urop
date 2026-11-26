@@ -1,172 +1,106 @@
-# Speaker Script / 演讲稿 — LED runs in SNOLAB Run 7
+# Speaker Script / 演讲稿: LED runs in SNOLAB Run 7
 
-约 16 分钟，16 页正片 + backup。每页先中文、后英文，意思一样，**英文可以直接照着念**。全部是短句。斜体是给自己的提示，不用念。
+约 8 分钟，11 页正片，后面是备用页（只在被问到时用）。每页先中文、后英文，意思一样，英文可以直接照着念。
 
-一句话主线：**哪个 LED → 稳不稳（幅度、触发）→ 模板和例子脉冲。**
-时间（秒）：1 Title 15 · 2 The data: LED runs i 50 · 3 One LED run 45 · 4 Which LED made the t 70 · 5 who triggers on whic 70 · 6 who triggers on whic 45 · 7 what we learn 70 · 8 amplitude vs time 65 · 9 whose change is it:  60 · 10 cases to look at aga 75 · 11 trigger fraction vs  80 · 12 one template per cel 75 · 13 own LED: pickup of t 55 · 14 all 43 cells 50 · 15 example pulses: Z7 P 75 · 16 Summary, and what co 65 → 约 965 秒。
-
----
-
-## Slide 1 — Title（约 15 秒）
-
-**中文**：大家好，我是李志恒。今天讲 Run 7 里 Cf 之后的 LED 数据。按老师给的四部分讲：谁看到哪个 LED，幅度稳不稳，触发稳不稳，最后是脉冲模板。
-
-**English**: Hi everyone, I'm Zhiheng. Today: the LED runs in Run 7, after the Cf calibration. Four parts, as Prof. Liu asked: who sees which LED, is the amplitude stable, is the trigger stable, and the pulse templates.
-
+时间（秒）：1 Title 15，2 Background 45，3 One LED run 40，4 Visibility: phase 1 55，5 Visibility: phase 2 35，6 Stability: amplitude vs time 50，7 Amplitude: cases to look at again 50，8 Stability: trigger fraction vs time 55，9 Template generation 55，10 Example pulses: Z7 PSum with Z7's LED 60，11 Summary 40；合计约 500 秒。
 
 ---
 
-## Slide 2 — The data: LED runs in SNOLAB Run 7（约 50 秒）
+## Slide 1: Title（约 15 秒）
 
-*提示：上图：一条竖线 = 一个 LED run。下图：脚本的一个循环。*
+**中文**：大家好，我是李志恒。今天讲 Run 7 的 LED 数据。按老师说的四点讲：谁看到哪个 LED，幅度稳不稳，触发稳不稳，还有脉冲模板。
 
-**中文**：先说背景。这是 SNOLAB Run 7 的数据，在 Cf 刻度之后取的。探测器不加偏压，一共 23 个探测器。**DAQ 的脚本自动循环：先取 100 分钟的低本底数据，再取大约 20 分钟的 LED 数据，然后重新锁定，再来一遍。**所以大约每 132 分钟有一个 LED run。上面这张图，每一条竖线是一个 LED run：从 9 月 15 号凌晨到 21 号上午，一共 47 个，我们用了其中 45 个。中间的空白是没有 LED run 的时间。
-
-**English**: First, the background. These data are from SNOLAB Run 7, taken after the Cf calibration. The detectors are at zero volts, and there are 23 of them. **A sequencer script runs in a loop: 100 minutes of low-background data, then about 20 minutes of LED data, then a relock, and again.** So we get one LED run about every 132 minutes. In the top plot, each line is one LED run. They go from the early morning of September 15 to the morning of September 21: 47 runs, and we use 45 of them. The gaps are times without LED runs.
+**English**: Hi everyone, I'm Zhiheng. Today I'll show the LED data from Run 7. Four points: who sees which LED, amplitude stability, trigger stability, and pulse templates.
 
 
 ---
 
-## Slide 3 — One LED run（约 45 秒）
+## Slide 2: Background（约 45 秒）
 
-*提示：指着图：灰色是普通触发，蓝色是 LED 触发，两段中间停 3 秒。*
+**中文**：先说背景。这是 Run 7 在 Cf 刻度之后的数据。DAQ 脚本一直循环：先取低本底数据，再取一个 LED run，大概每 2 个小时一次。上面每一条竖线是一个 LED run。从 9 月 15 号到 21 号一共 47 个，我们用了 45 个。
 
-**中文**：再看一个 LED run 里面是什么样。每个 run 先等大约 880 秒，然后开灯。**第一段 15 个 LED 一起闪，停 3 秒，第二段换 12 个 LED 再闪。**每个 LED 每秒闪一次，每段正好闪 151 次。还有一点要记住：每次触发只读出触发的那一个探测器。
-
-**English**: Now one LED run. It waits about 880 seconds, then the LEDs turn on. **Phase one: 15 LEDs flash together. Three seconds off. Phase two: 12 other LEDs.** Each LED flashes once per second, exactly 151 times per phase. One thing to keep in mind: each trigger reads out only the detector that triggered.
+**English**: First, the background. This is Run 7 data after the Cf calibration. The DAQ script runs in a loop: low-background data, then one LED run, about every 2 hours. Each line on the top is one LED run. From September 15 to 21 there are 47 of them, and we use 45.
 
 
 ---
 
-## Slide 4 — Which LED made the trigger（约 70 秒）
+## Slide 3: One LED run（约 40 秒）
 
-*提示：一个峰就是一个 LED。*
+**中文**：一个 LED run 里面是这样的。第一段 15 个 LED 在闪，停 3 秒，第二段换 12 个 LED。每个 LED 每秒闪一次，一共 151 次。每次触发只读出触发的那个探测器。
 
-**中文**：数据里没有记是哪个 LED 闪的，只有触发时间和触发的探测器。但是每个 LED 在一秒里闪的时刻是固定的。**把触发时间对一秒取余，每个 LED 就是一个峰。**看同一次闪光的探测器，触发时间差不超过 0.2 毫秒。脚本告诉我们哪些 LED 开着：峰上有它自己的探测器，就是它；自己不触发的，用排除法。有时候两个 LED 正好同时闪，分不开，这样的组有 22 个，我们不用。
-
-**English**: The data do not record which LED flashed. We only have the trigger time and the detector. But each LED flashes at a fixed time within the second. **Take the trigger time modulo one second, and every LED is one peak.** Detectors that see the same flash trigger within 0.2 milliseconds of each other. The script tells us which LEDs are on. If the LED's own detector is in the peak, the peak is that LED; if not, we use elimination. Sometimes two LEDs flash at the same moment and cannot be separated. That happens in 22 groups; we leave them out.
+**English**: Inside one LED run: in phase one, 15 LEDs flash. Then 3 seconds off. In phase two, 12 LEDs flash. Each LED flashes once per second, 151 times. Each trigger reads out only the detector that triggered.
 
 
 ---
 
-## Slide 5 — Part 1 — who triggers on which LED: phase 1（约 70 秒）
+## Slide 4: Visibility: phase 1（约 55 秒）
 
-**中文**：这张图回答：**每个 LED 闪的时候，哪个探测器触发。**横轴是第一段开的 15 个 LED，纵轴是探测器。格子里的数是：这个 LED 闪 151 次，这个探测器在多大比例的闪光上触发了，对 45 个 series 取平均。红框是 LED 自己的探测器，大部分是 1.00。**红框外面也有数字：隔壁的探测器也看到了光。**每个有数字的格子有一个编号，比如 P1-07，后面做模板用。
+**中文**：这是第一段的可见度图。横轴是 LED，纵轴是探测器。格子里的数是：这个 LED 闪的时候，这个探测器触发的比例。红框是 LED 自己的探测器，基本都是 1。红框旁边的格子，是隔壁的探测器也看到了光。
 
-**English**: This plot answers: **when an LED flashes, which detector triggers?** Columns are the 15 LEDs of phase one, rows are detectors. The number is the fraction of the 151 flashes on which that detector triggers, averaged over 45 series. The red box is the LED's own detector; most are 1.00. **There are numbers outside the red boxes too: a neighbour also sees the light.** Every cell with a number has an ID, like P1-07. We use it for the templates later.
-
-
----
-
-## Slide 6 — Part 1 — who triggers on which LED: phase 2（约 45 秒）
-
-**中文**：第二段一样，12 个 LED。规律也一样：自己的探测器基本每次都触发，隔壁的探测器也经常触发。两段加起来一共 43 个格子。
-
-**English**: Phase two, the same picture with 12 LEDs. The same pattern: the own detector triggers on almost every flash, and a neighbour often does too. Together the two phases have 43 cells.
+**English**: This is the visibility plot for phase one. Columns are LEDs, rows are detectors. The number is how often the detector triggers when that LED flashes. The red box is the LED's own detector, and it is almost always one. A number next to a red box means the neighbouring detector also sees the light.
 
 
 ---
 
-## Slide 7 — Part 1 — what we learn（约 70 秒）
+## Slide 5: Visibility: phase 2（约 35 秒）
 
-**中文**：第一部分的结论。第一，**光只照到编号相邻的探测器，再远没有。**43 个格子里 18 个是隔壁的探测器，没有一个隔一个号的。第二，也没有跨组的：所有的对都在 1 到 6、7 到 12、13 到 18、19 到 24 这四组里面。第三，**方向是固定的：0 号和 1 号 LED 照编号小一号的探测器，3、4、5 号 LED 照大一号的。**在一组的两头没有邻居，所以那些 LED 只有自己看得到。只有两个例外，写在下面。最后，我们只读出触发的探测器，低于阈值的光看不到，所以这些数是下限。
+**中文**：第二段也一样。自己的探测器基本每次都触发，隔壁的探测器也经常触发。光只到相邻的探测器，再远就没有了。
 
-**English**: What we learn from part one. First, **light reaches only the detector with the adjacent number, nothing further.** 18 of the 43 cells are a neighbour, and none skips a number. Second, no pair crosses a group: all pairs are inside detectors 1 to 6, 7 to 12, 13 to 18, or 19 to 24. Third, **the direction is fixed: LED 0 and 1 light the detector with the number below, LED 3, 4 and 5 the one above.** At the end of a group there is no neighbour, so those LEDs are seen only by their own detector. There are two exceptions, listed below. Finally, only the triggering detector is read out, so light below threshold is invisible. These numbers are lower limits.
-
-
----
-
-## Slide 8 — Part 2 — amplitude vs time（约 65 秒）
-
-*提示：白色 = 1；红 = 偏高；蓝 = 偏低；灰 = 没有数据。*
-
-**中文**：第二部分，幅度随时间。每一行是一个格子，每一列是一个 series，按时间排。颜色是这个 series 的幅度除以这一行的中位数。**白色就是正常。**大部分是白的：72.5% 的点在 5% 以内，90.8% 在 10% 以内。所以大部分是稳定的。另外，多数格子在慢慢往下走，中位数是每天 -0.9%。有几处颜色很明显，后面单独看。
-
-**English**: Part two, amplitude over time. Each row is one cell, each column one series, in time order. The colour is that series' amplitude divided by the row's median. **White means normal.** Most of it is white: 72.5 percent of the points are within 5 percent, 90.8 percent within 10 percent. So it is mostly stable. Most cells also go down slowly; the median is -0.9 percent per day. A few spots stand out. We look at them in a moment.
+**English**: Phase two shows the same pattern. The own detector triggers almost every time, and often the next detector too. The light only reaches the next detector, never further.
 
 
 ---
 
-## Slide 9 — Part 2 — whose change is it: the LED or the detector?（约 60 秒）
+## Slide 6: Stability: amplitude vs time（约 50 秒）
 
-*提示：左图两条线一起动；中间两条线各走各的。*
+**中文**：第二点，幅度随时间。每一行是一个格子，每一列是一个 series，按时间排。白色就是正常。大部分是白的，91% 的点变化在 10% 以内。所以大部分是稳定的，但有几个地方要再看。
 
-**中文**：幅度在变，是 LED 在变，还是探测器在变？可以这样查。左边：同一个 LED，两个探测器在看，两条线一起动。中间：同一个探测器，看自己的两个不同的 LED，两条线不一起动。右边是所有的对：蓝色是同一个 LED，相关系数大多在 0.9 以上；橙色是同一个探测器的两个 LED，大多接近零。**所以变化主要来自 LED 的光，不是探测器。**
-
-**English**: The amplitude changes. Is it the LED, or the detector? We can check. Left: one LED, seen by two detectors. The two lines move together. Middle: one detector, with its two different LEDs. The lines do not move together. Right: all the pairs. Blue is one LED on two detectors: the correlation is mostly above 0.9. Orange is one detector with its two LEDs: mostly near zero. **So the changes come mainly from the LED light, not from the detectors.**
+**English**: Second, amplitude versus time. Each row is one cell, each column is one series, in time order. White means normal. Most of it is white: 91 percent of the points are within 10 percent. So it is mostly stable, but a few spots need a second look.
 
 
 ---
 
-## Slide 10 — Part 2 — cases to look at again（约 75 秒）
+## Slide 7: Amplitude: cases to look at again（约 50 秒）
 
-*提示：先讲 Z20，再快速过其他几个。*
+**中文**：这几个要再看。最明显的是 9 月 18 号凌晨，Z20 的 LED 一下子暗了很多，过了几个小时又恢复了。Z19 看 Z20 的 LED 也变暗，所以是 LED 的问题，不是探测器。还有第一天几个格子偏高一点。
 
-**中文**：这几个要再看。**最明显的是 9 月 18 号凌晨，连续 3 个 series：Z20 的幅度只有正常的 0.25–0.26。**Z19 看 Z20 的 LED，也只有 0.56；但 Z19 看自己的 LED 是正常的。所以是 Z20 的 LED 变暗了。下一个 run 完全没有 LED 闪光，下午一点恢复正常。数据库里 LED 的设置没有变。另外，第一天有几个格子偏高大约两成，之后慢慢降下来。
-
-**English**: These need a second look. **The clearest is the early morning of September 18, 3 series in a row: Z20 is at only 0.25–0.26 of normal.** Z19, looking at Z20's LED, is at 0.56; but Z19 with its own LED is normal. So Z20's LEDs were dim. The next run had no LED flashes at all, and by 1 pm it was back to normal. The LED settings in the ODB did not change. Also, on the first day a few cells are about 20 percent high, and then come down.
+**English**: These need a second look. The clearest one: early on September 18, Z20's LEDs became much dimmer, and a few hours later they were back to normal. Z19 also saw Z20's LED get dimmer, so it is the LED, not the detector. Also, on the first day a few cells are a bit high.
 
 
 ---
 
-## Slide 11 — Part 3 — trigger fraction vs time（约 80 秒）
+## Slide 8: Stability: trigger fraction vs time（约 55 秒）
 
-*提示：黑线 = 触发阈值改了。黄 = 每次都触发。*
+**中文**：第三点，触发比例随时间。黄色是每次闪光都触发。自己 LED 的格子一直是黄的，很稳定。其他格子有台阶。我查了数据库，台阶正好在触发阈值被改的地方，就是图上的黑线。所以这是设置变了，不是探测器不稳定。
 
-**中文**：第三部分，触发比例随时间。还是一行一个格子，一列一个 series。黄色是每次闪光都触发。**自己的 LED 那些行一直是黄的，很稳定。**其他行有台阶：一下子从 0 变到 1，或者反过来。我去查了数据库：**台阶正好对应触发阈值被改的时间，就是图上的黑线。**这一周一共有 6 段不同的阈值设置。比如 Z9 和 Z10：只在第 2、4 段触发，正好是它们阈值调低的时候。所以这些台阶是设置变了，不是探测器不稳定。
-
-**English**: Part three, trigger fraction over time. Again one row per cell, one column per series. Yellow means it triggers on every flash. **The own-LED rows stay yellow: stable.** Other rows show steps: from zero to one, or back. I checked the ODB: **the steps are exactly where the trigger thresholds were changed, the black lines.** There are 6 different threshold settings during the week. For example Z9 and Z10 trigger only in periods 2 and 4, which is when their thresholds were low. So the steps are settings, not unstable detectors.
+**English**: Third, trigger fraction versus time. Yellow means it triggers on every flash. The own-LED cells stay yellow: stable. Other cells have steps. I checked the ODB: the steps are exactly where the trigger thresholds were changed, the black lines. So these are setting changes, not unstable detectors.
 
 
 ---
 
-## Slide 12 — Part 4 — one template per cell, made like the Z7 template（约 75 秒）
+## Slide 9: Template generation（约 55 秒）
 
-*提示：方法和 Z7 模板一样，只多一步去尖峰。*
+**中文**：第四点，模板。每个格子做一个模板，45 个 series 合在一起。方法和 Z7 的模板一样：每个脉冲先拟合，按起点对齐，再平均。最后拟合一个解析函数：一个上升，两个下降。这是 Z2 的例子，十二个通道：蓝色是单个脉冲，红色是模板，黑色虚线是解析函数。
 
-**中文**：第四部分，模板。每个格子做一个模板，45 个 series 合在一起。方法和 Z7 的模板一样：每个脉冲先低通，减基线，除以峰值，用两个指数拟合，起始时间是自由的。**按拟合出来的起始时间对齐，再平均。**只多了一步：LED 通电的时候读出上有很窄的尖峰，先用一个很短的中值滤波去掉。最后对模板拟合一个解析函数：一个上升，两个下降。这是一个干净的例子，Z2 看自己的 LED：残差基本是平的。
-
-**English**: Part four, templates. One template per cell, all 45 series together. The method is the same as for the Z7 template. Each pulse is low-passed, baseline-subtracted, divided by its peak, and fitted with two exponentials with a free start time. **Pulses are aligned on the fitted start, then averaged.** One extra step: when an LED is driven, the readout picks up a very narrow spike. A short median filter removes it first. At the end we fit an analytic function to the template: one rise, two falls. This is a clean example, Z2 with its own LED: the residual is nearly flat.
+**English**: Fourth, templates. One template per cell, with all 45 series together. Same method as the Z7 template: fit each pulse, align on the start, then average. Then we fit an analytic pulse: one rise and two falls. Here is Z2 as an example, twelve channels. Blue are single pulses, red is the template, and the dashed line is the analytic pulse.
 
 
 ---
 
-## Slide 13 — Part 4 — own LED: pickup of the LED drive pulse（约 55 秒）
+## Slide 10: Example pulses: Z7 PSum with Z7's LED（约 60 秒）
 
-*提示：只在自己 LED 的格子里有；隔壁探测器没有。*
+**中文**：老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 45 个，颜色从浅到深是从早到晚。左边是原始的 ADC，可以看到幅度慢慢变小。开头那个很尖的负信号是 LED 的串扰。右边每条除以自己的峰值，只看形状：基本叠在一起，形状没有变。
 
-**中文**：但是有些自己 LED 的格子，脉冲开头有问题。比如 Z7：有几个通道在脉冲开始的地方有一个很快的跳变，然后才是声子脉冲。**这是 LED 的驱动脉冲串进了自己探测器的读出。**隔壁的探测器看同一个 LED，就没有。一共 11 个格子有，都是自己的 LED。这些格子模板的开头不能直接用：可以用隔壁探测器的模板，或者把开头去掉再拟合。
-
-**English**: But some own-LED cells have a problem at the start of the pulse. Take Z7: several channels show a fast step at the start, before the phonon pulse. **This is the LED drive pulse, picked up by the detector's own readout.** A neighbour looking at the same LED does not show it. 11 cells have it, all own-LED. For these, the start of the template cannot be used as it is. We can use the neighbour's template, or cut the start before fitting.
+**English**: Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late. On the left, raw ADC: the amplitude slowly goes down. The sharp negative spike at the start is pickup from the LED drive. On the right, each pulse is divided by its own peak, so we only see the shape. They lie on top of each other: the shape did not change.
 
 
 ---
 
-## Slide 14 — Part 4 — all 43 cells（约 50 秒）
+## Slide 11: Summary（约 40 秒）
 
-**中文**：这是全部 43 个格子，每个格子一个小图：红色是探测器的模板，黑色虚线是解析函数。每个格子十二个通道的图在备用页，拟合出来的时间常数也在备用页和 CSV 文件里。
+**中文**：总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定，9 月 18 号 Z20 的 LED 要再查。触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。
 
-**English**: All 43 cells, one small panel each: the detector template in red, the analytic pulse in black dashes. The twelve-channel plot of every cell is in the backup, and so are the fitted time constants.
-
-
----
-
-## Slide 15 — Part 4 — example pulses: Z7 PSum with Z7's LED（约 75 秒）
-
-*提示：左：原始 ADC；中：放大；右：归一化以后只看形状。*
-
-**中文**：老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。**每个 series 挑一个典型的脉冲，一共 45 条，颜色从浅到深是从早到晚。**左边是原始的 ADC，整条 52 毫秒。中间放大。开头那个负的尖峰就是刚才说的 LED 串扰。中间能看到幅度从浅色到深色在变小，就是第二部分说的 Z7 这个 LED 慢慢变暗。右边去掉尖峰，每条除以自己的峰值，只看形状：这一周的脉冲基本叠在一起，形状没有变。
-
-**English**: Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. **One typical pulse per series, 45 in total. Light to dark is early to late.** Left: raw ADC, the whole 52 milliseconds. Middle: zoom. The negative spike at the start is the LED pickup from before. In the middle you can see the amplitude going down from light to dark: that is the slow decline of this LED from part two. Right: spike removed, each pulse divided by its own peak, so only the shape is left. The pulses of the week lie nearly on top of each other: the shape did not change.
-
-
----
-
-## Slide 16 — Summary, and what comes next（约 65 秒）
-
-**中文**：总结。一，每个 LED 触发都能对应到一个 LED；光只照到相邻的探测器，方向是固定的。二，幅度大部分在 10% 以内，变化主要来自 LED 本身；9 月 18 号凌晨 Z20 的 LED 变暗，要查原因。三，触发比例的台阶是阈值设置变了。四，43 个格子都有模板和解析函数，方法和 Z7 一样；有几个探测器自己的 LED 有串扰，要注意。下一步：查 Z20 那几个小时发生了什么，处理串扰的格子，再和老师确认这些模板要怎么用。
-
-**English**: To sum up. One: every LED trigger is traced to one LED. Light reaches only the adjacent detector, in a fixed direction. Two: amplitudes are mostly within 10 percent, and the changes come mainly from the LEDs. Z20's LEDs were dim on the morning of September 18; we need to find out why. Three: the steps in the trigger fraction are threshold settings. Four: all 43 cells have a template and an analytic pulse, made like the Z7 template. A few detectors pick up their own LED drive; watch out for those. Next: find out what happened to Z20 in those hours, handle the pickup cells, and agree on how these templates will be used.
+**English**: To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly stable; Z20's LEDs on September 18 need a closer look. Trigger fraction: stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.
 
 
 ---
@@ -174,33 +108,21 @@
 ## 可能被问的问题 / Likely questions（回答一两句就够）
 
 **Q1. 为什么看不到更远的探测器？/ Why no detector further away?**
-中文：我们只读出触发的探测器。光如果到了，但低于阈值，就看不到。所以图是下限。
-English: Only the triggering detector is read out. If light arrives but stays below threshold, we cannot see it. So the plot is a lower limit.
+中文：我们只读出触发的探测器。光如果太弱、没过阈值，就看不到。
+English: Only the triggering detector is read out. If the light is below threshold, we cannot see it.
 
-**Q2. 两个 LED 同时闪怎么办？/ What if two LEDs flash at the same time?**
-中文：LED 是一个接一个打开的，所以有时两个 LED 的闪光时刻差不到 0.2 毫秒。这时只靠时间分不开，我们就不用这一组。一共 22 组。
-English: The LEDs are switched on one after the other, so sometimes two of them flash within 0.2 milliseconds. Time alone cannot separate them, so we do not use that group. There are 22 such groups.
+**Q2. Z20 那次是 LED 还是探测器？/ Was the Z20 drop the LED or the detector?**
+中文：像是 LED。Z19 看 Z20 的 LED 也变暗了，但 Z19 看自己的 LED 是正常的。原因还不知道。
+English: It looks like the LED. Z19 also saw Z20's LED get dimmer, but Z19 with its own LED was normal. We do not know why yet.
 
-**Q3. 中值滤波会不会改变脉冲形状？/ Does the median filter change the pulse shape?**
-中文：基本不会。它只去掉比 18 微秒窄的尖峰。声子脉冲的上升比这慢，峰值和上升时间都不变。
-English: Hardly. It removes only spikes narrower than 18 microseconds. The phonon rise is slower than that, so the peak and the rise time stay the same.
+**Q3. 触发阈值是谁改的？/ Who changed the trigger thresholds?**
+中文：我不知道，我只在数据库里看到它们改了。要问当时值班的人。
+English: I do not know. I only see the changes in the ODB. We should ask the people on shift.
 
-**Q4. Z20 那次是 LED 还是探测器？/ Was the Z20 drop the LED or the detector?**
-中文：像是 LED。Z19 看 Z20 的 LED 也变暗了，但 Z19 看自己的 LED 是正常的。原因还不知道，要查那几个小时的记录。
-English: It looks like the LED. Z19 also saw less of Z20's light, while Z19 with its own LED was normal. We do not know the cause yet; we need the logs of those hours.
+**Q4. 模板具体怎么做的？/ How exactly are the templates made?**
+中文：和 Z7 一样：低通、减基线、除以峰值、拟合、按起点对齐、平均。LED 数据多一步中值滤波，去掉很窄的串扰尖峰。
+English: Same as Z7: low-pass, subtract the baseline, divide by the peak, fit, align on the start, average. For LED data we first apply a short median filter to remove the narrow pickup spikes.
 
-**Q5. 触发阈值是谁改的？/ Who changed the trigger thresholds?**
-中文：我不知道。我只看到每个 run 开始时数据库里的阈值，这一周有 6 种设置。要问当时值班的人。
-English: I do not know. I only see the thresholds in the ODB at the start of each run; there are 6 settings during the week. We should ask the people on shift.
-
-**Q6. 0918 脚本有什么不同？/ What changed with the 0918 script?**
-中文：LED 的设置完全一样。它会关掉 Z17 的一级触发。但数据库里 Z17 的触发一直是开的，Z17 也一直在触发。
-English: The LED settings are identical. It should switch off Z17's L1 trigger. But the ODB shows Z17's trigger on in every run, and Z17 keeps triggering.
-
-**Q7. 幅度怎么算的？/ How is the amplitude defined?**
-中文：先去掉尖峰，减基线，取最大值，单位 ADC。每个 series 取中位数，再除以所有 series 的中位数。
-English: Remove the spikes, subtract the baseline, take the maximum, in ADC. Then the median per series, divided by the median over all series.
-
-**Q8. 为什么说每组 6 个？/ Why groups of six?**
-中文：这是从数据看出来的：没有一对跨过 6 和 7、12 和 13、18 和 19。数据库里读出板的数目也是这样分的。
-English: That is what the data show: no pair crosses 6 and 7, 12 and 13, or 18 and 19. The number of readout boards in the ODB splits the same way.
+**Q5. 有些模板开头有尖峰？/ Some templates have a spike at the start?**
+中文：那是自己 LED 的格子，LED 驱动串进了读出。隔壁探测器看同一个 LED 是干净的，可以用那个模板。
+English: Those are own-LED cells: the LED drive is picked up by the readout. The neighbouring detector sees the same LED cleanly, so we can use its template.
