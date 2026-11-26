@@ -1,0 +1,31 @@
+# Talk: LED runs in SNOLAB Run 7
+
+Group-meeting talk on the 45 R7 LEDStability series (15–21 September 2026): who triggers on which LED,
+stability of amplitude and trigger fraction, pulse templates. About 15 minutes, 15 main slides plus backup.
+Outline from Prof. Liu; `outline.md` lists the content and the checked facts behind every statement.
+
+| file | what |
+|---|---|
+| `make_figures.py` | copies the analysis figures from `../out` into `figures/`, makes the talk-only figures, writes `stats.json` (every number quoted on a slide) |
+| `build_pptx.py` | builds the deck (python-pptx, 16:9, speaker notes on every slide) and `speech_script.md` |
+| `make_pdf.sh` | PDF of the deck (LibreOffice module) and of the speaker script (Chromium) |
+| `build_speech_pdf.py` | `speech_script.md` → HTML; `--en` for the English-only version |
+| `outline.md` | content and frozen facts of the talk |
+
+Generated, not in git (collaboration data): `figures/`, `stats.json`, `SNOLAB_R7_LED_runs_*.pptx/.pdf`,
+`speech_script.md/.html/.pdf`, `speech_script_en.*`, `outline.md`.
+
+## Rebuild
+
+```bash
+cd ~/urop/LED/R7/presentation
+SIF=/projects/standard/yanliusp/shared/singularity_images/cdmsfull_V07-02-00.sif
+singularity exec -B $HOME,/projects/standard/yanliusp/shared/ $SIF python3 make_figures.py   # needs ../out complete
+python3 build_pptx.py            # host python3 with python-pptx
+bash -lc ./make_pdf.sh
+```
+
+`build_pptx.py` reads `stats.json`, `../out/summary/cells.csv`, `../out/summary/trigger_settings.csv` and
+`../out/lpfit/LED_cell_templates.csv`; no number is typed into a slide. The speaker script has one block per
+main slide (Chinese, then English in short sentences that can be read aloud), a timing line at the top and the
+likely questions at the end.
