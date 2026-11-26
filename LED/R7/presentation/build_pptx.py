@@ -6,7 +6,8 @@
 
 Content follows Prof. Liu's outline (Slack): background and timeline; visibility (phase 1, phase 2);
 amplitude vs time (mostly stable, some cases to look at again); trigger fraction vs time; template generation
-with the 45 Z7 PSum pulses on Z7's LED. One figure and at most three short lines per slide; details are in the
+with the processing steps listed (as coded in ../lp_template_led.py and the
+chain it imports) and the 45 Z7 PSum pulses on Z7's LED. One figure and at most three short lines per slide; details are in the
 backup. Every number is read from stats.json or the CSV files of ../out; nothing is typed in.
 speech_script.md (Chinese + English per slide, short sentences) is written from the same text as the notes.
 """
@@ -289,25 +290,64 @@ lines(s, [Z("Yellow: triggers on every flash.", "黄色：每次闪光都触发�
           Z("The steps are where the trigger thresholds were changed (black lines).", "台阶出现在触发阈值改动的地方（黑线）。")],
       TXT_L, Inches(1.6), TXT_W, Inches(5.0))
 
-# ───────────────────────────────────────────────────────────────── 9 templates
+# ───────────────────────────────────────────────────────────────── 9 template method
+# Steps as coded in ../lp_template_led.py (median filter MEDFILT, selection START_TOL), the imported
+# lp_fit_align.py (100 kHz 4th-order Butterworth, baseline median, / peak, 2-exp fit with free start, shift of the
+# measured trace), ../lp_template_combine.py (mean over all series) and ../fit_led.py (analytic pulse).
+n_pulses = st["n_pulses_fit_ok"]
+mill = "%.1f" % (n_pulses / 1e6)
+s = new(Z("Template generation: method", "模板：处理流程"),
+        Z("one template per cell and channel, all %d series together" % n_ok, "每个格子、每个通道一个模板，%d 个 series 合在一起" % n_ok),
+        fig="fig_template_method.png", sec=65,
+        zh="第四点，模板。先说怎么做的。第一步，选事件：这个 LED 闪的时候，这个探测器触发的事件，十二个通道都用。"
+           "第二步，用一个很短的中值滤波，去掉 LED 通电带来的窄尖峰。第三步，100 千赫的低通滤波。"
+           "第四步，减掉基线，再除以峰值。第五步，每个脉冲用两个指数拟合，起始时间是自由的。右上图就是一个脉冲和它的拟合。"
+           "第六步，按拟合出来的起始时间，把实测的脉冲对齐。第七步，把 %d 个 series 所有对齐的脉冲取平均，这就是模板，右下图红色的线。"
+           "拟合只用来找起始时间，模板本身是实测脉冲的平均。最后再用一个上升、两个下降的函数拟合模板，得到解析脉冲。" % n_ok,
+        en="Fourth, templates. First, how they are made. Step one: select the events where this detector triggered on "
+           "this LED's flash, and use all twelve channels. Step two: a very short median filter removes the narrow spike "
+           "from the LED drive. Step three: a 100 kilohertz low-pass filter. Step four: subtract the baseline and divide "
+           "by the peak. Step five: fit each pulse with two exponentials, with a free start time. The top right plot shows "
+           "one pulse and its fit. Step six: shift each measured pulse so that the fitted start is at the same time. "
+           "Step seven: average all aligned pulses of the %d series. That is the template, the red line at the bottom "
+           "right. The fit is only used to find the start time; the template itself is the mean of the measured pulses. "
+           "Finally we fit the template with one rise and two falls to get the analytic pulse." % n_ok)
+pic(s, "fig_template_method.png", Inches(7.75), T, Inches(5.1), Inches(5.65))
+lines(s, [Z("1. Events: the detector triggered on this LED's flash. All 12 channels.",
+            "1. 事件：这个 LED 闪时该探测器触发的事件，12 个通道都用。"),
+          Z("2. Median filter, 11 samples (18 µs): removes the narrow LED pickup spike.",
+            "2. 中值滤波，11 个采样点（18 µs）：去掉 LED 串扰的窄尖峰。"),
+          Z("3. Low-pass filter: 100 kHz, 4th-order Butterworth.", "3. 低通滤波：100 kHz，4 阶 Butterworth。"),
+          Z("4. Subtract the baseline (median before the pulse), divide by the peak.",
+            "4. 减基线（脉冲之前的中位数），再除以峰值。"),
+          Z("5. Fit each pulse with two exponentials (rise and fall), start time free.",
+            "5. 每个脉冲用两个指数拟合（上升和下降），起始时间自由。"),
+          Z("6. Keep pulses with a valid fit; shift each measured pulse so that its fitted start is at the same time.",
+            "6. 保留拟合合理的脉冲；把实测脉冲平移，使拟合出的起点对齐。"),
+          Z("7. Template = mean of the aligned pulses of all %d series (%s million pulses in total)." % (n_ok, mill),
+            "7. 模板 = %d 个 series 所有对齐后脉冲的平均（共 %s 百万个脉冲）。" % (n_ok, mill)),
+          Z("Analytic pulse: fit of the template with A₁(e^(−t/τf1) − e^(−t/τr)) + A₂(e^(−t/τf2) − e^(−t/τr)).",
+            "解析脉冲：用 A₁(e^(−t/τf1) − e^(−t/τr)) + A₂(e^(−t/τf2) − e^(−t/τr)) 拟合模板。")],
+      L, Inches(1.45), Inches(7.0), Inches(5.7), size=15)
+
+# ───────────────────────────────────────────────────────────────── 10 template example
 cc = cell[CLEAN]
-s = new(Z("Template generation", "模板"),
-        Z("example: %s with its own LED, 12 channels" % cc["det"], "例子：%s 看自己的 LED，12 个通道" % cc["det"]),
-        fig="cell_%s.png" % CLEAN, sec=55,
-        zh="第四点，模板。每个格子做一个模板，%d 个 series 合在一起。方法和 Z7 的模板一样：每个脉冲先拟合，按起点对齐，再平均。"
-           "最后拟合一个解析函数：一个上升，两个下降。这是 %s 的例子，十二个通道：蓝色是单个脉冲，红色是模板，黑色虚线是解析函数。"
-           % (n_ok, cc["det"]),
-        en="Fourth, templates. One template per cell, with all %d series together. Same method as the Z7 template: fit "
-           "each pulse, align on the start, then average. Then we fit an analytic pulse: one rise and two falls. Here is "
-           "%s as an example, twelve channels. Blue are single pulses, red is the template, and the dashed line is the "
-           "analytic pulse." % (n_ok, cc["det"]))
+s = new(Z("Templates: example", "模板：例子"),
+        Z("%s with its own LED, 12 channels" % cc["det"], "%s 看自己的 LED，12 个通道" % cc["det"]),
+        fig="cell_%s.png" % CLEAN, sec=30,
+        zh="这是 %s 的例子，十二个通道。蓝色是对齐后的单个脉冲，红色是模板，黑色虚线是解析脉冲。"
+           "标题是灰色的通道，没有清楚的脉冲，所以不拟合解析脉冲。" % cc["det"],
+        en="Here is %s as an example, twelve channels. Blue are the aligned single pulses, red is the template, and the "
+           "dashed black line is the analytic pulse. Channels with a grey title have no clear pulse, so we do not fit an "
+           "analytic pulse there." % cc["det"])
 pic(s, "cell_%s.png" % CLEAN, L, T, FIG_W, Inches(6.1))
-lines(s, [Z("One template per cell, all %d series together." % n_ok, "每个格子一个模板，%d 个 series 合在一起。" % n_ok),
-          Z("Same method as the Z7 template: fit each pulse, align, average.", "和 Z7 模板的方法一样：逐个拟合、对齐、平均。"),
-          Z("Analytic pulse: one rise, two falls.", "解析函数：一个上升，两个下降。")],
+lines(s, [Z("Blue: aligned single pulses.", "蓝色：对齐后的单个脉冲。"),
+          Z("Red: template.", "红色：模板。"),
+          Z("Black dashed: analytic pulse.", "黑色虚线：解析脉冲。"),
+          Z("Grey title: no clear pulse in that channel, no analytic pulse.", "灰色标题：这个通道没有清楚的脉冲，不拟合解析脉冲。")],
       TXT_L, Inches(1.6), TXT_W, Inches(5.0))
 
-# ───────────────────────────────────────────────────────────────── 10 example pulses
+# ───────────────────────────────────────────────────────────────── 11 example pulses
 s = new(Z("Example pulses: Z7 PSum with Z7's LED", "例子脉冲：Z7 PSum，Z7 自己的 LED"),
         Z("%d pulses, one per series" % n_ok, "%d 个脉冲，每个 series 一个" % n_ok),
         fig="example_pulses_%s.png" % EX, sec=60,
@@ -325,7 +365,7 @@ lines(s, [Z("Light to dark: early to late.", "颜色由浅到深：时间由早�
           Z("Divided by its own peak, the shape stays the same.", "除以各自的峰值后，形状不变。")],
       L, Inches(5.8), W, Inches(1.5))
 
-# ───────────────────────────────────────────────────────────────── 11 summary
+# ───────────────────────────────────────────────────────────────── 12 summary
 s = new(Z("Summary", "总结"), sec=40,
         zh="总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定，9 月 18 号 Z20 的 LED 要再查。"
            "触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。",
@@ -442,8 +482,8 @@ out += ["## 可能被问的问题 / Likely questions（回答一两句就够）"
         "中文：我不知道，我只在数据库里看到它们改了。要问当时值班的人。",
         "English: I do not know. I only see the changes in the ODB. We should ask the people on shift.", "",
         "**Q4. 模板具体怎么做的？/ How exactly are the templates made?**",
-        "中文：和 Z7 一样：低通、减基线、除以峰值、拟合、按起点对齐、平均。LED 数据多一步中值滤波，去掉很窄的串扰尖峰。",
-        "English: Same as Z7: low-pass, subtract the baseline, divide by the peak, fit, align on the start, average. For LED data we first apply a short median filter to remove the narrow pickup spikes.", "",
+        "中文：每个脉冲：中值滤波、100 千赫低通、减基线、除以峰值，用两个指数拟合找起点，把实测脉冲按起点对齐，最后把所有 series 的脉冲取平均。拟合只用来找起点。",
+        "English: For each pulse: median filter, 100 kilohertz low-pass, subtract the baseline, divide by the peak, fit two exponentials to find the start, and shift the measured pulse to that start. Then we average the pulses of all series. The fit is only used to find the start.", "",
         "**Q5. 有些模板开头有尖峰？/ Some templates have a spike at the start?**",
         "中文：那是自己 LED 的格子，LED 驱动串进了读出。隔壁探测器看同一个 LED 是干净的，可以用那个模板。",
         "English: Those are own-LED cells: the LED drive is picked up by the readout. The neighbouring detector sees the same LED cleanly, so we can use its template.", ""]

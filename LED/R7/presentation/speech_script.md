@@ -1,8 +1,8 @@
 # Speaker Script / 演讲稿: LED runs in SNOLAB Run 7
 
-约 8 分钟，11 页正片，后面是备用页（只在被问到时用）。每页先中文、后英文，意思一样，英文可以直接照着念。
+约 9 分钟，12 页正片，后面是备用页（只在被问到时用）。每页先中文、后英文，意思一样，英文可以直接照着念。
 
-时间（秒）：1 Title 15，2 Background 45，3 One LED run 40，4 Visibility: phase 1 55，5 Visibility: phase 2 35，6 Stability: amplitude vs time 50，7 Amplitude: cases to look at again 50，8 Stability: trigger fraction vs time 55，9 Template generation 55，10 Example pulses: Z7 PSum with Z7's LED 60，11 Summary 40；合计约 500 秒。
+时间（秒）：1 Title 15，2 Background 45，3 One LED run 40，4 Visibility: phase 1 55，5 Visibility: phase 2 35，6 Stability: amplitude vs time 50，7 Amplitude: cases to look at again 50，8 Stability: trigger fraction vs time 55，9 Template generation: method 65，10 Templates: example 30，11 Example pulses: Z7 PSum with Z7's LED 60，12 Summary 40；合计约 540 秒。
 
 ---
 
@@ -78,16 +78,25 @@
 
 ---
 
-## Slide 9: Template generation（约 55 秒）
+## Slide 9: Template generation: method（约 65 秒）
 
-**中文**：第四点，模板。每个格子做一个模板，45 个 series 合在一起。方法和 Z7 的模板一样：每个脉冲先拟合，按起点对齐，再平均。最后拟合一个解析函数：一个上升，两个下降。这是 Z2 的例子，十二个通道：蓝色是单个脉冲，红色是模板，黑色虚线是解析函数。
+**中文**：第四点，模板。先说怎么做的。第一步，选事件：这个 LED 闪的时候，这个探测器触发的事件，十二个通道都用。第二步，用一个很短的中值滤波，去掉 LED 通电带来的窄尖峰。第三步，100 千赫的低通滤波。第四步，减掉基线，再除以峰值。第五步，每个脉冲用两个指数拟合，起始时间是自由的。右上图就是一个脉冲和它的拟合。第六步，按拟合出来的起始时间，把实测的脉冲对齐。第七步，把 45 个 series 所有对齐的脉冲取平均，这就是模板，右下图红色的线。拟合只用来找起始时间，模板本身是实测脉冲的平均。最后再用一个上升、两个下降的函数拟合模板，得到解析脉冲。
 
-**English**: Fourth, templates. One template per cell, with all 45 series together. Same method as the Z7 template: fit each pulse, align on the start, then average. Then we fit an analytic pulse: one rise and two falls. Here is Z2 as an example, twelve channels. Blue are single pulses, red is the template, and the dashed line is the analytic pulse.
+**English**: Fourth, templates. First, how they are made. Step one: select the events where this detector triggered on this LED's flash, and use all twelve channels. Step two: a very short median filter removes the narrow spike from the LED drive. Step three: a 100 kilohertz low-pass filter. Step four: subtract the baseline and divide by the peak. Step five: fit each pulse with two exponentials, with a free start time. The top right plot shows one pulse and its fit. Step six: shift each measured pulse so that the fitted start is at the same time. Step seven: average all aligned pulses of the 45 series. That is the template, the red line at the bottom right. The fit is only used to find the start time; the template itself is the mean of the measured pulses. Finally we fit the template with one rise and two falls to get the analytic pulse.
 
 
 ---
 
-## Slide 10: Example pulses: Z7 PSum with Z7's LED（约 60 秒）
+## Slide 10: Templates: example（约 30 秒）
+
+**中文**：这是 Z2 的例子，十二个通道。蓝色是对齐后的单个脉冲，红色是模板，黑色虚线是解析脉冲。标题是灰色的通道，没有清楚的脉冲，所以不拟合解析脉冲。
+
+**English**: Here is Z2 as an example, twelve channels. Blue are the aligned single pulses, red is the template, and the dashed black line is the analytic pulse. Channels with a grey title have no clear pulse, so we do not fit an analytic pulse there.
+
+
+---
+
+## Slide 11: Example pulses: Z7 PSum with Z7's LED（约 60 秒）
 
 **中文**：老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 45 个，颜色从浅到深是从早到晚。左边是原始的 ADC，可以看到幅度慢慢变小。开头那个很尖的负信号是 LED 的串扰。右边每条除以自己的峰值，只看形状：基本叠在一起，形状没有变。
 
@@ -96,7 +105,7 @@
 
 ---
 
-## Slide 11: Summary（约 40 秒）
+## Slide 12: Summary（约 40 秒）
 
 **中文**：总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定，9 月 18 号 Z20 的 LED 要再查。触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。
 
@@ -120,8 +129,8 @@ English: It looks like the LED. Z19 also saw Z20's LED get dimmer, but Z19 with 
 English: I do not know. I only see the changes in the ODB. We should ask the people on shift.
 
 **Q4. 模板具体怎么做的？/ How exactly are the templates made?**
-中文：和 Z7 一样：低通、减基线、除以峰值、拟合、按起点对齐、平均。LED 数据多一步中值滤波，去掉很窄的串扰尖峰。
-English: Same as Z7: low-pass, subtract the baseline, divide by the peak, fit, align on the start, average. For LED data we first apply a short median filter to remove the narrow pickup spikes.
+中文：每个脉冲：中值滤波、100 千赫低通、减基线、除以峰值，用两个指数拟合找起点，把实测脉冲按起点对齐，最后把所有 series 的脉冲取平均。拟合只用来找起点。
+English: For each pulse: median filter, 100 kilohertz low-pass, subtract the baseline, divide by the peak, fit two exponentials to find the start, and shift the measured pulse to that start. Then we average the pulses of all series. The fit is only used to find the start.
 
 **Q5. 有些模板开头有尖峰？/ Some templates have a spike at the start?**
 中文：那是自己 LED 的格子，LED 驱动串进了读出。隔壁探测器看同一个 LED 是干净的，可以用那个模板。

@@ -3027,5 +3027,9 @@
    "pre": 0.315,
    "res": 0.289
   }
- ]
+ ],
+ "method_example": {
+  "cell": "P1-02",
+  "channel": "PES2"
+ }
 }

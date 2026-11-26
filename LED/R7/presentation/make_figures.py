@@ -3,6 +3,7 @@
 Copies the analysis figures from ../out into figures/ and makes the talk-only ones:
   fig_week_timeline.png     all LED runs of the week on a time axis, and one sequencer cycle (--week: only this)
   fig_run_timeline.png      one run: trigger time vs detector, LED phases
+  fig_template_method.png   how a template is made: one pulse with its fit, then the aligned pulses and their mean (--method: only this)
   fig_flash_groups.png      TriggerTime mod 1 s in phase 1 of one run: one peak per LED
   fig_amp_map.png           relative amplitude, cell x series (median over the cell's channels)
   fig_trig_map.png          trigger fraction, cell x series
@@ -28,6 +29,7 @@ OUT = os.path.join(R7, "out")
 FIG = os.path.join(HERE, "figures")
 RUN = "24260915_063921"
 EXAMPLE = "P1-07"
+METHOD_CELL = "P1-02"      # clean own-LED cell used to show how a template is made
 DROPPED = ["24260916_232802", "24260918_084531"]     # in the series list, not analysed (74 events; no LED flashes)
 MSL = os.path.join(os.path.dirname(R7), "SR1a_post-activation_LEDStability_0V_23Det_20260918.msl")
 
@@ -146,6 +148,54 @@ def week_timeline():
                 led_wait_script_s=None if "LED_MONITORING" not in waits else waits["LED_MONITORING"])
 
 
+def template_method():
+    """How a template is made, for one channel of METHOD_CELL (the signal channel with the largest pulses).
+    Top: one pulse after the median filter, the low-pass, baseline subtraction and division by its peak, with its
+    2-exp fit and the fitted start. Bottom: aligned pulses of several series, their mean over all series (the
+    template) and the analytic pulse. Everything is read from the stored products; nothing is refitted here."""
+    import pickle
+    rows = [r for r in rd("lpfit/LED_cell_templates.csv") if r["id"] == METHOD_CELL and r["signal"] == "True" and r["amp_median_adc"]]
+    ch = max(rows, key=lambda r: float(r["amp_median_adc"]))["channel"]
+    files = sorted(glob.glob(os.path.join(OUT, "2426*", "lpfit.pkl")))
+    overlay, example, win, ref, sr = [], None, None, None, None
+    for f in [os.path.join(OUT, RUN, "lpfit.pkl")] + files[::6]:
+        d = pickle.load(open(f, "rb"))
+        o = d["cells"][METHOD_CELL][ch]
+        win, ref, sr = d["win"], d["rise_ref"], d["sample_rate"]
+        if example is None:
+            example = o["example"]
+        else:
+            overlay += o["overlay"]
+    tp = pickle.load(open(os.path.join(OUT, "lpfit", "LED_cell_templates.pkl"), "rb"))["templates"][(METHOD_CELL, ch)]
+    x_ms = (np.arange(win[0], win[1]) - ref) / sr * 1e3
+
+    y, fp, _ = example                                      # normalised low-passed trace over the fit window
+    lo = ref - 3500                                         # lp_fit_align.FIT_LO
+    xi = np.arange(lo, lo + len(y), dtype=float)
+    dt = np.clip((xi - fp["pretrigger"]) / sr, 0.0, None)
+    model = np.where(xi <= fp["pretrigger"], fp["baseline"],
+                     fp["baseline"] + fp["amp"] * (np.exp(-dt / fp["t_fall"]) - np.exp(-dt / fp["t_rise"])))
+    fig, (ax, bx) = plt.subplots(2, 1, figsize=(6.4, 7.4))
+    ax.plot((xi - ref) / sr * 1e3, y, color="C0", lw=0.8, label="one pulse: filtered, baseline subtracted, / peak")
+    ax.plot((xi - ref) / sr * 1e3, model, color="C3", lw=1.4, label="fit with two exponentials")
+    ax.axvline((fp["pretrigger"] - ref) / sr * 1e3, color="k", ls=":", lw=1.0, label="fitted start")
+    ax.set_xlim(-1, 6); ax.set_ylim(-0.25, 1.15); ax.grid(alpha=0.25)
+    ax.set_title("Steps 2 to 5: one pulse and its fit", fontsize=11); ax.legend(fontsize=8.5, loc="upper right")
+    ax.set_xlabel("time [ms]"); ax.set_ylabel("pulse / its peak")
+    for k, o in enumerate(overlay):
+        bx.plot(x_ms, o, color="C0", lw=0.4, alpha=0.35, label="aligned pulses" if k == 0 else None)
+    bx.plot(x_ms, tp["mean"], color="C3", lw=1.6, label="template = mean of all aligned pulses")
+    if tp.get("analytic") is not None:
+        bx.plot(x_ms, tp["analytic"], color="k", lw=1.1, ls="--", label="analytic pulse")
+    bx.set_xlim(-1, 6); bx.set_ylim(-0.25, 1.15); bx.grid(alpha=0.25)
+    bx.set_title("Steps 6 to 8: aligned pulses, template, analytic pulse", fontsize=11); bx.legend(fontsize=8.5, loc="upper right")
+    bx.set_xlabel("time from the fitted start [ms]"); bx.set_ylabel("pulse / its peak")
+    fig.suptitle("%s, channel %s" % (METHOD_CELL, ch), fontsize=10, y=0.995)
+    fig.tight_layout(); fig.savefig(os.path.join(FIG, "fig_template_method.png"), dpi=140); plt.close(fig)
+    print("template method figure:", METHOD_CELL, ch, "overlay", len(overlay))
+    return dict(cell=METHOD_CELL, channel=ch)
+
+
 def main():
     os.makedirs(FIG, exist_ok=True)
     for f in ("stability/amplitude_vs_time.png", "stability/trigger_fraction.png", "lpfit/cells_overview.png",
@@ -159,6 +209,7 @@ def main():
         copy("lpfit/cell_%s.png" % c["id"], crop=0.045)
     st = {}
     st["campaign"] = week_timeline()
+    st["method_example"] = template_method()
 
     # ---- one run: timeline and flash groups
     tm = json.load(open(os.path.join(OUT, RUN, "timing.json")))
@@ -421,12 +472,14 @@ def main():
 
 
 if __name__ == "__main__":
-    if "--week" in sys.argv:          # only the week timeline and its numbers; the other figures stay as they are
+    if "--week" in sys.argv or "--method" in sys.argv:    # only that figure and its numbers; the others stay as they are
         os.makedirs(FIG, exist_ok=True)
         f = os.path.join(HERE, "stats.json")
         st_ = json.load(open(f))
-        st_["campaign"] = week_timeline()
+        if "--method" in sys.argv:
+            st_["method_example"] = template_method()
+        else:
+            st_["campaign"] = week_timeline()
         json.dump(st_, open(f, "w"), indent=1, default=str)
-        print(st_["campaign"])
     else:
         main()

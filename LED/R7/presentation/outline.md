@@ -1,7 +1,7 @@
 # Outline and frozen facts for the R7 LED talk
 
 Audience: SuperCDMS group meeting (Prof. Yan Liu). Speaker: Zhiheng Li (UMN undergraduate).
-Length: about 8 minutes, 11 main slides, then backup (simplified 2026-11-26 at the user's request: follow Prof. Liu's
+Length: about 9 minutes, 12 main slides, then backup (simplified 2026-11-26 at the user's request: follow Prof. Liu's
 points only, one figure and at most three short lines per slide, few numbers, no dashes or arrows in titles and text). Slides in English. Speaker script: Chinese + English
 per slide, short simple sentences that can be read aloud.
 
@@ -106,3 +106,21 @@ and the difference must be reported.
 As `~/urop/snolab_phonon_pulse_analysis/didv/presentation/` (python-pptx, 16:9, Arial, navy titles, speaker notes
 on every slide, page numbers, `make_pdf.sh`, `speech_script.md` with timing line and likely questions,
 `build_speech_pdf.py`). Tone: plain and factual, percentages first, no showy wording.
+
+## Template method slide (added 2026-11-26)
+The audience does not know the Z7 template script, so the deck never says "same method as Z7"; it lists the steps as coded:
+1. events of the cell (its detector triggered on that LED's flash), all 12 channels, no per-pulse SNR cut here
+   (`lp_template_led.main`);
+2. 11-sample (17.6 us) running median (`to_z7_frame`, `MEDFILT`);
+3. 100 kHz 4th-order Butterworth low-pass (`lp_fit_align.lowpass`);
+4. baseline = median of samples 2000-12000 of the shifted trace (4.1-20.1 ms of the raw trace), subtracted; divided by
+   the global maximum (`normalize_trace`);
+5. 2-exp fit, 5 free parameters including the start, window -5.6 ... +12.8 ms (`fit_trace`);
+6. kept when amp > 0, 0 < t_rise < t_fall and the fitted start is within 300 samples (0.48 ms) of the expected one; the
+   measured trace is shifted by linear interpolation so the fitted start lands on a fixed sample (`fit_channel`,
+   `shift_align`);
+7. template = arithmetic mean of the aligned pulses of all series (`lp_template_combine`, sum / n);
+8. analytic pulse = least-squares fit of the template, one rise and two falls, window -2.9 ... +24 ms, 2-exp fallback
+   (`fit_led.fit`). A channel with a pulse in fewer than 30 % of the cell's events gets no analytic pulse.
+Figure `fig_template_method.png` (`make_figures.py --method`): one pulse with its fit, then aligned pulses, template and
+analytic pulse, for the signal channel of P1-02 with the largest pulses.

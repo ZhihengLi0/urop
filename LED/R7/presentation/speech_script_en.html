@@ -47,15 +47,19 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 <div class='en'><p>Third, trigger fraction versus time. Yellow means it triggers on every flash. The own-LED cells stay yellow: stable. Other cells have steps. I checked the ODB: the steps are exactly where the trigger thresholds were changed, the black lines. So these are setting changes, not unstable detectors.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 9: Template generation(about 55 s)</h2>
-<div class='en'><p>Fourth, templates. One template per cell, with all 45 series together. Same method as the Z7 template: fit each pulse, align on the start, then average. Then we fit an analytic pulse: one rise and two falls. Here is Z2 as an example, twelve channels. Blue are single pulses, red is the template, and the dashed line is the analytic pulse.</p>
+<section class='card'><h2>Slide 9: Template generation: method(about 65 s)</h2>
+<div class='en'><p>Fourth, templates. First, how they are made. Step one: select the events where this detector triggered on this LED&#x27;s flash, and use all twelve channels. Step two: a very short median filter removes the narrow spike from the LED drive. Step three: a 100 kilohertz low-pass filter. Step four: subtract the baseline and divide by the peak. Step five: fit each pulse with two exponentials, with a free start time. The top right plot shows one pulse and its fit. Step six: shift each measured pulse so that the fitted start is at the same time. Step seven: average all aligned pulses of the 45 series. That is the template, the red line at the bottom right. The fit is only used to find the start time; the template itself is the mean of the measured pulses. Finally we fit the template with one rise and two falls to get the analytic pulse.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 10: Example pulses: Z7 PSum with Z7&#x27;s LED(about 60 s)</h2>
+<section class='card'><h2>Slide 10: Templates: example(about 30 s)</h2>
+<div class='en'><p>Here is Z2 as an example, twelve channels. Blue are the aligned single pulses, red is the template, and the dashed black line is the analytic pulse. Channels with a grey title have no clear pulse, so we do not fit an analytic pulse there.</p>
+</div>
+</section>
+<section class='card'><h2>Slide 11: Example pulses: Z7 PSum with Z7&#x27;s LED(about 60 s)</h2>
 <div class='en'><p>Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late. On the left, raw ADC: the amplitude slowly goes down. The sharp negative spike at the start is pickup from the LED drive. On the right, each pulse is divided by its own peak, so we only see the shape. They lie on top of each other: the shape did not change.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 11: Summary(about 40 s)</h2>
+<section class='card'><h2>Slide 12: Summary(about 40 s)</h2>
 <div class='en'><p>To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly stable; Z20&#x27;s LEDs on September 18 need a closer look. Trigger fraction: stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
 </div>
 </section>
@@ -74,7 +78,7 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 </div>
 </section>
 <section class='card'><p><b>Q4. How exactly are the templates made?</b></p>
-<div class='en'><p>Same as Z7: low-pass, subtract the baseline, divide by the peak, fit, align on the start, average. For LED data we first apply a short median filter to remove the narrow pickup spikes.</p>
+<div class='en'><p>For each pulse: median filter, 100 kilohertz low-pass, subtract the baseline, divide by the peak, fit two exponentials to find the start, and shift the measured pulse to that start. Then we average the pulses of all series. The fit is only used to find the start.</p>
 </div>
 </section>
 <section class='card'><p><b>Q5. Some templates have a spike at the start?</b></p>
