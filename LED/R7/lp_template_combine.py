@@ -66,8 +66,11 @@ def plot_example(example_id, cells, psum, per_series, store):
     # example pulses: one PSum per series, light -> dark in time
     c = cells[example_id]
     lst = sorted(psum[example_id], key=lambda x: x[0])
-    cmap = plt.get_cmap("Blues")
-    cols = [cmap(0.35 + 0.65 * i / max(len(lst) - 1, 1)) for i in range(len(lst))]
+    # light -> dark in time, through several hues (yellow-green -> teal -> blue -> purple): with 45 overlapping
+    # traces a single hue hides which day a line belongs to
+    cmap = plt.get_cmap("viridis_r")
+    C0 = 0.08
+    cols = [cmap(C0 + (1 - C0) * i / max(len(lst) - 1, 1)) for i in range(len(lst))]
     x_full = np.arange(lp.TRACELENGTH) / SR * 1e3
     fig, axes = plt.subplots(1, 3, figsize=(18, 5.6), gridspec_kw=dict(width_ratios=[2.2, 1, 1]))
     for (t, s, ex), col in zip(lst, cols):
@@ -88,7 +91,7 @@ def plot_example(example_id, cells, psum, per_series, store):
     axes[2].set_title("same pulses normalised: shape only", fontsize=10)
     for ax in axes:
         ax.grid(alpha=0.2)
-    sm = plt.cm.ScalarMappable(cmap=matplotlib.colors.LinearSegmentedColormap.from_list("b", [cmap(0.35), cmap(1.0)]),
+    sm = plt.cm.ScalarMappable(cmap=matplotlib.colors.LinearSegmentedColormap.from_list("b", [cmap(v) for v in np.linspace(C0, 1.0, 64)]),
                                norm=plt.Normalize(mdates.date2num(lst[0][0]), mdates.date2num(lst[-1][0])))
     fig.subplots_adjust(left=0.05, right=0.9, bottom=0.17, top=0.86, wspace=0.2)
     cb = fig.colorbar(sm, cax=fig.add_axes([0.915, 0.17, 0.012, 0.69]))

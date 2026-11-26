@@ -30,6 +30,10 @@
   "script_loop": 9,
   "led_wait_script_s": 1106.0
  },
+ "method_example": {
+  "cell": "P1-02",
+  "channel": "PES2"
+ },
  "n_series": 45,
  "first": "24260915_021333",
  "last": "24260921_110340",
@@ -3027,9 +3031,5 @@
    "pre": 0.315,
    "res": 0.289
   }
- ],
- "method_example": {
-  "cell": "P1-02",
-  "channel": "PES2"
- }
+ ]
 }

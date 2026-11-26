@@ -98,9 +98,9 @@
 
 ## Slide 11: Example pulses: Z7 PSum with Z7's LED（约 60 秒）
 
-**中文**：老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 45 个，颜色从浅到深是从早到晚。左边是原始的 ADC，可以看到幅度慢慢变小。开头那个很尖的负信号是 LED 的串扰。右边每条除以自己的峰值，只看形状：基本叠在一起，形状没有变。
+**中文**：老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 45 个，颜色从浅到深是从早到晚：黄色最早，紫色最晚。左边是原始的 ADC，可以看到幅度慢慢变小。开头那个很尖的负信号是 LED 的串扰。右边每条除以自己的峰值，只看形状：基本叠在一起，形状没有变。
 
-**English**: Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late. On the left, raw ADC: the amplitude slowly goes down. The sharp negative spike at the start is pickup from the LED drive. On the right, each pulse is divided by its own peak, so we only see the shape. They lie on top of each other: the shape did not change.
+**English**: Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late: yellow is the first day, purple the last. On the left, raw ADC: the amplitude slowly goes down. The sharp negative spike at the start is pickup from the LED drive. On the right, each pulse is divided by its own peak, so we only see the shape. They lie on top of each other: the shape did not change.
 
 
 ---
