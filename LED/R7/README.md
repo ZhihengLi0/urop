@@ -7,8 +7,8 @@ and `..._20261004.msl` (LED settings identical in all three). Raw data:
 `~/series_lists/led_after_cf_2026-09-22.csv` (47 series; `24260916_232802` (74 events) and
 `24260918_084531` (no LED flashes) are dropped, 45 are analysed).
 
-Data products (`out/`), job logs (`*.out`) and the generated talk files are collaboration data and
-stay out of git.
+Data products (`out/`) and job logs (`*.out`, `logs/`) stay out of git. The talk (slides, PDF, speaker
+script, figures) is in `presentation/`.
 
 ## What a run looks like
 

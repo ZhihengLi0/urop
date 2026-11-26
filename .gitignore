@@ -17,13 +17,6 @@ snolab_run4_phonon_pulse_analysis/
 # R7 LED analysis: data products and job logs stay local (collaboration data)
 LED/R7/out/
 LED/R7/*.out
-LED/R7/presentation/figures/
-LED/R7/presentation/*.pptx
-LED/R7/presentation/*.pdf
-LED/R7/presentation/*.html
-LED/R7/presentation/stats.json
-LED/R7/presentation/speech_script.md
-LED/R7/presentation/outline.md
 LED/R7/logs/
 LED/R7/HANDOFF_LED.md
 # DAQ sequencer scripts (collaboration-internal)
