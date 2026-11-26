@@ -1,12 +1,12 @@
 # Talk: LED runs in SNOLAB Run 7
 
 Group-meeting talk on the 45 R7 LEDStability series (15–21 September 2026): who triggers on which LED,
-stability of amplitude and trigger fraction, pulse templates. About 15 minutes, 15 main slides plus backup.
+stability of amplitude and trigger fraction, pulse templates. About 16 minutes, 16 main slides plus backup.
 Outline from Prof. Liu; `outline.md` lists the content and the checked facts behind every statement.
 
 | file | what |
 |---|---|
-| `make_figures.py` | copies the analysis figures from `../out` into `figures/`, makes the talk-only figures, writes `stats.json` (every number quoted on a slide) |
+| `make_figures.py` | copies the analysis figures from `../out` into `figures/`, makes the talk-only figures (`--week`: only the week timeline of the opening slide), writes `stats.json` (every number quoted on a slide) |
 | `build_pptx.py` | builds the deck (python-pptx, 16:9, speaker notes on every slide) and `speech_script.md` |
 | `build_pptx.py --zh` | the same deck with Chinese slide text, `SNOLAB_R7_LED_runs_*_zh.pptx` (for reading; same numbers, figures keep their English labels, notes = the Chinese speaker text) |
 | `make_pdf.sh` | PDF of the deck (LibreOffice module) and of the speaker script (Chromium) |

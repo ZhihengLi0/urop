@@ -1,6 +1,7 @@
 """Figures and numbers for the R7 LED talk (run in the V07-02 container from LED/R7/talk).
 
 Copies the analysis figures from ../out into figures/ and makes the talk-only ones:
+  fig_week_timeline.png     all LED runs of the week on a time axis, and one sequencer cycle (--week: only this)
   fig_run_timeline.png      one run: trigger time vs detector, LED phases
   fig_flash_groups.png      TriggerTime mod 1 s in phase 1 of one run: one peak per LED
   fig_amp_map.png           relative amplitude, cell x series (median over the cell's channels)
@@ -10,9 +11,9 @@ Copies the analysis figures from ../out into figures/ and makes the talk-only on
 and writes stats.json with every number quoted on the slides. Needs out/summary/trigger_epochs.csv
 (trigger_settings.py) for the trigger-threshold epochs.
 """
-import csv, json, os, shutil, sys
+import csv, glob, json, os, shutil, sys
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
@@ -27,6 +28,8 @@ OUT = os.path.join(R7, "out")
 FIG = os.path.join(HERE, "figures")
 RUN = "24260915_063921"
 EXAMPLE = "P1-07"
+DROPPED = ["24260916_232802", "24260918_084531"]     # in the series list, not analysed (74 events; no LED flashes)
+MSL = os.path.join(os.path.dirname(R7), "SR1a_post-activation_LEDStability_0V_23Det_20260918.msl")
 
 
 def rd(p):
@@ -45,6 +48,97 @@ def copy(src, dst=None):
         print("missing", src)
 
 
+def script_times():
+    """Sequencer script: seconds of WAIT between TRANSITION START and STOP per subroutine, and the main loop count."""
+    sub, on, out, loop = None, False, defaultdict(float), None
+    for l in open(MSL):
+        w = l.split("#")[0].strip(); u = w.upper()
+        if u.startswith("SUBROUTINE"):
+            sub = w.split()[1]
+        elif u.startswith("ENDSUBROUTINE"):
+            sub = None
+        elif u.startswith("TRANSITION START"):
+            on = True
+        elif u.startswith("TRANSITION STOP"):
+            on = False
+        elif u.startswith("WAIT SECONDS") and on and sub:
+            out[sub] += float(w.split(",")[1])
+        elif u.startswith("LOOP") and sub is None and len(w.split()) == 2:
+            loop = int(w.split()[1])
+    return dict(out), loop
+
+
+def week_timeline():
+    """All LED runs of the week on a time axis (one line per run), and one sequencer cycle drawn from the script's
+    wait times. Returns the numbers quoted on the background slide."""
+    import matplotlib.dates as mdates
+    from stability_led import SCRIPT_SWITCH
+    ser = sorted(os.path.basename(os.path.dirname(f)) for f in glob.glob(os.path.join(OUT, "2426*", "timing.json")))
+    tms = {s: json.load(open(os.path.join(OUT, s, "timing.json"))) for s in ser}
+    run_s = float(np.median([tms[s]["led_off_s"] for s in ser]))
+    allser = sorted(ser + DROPPED)
+    tt = {s: series_time(s) for s in allser}
+    blocks = [[allser[0]]]
+    for a, b in zip(allser, allser[1:]):
+        if (tt[b] - tt[a]).total_seconds() > 3 * 3600:
+            blocks.append([])
+        blocks[-1].append(b)
+    gaps = [(tt[b] - tt[a]).total_seconds() / 60 for bl in blocks for a, b in zip(bl, bl[1:])]
+    cycle = float(np.median(gaps))
+    waits, loop = script_times()
+    lowbkg = waits["LOW_BACKGROUND"] / 60.0
+
+    fig, (ax, bx) = plt.subplots(2, 1, figsize=(12, 3.85), gridspec_kw=dict(height_ratios=[1.3, 1]))
+    pad = timedelta(minutes=25)
+    for bl in blocks:
+        a, b = tt[bl[0]] - pad, tt[bl[-1]] + timedelta(seconds=run_s) + pad
+        ax.axvspan(a, b, color="C0", alpha=0.10, lw=0)
+        ax.text(a + (b - a) / 2, 0.84, "%d" % sum(s in tms for s in bl), ha="center", fontsize=12, color="C0")
+    ax.vlines([tt[s] for s in ser], 0.12, 0.72, color="C0", lw=1.7, label="LED run, analysed (%d)" % len(ser))
+    ax.vlines([tt[s] for s in DROPPED], 0.12, 0.72, color="0.45", lw=1.7, linestyles=":", label="LED run, not used (%d)" % len(DROPPED))
+    ax.plot([tt[s] for s in DROPPED], [0.72] * len(DROPPED), "x", color="0.3", ms=7)
+    ax.axvline(SCRIPT_SWITCH, color="C3", ls="--", lw=1.1)
+    ax.text(SCRIPT_SWITCH + timedelta(minutes=40), 0.02, "script 0913 -> 0918", color="C3", fontsize=10.5, va="bottom")
+    d0 = tt[allser[0]].replace(hour=0, minute=0, second=0)
+    d1 = tt[allser[-1]].replace(hour=0, minute=0, second=0) + timedelta(days=1)
+    ax.set_xlim(d0, d1); ax.set_ylim(0, 1); ax.set_yticks([])
+    ax.xaxis.set_major_locator(mdates.DayLocator()); ax.xaxis.set_major_formatter(mdates.DateFormatter("%d %b"))
+    ax.xaxis.set_minor_locator(mdates.HourLocator(byhour=[6, 12, 18]))
+    ax.grid(axis="x", which="major", color="0.6", lw=0.8); ax.grid(axis="x", which="minor", color="0.88", lw=0.6)
+    for lab in ax.get_xticklabels():
+        lab.set_ha("left"); lab.set_fontsize(11)
+    bx.tick_params(labelsize=11); bx.xaxis.label.set_size(11)
+    ax.set_title("LED runs of the week, %s - %s: blue line = one LED run, analysed (%d); grey dotted with x = not used (%d)\n"
+                 "bands = blocks of consecutive runs, with the number of analysed runs"
+                 % (tt[allser[0]].strftime("%d %b %H:%M"), tt[allser[-1]].strftime("%d %b %H:%M"), len(ser), len(DROPPED)), fontsize=11.5)
+
+    tm = tms[RUN]
+    x0 = lowbkg + waits.get("LOW_BACKGROUND_after", 300.0) / 60.0            # the script waits 300 s after the stop
+    on, sp, off, pz = tm["led_on_s"] / 60, tm["split_s"] / 60, tm["led_off_s"] / 60, tm["pause_s"] / 120
+    bx.barh(0, lowbkg, left=0, color="0.75", edgecolor="k", lw=0.6)
+    bx.text(lowbkg / 2, 0, "low-background run: %.0f min" % lowbkg, ha="center", va="center", fontsize=12)
+    bx.barh(0, on, left=x0, color="C0", alpha=0.25, edgecolor="k", lw=0.6)
+    bx.barh(0, sp - pz - on, left=x0 + on, color="C1", alpha=0.75, edgecolor="k", lw=0.6)
+    bx.barh(0, off - sp - pz, left=x0 + sp + pz, color="C2", alpha=0.75, edgecolor="k", lw=0.6)
+    bx.text(x0 + on / 2, 0, "wait", ha="center", va="center", fontsize=11)
+    bx.text(x0 + off / 2, 0.62, "LED run: about %.0f min" % (run_s / 60), ha="center", va="bottom", fontsize=12, color="C0")
+    bx.annotate("phase 1: %d flashes" % tm["n_flashes"]["phase1"], (x0 + (on + sp) / 2, -0.4), (x0 + on - 17, -1.3),
+                fontsize=11, ha="center", arrowprops=dict(arrowstyle="-", lw=0.7))
+    bx.annotate("phase 2: %d flashes" % tm["n_flashes"]["phase2"], (x0 + (sp + off) / 2, -0.4), (x0 + off + 12, -1.3),
+                fontsize=11, ha="center", arrowprops=dict(arrowstyle="-", lw=0.7))
+    bx.barh(0, cycle - (x0 + off), left=x0 + off, color="w", edgecolor="k", lw=0.6, hatch="///")
+    bx.text(cycle + 1.5, 0, "stop, relock,\nthen again", ha="left", va="center", fontsize=11)
+    bx.set_xlim(-2, cycle + 22); bx.set_ylim(-1.75, 1.45); bx.set_yticks([])
+    bx.set_xlabel("minutes within one sequencer cycle (from the script's wait times; measured: one LED run every %.0f min)" % cycle)
+    for sp_ in ("top", "right", "left"):
+        bx.spines[sp_].set_visible(False)
+    fig.tight_layout(); fig.savefig(os.path.join(FIG, "fig_week_timeline.png"), dpi=130); plt.close(fig)
+    return dict(n_all=len(allser), n_ok=len(ser), dropped=DROPPED, first_all=allser[0], last_all=allser[-1],
+                n_blocks=len(blocks), block_sizes=[sum(s in tms for s in bl) for bl in blocks], run_min=round(run_s / 60, 1),
+                cycle_min=round(cycle), lowbkg_min=round(lowbkg), script_loop=loop,
+                led_wait_script_s=None if "LED_MONITORING" not in waits else waits["LED_MONITORING"])
+
+
 def main():
     os.makedirs(FIG, exist_ok=True)
     for f in ("summary/visibility_phase1.png", "summary/visibility_phase2.png", "stability/amplitude_vs_time.png",
@@ -55,6 +149,7 @@ def main():
     for c in cells:
         copy("lpfit/cell_%s.png" % c["id"])
     st = {}
+    st["campaign"] = week_timeline()
 
     # ---- one run: timeline and flash groups
     tm = json.load(open(os.path.join(OUT, RUN, "timing.json")))
@@ -311,4 +406,12 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "--week" in sys.argv:          # only the week timeline and its numbers; the other figures stay as they are
+        os.makedirs(FIG, exist_ok=True)
+        f = os.path.join(HERE, "stats.json")
+        st_ = json.load(open(f))
+        st_["campaign"] = week_timeline()
+        json.dump(st_, open(f, "w"), indent=1, default=str)
+        print(st_["campaign"])
+    else:
+        main()

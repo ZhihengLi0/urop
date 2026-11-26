@@ -249,19 +249,52 @@ run(tb.text_frame.add_paragraph(), Z("%d LEDStability series, %s – %s (after t
     n_ok, when(st["first"])[:6], when(st["last"])[:6]), 13, GRAY)
 
 # ───────────────────────────────────────────────────────────────── 2 data
-s = new(Z("The data", "数据"), Z("%d LED series; one run = two LED phases", "%d 个 LED series；一次 run = 两段 LED") % n_ok, fig="fig_run_timeline.png", sec=55,
+cp = st["campaign"]          # all LED runs of the week, and one sequencer cycle (make_figures.week_timeline)
+not_used = Z("24260916_232802 (74 events), 24260918_084531 (no LED flashes)", "24260916_232802（74 个事件）、24260918_084531（没有 LED 闪光）")
+s = new(Z("The data: LED runs in SNOLAB Run 7", "数据：SNOLAB Run 7 的 LED run"),
+        Z("%d LED runs, %s – %s; %d analysed", "%d 个 LED run，%s – %s；分析了其中 %d 个") % (
+            cp["n_all"], when(cp["first_all"]), when(cp["last_all"]), n_ok),
+        fig="fig_week_timeline.png", sec=50, hint="上图：一条竖线 = 一个 LED run。下图：脚本的一个循环。",
+        zh="先说背景。这是 SNOLAB Run 7 的数据，在 Cf 刻度之后取的。探测器不加偏压，一共 23 个探测器。"
+           "**DAQ 的脚本自动循环：先取 %d 分钟的低本底数据，再取大约 %d 分钟的 LED 数据，然后重新锁定，再来一遍。**"
+           "所以大约每 %d 分钟有一个 LED run。上面这张图，每一条竖线是一个 LED run："
+           "从 9 月 15 号凌晨到 21 号上午，一共 %d 个，我们用了其中 %d 个。中间的空白是没有 LED run 的时间。"
+           % (cp["lowbkg_min"], round(cp["run_min"]), cp["cycle_min"], cp["n_all"], n_ok),
+        en="First, the background. These data are from SNOLAB Run 7, taken after the Cf calibration. The detectors are at "
+           "zero volts, and there are 23 of them. **A sequencer script runs in a loop: %d minutes of low-background data, "
+           "then about %d minutes of LED data, then a relock, and again.** So we get one LED run about every %d minutes. "
+           "In the top plot, each line is one LED run. They go from the early morning of September 15 to the morning of "
+           "September 21: %d runs, and we use %d of them. The gaps are times without LED runs."
+           % (cp["lowbkg_min"], round(cp["run_min"]), cp["cycle_min"], cp["n_all"], n_ok))
+if s:
+    pic(s, "fig_week_timeline.png", L, T, W, Inches(3.95))
+    lines(s, [Z("SNOLAB Run 7 (SR1a), after the Cf calibration; detectors at 0 V; 23 detectors (all except Z12).",
+                "SNOLAB Run 7（SR1a），Cf 刻度之后；探测器 0 V；23 个探测器（除 Z12 以外全部）。"),
+              Z("The sequencer repeats: low-background run (%d min) → LED run (about %d min) → relock.  One LED run about every %d min.",
+                "脚本循环：低本底 run（%d 分钟）→ LED run（约 %d 分钟）→ 重新锁定。大约每 %d 分钟一个 LED run。") % (
+                  cp["lowbkg_min"], round(cp["run_min"]), cp["cycle_min"]),
+              Z("%d LED runs in %d blocks; %d analysed.  Not used: %s.", "%d 个 LED run，分成 %d 块；分析了 %d 个。没有用：%s。") % (
+                  cp["n_all"], cp["n_blocks"], n_ok, not_used),
+              Z("Sequencer script 0913 until 18 Sep 22:00, then 0918: same LED settings.",
+                "序列脚本：9 月 18 日 22:00 之前是 0913 版，之后是 0918 版；LED 设置相同。"),
+              Z("!Questions: who sees which LED?  Are amplitude and trigger fraction stable?  What do the pulses look like?",
+                "!要回答的问题：谁看到哪个 LED？幅度和触发比例稳不稳？脉冲长什么样？")],
+          L, Inches(5.3), W, Inches(2.0), size=13)
+
+# ───────────────────────────────────────────────────────────────── 3 one run
+s = new(Z("One LED run", "一次 LED run"), Z("wait, phase 1 (15 LEDs), 3 s off, phase 2 (12 LEDs)", "等待 → 第一段（15 个 LED）→ 停 3 s → 第二段（12 个 LED）"), fig="fig_run_timeline.png", sec=45,
         hint="指着图：灰色是普通触发，蓝色是 LED 触发，两段中间停 3 秒。",
-        zh="数据是 9 月 15 号到 21 号的 LED series，一共 %d 个。每个 run 先等大约 880 秒，然后开灯。"
+        zh="再看一个 LED run 里面是什么样。每个 run 先等大约 880 秒，然后开灯。"
            "**第一段 15 个 LED 一起闪，停 3 秒，第二段换 12 个 LED 再闪。**每个 LED 每秒闪一次，每段正好闪 151 次。"
-           "还有一点要记住：每次触发只读出触发的那一个探测器。" % n_ok,
-        en="The data: %d LED series, from September 15 to 21. Each run waits about 880 seconds, then the LEDs turn on. "
+           "还有一点要记住：每次触发只读出触发的那一个探测器。",
+        en="Now one LED run. It waits about 880 seconds, then the LEDs turn on. "
            "**Phase one: 15 LEDs flash together. Three seconds off. Phase two: 12 other LEDs.** Each LED flashes once per "
            "second, exactly 151 times per phase. One thing to keep in mind: each trigger reads out only the detector that "
-           "triggered." % n_ok)
+           "triggered.")
 pic(s, "fig_run_timeline.png", L, T, W, Inches(3.9))
 lines(s, [Z("Sequencer script SR1a LEDStability: 800 s wait, then LEDs at 1 Hz, 100 µs pulses (Z17 200 µs, Z20 50 µs).", "序列脚本 SR1a LEDStability：先等 800 s，然后 LED 以 1 Hz 闪，脉宽 100 µs（Z17 200 µs，Z20 50 µs）。"),
           Z("Phase 1: 15 LEDs  ·  3 s off  ·  phase 2: 12 LEDs.  151 flashes per phase in all %d series.", "第一段：15 个 LED  ·  停 3 s  ·  第二段：12 个 LED。全部 %d 个 series 里每段都是 151 次闪光。") % n_ok,
-          Z("Not used: 24260916_232802 (74 events), 24260918_084531 (no LED flashes).  One detector is read out per trigger.", "没有用：24260916_232802（74 个事件）、24260918_084531（没有 LED 闪光）。每次触发只读出一个探测器。")],
+          Z("One detector is read out per trigger: the one that triggered.", "每次触发只读出一个探测器：就是触发的那个。")],
       L, Inches(5.25), W, Inches(2.0), size=14)
 
 # ───────────────────────────────────────────────────────────────── 3 which LED

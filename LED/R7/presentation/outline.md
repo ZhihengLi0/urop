@@ -1,7 +1,7 @@
 # Outline and frozen facts for the R7 LED talk
 
 Audience: SuperCDMS group meeting (Prof. Yan Liu). Speaker: Zhiheng Li (UMN undergraduate).
-Length: about 15 minutes, ~14 main slides, then backup. Slides in English. Speaker script: Chinese + English
+Length: about 16 minutes, 16 main slides, then backup. Slides in English. Speaker script: Chinese + English
 per slide, short simple sentences that can be read aloud.
 
 Every number on a slide must be read from `stats.json` or the CSV files named below, never typed.
@@ -15,7 +15,11 @@ and the difference must be reported.
 4. template generation; show example pulses, e.g. Z7 PSum in Z7's LED, drawn together, to see the pulse shape
    change with time
 
-## Data and method (1-2 slides)
+## Data and method (2-3 slides)
+- Opening slide (asked for by Prof. Liu: start with the basic information and a timeline): `fig_week_timeline.png`,
+  all LED runs of the week on a time axis and one sequencer cycle; numbers in `stats.campaign` (47 runs, 45
+  analysed, blocks of consecutive runs, low-background run 100 min -> LED run ~20 min -> relock, one LED run
+  about every 132 min; the cycle is read from the script's wait times and the measured spacing of the series).
 - 45 LEDStability series, 15-21 September 2026, after the Cf calibration. Two more dropped: 24260916_232802
   (74 events), 24260918_084531 (no LED flashes).
 - One run: ~880 s wait, phase 1 (15 LEDs), 3 s off, phase 2 (12 LEDs). Each LED flashes at 1 Hz, 151 times per

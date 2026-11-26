@@ -1,9 +1,9 @@
 # Speaker Script / 演讲稿 — LED runs in SNOLAB Run 7
 
-约 15 分钟，15 页正片 + backup。每页先中文、后英文，意思一样，**英文可以直接照着念**。全部是短句。斜体是给自己的提示，不用念。
+约 16 分钟，16 页正片 + backup。每页先中文、后英文，意思一样，**英文可以直接照着念**。全部是短句。斜体是给自己的提示，不用念。
 
 一句话主线：**哪个 LED → 稳不稳（幅度、触发）→ 模板和例子脉冲。**
-时间（秒）：1 Title 15 · 2 The data 55 · 3 Which LED made the t 70 · 4 who triggers on whic 70 · 5 who triggers on whic 45 · 6 what we learn 70 · 7 amplitude vs time 65 · 8 whose change is it:  60 · 9 cases to look at aga 75 · 10 trigger fraction vs  80 · 11 one template per cel 75 · 12 own LED: pickup of t 55 · 13 all 43 cells 50 · 14 example pulses: Z7 P 75 · 15 Summary, and what co 65 → 约 925 秒。
+时间（秒）：1 Title 15 · 2 The data: LED runs i 50 · 3 One LED run 45 · 4 Which LED made the t 70 · 5 who triggers on whic 70 · 6 who triggers on whic 45 · 7 what we learn 70 · 8 amplitude vs time 65 · 9 whose change is it:  60 · 10 cases to look at aga 75 · 11 trigger fraction vs  80 · 12 one template per cel 75 · 13 own LED: pickup of t 55 · 14 all 43 cells 50 · 15 example pulses: Z7 P 75 · 16 Summary, and what co 65 → 约 965 秒。
 
 ---
 
@@ -16,18 +16,29 @@
 
 ---
 
-## Slide 2 — The data（约 55 秒）
+## Slide 2 — The data: LED runs in SNOLAB Run 7（约 50 秒）
 
-*提示：指着图：灰色是普通触发，蓝色是 LED 触发，两段中间停 3 秒。*
+*提示：上图：一条竖线 = 一个 LED run。下图：脚本的一个循环。*
 
-**中文**：数据是 9 月 15 号到 21 号的 LED series，一共 45 个。每个 run 先等大约 880 秒，然后开灯。**第一段 15 个 LED 一起闪，停 3 秒，第二段换 12 个 LED 再闪。**每个 LED 每秒闪一次，每段正好闪 151 次。还有一点要记住：每次触发只读出触发的那一个探测器。
+**中文**：先说背景。这是 SNOLAB Run 7 的数据，在 Cf 刻度之后取的。探测器不加偏压，一共 23 个探测器。**DAQ 的脚本自动循环：先取 100 分钟的低本底数据，再取大约 20 分钟的 LED 数据，然后重新锁定，再来一遍。**所以大约每 132 分钟有一个 LED run。上面这张图，每一条竖线是一个 LED run：从 9 月 15 号凌晨到 21 号上午，一共 47 个，我们用了其中 45 个。中间的空白是没有 LED run 的时间。
 
-**English**: The data: 45 LED series, from September 15 to 21. Each run waits about 880 seconds, then the LEDs turn on. **Phase one: 15 LEDs flash together. Three seconds off. Phase two: 12 other LEDs.** Each LED flashes once per second, exactly 151 times per phase. One thing to keep in mind: each trigger reads out only the detector that triggered.
+**English**: First, the background. These data are from SNOLAB Run 7, taken after the Cf calibration. The detectors are at zero volts, and there are 23 of them. **A sequencer script runs in a loop: 100 minutes of low-background data, then about 20 minutes of LED data, then a relock, and again.** So we get one LED run about every 132 minutes. In the top plot, each line is one LED run. They go from the early morning of September 15 to the morning of September 21: 47 runs, and we use 45 of them. The gaps are times without LED runs.
 
 
 ---
 
-## Slide 3 — Which LED made the trigger（约 70 秒）
+## Slide 3 — One LED run（约 45 秒）
+
+*提示：指着图：灰色是普通触发，蓝色是 LED 触发，两段中间停 3 秒。*
+
+**中文**：再看一个 LED run 里面是什么样。每个 run 先等大约 880 秒，然后开灯。**第一段 15 个 LED 一起闪，停 3 秒，第二段换 12 个 LED 再闪。**每个 LED 每秒闪一次，每段正好闪 151 次。还有一点要记住：每次触发只读出触发的那一个探测器。
+
+**English**: Now one LED run. It waits about 880 seconds, then the LEDs turn on. **Phase one: 15 LEDs flash together. Three seconds off. Phase two: 12 other LEDs.** Each LED flashes once per second, exactly 151 times per phase. One thing to keep in mind: each trigger reads out only the detector that triggered.
+
+
+---
+
+## Slide 4 — Which LED made the trigger（约 70 秒）
 
 *提示：一个峰就是一个 LED。*
 
@@ -38,7 +49,7 @@
 
 ---
 
-## Slide 4 — Part 1 — who triggers on which LED: phase 1（约 70 秒）
+## Slide 5 — Part 1 — who triggers on which LED: phase 1（约 70 秒）
 
 **中文**：这张图回答：**每个 LED 闪的时候，哪个探测器触发。**横轴是第一段开的 15 个 LED，纵轴是探测器。格子里的数是：这个 LED 闪 151 次，这个探测器在多大比例的闪光上触发了，对 45 个 series 取平均。红框是 LED 自己的探测器，大部分是 1.00。**红框外面也有数字：隔壁的探测器也看到了光。**每个有数字的格子有一个编号，比如 P1-07，后面做模板用。
 
@@ -47,7 +58,7 @@
 
 ---
 
-## Slide 5 — Part 1 — who triggers on which LED: phase 2（约 45 秒）
+## Slide 6 — Part 1 — who triggers on which LED: phase 2（约 45 秒）
 
 **中文**：第二段一样，12 个 LED。规律也一样：自己的探测器基本每次都触发，隔壁的探测器也经常触发。两段加起来一共 43 个格子。
 
@@ -56,7 +67,7 @@
 
 ---
 
-## Slide 6 — Part 1 — what we learn（约 70 秒）
+## Slide 7 — Part 1 — what we learn（约 70 秒）
 
 **中文**：第一部分的结论。第一，**光只照到编号相邻的探测器，再远没有。**43 个格子里 18 个是隔壁的探测器，没有一个隔一个号的。第二，也没有跨组的：所有的对都在 1 到 6、7 到 12、13 到 18、19 到 24 这四组里面。第三，**方向是固定的：0 号和 1 号 LED 照编号小一号的探测器，3、4、5 号 LED 照大一号的。**在一组的两头没有邻居，所以那些 LED 只有自己看得到。只有两个例外，写在下面。最后，我们只读出触发的探测器，低于阈值的光看不到，所以这些数是下限。
 
@@ -65,7 +76,7 @@
 
 ---
 
-## Slide 7 — Part 2 — amplitude vs time（约 65 秒）
+## Slide 8 — Part 2 — amplitude vs time（约 65 秒）
 
 *提示：白色 = 1；红 = 偏高；蓝 = 偏低；灰 = 没有数据。*
 
@@ -76,7 +87,7 @@
 
 ---
 
-## Slide 8 — Part 2 — whose change is it: the LED or the detector?（约 60 秒）
+## Slide 9 — Part 2 — whose change is it: the LED or the detector?（约 60 秒）
 
 *提示：左图两条线一起动；中间两条线各走各的。*
 
@@ -87,7 +98,7 @@
 
 ---
 
-## Slide 9 — Part 2 — cases to look at again（约 75 秒）
+## Slide 10 — Part 2 — cases to look at again（约 75 秒）
 
 *提示：先讲 Z20，再快速过其他几个。*
 
@@ -98,7 +109,7 @@
 
 ---
 
-## Slide 10 — Part 3 — trigger fraction vs time（约 80 秒）
+## Slide 11 — Part 3 — trigger fraction vs time（约 80 秒）
 
 *提示：黑线 = 触发阈值改了。黄 = 每次都触发。*
 
@@ -109,7 +120,7 @@
 
 ---
 
-## Slide 11 — Part 4 — one template per cell, made like the Z7 template（约 75 秒）
+## Slide 12 — Part 4 — one template per cell, made like the Z7 template（约 75 秒）
 
 *提示：方法和 Z7 模板一样，只多一步去尖峰。*
 
@@ -120,7 +131,7 @@
 
 ---
 
-## Slide 12 — Part 4 — own LED: pickup of the LED drive pulse（约 55 秒）
+## Slide 13 — Part 4 — own LED: pickup of the LED drive pulse（约 55 秒）
 
 *提示：只在自己 LED 的格子里有；隔壁探测器没有。*
 
@@ -131,7 +142,7 @@
 
 ---
 
-## Slide 13 — Part 4 — all 43 cells（约 50 秒）
+## Slide 14 — Part 4 — all 43 cells（约 50 秒）
 
 **中文**：这是全部 43 个格子，每个格子一个小图：红色是探测器的模板，黑色虚线是解析函数。每个格子十二个通道的图在备用页，拟合出来的时间常数也在备用页和 CSV 文件里。
 
@@ -140,7 +151,7 @@
 
 ---
 
-## Slide 14 — Part 4 — example pulses: Z7 PSum with Z7's LED（约 75 秒）
+## Slide 15 — Part 4 — example pulses: Z7 PSum with Z7's LED（约 75 秒）
 
 *提示：左：原始 ADC；中：放大；右：归一化以后只看形状。*
 
@@ -151,7 +162,7 @@
 
 ---
 
-## Slide 15 — Summary, and what comes next（约 65 秒）
+## Slide 16 — Summary, and what comes next（约 65 秒）
 
 **中文**：总结。一，每个 LED 触发都能对应到一个 LED；光只照到相邻的探测器，方向是固定的。二，幅度大部分在 10% 以内，变化主要来自 LED 本身；9 月 18 号凌晨 Z20 的 LED 变暗，要查原因。三，触发比例的台阶是阈值设置变了。四，43 个格子都有模板和解析函数，方法和 Z7 一样；有几个探测器自己的 LED 有串扰，要注意。下一步：查 Z20 那几个小时发生了什么，处理串扰的格子，再和老师确认这些模板要怎么用。
 
