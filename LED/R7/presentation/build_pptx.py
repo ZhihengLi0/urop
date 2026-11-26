@@ -82,12 +82,19 @@ def title(s, text, sub=None):
     ln.fill.solid(); ln.fill.fore_color.rgb = NAVY; ln.line.fill.background()
 
 
-def lines(s, items, l, t, w, h, size=17):
+def lines(s, items, l, t, w, h, size=17, bullet=True):
+    """One paragraph per item, with a real PowerPoint bullet (hanging indent) unless bullet=False."""
     tb = textbox(s, l, t, w, h)
     tf = tb.text_frame
     for i, txt in enumerate(items):
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.space_after = Pt(10)
+        if bullet:
+            pPr = p._p.get_or_add_pPr()
+            ind = int(Pt(size) * 1.1)
+            pPr.set("marL", str(ind)); pPr.set("indent", str(-ind))
+            pPr.append(pPr.makeelement(qn("a:buFont"), {"typeface": "Arial"}))
+            pPr.append(pPr.makeelement(qn("a:buChar"), {"char": "\u2022"}))
         run(p, txt, size)
 
 
@@ -261,7 +268,7 @@ s = new(Z("Stability: amplitude vs time", "稳定性：幅度随时间"), fig="f
 pic(s, "fig_amp_map.png", L, T, FIG_W, Inches(6.1))
 lines(s, [Z("One row per cell, one column per series.", "一行一个格子，一列一个 series。"),
           Z("White means normal.", "白色就是正常。"),
-          Z("Mostly stable: %d %% within 10 %%." % amp10, "大部分稳定：%d %% 在 10 %% 以内。" % amp10)],
+          Z("Mostly stable: %d\u00a0%% within 10\u00a0%%." % amp10, "大部分稳定：%d\u00a0%% 在 10\u00a0%% 以内。" % amp10)],
       TXT_L, Inches(1.6), TXT_W, Inches(5.0))
 
 # ───────────────────────────────────────────────────────────────── 7 cases
@@ -328,7 +335,7 @@ lines(s, [Z("1. Events: the detector triggered on this LED's flash. All 12 chann
             "7. 模板 = %d 个 series 所有对齐后脉冲的平均（共 %s 百万个脉冲）。" % (n_ok, mill)),
           Z("Analytic pulse: fit of the template with one rise time and two fall times:",
             "解析脉冲：用一个上升时间、两个下降时间的函数拟合模板：")],
-      L, Inches(1.45), Inches(7.0), Inches(4.6), size=15)
+      L, Inches(1.45), Inches(7.0), Inches(4.6), size=15, bullet=False)
 pic(s, "fig_formula_analytic.png", L, Inches(5.55), Inches(6.2), Inches(0.6))
 
 # ───────────────────────────────────────────────────────────────── 10 template example
