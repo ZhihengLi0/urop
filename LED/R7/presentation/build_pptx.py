@@ -198,7 +198,7 @@ FIG_W, TXT_L, TXT_W = Inches(8.6), Inches(9.35), Inches(3.7)      # figure left,
 
 # ───────────────────────────────────────────────────────────────── 1 title
 s = new(None, sec=15,
-        zh="大家好，我是李志恒。今天讲 Run 7 中子活化之后的 LED 数据。按老师说的四点讲：谁看到哪个 LED，幅度稳不稳，触发稳不稳，还有脉冲模板。",
+        zh="大家好，我是李志恒。今天讲 Run 7 中子活化之后的 LED 数据。讲四点：谁看到哪个 LED，幅度稳不稳，触发稳不稳，还有脉冲模板。",
         en="Hi everyone, I'm Zhiheng. Today I'll show the post-activation LED data from Run 7. Four points: who sees which LED, "
            "amplitude stability, trigger stability, and pulse templates.")
 tb = textbox(s, Inches(0.9), Inches(2.2), Inches(11.5), Inches(2.0))
@@ -374,10 +374,10 @@ s = new(Z("Example pulses: Z7 PSum with Z7's LED", "例子脉冲：Z7 PSum，Z7 
         Z("%d pulses, one per series; %d kHz low-pass, divided by the peak" % (n_ok, EX_LP),
           "%d 个脉冲，每个 series 一个；%d kHz 低通，除以峰值" % (n_ok, EX_LP)),
         fig="example_pulses_%s.png" % EX, sec=55,
-        zh="老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 %d 个。"
+        zh="我们要看一下脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 %d 个。"
            "颜色从浅到深是从早到晚：黄色最早，紫色最晚。每个脉冲先过一个 %d 千赫的低通滤波，把高频噪声去掉，再除以自己的峰值，只看形状。"
            "这些脉冲基本叠在一起，说明这一周形状没有变。脉冲前面那个很窄的尖峰是 LED 驱动的串扰。" % (n_ok, EX_LP),
-        en="Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve "
+        en="We want to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve "
            "channels summed: the PSum. One pulse per series, %d in total. Light to dark is early to late: yellow is the "
            "first day, purple the last. Each pulse goes through a %d kilohertz low-pass filter to remove high-frequency "
            "noise, and is divided by its own peak, so we only see the shape. The pulses lie on top of each other: the "

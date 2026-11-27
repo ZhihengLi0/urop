@@ -8,7 +8,7 @@
 
 ## Slide 1: Title（约 15 秒）
 
-**中文**：大家好，我是李志恒。今天讲 Run 7 中子活化之后的 LED 数据。按老师说的四点讲：谁看到哪个 LED，幅度稳不稳，触发稳不稳，还有脉冲模板。
+**中文**：大家好，我是李志恒。今天讲 Run 7 中子活化之后的 LED 数据。讲四点：谁看到哪个 LED，幅度稳不稳，触发稳不稳，还有脉冲模板。
 
 **English**: Hi everyone, I'm Zhiheng. Today I'll show the post-activation LED data from Run 7. Four points: who sees which LED, amplitude stability, trigger stability, and pulse templates.
 
@@ -98,9 +98,9 @@
 
 ## Slide 11: Example pulses: Z7 PSum with Z7's LED（约 55 秒）
 
-**中文**：老师想看脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 45 个。颜色从浅到深是从早到晚：黄色最早，紫色最晚。每个脉冲先过一个 40 千赫的低通滤波，把高频噪声去掉，再除以自己的峰值，只看形状。这些脉冲基本叠在一起，说明这一周形状没有变。脉冲前面那个很窄的尖峰是 LED 驱动的串扰。
+**中文**：我们要看一下脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 45 个。颜色从浅到深是从早到晚：黄色最早，紫色最晚。每个脉冲先过一个 40 千赫的低通滤波，把高频噪声去掉，再除以自己的峰值，只看形状。这些脉冲基本叠在一起，说明这一周形状没有变。脉冲前面那个很窄的尖峰是 LED 驱动的串扰。
 
-**English**: Prof. Liu wanted to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late: yellow is the first day, purple the last. Each pulse goes through a 40 kilohertz low-pass filter to remove high-frequency noise, and is divided by its own peak, so we only see the shape. The pulses lie on top of each other: the shape did not change during the week. The narrow spike just before the pulse is pickup from the LED drive.
+**English**: We want to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late: yellow is the first day, purple the last. Each pulse goes through a 40 kilohertz low-pass filter to remove high-frequency noise, and is divided by its own peak, so we only see the shape. The pulses lie on top of each other: the shape did not change during the week. The narrow spike just before the pulse is pickup from the LED drive.
 
 
 ---
