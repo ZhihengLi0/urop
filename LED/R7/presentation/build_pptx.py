@@ -240,7 +240,27 @@ lines(s, [Z("Phase 1: %d LEDs.  Phase 2: %d LEDs." % (n_led1, n_led2), "第一�
           Z("Only the detector that triggers is read out.", "每次只读出触发的那个探测器。")],
       L, Inches(5.7), W, Inches(1.6))
 
-# ───────────────────────────────────────────────────────────────── 4-5 visibility
+# ───────────────────────────────────────────────────────────────── 4 trigger matching (moved from the backup, Prof. Liu 2026-11-27)
+s = new(Z("How a trigger is matched to an LED", "怎么知道触发来自哪个 LED"), fig="fig_flash_groups.png", sec=40,
+        zh="怎么知道一个触发来自哪个 LED？每个 LED 每秒闪一次，而且每个 LED 在一秒里闪的时刻不一样。"
+           "所以我们画触发时间在这一秒里的位置，每个 LED 就是一个峰。落在峰里的触发，就算这个 LED 的。"
+           "脚本告诉我们哪些 LED 开着，LED 自己的探测器会在它的峰里触发，这样就知道每个峰是哪个 LED。"
+           "峰外面零散的触发是本底。两个 LED 相差不到 0.2 毫秒时分不开，这种情况不用，后面的图上是灰色。",
+        en="How do we know which LED a trigger comes from? Each LED flashes once per second, and each LED has its own "
+           "time within the second. So we plot the trigger time within its second, and each LED is one peak. "
+           "A trigger in a peak belongs to that LED. The script tells us which LEDs are on, and the LED's own detector "
+           "triggers in its peak, so we know which LED each peak is. The few triggers outside the peaks are background. "
+           "If two LEDs flash within 0.2 milliseconds, we cannot separate them. We leave those out, and they are grey "
+           "in the later plots.")
+pic(s, "fig_flash_groups.png", L, T, W, Inches(4.3))
+lines(s, [Z("Each LED flashes at a fixed time within the second, so each LED is one peak.",
+            "每个 LED 在一秒里闪的时刻固定，所以每个 LED 是一个峰。"),
+          Z("A trigger in a peak belongs to that LED.", "落在峰里的触发，就算这个 LED 的。"),
+          Z("Two LEDs within 0.2 ms cannot be separated; those series are left out (grey in the maps).",
+            "两个 LED 相差不到 0.2 ms 时分不开，这些 series 不用（图上是灰色）。")],
+      L, Inches(5.7), W, Inches(1.6))
+
+# ───────────────────────────────────────────────────────────────── 5-6 visibility
 for ph, sec in (("phase1", 55), ("phase2", 35)):
     k = ph[-1]
     if ph == "phase1":
@@ -458,14 +478,6 @@ if len(rows) > half:
     table(s, [rows[0]] + rows[half:], Inches(6.85), T, Inches(5.9), Inches(0.3) * (len(rows) - half + 1), col_w=cw, size=10)
 caption(s, Z("τ_fall2 > 20 000 µs: longer than the fit window, not constrained.", "τ_fall2 > 20 000 µs：比拟合窗口还长，定不出来。"),
         L, Inches(6.75), W)
-
-s = new(Z("Backup: how a trigger is matched to an LED", "备用：怎么知道触发来自哪个 LED"), fig="fig_flash_groups.png")
-if s:
-    pic(s, "fig_flash_groups.png", L, T, W, Inches(4.3))
-    lines(s, [Z("Each LED flashes at a fixed time within the second, so each LED is one peak.",
-                "每个 LED 在一秒里闪的时刻固定，所以每个 LED 是一个峰。"),
-              Z("Two LEDs within 0.2 ms cannot be separated; those series are left out (grey in the maps).",
-                "两个 LED 相差不到 0.2 ms 时分不开，这些 series 不用（图上是灰色）。")], L, Inches(5.75), W, Inches(1.5), size=15)
 
 for name, en_t, zh_t in (("shape_vs_time_%s.png" % EX, "Backup: Z7 rise and fall time per series", "备用：Z7 每个 series 的上升和下降时间"),
                          ("amplitude_vs_time.png", "Backup: amplitude vs time, every channel", "备用：幅度随时间，每个通道"),

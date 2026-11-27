@@ -27,39 +27,43 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 <div class='en'><p>Here is one LED run as an example. In phase one, 15 LEDs flash. In phase two, 12 LEDs flash. Each LED flashes once per second, 151 times in total. Each trigger reads out only the detector that triggered.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 4: Visibility: phase 1(about 55 s)</h2>
+<section class='card'><h2>Slide 4: How a trigger is matched to an LED(about 40 s)</h2>
+<div class='en'><p>How do we know which LED a trigger comes from? Each LED flashes once per second, and each LED has its own time within the second. So we plot the trigger time within its second, and each LED is one peak. A trigger in a peak belongs to that LED. The script tells us which LEDs are on, and the LED&#x27;s own detector triggers in its peak, so we know which LED each peak is. The few triggers outside the peaks are background. If two LEDs flash within 0.2 milliseconds, we cannot separate them. We leave those out, and they are grey in the later plots.</p>
+</div>
+</section>
+<section class='card'><h2>Slide 5: Visibility: phase 1(about 55 s)</h2>
 <div class='en'><p>This is the visibility plot for phase one. Columns are LEDs, rows are detectors. The number is how often the detector triggers when that LED flashes. The red box is the LED&#x27;s own detector, and it is almost always one. A number next to a red box means the neighbouring detector also sees the light.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 5: Visibility: phase 2(about 35 s)</h2>
+<section class='card'><h2>Slide 6: Visibility: phase 2(about 35 s)</h2>
 <div class='en'><p>Phase two shows the same pattern. The own detector triggers almost every time, and often the next detector too. The light only reaches the next detector, never further.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 6: Stability: amplitude vs time(about 50 s)</h2>
+<section class='card'><h2>Slide 7: Stability: amplitude vs time(about 50 s)</h2>
 <div class='en'><p>Second, amplitude versus time. Each row is one detector with one LED, each column is one series, in time order. Phase one is on the left, phase two on the right. White means average. Most of it is white: 91 percent of the points are within 10 percent. So it is mostly stable, but a few spots need a second look.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 7: Amplitude: cases to look at again(about 55 s)</h2>
+<section class='card'><h2>Slide 8: Amplitude: cases to look at again(about 55 s)</h2>
 <div class='en'><p>These need a second look. The clearest one: early on September 18, Z20 is much lower, and Z19 with Z20&#x27;s LED is lower too. A few hours later they are back. The operation elog says that on September 17 at 10 pm there were chiller alarms, and the detectors were put into safe state. So some HEMT settings of Z19 and Z20 might have changed. The small red bars are the error bars. Also, on the first day a few cells are a bit high.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 8: Stability: trigger fraction vs time(about 55 s)</h2>
+<section class='card'><h2>Slide 9: Stability: trigger fraction vs time(about 55 s)</h2>
 <div class='en'><p>Third, trigger fraction versus time. Yellow means it triggers on every flash. The own-LED rows stay yellow: stable. Other rows have steps. The steps are exactly where the trigger thresholds were changed, the black lines. For example, the elog says that on September 18 at ten past midnight the thresholds of detectors 9, 10, 11 and 15 were raised. So these are setting changes, not unstable detectors.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 9: Template generation: method(about 65 s)</h2>
+<section class='card'><h2>Slide 10: Template generation: method(about 65 s)</h2>
 <div class='en'><p>Fourth, templates. First, how they are made. Step one: select the events where this detector triggered on this LED&#x27;s flash, and use all twelve channels. Step two: a very short median filter removes the narrow spike from the LED drive. Step three: a 100 kilohertz low-pass filter. Step four: subtract the baseline and divide by the peak. Step five: fit each pulse with two exponentials, with a free start time. The top right plot shows one pulse and its fit. Step six: shift each measured pulse so that the fitted start is at the same time. Step seven: average all aligned pulses of the 45 series. That is the template, the red line at the bottom right. The fit is only used to find the start time; the template itself is the mean of the measured pulses. Finally we fit the template with one rise and two falls to get the analytic pulse.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 10: Templates: example(about 30 s)</h2>
+<section class='card'><h2>Slide 11: Templates: example(about 30 s)</h2>
 <div class='en'><p>Here is Z2 as an example, twelve channels. Blue are the aligned single pulses, red is the template, and the dashed black line is the analytic pulse. Channels with a grey title have no clear pulse, so we do not fit an analytic pulse there.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 11: Example pulses: Z7 PSum with Z7&#x27;s LED(about 55 s)</h2>
+<section class='card'><h2>Slide 12: Example pulses: Z7 PSum with Z7&#x27;s LED(about 55 s)</h2>
 <div class='en'><p>We want to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late: yellow is the first day, purple the last. Each pulse goes through a 40 kilohertz low-pass filter to remove high-frequency noise, and is divided by its own peak, so we only see the shape. The pulses lie on top of each other: the shape did not change during the week. The narrow spike just before the pulse is pickup from the LED drive.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 12: Summary(about 40 s)</h2>
+<section class='card'><h2>Slide 13: Summary(about 40 s)</h2>
 <div class='en'><p>To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly stable; Z19 and Z20 were low on September 18, after the detectors were put into safe state. Trigger fraction: stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
 </div>
 </section>

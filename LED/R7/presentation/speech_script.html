@@ -15,8 +15,8 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 .li { margin-left: 10pt; }
 .intro { font-size: 9.5pt; line-height: 1.3; margin: 2pt 0; color: #444; }
 </style></head><body><h1>Speaker Script / 演讲稿: LED runs in SNOLAB Run 7</h1>
-<p class='intro'>约 9 分钟，12 页正片，后面是备用页（只在被问到时用）。每页先中文、后英文，意思一样，英文可以直接照着念。</p>
-<p class='intro'>时间（秒）：1 Title 15，2 Background 45，3 Example LED run 40，4 Visibility: phase 1 55，5 Visibility: phase 2 35，6 Stability: amplitude vs time 50，7 Amplitude: cases to look at again 55，8 Stability: trigger fraction vs time 55，9 Template generation: method 65，10 Templates: example 30，11 Example pulses: Z7 PSum with Z7&#x27;s LED 55，12 Summary 40；合计约 540 秒。</p>
+<p class='intro'>约 10 分钟，13 页正片，后面是备用页（只在被问到时用）。每页先中文、后英文，意思一样，英文可以直接照着念。</p>
+<p class='intro'>时间（秒）：1 Title 15，2 Background 45，3 Example LED run 40，4 How a trigger is matched to an LED 40，5 Visibility: phase 1 55，6 Visibility: phase 2 35，7 Stability: amplitude vs time 50，8 Amplitude: cases to look at again 55，9 Stability: trigger fraction vs time 55，10 Template generation: method 65，11 Templates: example 30，12 Example pulses: Z7 PSum with Z7&#x27;s LED 55，13 Summary 40；合计约 580 秒。</p>
 <section class='card'><h2>Slide 1: Title（约 15 秒）</h2>
 <p class='zh'><b>中文</b>：大家好，我是李志恒。今天讲 Run 7 中子活化之后的 LED 数据。讲四点：谁看到哪个 LED，幅度稳不稳，触发稳不稳，还有脉冲模板。</p>
 <div class='en'><p><b>English</b>: Hi everyone, I&#x27;m Zhiheng. Today I&#x27;ll show the post-activation LED data from Run 7. Four points: who sees which LED, amplitude stability, trigger stability, and pulse templates.</p>
@@ -32,47 +32,52 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 <div class='en'><p><b>English</b>: Here is one LED run as an example. In phase one, 15 LEDs flash. In phase two, 12 LEDs flash. Each LED flashes once per second, 151 times in total. Each trigger reads out only the detector that triggered.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 4: Visibility: phase 1（约 55 秒）</h2>
+<section class='card'><h2>Slide 4: How a trigger is matched to an LED（约 40 秒）</h2>
+<p class='zh'><b>中文</b>：怎么知道一个触发来自哪个 LED？每个 LED 每秒闪一次，而且每个 LED 在一秒里闪的时刻不一样。所以我们画触发时间在这一秒里的位置，每个 LED 就是一个峰。落在峰里的触发，就算这个 LED 的。脚本告诉我们哪些 LED 开着，LED 自己的探测器会在它的峰里触发，这样就知道每个峰是哪个 LED。峰外面零散的触发是本底。两个 LED 相差不到 0.2 毫秒时分不开，这种情况不用，后面的图上是灰色。</p>
+<div class='en'><p><b>English</b>: How do we know which LED a trigger comes from? Each LED flashes once per second, and each LED has its own time within the second. So we plot the trigger time within its second, and each LED is one peak. A trigger in a peak belongs to that LED. The script tells us which LEDs are on, and the LED&#x27;s own detector triggers in its peak, so we know which LED each peak is. The few triggers outside the peaks are background. If two LEDs flash within 0.2 milliseconds, we cannot separate them. We leave those out, and they are grey in the later plots.</p>
+</div>
+</section>
+<section class='card'><h2>Slide 5: Visibility: phase 1（约 55 秒）</h2>
 <p class='zh'><b>中文</b>：这是第一段的可见度图。横轴是 LED，纵轴是探测器。格子里的数是：这个 LED 闪的时候，这个探测器触发的比例。红框是 LED 自己的探测器，基本都是 1。红框旁边的格子，是隔壁的探测器也看到了光。</p>
 <div class='en'><p><b>English</b>: This is the visibility plot for phase one. Columns are LEDs, rows are detectors. The number is how often the detector triggers when that LED flashes. The red box is the LED&#x27;s own detector, and it is almost always one. A number next to a red box means the neighbouring detector also sees the light.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 5: Visibility: phase 2（约 35 秒）</h2>
+<section class='card'><h2>Slide 6: Visibility: phase 2（约 35 秒）</h2>
 <p class='zh'><b>中文</b>：第二段也一样。自己的探测器基本每次都触发，隔壁的探测器也经常触发。光只到相邻的探测器，再远就没有了。</p>
 <div class='en'><p><b>English</b>: Phase two shows the same pattern. The own detector triggers almost every time, and often the next detector too. The light only reaches the next detector, never further.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 6: Stability: amplitude vs time（约 50 秒）</h2>
+<section class='card'><h2>Slide 7: Stability: amplitude vs time（约 50 秒）</h2>
 <p class='zh'><b>中文</b>：第二点，幅度随时间。每一行是一个探测器看一个 LED，每一列是一个 series，按时间排。左边是第一段，右边是第二段。白色就是平均水平。大部分是白的，91% 的点变化在 10% 以内。所以大部分是稳定的，但有几个地方要再看。</p>
 <div class='en'><p><b>English</b>: Second, amplitude versus time. Each row is one detector with one LED, each column is one series, in time order. Phase one is on the left, phase two on the right. White means average. Most of it is white: 91 percent of the points are within 10 percent. So it is mostly stable, but a few spots need a second look.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 7: Amplitude: cases to look at again（约 55 秒）</h2>
+<section class='card'><h2>Slide 8: Amplitude: cases to look at again（约 55 秒）</h2>
 <p class='zh'><b>中文</b>：这几个要再看。最明显的是 9 月 18 号凌晨：Z20 低了很多，Z19 看 Z20 的 LED 也低，过了几个小时恢复了。运行日志里写着：9 月 17 号晚上十点，冷水机报警，探测器被放进了 safe state。所以可能是 Z19 和 Z20 的一些 HEMT 设置变了。每个点上的红色短线是误差棒。另外，第一天有几个格子偏高一点。</p>
 <div class='en'><p><b>English</b>: These need a second look. The clearest one: early on September 18, Z20 is much lower, and Z19 with Z20&#x27;s LED is lower too. A few hours later they are back. The operation elog says that on September 17 at 10 pm there were chiller alarms, and the detectors were put into safe state. So some HEMT settings of Z19 and Z20 might have changed. The small red bars are the error bars. Also, on the first day a few cells are a bit high.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 8: Stability: trigger fraction vs time（约 55 秒）</h2>
+<section class='card'><h2>Slide 9: Stability: trigger fraction vs time（约 55 秒）</h2>
 <p class='zh'><b>中文</b>：第三点，触发比例随时间。黄色是每次闪光都触发。自己 LED 的那些行一直是黄的，很稳定。其他行有台阶。台阶正好在触发阈值被改的地方，就是图上的黑线。比如运行日志里记着，9 月 18 号零点十分，9 号、10 号、11 号、15 号探测器的阈值被调高了。所以这是设置变了，不是探测器不稳定。</p>
 <div class='en'><p><b>English</b>: Third, trigger fraction versus time. Yellow means it triggers on every flash. The own-LED rows stay yellow: stable. Other rows have steps. The steps are exactly where the trigger thresholds were changed, the black lines. For example, the elog says that on September 18 at ten past midnight the thresholds of detectors 9, 10, 11 and 15 were raised. So these are setting changes, not unstable detectors.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 9: Template generation: method（约 65 秒）</h2>
+<section class='card'><h2>Slide 10: Template generation: method（约 65 秒）</h2>
 <p class='zh'><b>中文</b>：第四点，模板。先说怎么做的。第一步，选事件：这个 LED 闪的时候，这个探测器触发的事件，十二个通道都用。第二步，用一个很短的中值滤波，去掉 LED 通电带来的窄尖峰。第三步，100 千赫的低通滤波。第四步，减掉基线，再除以峰值。第五步，每个脉冲用两个指数拟合，起始时间是自由的。右上图就是一个脉冲和它的拟合。第六步，按拟合出来的起始时间，把实测的脉冲对齐。第七步，把 45 个 series 所有对齐的脉冲取平均，这就是模板，右下图红色的线。拟合只用来找起始时间，模板本身是实测脉冲的平均。最后再用一个上升、两个下降的函数拟合模板，得到解析脉冲。</p>
 <div class='en'><p><b>English</b>: Fourth, templates. First, how they are made. Step one: select the events where this detector triggered on this LED&#x27;s flash, and use all twelve channels. Step two: a very short median filter removes the narrow spike from the LED drive. Step three: a 100 kilohertz low-pass filter. Step four: subtract the baseline and divide by the peak. Step five: fit each pulse with two exponentials, with a free start time. The top right plot shows one pulse and its fit. Step six: shift each measured pulse so that the fitted start is at the same time. Step seven: average all aligned pulses of the 45 series. That is the template, the red line at the bottom right. The fit is only used to find the start time; the template itself is the mean of the measured pulses. Finally we fit the template with one rise and two falls to get the analytic pulse.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 10: Templates: example（约 30 秒）</h2>
+<section class='card'><h2>Slide 11: Templates: example（约 30 秒）</h2>
 <p class='zh'><b>中文</b>：这是 Z2 的例子，十二个通道。蓝色是对齐后的单个脉冲，红色是模板，黑色虚线是解析脉冲。标题是灰色的通道，没有清楚的脉冲，所以不拟合解析脉冲。</p>
 <div class='en'><p><b>English</b>: Here is Z2 as an example, twelve channels. Blue are the aligned single pulses, red is the template, and the dashed black line is the analytic pulse. Channels with a grey title have no clear pulse, so we do not fit an analytic pulse there.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 11: Example pulses: Z7 PSum with Z7&#x27;s LED（约 55 秒）</h2>
+<section class='card'><h2>Slide 12: Example pulses: Z7 PSum with Z7&#x27;s LED（约 55 秒）</h2>
 <p class='zh'><b>中文</b>：我们要看一下脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 45 个。颜色从浅到深是从早到晚：黄色最早，紫色最晚。每个脉冲先过一个 40 千赫的低通滤波，把高频噪声去掉，再除以自己的峰值，只看形状。这些脉冲基本叠在一起，说明这一周形状没有变。脉冲前面那个很窄的尖峰是 LED 驱动的串扰。</p>
 <div class='en'><p><b>English</b>: We want to see how the pulse shape changes with time. This is Z7 with its own LED, all twelve channels summed: the PSum. One pulse per series, 45 in total. Light to dark is early to late: yellow is the first day, purple the last. Each pulse goes through a 40 kilohertz low-pass filter to remove high-frequency noise, and is divided by its own peak, so we only see the shape. The pulses lie on top of each other: the shape did not change during the week. The narrow spike just before the pulse is pickup from the LED drive.</p>
 </div>
 </section>
-<section class='card'><h2>Slide 12: Summary（约 40 秒）</h2>
+<section class='card'><h2>Slide 13: Summary（约 40 秒）</h2>
 <p class='zh'><b>中文</b>：总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定；9 月 18 号 Z19 和 Z20 偏低，是在探测器进入 safe state 之后。触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。</p>
 <div class='en'><p><b>English</b>: To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly stable; Z19 and Z20 were low on September 18, after the detectors were put into safe state. Trigger fraction: stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
 </div>

@@ -1,7 +1,7 @@
 # Talk: LED runs in SNOLAB Run 7
 
 Group-meeting talk on the 45 R7 LEDStability series (15–21 September 2026): who triggers on which LED,
-stability of amplitude and trigger fraction, pulse templates. About 9 minutes, 12 main slides (Prof. Liu's outline, one figure and at most three short lines each) plus backup.
+stability of amplitude and trigger fraction, pulse templates. About 10 minutes, 13 main slides (Prof. Liu's outline, one figure and at most three short lines each) plus backup.
 Outline from Prof. Liu; `outline.md` lists the content and the checked facts behind every statement.
 
 | file | what |

@@ -1,7 +1,7 @@
 # Outline and frozen facts for the R7 LED talk
 
 Audience: SuperCDMS group meeting (Prof. Yan Liu). Speaker: Zhiheng Li (UMN undergraduate).
-Length: about 9 minutes, 12 main slides, then backup (simplified 2026-11-26 at the user's request: follow Prof. Liu's
+Length: about 10 minutes, 13 main slides, then backup (simplified 2026-11-26 at the user's request: follow Prof. Liu's
 points only, one figure and at most three short lines per slide, few numbers, no dashes or arrows in titles and text). Slides in English. Speaker script: Chinese + English
 per slide, short simple sentences that can be read aloud.
 

@@ -1,8 +1,8 @@
 # Speaker Script / 演讲稿: LED runs in SNOLAB Run 7
 
-约 9 分钟，12 页正片，后面是备用页（只在被问到时用）。每页先中文、后英文，意思一样，英文可以直接照着念。
+约 10 分钟，13 页正片，后面是备用页（只在被问到时用）。每页先中文、后英文，意思一样，英文可以直接照着念。
 
-时间（秒）：1 Title 15，2 Background 45，3 Example LED run 40，4 Visibility: phase 1 55，5 Visibility: phase 2 35，6 Stability: amplitude vs time 50，7 Amplitude: cases to look at again 55，8 Stability: trigger fraction vs time 55，9 Template generation: method 65，10 Templates: example 30，11 Example pulses: Z7 PSum with Z7's LED 55，12 Summary 40；合计约 540 秒。
+时间（秒）：1 Title 15，2 Background 45，3 Example LED run 40，4 How a trigger is matched to an LED 40，5 Visibility: phase 1 55，6 Visibility: phase 2 35，7 Stability: amplitude vs time 50，8 Amplitude: cases to look at again 55，9 Stability: trigger fraction vs time 55，10 Template generation: method 65，11 Templates: example 30，12 Example pulses: Z7 PSum with Z7's LED 55，13 Summary 40；合计约 580 秒。
 
 ---
 
@@ -33,7 +33,16 @@
 
 ---
 
-## Slide 4: Visibility: phase 1（约 55 秒）
+## Slide 4: How a trigger is matched to an LED（约 40 秒）
+
+**中文**：怎么知道一个触发来自哪个 LED？每个 LED 每秒闪一次，而且每个 LED 在一秒里闪的时刻不一样。所以我们画触发时间在这一秒里的位置，每个 LED 就是一个峰。落在峰里的触发，就算这个 LED 的。脚本告诉我们哪些 LED 开着，LED 自己的探测器会在它的峰里触发，这样就知道每个峰是哪个 LED。峰外面零散的触发是本底。两个 LED 相差不到 0.2 毫秒时分不开，这种情况不用，后面的图上是灰色。
+
+**English**: How do we know which LED a trigger comes from? Each LED flashes once per second, and each LED has its own time within the second. So we plot the trigger time within its second, and each LED is one peak. A trigger in a peak belongs to that LED. The script tells us which LEDs are on, and the LED's own detector triggers in its peak, so we know which LED each peak is. The few triggers outside the peaks are background. If two LEDs flash within 0.2 milliseconds, we cannot separate them. We leave those out, and they are grey in the later plots.
+
+
+---
+
+## Slide 5: Visibility: phase 1（约 55 秒）
 
 **中文**：这是第一段的可见度图。横轴是 LED，纵轴是探测器。格子里的数是：这个 LED 闪的时候，这个探测器触发的比例。红框是 LED 自己的探测器，基本都是 1。红框旁边的格子，是隔壁的探测器也看到了光。
 
@@ -42,7 +51,7 @@
 
 ---
 
-## Slide 5: Visibility: phase 2（约 35 秒）
+## Slide 6: Visibility: phase 2（约 35 秒）
 
 **中文**：第二段也一样。自己的探测器基本每次都触发，隔壁的探测器也经常触发。光只到相邻的探测器，再远就没有了。
 
@@ -51,7 +60,7 @@
 
 ---
 
-## Slide 6: Stability: amplitude vs time（约 50 秒）
+## Slide 7: Stability: amplitude vs time（约 50 秒）
 
 **中文**：第二点，幅度随时间。每一行是一个探测器看一个 LED，每一列是一个 series，按时间排。左边是第一段，右边是第二段。白色就是平均水平。大部分是白的，91% 的点变化在 10% 以内。所以大部分是稳定的，但有几个地方要再看。
 
@@ -60,7 +69,7 @@
 
 ---
 
-## Slide 7: Amplitude: cases to look at again（约 55 秒）
+## Slide 8: Amplitude: cases to look at again（约 55 秒）
 
 **中文**：这几个要再看。最明显的是 9 月 18 号凌晨：Z20 低了很多，Z19 看 Z20 的 LED 也低，过了几个小时恢复了。运行日志里写着：9 月 17 号晚上十点，冷水机报警，探测器被放进了 safe state。所以可能是 Z19 和 Z20 的一些 HEMT 设置变了。每个点上的红色短线是误差棒。另外，第一天有几个格子偏高一点。
 
@@ -69,7 +78,7 @@
 
 ---
 
-## Slide 8: Stability: trigger fraction vs time（约 55 秒）
+## Slide 9: Stability: trigger fraction vs time（约 55 秒）
 
 **中文**：第三点，触发比例随时间。黄色是每次闪光都触发。自己 LED 的那些行一直是黄的，很稳定。其他行有台阶。台阶正好在触发阈值被改的地方，就是图上的黑线。比如运行日志里记着，9 月 18 号零点十分，9 号、10 号、11 号、15 号探测器的阈值被调高了。所以这是设置变了，不是探测器不稳定。
 
@@ -78,7 +87,7 @@
 
 ---
 
-## Slide 9: Template generation: method（约 65 秒）
+## Slide 10: Template generation: method（约 65 秒）
 
 **中文**：第四点，模板。先说怎么做的。第一步，选事件：这个 LED 闪的时候，这个探测器触发的事件，十二个通道都用。第二步，用一个很短的中值滤波，去掉 LED 通电带来的窄尖峰。第三步，100 千赫的低通滤波。第四步，减掉基线，再除以峰值。第五步，每个脉冲用两个指数拟合，起始时间是自由的。右上图就是一个脉冲和它的拟合。第六步，按拟合出来的起始时间，把实测的脉冲对齐。第七步，把 45 个 series 所有对齐的脉冲取平均，这就是模板，右下图红色的线。拟合只用来找起始时间，模板本身是实测脉冲的平均。最后再用一个上升、两个下降的函数拟合模板，得到解析脉冲。
 
@@ -87,7 +96,7 @@
 
 ---
 
-## Slide 10: Templates: example（约 30 秒）
+## Slide 11: Templates: example（约 30 秒）
 
 **中文**：这是 Z2 的例子，十二个通道。蓝色是对齐后的单个脉冲，红色是模板，黑色虚线是解析脉冲。标题是灰色的通道，没有清楚的脉冲，所以不拟合解析脉冲。
 
@@ -96,7 +105,7 @@
 
 ---
 
-## Slide 11: Example pulses: Z7 PSum with Z7's LED（约 55 秒）
+## Slide 12: Example pulses: Z7 PSum with Z7's LED（约 55 秒）
 
 **中文**：我们要看一下脉冲形状随时间怎么变。这是 Z7 看自己的 LED，十二个通道加起来，就是 PSum。每个 series 取一个脉冲，一共 45 个。颜色从浅到深是从早到晚：黄色最早，紫色最晚。每个脉冲先过一个 40 千赫的低通滤波，把高频噪声去掉，再除以自己的峰值，只看形状。这些脉冲基本叠在一起，说明这一周形状没有变。脉冲前面那个很窄的尖峰是 LED 驱动的串扰。
 
@@ -105,7 +114,7 @@
 
 ---
 
-## Slide 12: Summary（约 40 秒）
+## Slide 13: Summary（约 40 秒）
 
 **中文**：总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定；9 月 18 号 Z19 和 Z20 偏低，是在探测器进入 safe state 之后。触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。
 
