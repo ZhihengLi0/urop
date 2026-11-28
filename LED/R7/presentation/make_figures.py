@@ -238,6 +238,7 @@ def main():
               "lpfit/shape_vs_time_%s.png" % EXAMPLE):
         copy(f)
     copy("lpfit/example_pulses_%s.png" % EXAMPLE)
+    copy("lpfit/example_pulses_%s_zoom.png" % EXAMPLE)      # rising edge zoomed (asked by Prof. Liu, not on a slide yet)
     cells = rd("summary/cells.csv")
     visibility_talk(cells)
     for c in cells:

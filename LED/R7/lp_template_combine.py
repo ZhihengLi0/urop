@@ -96,6 +96,47 @@ def plot_example(example_id, cells, psum, per_series, store):
     cb.set_label("series start (light = early, dark = late)", fontsize=12)
     fig.tight_layout(); fig.savefig(os.path.join(LP, "example_pulses_%s.png" % example_id), dpi=160); plt.close(fig)
 
+    # the same pulses with the time axis zoomed on the rising edge (Prof. Liu: does the rise time drift?).
+    # Left: exactly the figure above, zoomed. Right: each pulse moved so that it crosses half of its peak at 0,
+    # which takes out the trigger-time jitter and leaves only the slope of the edge.
+    fig, axes = plt.subplots(1, 2, figsize=(14.5, 5.2), sharey=True)
+    rows = []
+    for (t, s, ex), col in zip(lst, cols):
+        y = median_filter(ex["psum"].astype(np.float64), size=PSUM_MEDFILT, mode="nearest")
+        yl, _ = sosfilt(sos, y, zi=zi * y[0])
+        lo = lp.RISE_REF_IDX - 1000
+        ip = lo + int(np.argmax(yl[lo:lp.RISE_REF_IDX + 4000])); pk = yl[ip]
+        yn = yl / pk
+        axes[0].plot(x_full, yn, color=col, lw=0.9)
+
+        def cross(level):                      # last upward crossing of `level` before the peak, in samples
+            j = ip
+            while j > lo and yn[j - 1] >= level:
+                j -= 1
+            return j - 1 + (level - yn[j - 1]) / (yn[j] - yn[j - 1])
+        x50 = cross(0.5)
+        axes[1].plot((np.arange(lp.TRACELENGTH) - x50) / SR * 1e6, yn, color=col, lw=0.9)
+        rows.append((t, s, (cross(0.9) - cross(0.2)) / SR * 1e6, x50 / SR * 1e3))
+    tp = float(np.median([r[3] for r in rows]))
+    axes[0].set_xlim(tp - 0.25, tp + 0.55); axes[0].set_ylim(-0.25, 1.1)
+    axes[0].set_xlabel("time in the trace [ms]", fontsize=13); axes[0].set_ylabel("PSum / its peak", fontsize=13)
+    axes[0].set_title("as recorded, time axis zoomed", fontsize=12)
+    axes[1].set_xlim(-150, 300)
+    axes[1].set_xlabel("time from the half-height point of the rising edge [us]", fontsize=13)
+    axes[1].set_title("each pulse moved to cross half of its peak at 0", fontsize=12)
+    for ax in axes:
+        ax.grid(alpha=0.25); ax.tick_params(labelsize=12)
+    cb = fig.colorbar(sm, ax=axes, pad=0.015)
+    cb.ax.yaxis.set_major_formatter(mdates.DateFormatter("%d %b")); cb.ax.tick_params(labelsize=11)
+    cb.set_label("series start (light = early, dark = late)", fontsize=12)
+    fig.suptitle("%s PSum on LED %s of %s: rising edge of the %d example pulses (one per series), %.0f kHz low-pass" %
+                 (c["det"], c["led"].split("#")[1], c["led"].split("#")[0], len(lst), EXAMPLE_LP_KHZ), fontsize=13)
+    fig.savefig(os.path.join(LP, "example_pulses_%s_zoom.png" % example_id), dpi=160, bbox_inches="tight"); plt.close(fig)
+    with open(os.path.join(LP, "example_pulses_%s_rise.csv" % example_id), "w") as f:
+        f.write("series,rise_20_90_us,half_height_ms\n")
+        for t, s, r, x in rows:
+            f.write("%s,%.2f,%.4f\n" % (s, r, x))
+
     # shape vs time of the example cell: per series median per-pulse rise / fall, per channel
     fig, axes = plt.subplots(1, 2, figsize=(15, 4.8), sharex=True)
     for ch in CHANS:
