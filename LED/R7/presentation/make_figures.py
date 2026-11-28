@@ -4,6 +4,7 @@ Copies the analysis figures from ../out into figures/ and makes the talk-only on
   fig_week_timeline.png     all LED runs of the week on a time axis, and one sequencer cycle (--week: only this)
   fig_run_timeline.png      one run: trigger time vs detector, LED phases
   fig_template_method.png   how a template is made: one pulse with its fit, then the aligned pulses and their mean (--method: only this)
+  fig_template_example.png  the 12 channels of one cell at slide size: single pulses, template, analytic pulse (--tmpl: only this)
   fig_flash_groups.png      TriggerTime mod 1 s in phase 1 of one run: one peak per LED
   fig_amp_map.png           relative amplitude, cell x series (median over the cell's channels)
   fig_trig_map.png          trigger fraction, cell x series
@@ -201,6 +202,55 @@ def template_method():
     return dict(cell=METHOD_CELL, channel=ch)
 
 
+def template_example():
+    """The 12 channels of METHOD_CELL drawn at slide size (the per-cell figure of lp_template_combine.py is made
+    for a full page: on a slide its labels are too small). Same content: aligned single pulses (3 per series),
+    the template, the analytic pulse and their difference. Read from the stored products; nothing is refitted."""
+    import pickle
+    chans = ["PAS1", "PBS1", "PCS1", "PDS1", "PES1", "PFS1", "PAS2", "PBS2", "PCS2", "PDS2", "PES2", "PFS2"]
+    rows = {r["channel"]: r for r in rd("lpfit/LED_cell_templates.csv") if r["id"] == METHOD_CELL}
+    cell = [c for c in rd("summary/cells.csv") if c["id"] == METHOD_CELL][0]
+    overlay = {ch: [] for ch in chans}
+    win = ref = sr = None
+    for f in sorted(glob.glob(os.path.join(OUT, "2426*", "lpfit.pkl"))):
+        d = pickle.load(open(f, "rb"))
+        win, ref, sr = d["win"], d["rise_ref"], d["sample_rate"]
+        for ch in chans:
+            o = d["cells"].get(METHOD_CELL, {}).get(ch)      # the cell is missing in a series where its LED is not separable
+            if o:
+                overlay[ch] += o["overlay"]
+    tps = pickle.load(open(os.path.join(OUT, "lpfit", "LED_cell_templates.pkl"), "rb"))["templates"]
+    x_ms = (np.arange(win[0], win[1]) - ref) / sr * 1e3
+    fig, axes = plt.subplots(3, 4, figsize=(12.3, 5.3), sharex=True, sharey=True)
+    for ax, ch in zip(axes.ravel(), chans):
+        tp, r = tps.get((METHOD_CELL, ch)), rows.get(ch)
+        ax.set_xlim(-0.5, 6); ax.set_ylim(-0.35, 1.15); ax.grid(alpha=0.2); ax.tick_params(labelsize=10)
+        if tp is None:
+            ax.set_title("%s: no pulses" % ch, fontsize=10.5, color="gray"); continue
+        for k, tr in enumerate(overlay[ch][:150]):
+            ax.plot(x_ms, tr, color="steelblue", lw=0.3, alpha=0.15)
+        ax.plot(x_ms, tp["mean"], color="crimson", lw=1.5)
+        if tp.get("analytic") is not None:
+            ax.plot(x_ms, tp["analytic"], "k--", lw=1.1)
+            ax.plot(x_ms, (tp["mean"] - tp["analytic"]) - 0.25, color="gray", lw=0.7)
+            ax.set_title("%s   rise %.0f, fall %.0f / %.0f \u00b5s" % (ch, float(r["tau_rise_us"]), float(r["tau_fall1_us"]),
+                                                                    float(r["tau_fall2_us"])), fontsize=10.5)
+        else:
+            ax.set_title("%s: no clear pulse" % ch, fontsize=10.5, color="gray")
+    from matplotlib.lines import Line2D
+    axes[0, 0].legend([Line2D([], [], color="steelblue", lw=1), Line2D([], [], color="crimson", lw=1.5),
+                       Line2D([], [], color="k", ls="--", lw=1.1), Line2D([], [], color="gray", lw=0.7)],
+                      ["single pulses", "template", "analytic pulse", "difference, moved to \u22120.25"],
+                      fontsize=8.5, loc="upper right", framealpha=0.9)
+    for ax in axes[-1]:
+        ax.set_xlabel("time from the pulse start [ms]", fontsize=11)
+    for ax in axes[:, 0]:
+        ax.set_ylabel("pulse / its peak", fontsize=11)
+    fig.tight_layout(pad=0.4, w_pad=0.6, h_pad=0.5)
+    fig.savefig(os.path.join(FIG, "fig_template_example.png"), dpi=200); plt.close(fig)
+    print("template example figure:", METHOD_CELL, cell["det"], cell["led"], {ch: len(v) for ch, v in overlay.items()})
+
+
 def visibility_talk(cells):
     """Talk version of the visibility plots (Prof. Liu: numbers and axes large enough to read, no cell IDs):
     drawn at the size it has on the slide from out/summary/visibility.csv; the analysis figure in out/ is unchanged."""
@@ -246,6 +296,7 @@ def main():
     st = {}
     st["campaign"] = week_timeline()
     st["method_example"] = template_method()
+    template_example()
 
     # ---- one run: timeline and flash groups
     tm = json.load(open(os.path.join(OUT, RUN, "timing.json")))
@@ -517,7 +568,9 @@ def main():
 
 
 if __name__ == "__main__":
-    if "--week" in sys.argv or "--method" in sys.argv:    # only that figure and its numbers; the others stay as they are
+    if "--tmpl" in sys.argv:                              # only the 12-channel figure of the template example slide
+        template_example()
+    elif "--week" in sys.argv or "--method" in sys.argv:  # only that figure and its numbers; the others stay as they are
         os.makedirs(FIG, exist_ok=True)
         f = os.path.join(HERE, "stats.json")
         st_ = json.load(open(f))

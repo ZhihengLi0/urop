@@ -340,19 +340,20 @@ mill = "%.1f" % (n_pulses / 1e6)
 s = new(Z("Template generation: method", "模板：处理流程"),
         Z("one template per cell and channel, all %d series together" % n_ok, "每个格子、每个通道一个模板，%d 个 series 合在一起" % n_ok),
         fig="fig_template_method.png", sec=65,
-        zh="第四点，模板。先说怎么做的。第一步，选事件：这个 LED 闪的时候，这个探测器触发的事件，十二个通道都用。"
-           "第二步，用一个很短的中值滤波，去掉 LED 通电带来的窄尖峰。第三步，100 千赫的低通滤波。"
-           "第四步，减掉基线，再除以峰值。第五步，每个脉冲用两个指数拟合，起始时间是自由的。右上图就是一个脉冲和它的拟合。"
-           "第六步，按拟合出来的起始时间，把实测的脉冲对齐。第七步，把 %d 个 series 所有对齐的脉冲取平均，这就是模板，右下图红色的线。"
-           "拟合只用来找起始时间，模板本身是实测脉冲的平均。最后再用一个上升、两个下降的函数拟合模板，得到解析脉冲。" % n_ok,
-        en="Fourth, templates. First, how they are made. Step one: select the events where this detector triggered on "
-           "this LED's flash, and use all twelve channels. Step two: a very short median filter removes the narrow spike "
-           "from the LED drive. Step three: a 100 kilohertz low-pass filter. Step four: subtract the baseline and divide "
-           "by the peak. Step five: fit each pulse with two exponentials, with a free start time. The top right plot shows "
-           "one pulse and its fit. Step six: shift each measured pulse so that the fitted start is at the same time. "
-           "Step seven: average all aligned pulses of the %d series. That is the template, the red line at the bottom "
-           "right. The fit is only used to find the start time; the template itself is the mean of the measured pulses. "
-           "Finally we fit the template with one rise and two falls to get the analytic pulse." % n_ok)
+        zh="第四点是模板。先说一下模板是怎么做的。我们先选事件，就是这个 LED 闪的时候、这个探测器触发的事件，十二个通道都用。"
+           "然后用一个很短的中值滤波，去掉 LED 通电带来的窄尖峰。接着做 100 千赫的低通滤波，再减掉基线，除以峰值。"
+           "之后，每个脉冲用两个指数拟合，起始时间是自由的。右上图就是一个脉冲和它的拟合。"
+           "有了起始时间，就可以把实测的脉冲对齐。最后，把 %d 个 series 所有对齐的脉冲取平均，这就是模板，也就是右下图红色的线。"
+           "所以拟合只是用来找起始时间，模板本身是实测脉冲的平均。另外，我们还用一个上升、两个下降的函数去拟合模板，得到解析脉冲。" % n_ok,
+        en="The fourth point is the templates. Let me first show how we make them. We start with the events where this "
+           "detector triggered on this LED's flash, and we use all twelve channels. First, a very short median filter "
+           "removes the narrow spike from the LED drive. Then we apply a 100 kilohertz low-pass filter. Next, we subtract "
+           "the baseline and divide by the peak. After that, we fit each pulse with two exponentials, and the start time "
+           "is free. You can see one pulse and its fit at the top right. With the fitted start time, we shift the "
+           "measured pulses so that they all start at the same time. Finally, we average all the aligned pulses of the "
+           "%d series. This average is the template, the red line at the bottom right. So the fit is only used to find "
+           "the start time, and the template itself is the average of the measured pulses. In the end, we also fit the "
+           "template with one rise time and two fall times. This gives the analytic pulse." % n_ok)
 pic(s, "fig_template_method.png", Inches(7.75), T, Inches(5.1), Inches(5.65))
 lines(s, [Z("1. Events: the detector triggered on this LED's flash. All 12 channels.",
             "1. 事件：这个 LED 闪时该探测器触发的事件，12 个通道都用。"),
@@ -376,18 +377,17 @@ pic(s, "fig_formula_analytic.png", L, Inches(5.55), Inches(6.2), Inches(0.6))
 cc = cell[CLEAN]
 s = new(Z("Templates: example", "模板：例子"),
         Z("%s with its own LED, 12 channels" % cc["det"], "%s 看自己的 LED，12 个通道" % cc["det"]),
-        fig="cell_%s.png" % CLEAN, sec=30,
+        fig="fig_template_example.png", sec=30,      # make_figures.template_example: METHOD_CELL = CLEAN
         zh="这是 %s 的例子，十二个通道。蓝色是对齐后的单个脉冲，红色是模板，黑色虚线是解析脉冲。"
            "标题是灰色的通道，没有清楚的脉冲，所以不拟合解析脉冲。" % cc["det"],
         en="Here is %s as an example, twelve channels. Blue are the aligned single pulses, red is the template, and the "
            "dashed black line is the analytic pulse. Channels with a grey title have no clear pulse, so we do not fit an "
            "analytic pulse there." % cc["det"])
-pic(s, "cell_%s.png" % CLEAN, L, T, FIG_W, Inches(6.1))
-lines(s, [Z("Blue: aligned single pulses.", "蓝色：对齐后的单个脉冲。"),
-          Z("Red: template.", "红色：模板。"),
-          Z("Black dashed: analytic pulse.", "黑色虚线：解析脉冲。"),
+pic(s, "fig_template_example.png", L, Inches(1.2), W, Inches(5.2))
+lines(s, [Z("Blue: aligned single pulses.  Red: template.  Black dashed: analytic pulse.",
+            "蓝色：对齐后的单个脉冲。红色：模板。黑色虚线：解析脉冲。"),
           Z("Grey title: no clear pulse in that channel, no analytic pulse.", "灰色标题：这个通道没有清楚的脉冲，不拟合解析脉冲。")],
-      TXT_L, Inches(1.6), TXT_W, Inches(5.0))
+      L, Inches(6.42), Inches(11.8), Inches(0.7), size=14)
 
 # ───────────────────────────────────────────────────────────────── 11 example pulses
 s = new(Z("Example pulses: Z7 PSum with Z7's LED", "例子脉冲：Z7 PSum，Z7 自己的 LED"),
@@ -412,12 +412,13 @@ lines(s, [Z("Colour: light (yellow) is early, dark (purple) is late.", "颜色�
 
 # ───────────────────────────────────────────────────────────────── 12 summary
 s = new(Z("Summary", "总结"), sec=40,
-        zh="总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定；9 月 18 号 Z19 和 Z20 偏低，"
-           "是在探测器进入 safe state 之后。触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。",
-        en="To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly "
-           "stable; Z19 and Z20 were low on September 18, after the detectors were put into safe state. Trigger fraction: "
-           "stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change "
-           "during the week. Thank you.")
+        zh="总结一下。先说可见度，每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度方面，大部分是稳定的，"
+           "只有 9 月 18 号 Z19 和 Z20 偏低，那是在探测器进入 safe state 之后。触发比例也是稳定的，台阶是因为阈值改了。"
+           "最后是模板，每个格子都有一个，Z7 的脉冲形状这一周没有变。谢谢大家。",
+        en="To sum up. For visibility, each LED is seen by its own detector, and often by the next one as well. "
+           "In terms of amplitude, it is mostly stable. Only Z19 and Z20 were low on September 18, after the detectors "
+           "were put into safe state. The trigger fraction is also stable, and the steps come from threshold changes. "
+           "Finally, we have a template for every cell, and the Z7 pulse shape did not change during the week. Thank you.")
 lines(s, [Z("Visibility: each LED is seen by its own detector, and often by the next one.",
             "可见度：每个 LED 自己的探测器看得到，隔壁的也常常看到。"),
           Z("Amplitude: mostly stable. Z19 and Z20 are low on %s, after the safe state of 17 Sep." % z20_from[:6],

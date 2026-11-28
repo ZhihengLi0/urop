@@ -63,8 +63,8 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 </div>
 </section>
 <section class='card'><h2>Slide 10: Template generation: method（约 65 秒）</h2>
-<p class='zh'><b>中文</b>：第四点，模板。先说怎么做的。第一步，选事件：这个 LED 闪的时候，这个探测器触发的事件，十二个通道都用。第二步，用一个很短的中值滤波，去掉 LED 通电带来的窄尖峰。第三步，100 千赫的低通滤波。第四步，减掉基线，再除以峰值。第五步，每个脉冲用两个指数拟合，起始时间是自由的。右上图就是一个脉冲和它的拟合。第六步，按拟合出来的起始时间，把实测的脉冲对齐。第七步，把 45 个 series 所有对齐的脉冲取平均，这就是模板，右下图红色的线。拟合只用来找起始时间，模板本身是实测脉冲的平均。最后再用一个上升、两个下降的函数拟合模板，得到解析脉冲。</p>
-<div class='en'><p><b>English</b>: Fourth, templates. First, how they are made. Step one: select the events where this detector triggered on this LED&#x27;s flash, and use all twelve channels. Step two: a very short median filter removes the narrow spike from the LED drive. Step three: a 100 kilohertz low-pass filter. Step four: subtract the baseline and divide by the peak. Step five: fit each pulse with two exponentials, with a free start time. The top right plot shows one pulse and its fit. Step six: shift each measured pulse so that the fitted start is at the same time. Step seven: average all aligned pulses of the 45 series. That is the template, the red line at the bottom right. The fit is only used to find the start time; the template itself is the mean of the measured pulses. Finally we fit the template with one rise and two falls to get the analytic pulse.</p>
+<p class='zh'><b>中文</b>：第四点是模板。先说一下模板是怎么做的。我们先选事件，就是这个 LED 闪的时候、这个探测器触发的事件，十二个通道都用。然后用一个很短的中值滤波，去掉 LED 通电带来的窄尖峰。接着做 100 千赫的低通滤波，再减掉基线，除以峰值。之后，每个脉冲用两个指数拟合，起始时间是自由的。右上图就是一个脉冲和它的拟合。有了起始时间，就可以把实测的脉冲对齐。最后，把 45 个 series 所有对齐的脉冲取平均，这就是模板，也就是右下图红色的线。所以拟合只是用来找起始时间，模板本身是实测脉冲的平均。另外，我们还用一个上升、两个下降的函数去拟合模板，得到解析脉冲。</p>
+<div class='en'><p><b>English</b>: The fourth point is the templates. Let me first show how we make them. We start with the events where this detector triggered on this LED&#x27;s flash, and we use all twelve channels. First, a very short median filter removes the narrow spike from the LED drive. Then we apply a 100 kilohertz low-pass filter. Next, we subtract the baseline and divide by the peak. After that, we fit each pulse with two exponentials, and the start time is free. You can see one pulse and its fit at the top right. With the fitted start time, we shift the measured pulses so that they all start at the same time. Finally, we average all the aligned pulses of the 45 series. This average is the template, the red line at the bottom right. So the fit is only used to find the start time, and the template itself is the average of the measured pulses. In the end, we also fit the template with one rise time and two fall times. This gives the analytic pulse.</p>
 </div>
 </section>
 <section class='card'><h2>Slide 11: Templates: example（约 30 秒）</h2>
@@ -78,8 +78,8 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 </div>
 </section>
 <section class='card'><h2>Slide 13: Summary（约 40 秒）</h2>
-<p class='zh'><b>中文</b>：总结一下。可见度：每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度：大部分稳定；9 月 18 号 Z19 和 Z20 偏低，是在探测器进入 safe state 之后。触发比例：稳定，台阶是阈值改了。模板：每个格子都有，Z7 的脉冲形状一周内没有变。谢谢。</p>
-<div class='en'><p><b>English</b>: To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly stable; Z19 and Z20 were low on September 18, after the detectors were put into safe state. Trigger fraction: stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
+<p class='zh'><b>中文</b>：总结一下。先说可见度，每个 LED 自己的探测器都看得到，隔壁的也常常看到。幅度方面，大部分是稳定的，只有 9 月 18 号 Z19 和 Z20 偏低，那是在探测器进入 safe state 之后。触发比例也是稳定的，台阶是因为阈值改了。最后是模板，每个格子都有一个，Z7 的脉冲形状这一周没有变。谢谢大家。</p>
+<div class='en'><p><b>English</b>: To sum up. For visibility, each LED is seen by its own detector, and often by the next one as well. In terms of amplitude, it is mostly stable. Only Z19 and Z20 were low on September 18, after the detectors were put into safe state. The trigger fraction is also stable, and the steps come from threshold changes. Finally, we have a template for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
 </div>
 </section>
 <section class='card'><h2>可能被问的问题 / Likely questions（回答一两句就够）</h2>

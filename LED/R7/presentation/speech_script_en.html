@@ -52,7 +52,7 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 </div>
 </section>
 <section class='card'><h2>Slide 10: Template generation: method(about 65 s)</h2>
-<div class='en'><p>Fourth, templates. First, how they are made. Step one: select the events where this detector triggered on this LED&#x27;s flash, and use all twelve channels. Step two: a very short median filter removes the narrow spike from the LED drive. Step three: a 100 kilohertz low-pass filter. Step four: subtract the baseline and divide by the peak. Step five: fit each pulse with two exponentials, with a free start time. The top right plot shows one pulse and its fit. Step six: shift each measured pulse so that the fitted start is at the same time. Step seven: average all aligned pulses of the 45 series. That is the template, the red line at the bottom right. The fit is only used to find the start time; the template itself is the mean of the measured pulses. Finally we fit the template with one rise and two falls to get the analytic pulse.</p>
+<div class='en'><p>The fourth point is the templates. Let me first show how we make them. We start with the events where this detector triggered on this LED&#x27;s flash, and we use all twelve channels. First, a very short median filter removes the narrow spike from the LED drive. Then we apply a 100 kilohertz low-pass filter. Next, we subtract the baseline and divide by the peak. After that, we fit each pulse with two exponentials, and the start time is free. You can see one pulse and its fit at the top right. With the fitted start time, we shift the measured pulses so that they all start at the same time. Finally, we average all the aligned pulses of the 45 series. This average is the template, the red line at the bottom right. So the fit is only used to find the start time, and the template itself is the average of the measured pulses. In the end, we also fit the template with one rise time and two fall times. This gives the analytic pulse.</p>
 </div>
 </section>
 <section class='card'><h2>Slide 11: Templates: example(about 30 s)</h2>
@@ -64,7 +64,7 @@ code { font-family: monospace; font-size: 11pt; background: #EEE; padding: 0 3px
 </div>
 </section>
 <section class='card'><h2>Slide 13: Summary(about 40 s)</h2>
-<div class='en'><p>To sum up. Visibility: each LED is seen by its own detector, and often by the next one. Amplitude: mostly stable; Z19 and Z20 were low on September 18, after the detectors were put into safe state. Trigger fraction: stable; the steps are threshold changes. Templates: one for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
+<div class='en'><p>To sum up. For visibility, each LED is seen by its own detector, and often by the next one as well. In terms of amplitude, it is mostly stable. Only Z19 and Z20 were low on September 18, after the detectors were put into safe state. The trigger fraction is also stable, and the steps come from threshold changes. Finally, we have a template for every cell, and the Z7 pulse shape did not change during the week. Thank you.</p>
 </div>
 </section>
 <section class='card'><h2>Likely questions (one or two sentences each)</h2>
